@@ -9,24 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.business.travel.app.databinding.FragmentMyBinding;
+import com.business.travel.app.ui.base.BaseFragment;
 
 /**
  * @author chenshang
  */
-public class MyFragment extends Fragment {
-
-	private FragmentMyBinding binding;
+public class MyFragment extends BaseFragment<FragmentMyBinding> {
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		binding = FragmentMyBinding.inflate(inflater, container, false);
-		View root = binding.getRoot();
-		return root;
-	}
-
-	@Override
-	public void onDestroyView() {
-		super.onDestroyView();
-		binding = null;
+		return super.onCreateView(inflater, container, savedInstanceState);
 	}
 }

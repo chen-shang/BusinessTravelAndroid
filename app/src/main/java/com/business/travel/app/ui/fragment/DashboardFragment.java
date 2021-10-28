@@ -4,29 +4,21 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import com.business.travel.app.R;
 import com.business.travel.app.databinding.FragmentDashboardBinding;
+import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.utils.AnimalUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import static com.business.travel.app.databinding.FragmentDashboardBinding.inflate;
 
 /**
  * @author chenshang
  */
-public class DashboardFragment extends Fragment {
-
-	private FragmentDashboardBinding binding;
+public class DashboardFragment extends BaseFragment<FragmentDashboardBinding> {
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		binding = inflate(inflater, container, false);
-		View root = binding.getRoot();
-		return root;
+		return super.onCreateView(inflater, container, savedInstanceState);
 	}
 
 	@Override
