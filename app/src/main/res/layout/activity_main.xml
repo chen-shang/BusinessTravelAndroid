@@ -5,14 +5,70 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         tools:context=".MainActivity">
-    <TextView
+
+    <Button
+            android:id="@+id/button_wx_login"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="@string/button_name_wx_login"
+            android:onClick="goMasterActivity"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/corners_shap"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.75"/>
+
+    <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello World!"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:srcCompat="@drawable/ic_launcher_foreground"
+            android:background="@drawable/corners_shap"
+            android:id="@+id/imageView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/button_wx_login"
+            app:layout_constraintVertical_bias="0.354"
+            app:layout_constraintHorizontal_bias="0.497"/>
+
+    <TextView
+            android:text="@string/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black_100"
+            android:textStyle="bold"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            android:layout_marginTop="28dp"
+            app:layout_constraintHorizontal_bias="0.498"/>
+
+    <TextView
+            android:text="@string/button_name_account_login"
+            android:layout_width="76dp"
+            android:layout_height="17dp"
+            android:id="@+id/textView_account_login"
+            android:onClick="goAccountLongActivity"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_wx_login"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="100dp"/>
+
+    <TextView
+            android:text="@string/button_name_sign_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView_sign_up"
+            android:onClick="goSingUpActivity"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_wx_login"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="100dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

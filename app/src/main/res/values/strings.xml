@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">BusinessTravelAndroid</string>
+    <string name="app_name">差旅记账</string>
+
+    <!-- 按钮的名字-->
+    <string name="button_name_wx_login">微信登录</string>
+    <string name="button_name_account_login">账号密码登录</string>
+    <string name="button_name_sign_up">注册</string>
 </resources>
