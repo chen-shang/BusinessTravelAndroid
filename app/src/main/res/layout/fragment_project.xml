@@ -5,7 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.ui.project.ProjectFragment">
+        tools:context=".ui.fragment.ProjectFragment">
 
     <LinearLayout
             android:layout_width="match_parent"

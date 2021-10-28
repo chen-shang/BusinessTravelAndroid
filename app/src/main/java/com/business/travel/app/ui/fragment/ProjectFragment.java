@@ -1,4 +1,4 @@
-package com.business.travel.app.activity.ui.project;
+package com.business.travel.app.ui.fragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,13 +28,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ProjectFragment extends Fragment {
 
-	private ProjectViewModel projectViewModel;
 	private FragmentProjectBinding binding;
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		projectViewModel = new ViewModelProvider(this).get(ProjectViewModel.class);
-
 		binding = FragmentProjectBinding.inflate(inflater, container, false);
 		View root = binding.getRoot();
 

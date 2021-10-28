@@ -1,4 +1,4 @@
-package com.business.travel.app.activity.ui.dashboard;
+package com.business.travel.app.ui.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,23 +13,19 @@ import com.business.travel.app.databinding.FragmentDashboardBinding;
 import com.business.travel.app.utils.AnimalUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import static com.business.travel.app.databinding.FragmentDashboardBinding.inflate;
+
 /**
  * @author chenshang
  */
 public class DashboardFragment extends Fragment {
 
-	private DashboardViewModel dashboardViewModel;
 	private FragmentDashboardBinding binding;
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-
-		binding = FragmentDashboardBinding.inflate(inflater, container, false);
+		binding = inflate(inflater, container, false);
 		View root = binding.getRoot();
-
-		final TextView textView = binding.textDashboard;
-		dashboardViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 		return root;
 	}
 

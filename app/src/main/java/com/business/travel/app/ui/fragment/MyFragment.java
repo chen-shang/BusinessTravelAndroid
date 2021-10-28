@@ -1,4 +1,4 @@
-package com.business.travel.app.activity.ui.my;
+package com.business.travel.app.ui.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,18 +15,12 @@ import com.business.travel.app.databinding.FragmentMyBinding;
  */
 public class MyFragment extends Fragment {
 
-	private MyViewModel myViewModel;
 	private FragmentMyBinding binding;
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		myViewModel = new ViewModelProvider(this).get(MyViewModel.class);
-
 		binding = FragmentMyBinding.inflate(inflater, container, false);
 		View root = binding.getRoot();
-
-		final TextView textView = binding.textNotifications;
-		myViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 		return root;
 	}
 
