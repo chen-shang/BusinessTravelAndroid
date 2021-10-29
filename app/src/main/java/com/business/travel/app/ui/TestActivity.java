@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
@@ -29,55 +29,68 @@ import org.jetbrains.annotations.NotNull;
  * @author chenshang
  */
 public class TestActivity extends BaseActivity<ActivityTestBinding> {
-    private UserDao userDao;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        userDao = AppDatabase.getInstance(this).userDao();
-    }
+	private UserDao userDao;
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        AppDatabase.getInstance(this).close();
-    }
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		userDao = AppDatabase.getInstance(this).userDao();
 
-    public void insert(View view) {
-        User user = new User();
-        user.setFirstName("chen" + RandomUtils.nextInt());
-        user.setLastName("shang" + RandomUtils.nextInt());
-        userDao.insertUsers(user);
-        ToastUtils.showShort("插入成功:" + JacksonUtil.toString(user));
-    }
+		// listen refresh event
+		binding.swipeRedreshLayout.setOnRefreshListener(() -> {
+			select(null);
+			binding.swipeRedreshLayout.setRefreshing(false);
+		});
+	}
 
-    public void select(View view) {
-        User[] users = userDao.loadAllUsers();
-        List<User> userList = new ArrayList<>(Arrays.asList(users));
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        binding.recyclerView.setAdapter(new Adapter() {
-            @NonNull
-            @NotNull
-            @Override
-            public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_rv_item_simple, parent, false);
-                return new ViewHolder(view) {
-                };
-            }
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		AppDatabase.getInstance(this).close();
+	}
 
-            @Override
-            public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-                TextView userInfo = holder.itemView.findViewById(R.id.userInfo);
-                User user = userList.get(userList.size() - position - 1);
-                userInfo.setText(JacksonUtil.toString(user));
-            }
+	public void insert(View view) {
+		User user = new User();
+		user.setFirstName("chen" + RandomUtils.nextInt());
+		user.setLastName("shang" + RandomUtils.nextInt());
+		userDao.insertUsers(user);
+		ToastUtils.showShort("插入成功:" + JacksonUtil.toString(user));
+	}
 
-            @Override
-            public int getItemCount() {
-                return userList.size();
-            }
-        });
-    }
+	public void select(View view) {
+		User[] users = userDao.loadAllUsers();
+		List<User> userList = new ArrayList<>(Arrays.asList(users));
+		binding.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+		binding.recyclerView.setAdapter(new Adapter() {
+			@NonNull
+			@NotNull
+			@Override
+			public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+				View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_rv_item_simple, parent, false);
+				return new ViewHolder(view) {
+				};
+			}
 
-    public void delete(View view) {
-    }
+			@Override
+			public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
+				TextView userInfo = holder.itemView.findViewById(R.id.userInfo);
+				User user = userList.get(userList.size() - position - 1);
+				userInfo.setText(JacksonUtil.toString(user));
+
+				CardView cardView = holder.itemView.findViewById(R.id.card_view);
+				cardView.setOnClickListener(v -> {
+					ToastUtils.showLong(userInfo.getText());
+				});
+
+			}
+
+			@Override
+			public int getItemCount() {
+				return userList.size();
+			}
+		});
+	}
+
+	public void delete(View view) {
+	}
 }

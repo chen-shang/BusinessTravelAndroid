@@ -103,6 +103,8 @@ dependencies {
     implementation 'com.gitee.bigoy:RoundViewGroup:v1.01'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.github.RuffianZhong:RWidgetHelper:androidx.v0.0.8'
+
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 }
 
 //编译的时候织入代码
