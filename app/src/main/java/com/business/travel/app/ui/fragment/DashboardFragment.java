@@ -16,28 +16,24 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
  */
 public class DashboardFragment extends BaseFragment<FragmentDashboardBinding> {
 
+	private FloatingActionButton floatingActionButton;
+
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return super.onCreateView(inflater, container, savedInstanceState);
+		View view = super.onCreateView(inflater, container, savedInstanceState);
+		floatingActionButton = requireActivity().findViewById(R.id.floatingActionButton);
+		return view;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		FloatingActionButton view = getActivity().findViewById(R.id.floatingActionButton);
-		AnimalUtil.show(view);
+		AnimalUtil.show(floatingActionButton);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		FloatingActionButton view = getActivity().findViewById(R.id.floatingActionButton);
-		AnimalUtil.reset(view);
-	}
-
-	@Override
-	public void onDestroyView() {
-		super.onDestroyView();
-		binding = null;
+		AnimalUtil.reset(floatingActionButton);
 	}
 }
