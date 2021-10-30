@@ -1,5 +1,7 @@
 package com.business.travel.app.dal.dao;
 
+import java.util.List;
+
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -18,7 +20,10 @@ public interface UserDao {
 	 * @param users
 	 */
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	void insertUsers(User... users);
+	List<Long> insertUsers(User... users);
+
+	@Insert(onConflict = OnConflictStrategy.REPLACE)
+	Long insertUser(User users);
 
 	/**
 	 * 查询用户
@@ -26,7 +31,7 @@ public interface UserDao {
 	 * @return
 	 */
 	@Query("SELECT * FROM user")
-	User[] loadAllUsers();
+	List<User> loadAllUsers();
 
 	/**
 	 * 删除用户
