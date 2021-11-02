@@ -1,5 +1,7 @@
 package com.business.travel.app.ui.activity;
 
+import java.util.Objects;
+
 import android.os.Bundle;
 import com.business.travel.app.databinding.ActivityAddBillBinding;
 import com.business.travel.app.ui.base.BaseActivity;
@@ -13,6 +15,6 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		Objects.requireNonNull(getSupportActionBar()).hide();
 	}
 }
