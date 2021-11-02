@@ -100,12 +100,15 @@ dependencies {
     // if u use AndroidX, use the following
     implementation 'com.blankj:utilcodex:1.30.6'
     implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.gitee.bigoy:RoundViewGroup:v1.01'
-    implementation 'de.hdodenhof:circleimageview:3.1.0'
-    implementation 'com.github.RuffianZhong:RWidgetHelper:androidx.v0.0.8'
 
+    //圆角图片控件
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    //专治原生控件各种不服控件
+    implementation 'com.github.RuffianZhong:RWidgetHelper:androidx.v0.0.8'
+    //下拉刷新控件
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    implementation 'com.github.alidili:RecyclerViewHelper:1.1.5'
+    //侧滑拖拽控件
+    implementation 'com.yanzhenjie.recyclerview:x:1.3.2'
 }
 
 //编译的时候织入代码

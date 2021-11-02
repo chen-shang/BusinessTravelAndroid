@@ -1,5 +1,6 @@
 package com.business.travel.app.ui;
 
+import java.util.Collections;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -11,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.blankj.utilcode.util.ToastUtils;
@@ -22,7 +22,8 @@ import com.business.travel.app.dal.entity.User;
 import com.business.travel.app.databinding.ActivityTestBinding;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.utils.JacksonUtil;
-import com.yl.recyclerview.wrapper.SwipeToDismissWrapper;
+import com.yanzhenjie.recyclerview.SwipeRecyclerView;
+import com.yanzhenjie.recyclerview.touch.OnItemMoveListener;
 import org.apache.commons.lang3.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
  * @author chenshang
  */
 public class TestActivity extends BaseActivity<ActivityTestBinding> {
-	SwipeToDismissWrapper mSwipeToDismissWrapper;
+	MyAdapter adapter;
 	private UserDao userDao;
 	private List<User> mDataList;
 
@@ -38,24 +39,46 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		userDao = AppDatabase.getInstance(this).userDao();
-		RecyclerView mRecyclerView = binding.recyclerView;
-		binding.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+		SwipeRecyclerView recyclerView = binding.recyclerView;
 
 		mDataList = userDao.loadAllUsers();
-		MyAdapter commonAdapter = new MyAdapter(mDataList);
+		adapter = new MyAdapter(mDataList);
 
-		mSwipeToDismissWrapper = new SwipeToDismissWrapper(commonAdapter, mDataList);
-		mSwipeToDismissWrapper.attachToRecyclerView(mRecyclerView);
-		mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-		mRecyclerView.setAdapter(mSwipeToDismissWrapper);
-		// 设置删除事件监听
-		mSwipeToDismissWrapper.setItemDismissListener(position -> {
-			// TODO
-			userDao.deleteUsers(mDataList.get(position));
-			mDataList.remove(position);
-			// 刷新数据需要使用外层Adapter
-			mSwipeToDismissWrapper.notifyDataSetChanged();
-		});
+		recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+		// 拖拽排序，默认关闭。
+		recyclerView.setLongPressDragEnabled(true);
+		// 侧滑删除，默认关闭。
+		recyclerView.setItemViewSwipeEnabled(true);
+
+		OnItemMoveListener mItemMoveListener = new OnItemMoveListener() {
+			@Override
+			public boolean onItemMove(ViewHolder srcHolder, ViewHolder targetHolder) {
+				// 此方法在Item拖拽交换位置时被调用。
+				// 第一个参数是要交换为之的Item，第二个是目标位置的Item。
+
+				// 交换数据，并更新adapter。
+				int fromPosition = srcHolder.getAdapterPosition();
+				int toPosition = targetHolder.getAdapterPosition();
+				Collections.swap(mDataList, fromPosition, toPosition);
+				adapter.notifyItemMoved(fromPosition, toPosition);
+
+				// 返回true，表示数据交换成功，ItemView可以交换位置。
+				return true;
+			}
+
+			@Override
+			public void onItemDismiss(ViewHolder srcHolder) {
+				// 此方法在Item在侧滑删除时被调用。
+
+				// 从数据源移除该Item对应的数据，并刷新Adapter。
+				int position = srcHolder.getAdapterPosition();
+				mDataList.remove(position);
+				adapter.notifyItemRemoved(position);
+			}
+		};
+		// 监听拖拽，更新UI
+		recyclerView.setOnItemMoveListener(mItemMoveListener);
+		binding.recyclerView.setAdapter(adapter);
 
 		binding.swipeRedreshLayout.setOnRefreshListener(() -> {
 			select(null);
@@ -79,19 +102,19 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 		ToastUtils.showShort("插入成功:" + JacksonUtil.toString(user));
 
 		mDataList.add(user);
-		mSwipeToDismissWrapper.notifyDataSetChanged();
+		adapter.notifyDataSetChanged();
 	}
 
 	public void select(View view) {
 		mDataList.clear();
 		mDataList.addAll(userDao.loadAllUsers());
-		mSwipeToDismissWrapper.notifyDataSetChanged();
+		adapter.notifyDataSetChanged();
 	}
 
 	public void delete(View view) {
 		userDao.loadAllUsers().forEach(userDao::deleteUsers);
 		mDataList.clear();
-		mSwipeToDismissWrapper.notifyDataSetChanged();
+		adapter.notifyDataSetChanged();
 	}
 
 	private class MyAdapter extends Adapter {
@@ -127,7 +150,7 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 							ToastUtils.showLong("点击了确定:" + which);
 							userDao.deleteUsers(user);
 							mDataList.remove(position);
-							mSwipeToDismissWrapper.notifyDataSetChanged();
+							adapter.notifyDataSetChanged();
 						})
 						.setNegativeButton("取消", null)
 						.show();
