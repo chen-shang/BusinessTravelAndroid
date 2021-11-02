@@ -26,6 +26,7 @@ public class Project {
 	 * 项目结束时间,yyyy-MM-dd HH:mm:ss
 	 */
 	private String endTime;
+	
 	/**
 	 * 项目创建时间,yyyy-MM-dd HH:mm:ss
 	 */
