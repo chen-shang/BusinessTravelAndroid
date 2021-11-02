@@ -43,7 +43,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.9"
                     app:layout_constraintVertical_bias="0.2"
-                    app:layout_constraintStart_toEndOf="@+id/time">
+                    app:layout_constraintStart_toEndOf="@+id/TextView_time">
             </TextView>
 
             <View
@@ -70,7 +70,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintHorizontal_bias="0.1"
                     app:layout_constraintVertical_bias="0.5"
-                    app:layout_constraintTop_toBottomOf="@+id/time">
+                    app:layout_constraintTop_toBottomOf="@+id/TextView_time">
             </TextView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
