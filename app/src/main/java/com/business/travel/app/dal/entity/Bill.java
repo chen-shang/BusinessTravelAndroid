@@ -2,24 +2,26 @@ package com.business.travel.app.dal.entity;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import lombok.Data;
 
 /**
  * @author chenshang
  * 差旅账单单据表
  */
 @Entity
+@Data
 public class Bill {
 	@PrimaryKey(autoGenerate = true)
 	private Long id;
-
 	/**
-	 * 账单名字
+	 * 账单名字,逗号分隔
 	 */
 	private String name;
 	/**
-	 * 账单显示图标
+	 * 所属的项目名称
 	 */
-	private Integer iconId;
+	private Long projectId;
+
 	/**
 	 * 账单金额,单位分
 	 */
@@ -29,9 +31,9 @@ public class Bill {
 	 */
 	private String consumeTime;
 	/**
-	 * 差旅同行人
+	 * 差旅同行人id,逗号分割
 	 */
-	private String associate;
+	private String associateId;
 
 	/**
 	 * 项目创建时间,yyyy-MM-dd HH:mm:ss
@@ -45,5 +47,4 @@ public class Bill {
 	 * 备注
 	 */
 	private String remark;
-
 }

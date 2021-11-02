@@ -41,7 +41,7 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 		userDao = AppDatabase.getInstance(this).userDao();
 		SwipeRecyclerView recyclerView = binding.recyclerView;
 
-		mDataList = userDao.loadAllUsers();
+		mDataList = userDao.selectAll();
 		adapter = new MyAdapter(mDataList);
 
 		recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -97,7 +97,7 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 		User user = new User();
 		user.setFirstName("chen" + RandomUtils.nextInt());
 		user.setLastName("shang" + RandomUtils.nextInt());
-		Long id = userDao.insertUser(user);
+		Long id = userDao.insert(user);
 		user.setId(id);
 		ToastUtils.showShort("插入成功:" + JacksonUtil.toString(user));
 
@@ -107,12 +107,12 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 
 	public void select(View view) {
 		mDataList.clear();
-		mDataList.addAll(userDao.loadAllUsers());
+		mDataList.addAll(userDao.selectAll());
 		adapter.notifyDataSetChanged();
 	}
 
 	public void delete(View view) {
-		userDao.loadAllUsers().forEach(userDao::deleteUsers);
+		userDao.selectAll().forEach(userDao::delete);
 		mDataList.clear();
 		adapter.notifyDataSetChanged();
 	}
@@ -148,7 +148,7 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 						.setMessage("确定删除？？？")
 						.setPositiveButton("确定", (dialog, which) -> {
 							ToastUtils.showLong("点击了确定:" + which);
-							userDao.deleteUsers(user);
+							userDao.delete(user);
 							mDataList.remove(position);
 							adapter.notifyDataSetChanged();
 						})

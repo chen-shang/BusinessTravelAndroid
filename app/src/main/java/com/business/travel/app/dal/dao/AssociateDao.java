@@ -8,49 +8,49 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
-import com.business.travel.app.dal.entity.User;
+import com.business.travel.app.dal.entity.Associate;
 
 /**
  * @author chenshang
  */
 @Dao
-public interface UserDao {
+public interface AssociateDao {
 	/**
 	 * 批量添加
 	 */
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	List<Long> batchInsert(List<User> records);
+	List<Long> batchInsert(List<Associate> records);
 
 	/**
 	 * 添加
 	 */
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	Long insert(User record);
+	Long insert(Associate record);
 
 	/**
 	 * 查询全部
 	 */
-	@Query("SELECT * FROM user")
-	List<User> selectAll();
+	@Query("SELECT * FROM associate")
+	List<Associate> selectAll();
 
 	/**
 	 * 查询单条
 	 */
-	@Query("SELECT * FROM user limit 1")
-	User selectOne();
+	@Query("SELECT * FROM associate limit 1")
+	Associate selectOne();
 
 	/**
 	 * 删除用户
 	 */
 	@Delete
-	void delete(User record);
+	void delete(Associate record);
 
 	@Delete
-	void batchDelete(List<User> records);
+	void batchDelete(List<Associate> records);
 
 	@Update
-	void update(User record);
+	void update(Associate record);
 
 	@Update
-	void batchUpdate(List<User> records);
+	void batchUpdate(List<Associate> records);
 }

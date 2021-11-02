@@ -1,31 +1,29 @@
 package com.business.travel.app.dal.entity;
 
 import androidx.room.Entity;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import lombok.Data;
 
 /**
  * @author chenshang
- * 差旅项目表
  */
-@Entity(indices = {@Index(value = "name", unique = true)})
+@Entity
 @Data
-public class Project {
+public class Associate {
+	/**
+	 * 主键id
+	 */
 	@PrimaryKey(autoGenerate = true)
 	private Long id;
 	/**
-	 * 项目名称
+	 * 同行人姓名
 	 */
 	private String name;
 	/**
-	 * 项目开始时间,yyyy-MM-dd HH:mm:ss
+	 * 头像地址
 	 */
-	private String startTime;
-	/**
-	 * 项目结束时间,yyyy-MM-dd HH:mm:ss
-	 */
-	private String endTime;
+	private String avatar;
+
 	/**
 	 * 项目创建时间,yyyy-MM-dd HH:mm:ss
 	 */
