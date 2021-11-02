@@ -2,23 +2,18 @@ package com.business.travel.app.ui;
 
 import java.util.Objects;
 
-import javax.validation.constraints.NotNull;
-
 import android.content.Intent;
-import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
+import android.view.MenuItem;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback;
-import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.databinding.ActivityMasterBinding;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
+import com.business.travel.app.ui.activity.AddBillActivity;
 import com.business.travel.app.ui.base.BaseActivity;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author chenshang
@@ -31,10 +26,78 @@ public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 		Objects.requireNonNull(getSupportActionBar()).hide();
 		binding = ActivityMasterBinding.inflate(getLayoutInflater());
 		setContentView(binding.getRoot());
-		BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
-		binding.viewPager.setAdapter(new FragmentStateAdapter(this) {
-			@RequiresApi(api = VERSION_CODES.N)
-			@NonNull
+		//初始化viewPage控件
+		initViewPager();
+		//初始化navView控件
+		binding.navView.setOnItemSelectedListener(this::buildBottomNavigationViewOnItemSelectedListener);
+		//初始化中间按钮点击功能
+		initFloatingActionButton();
+	}
+
+	/**
+	 * 初始化中间按钮点击功能
+	 */
+	private void initFloatingActionButton() {
+		binding.floatingActionButton.setOnClickListener(view -> {
+			int position = binding.viewPager.getCurrentItem();
+			if (MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition() != position) {
+				//如果当前不是 DASHBOARD_FRAGMENT 页面,当点击+号的时候显示DASHBOARD_FRAGMENT页面
+				//当显示DASHBOARD_FRAGMENT页面的时候回自动执行上升和放大的动画
+				binding.viewPager.setCurrentItem(MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition());
+			} else {
+				//如果是DASHBOARD_FRAGMENT页面,当点击的时候则跳转到新增账单页面
+				startActivity(new Intent(this, AddBillActivity.class));
+			}
+		});
+	}
+
+	/**
+	 * 初始化viewPage控件
+	 */
+	private void initViewPager() {
+		binding.viewPager.setAdapter(buildViewPagerFragmentStateAdapter());
+		//默认第一页面展示DASHBOARD_FRAGMENT
+		binding.viewPager.setCurrentItem(MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition());
+		binding.viewPager.registerOnPageChangeCallback(new OnPageChangeCallback() {
+			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+				super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+				binding.navView.getMenu().getItem(position).setChecked(true);
+			}
+		});
+	}
+
+	/**
+	 * 底部栏点击后的动作
+	 *
+	 * @param item
+	 * @return
+	 */
+	private boolean buildBottomNavigationViewOnItemSelectedListener(MenuItem item) {
+		int itemId = item.getItemId();
+		switch (itemId) {
+			case R.id.navigation_project:
+				binding.viewPager.setCurrentItem(MasterFragmentPositionEnum.PROJECT_FRAGMENT.getPosition());
+				break;
+			case R.id.navigation_dashboard:
+				binding.viewPager.setCurrentItem(MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition());
+				break;
+			case R.id.navigation_my:
+				binding.viewPager.setCurrentItem(MasterFragmentPositionEnum.MY_FRAGMENT.getPosition());
+				break;
+			default:
+				//do nothing
+		}
+		return true;
+	}
+
+	/**
+	 * 主界面的viewpager加载的fragment页面适配器
+	 *
+	 * @return
+	 */
+	private FragmentStateAdapter buildViewPagerFragmentStateAdapter() {
+		return new FragmentStateAdapter(this) {
 			@NotNull
 			@Override
 			public Fragment createFragment(int position) {
@@ -45,45 +108,6 @@ public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 			public int getItemCount() {
 				return MasterFragmentPositionEnum.values().length;
 			}
-		});
-		//默认第一页面展示DASHBOARD_FRAGMENT
-		binding.viewPager.setCurrentItem(MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition());
-
-		//中间按钮点击功能
-		FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton);
-		floatingActionButton.setOnClickListener(view -> {
-			int position = binding.viewPager.getCurrentItem();
-			if (MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition() != position) {
-				binding.viewPager.setCurrentItem(MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition());
-			} else {
-				ToastUtils.showLong("请录入账单");
-				Intent intent = new Intent(this, AddBillActivity.class);
-				startActivity(intent);
-			}
-		});
-		bottomNavigationView.setOnItemSelectedListener(item -> {
-			int itemId = item.getItemId();
-			switch (itemId) {
-				case R.id.navigation_project:
-					binding.viewPager.setCurrentItem(MasterFragmentPositionEnum.PROJECT_FRAGMENT.getPosition());
-					break;
-				case R.id.navigation_dashboard:
-					binding.viewPager.setCurrentItem(MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition());
-					break;
-				case R.id.navigation_my:
-					binding.viewPager.setCurrentItem(MasterFragmentPositionEnum.MY_FRAGMENT.getPosition());
-					break;
-				default:
-					//do nothing
-			}
-			return true;
-		});
-		binding.viewPager.registerOnPageChangeCallback(new OnPageChangeCallback() {
-			@Override
-			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-				super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-				bottomNavigationView.getMenu().getItem(position).setChecked(true);
-			}
-		});
+		};
 	}
 }

@@ -1,4 +1,4 @@
-package com.business.travel.app.ui;
+package com.business.travel.app.ui.activity;
 
 import android.os.Bundle;
 import com.business.travel.app.databinding.ActivityAddBillBinding;
