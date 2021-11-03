@@ -127,14 +127,14 @@ public class TestActivity extends BaseActivity<ActivityTestBinding, ShareData> {
 		@NotNull
 		@Override
 		public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-			View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_rv_item_simple, parent, false);
+			View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_project_item, parent, false);
 			return new ViewHolder(view) {
 			};
 		}
 
 		@Override
 		public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-			TextView userInfo = holder.itemView.findViewById(R.id.userInfo);
+			TextView userInfo = holder.itemView.findViewById(R.id.text_view_name);
 			User user = userList.get(position);
 			userInfo.setText(JacksonUtil.toString(user));
 

@@ -34,7 +34,7 @@ public class AddBillAdapter extends RecyclerView.Adapter<AddBillImageViewHolder>
 	@NotNull
 	@Override
 	public AddBillImageViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_rv_item_icon, parent, false);
+		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_bill_icon_item, parent, false);
 		return new AddBillImageViewHolder(view) {
 		};
 	}
