@@ -13,12 +13,13 @@ import com.business.travel.app.databinding.ActivityAddBillBinding;
 import com.business.travel.app.enums.IconEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.base.BaseActivity;
+import com.business.travel.app.ui.base.ShareData;
 
 /**
  * @author chenshang
  * 添加账单
  */
-public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
+public class AddBillActivity extends BaseActivity<ActivityAddBillBinding, ShareData> {
 
 	private final List<ImageIconInfo> iconList = new ArrayList<>();
 	private final List<ImageIconInfo> associateList = new ArrayList<>();
@@ -58,12 +59,12 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		associateList.add(imageAddIconInfo2);
 
 		LayoutManager layoutManager = new GridLayoutManager(this, 5);
-		binding.UIAddBillActivitySwipeRecyclerViewBill.setLayoutManager(layoutManager);
-		binding.UIAddBillActivitySwipeRecyclerViewBill.setAdapter(new AddBillAdapter(iconList));
+		viewBinding.UIAddBillActivitySwipeRecyclerViewBill.setLayoutManager(layoutManager);
+		viewBinding.UIAddBillActivitySwipeRecyclerViewBill.setAdapter(new AddBillAdapter(iconList));
 
 		//同行人列表
 		LayoutManager layoutManager2 = new GridLayoutManager(this, 5);
-		binding.UIAddBillActivitySwipeRecyclerViewAssociate.setLayoutManager(layoutManager2);
-		binding.UIAddBillActivitySwipeRecyclerViewAssociate.setAdapter(new AddBillAdapter(associateList));
+		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setLayoutManager(layoutManager2);
+		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setAdapter(new AddBillAdapter(associateList));
 	}
 }

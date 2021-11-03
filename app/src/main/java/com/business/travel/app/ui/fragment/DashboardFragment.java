@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import com.business.travel.app.R;
+import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.FragmentDashboardBinding;
 import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.utils.AnimalUtil;
@@ -14,7 +16,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 /**
  * @author chenshang
  */
-public class DashboardFragment extends BaseFragment<FragmentDashboardBinding> {
+public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, DashBoardSharedData> {
 
 	private FloatingActionButton floatingActionButton;
 
@@ -29,6 +31,13 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding> {
 	public void onResume() {
 		super.onResume();
 		AnimalUtil.show(floatingActionButton);
+		DashBoardSharedData sharedData = getDataBinding();
+		Project project = sharedData.getProject();
+		if (project == null) {
+			return;
+		}
+		TextView textView = viewBinding.textDashboard;
+		textView.setText(project.getName());
 	}
 
 	@Override

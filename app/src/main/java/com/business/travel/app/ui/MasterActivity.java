@@ -13,23 +13,24 @@ import com.business.travel.app.databinding.ActivityMasterBinding;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.ui.activity.AddBillActivity;
 import com.business.travel.app.ui.base.BaseActivity;
+import com.business.travel.app.ui.base.ShareData;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author chenshang
  */
-public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
+public class MasterActivity extends BaseActivity<ActivityMasterBinding, ShareData> {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Objects.requireNonNull(getSupportActionBar()).hide();
-		binding = ActivityMasterBinding.inflate(getLayoutInflater());
-		setContentView(binding.getRoot());
+		viewBinding = ActivityMasterBinding.inflate(getLayoutInflater());
+		setContentView(viewBinding.getRoot());
 		//初始化viewPage控件
 		initViewPager();
 		//初始化navView控件
-		binding.navView.setOnItemSelectedListener(this::buildBottomNavigationViewOnItemSelectedListener);
+		viewBinding.navView.setOnItemSelectedListener(this::buildBottomNavigationViewOnItemSelectedListener);
 		//初始化中间按钮点击功能
 		initFloatingActionButton();
 	}
@@ -38,12 +39,12 @@ public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 	 * 初始化中间按钮点击功能
 	 */
 	private void initFloatingActionButton() {
-		binding.floatingActionButton.setOnClickListener(view -> {
-			int position = binding.viewPager.getCurrentItem();
+		viewBinding.floatingActionButton.setOnClickListener(view -> {
+			int position = viewBinding.viewPager.getCurrentItem();
 			if (MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition() != position) {
 				//如果当前不是 DASHBOARD_FRAGMENT 页面,当点击+号的时候显示DASHBOARD_FRAGMENT页面
 				//当显示DASHBOARD_FRAGMENT页面的时候回自动执行上升和放大的动画
-				binding.viewPager.setCurrentItem(MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition());
+				viewBinding.viewPager.setCurrentItem(MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition());
 			} else {
 				//如果是DASHBOARD_FRAGMENT页面,当点击的时候则跳转到新增账单页面
 				startActivity(new Intent(this, AddBillActivity.class));
@@ -55,14 +56,14 @@ public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 	 * 初始化viewPage控件
 	 */
 	private void initViewPager() {
-		binding.viewPager.setAdapter(buildViewPagerFragmentStateAdapter());
+		viewBinding.viewPager.setAdapter(buildViewPagerFragmentStateAdapter());
 		//默认第一页面展示DASHBOARD_FRAGMENT
-		binding.viewPager.setCurrentItem(MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition());
-		binding.viewPager.registerOnPageChangeCallback(new OnPageChangeCallback() {
+		viewBinding.viewPager.setCurrentItem(MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition());
+		viewBinding.viewPager.registerOnPageChangeCallback(new OnPageChangeCallback() {
 			@Override
 			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 				super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-				binding.navView.getMenu().getItem(position).setChecked(true);
+				viewBinding.navView.getMenu().getItem(position).setChecked(true);
 			}
 		});
 	}
@@ -77,13 +78,13 @@ public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 		int itemId = item.getItemId();
 		switch (itemId) {
 			case R.id.navigation_project:
-				binding.viewPager.setCurrentItem(MasterFragmentPositionEnum.PROJECT_FRAGMENT.getPosition());
+				viewBinding.viewPager.setCurrentItem(MasterFragmentPositionEnum.PROJECT_FRAGMENT.getPosition());
 				break;
 			case R.id.navigation_dashboard:
-				binding.viewPager.setCurrentItem(MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition());
+				viewBinding.viewPager.setCurrentItem(MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition());
 				break;
 			case R.id.navigation_my:
-				binding.viewPager.setCurrentItem(MasterFragmentPositionEnum.MY_FRAGMENT.getPosition());
+				viewBinding.viewPager.setCurrentItem(MasterFragmentPositionEnum.MY_FRAGMENT.getPosition());
 				break;
 			default:
 				//do nothing

@@ -21,6 +21,7 @@ import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.User;
 import com.business.travel.app.databinding.ActivityTestBinding;
 import com.business.travel.app.ui.base.BaseActivity;
+import com.business.travel.app.ui.base.ShareData;
 import com.business.travel.utils.JacksonUtil;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import com.yanzhenjie.recyclerview.touch.OnItemMoveListener;
@@ -30,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author chenshang
  */
-public class TestActivity extends BaseActivity<ActivityTestBinding> {
+public class TestActivity extends BaseActivity<ActivityTestBinding, ShareData> {
 	MyAdapter adapter;
 	private UserDao userDao;
 	private List<User> mDataList;
@@ -39,7 +40,7 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		userDao = AppDatabase.getInstance(this).userDao();
-		SwipeRecyclerView recyclerView = binding.recyclerView;
+		SwipeRecyclerView recyclerView = viewBinding.recyclerView;
 
 		mDataList = userDao.selectAll();
 		adapter = new MyAdapter(mDataList);
@@ -78,11 +79,11 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 		};
 		// 监听拖拽，更新UI
 		recyclerView.setOnItemMoveListener(mItemMoveListener);
-		binding.recyclerView.setAdapter(adapter);
+		viewBinding.recyclerView.setAdapter(adapter);
 
-		binding.swipeRedreshLayout.setOnRefreshListener(() -> {
+		viewBinding.swipeRedreshLayout.setOnRefreshListener(() -> {
 			select(null);
-			binding.swipeRedreshLayout.setRefreshing(false);
+			viewBinding.swipeRedreshLayout.setRefreshing(false);
 		});
 
 	}
