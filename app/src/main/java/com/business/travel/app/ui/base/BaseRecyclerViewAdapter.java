@@ -9,13 +9,19 @@ import androidx.viewbinding.ViewBinding;
 /**
  * @author chenshang
  */
-public abstract class BaseRecyclerViewAdapter<T extends ViewHolder, O> extends RecyclerView.Adapter<T> {
-	protected final List<O> dataList;
-	protected final BaseActivity<? extends ViewBinding, ShareData> baseActivity;
+public abstract class BaseRecyclerViewAdapter<VH extends ViewHolder, DATA> extends RecyclerView.Adapter<VH> {
+	/**
+	 * 加载的activity
+	 */
+	protected final BaseActivity<? extends ViewBinding, ShareData> activity;
+	/**
+	 * 加载的数据模型
+	 */
+	protected final List<DATA> dataList;
 
-	public BaseRecyclerViewAdapter(List<O> dataList, BaseActivity<? extends ViewBinding, ShareData> baseActivity) {
+	public BaseRecyclerViewAdapter(List<DATA> dataList, BaseActivity<? extends ViewBinding, ShareData> baseActivity) {
 		this.dataList = dataList;
-		this.baseActivity = baseActivity;
+		this.activity = baseActivity;
 	}
 
 	@Override

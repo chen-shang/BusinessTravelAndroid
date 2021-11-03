@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author chenshang
+ * 基本的数据共享模型
+ * 每一个 activity 和 fragment 对象都对应一个shareData
  */
 @Data
 @NoArgsConstructor

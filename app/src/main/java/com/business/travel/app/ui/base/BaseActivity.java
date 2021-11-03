@@ -39,18 +39,21 @@ public abstract class BaseActivity<VB extends ViewBinding, DATA extends ShareDat
 		//第二个参数是 DATA
 		Class<?> clazzData = (Class<?>)((ParameterizedType)Objects.requireNonNull(superclass)).getActualTypeArguments()[1];
 		try {
+			//初始化viewBinding
 			viewBinding = (VB)clazzViewBinding.getDeclaredMethod("inflate", LayoutInflater.class).invoke(null, getLayoutInflater());
 			//初始化dataBinding
 			dataBinding = (DATA)clazzData.newInstance();
+			//初始化加载页面
 			setContentView(Objects.requireNonNull(viewBinding).getRoot());
 		} catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException | InstantiationException e) {
-			Log.e("BaseActivity", "view banding error", e);
+			Log.e("BaseActivity", "banding error", e);
 		}
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		//activity销毁的时候清空,有助于快速回收垃圾
 		viewBinding = null;
 		dataBinding = null;
 	}

@@ -50,7 +50,7 @@ public abstract class BaseFragment<VB extends ViewBinding, DATA extends ShareDat
 			//初始化dataBinding
 			dataBinding = (DATA)clazz2.newInstance();
 		} catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException | java.lang.InstantiationException e) {
-			Log.e("BaseFragment", "view banding error", e);
+			Log.e("BaseFragment", "banding error", e);
 		}
 		return viewBinding.getRoot();
 	}
@@ -58,6 +58,7 @@ public abstract class BaseFragment<VB extends ViewBinding, DATA extends ShareDat
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
+		//activity销毁的时候清空,有助于快速回收垃圾
 		viewBinding = null;
 		dataBinding = null;
 	}

@@ -44,11 +44,10 @@ public class ProjectAdapter extends BaseRecyclerViewAdapter<ProjectAdapterHolder
 	@Override
 	public void onBindViewHolder(@NonNull @NotNull ProjectAdapterHolder holder, int position) {
 		Project project = dataList.get(position);
-
 		holder.textViewName.setText(project.getName());
 		holder.cardView.setOnClickListener(v -> {
 			ToastUtils.showShort(JacksonUtil.toString(project));
-			ViewPager2 viewPager2 = baseActivity.findViewById(R.id.viewPager);
+			ViewPager2 viewPager2 = activity.findViewById(R.id.viewPager);
 			viewPager2.setCurrentItem(MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition());
 			DashboardFragment dashboardFragment = (DashboardFragment)MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getFragment();
 			DashBoardSharedData sharedData = dashboardFragment.getDataBinding();
