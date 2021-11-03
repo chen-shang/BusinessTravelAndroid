@@ -63,6 +63,7 @@
             android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="5dp"
             app:cardElevation="5dp"
+            android:padding="5dp"
             android:layout_margin="10dp"
             >
         <!--  下面的项目列表数据   -->
