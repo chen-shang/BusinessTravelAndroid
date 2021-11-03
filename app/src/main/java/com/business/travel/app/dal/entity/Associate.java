@@ -19,6 +19,7 @@ public class Associate {
 	 * 同行人姓名
 	 */
 	private String name;
+	//todo 性别
 	/**
 	 * 头像地址
 	 */
