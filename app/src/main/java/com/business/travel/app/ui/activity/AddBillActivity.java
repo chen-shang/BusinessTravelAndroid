@@ -2,8 +2,10 @@ package com.business.travel.app.ui.activity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,7 +17,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
+import com.business.travel.app.dal.dao.BillDao;
+import com.business.travel.app.dal.dao.ProjectDao;
+import com.business.travel.app.dal.db.AppDatabase;
+import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityAddBillBinding;
 import com.business.travel.app.enums.IconEnum;
@@ -24,6 +31,8 @@ import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.fragment.DashBoardSharedData;
 import com.business.travel.app.ui.fragment.DashboardFragment;
+import com.business.travel.utils.DateTimeUtil;
+import com.business.travel.utils.JacksonUtil;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -35,6 +44,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	private final List<ImageIconInfo> iconList = new ArrayList<>();
 	private final List<ImageIconInfo> associateList = new ArrayList<>();
 
+	private BillDao billDao;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,24 +55,9 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		if (project != null) {
 			viewBinding.UIAddBillActivityTextViewProjectName.setText(project.getName());
 		}
-
-		Arrays.stream(IconEnum.values()).forEach(iconEnum -> {
-			ImageIconInfo imageIconInfo = new ImageIconInfo();
-			imageIconInfo.setResourceId(iconEnum.getResourceId());
-			imageIconInfo.setName(iconEnum.getDescription());
-			imageIconInfo.setSelected(false);
-			iconList.add(imageIconInfo);
-		});
-
-		ImageIconInfo imageAddIconInfo = new ImageIconInfo();
-		imageAddIconInfo.setResourceId(R.drawable.bill_icon_add);
-		imageAddIconInfo.setName("添加");
-		iconList.add(imageAddIconInfo);
-
-		ImageIconInfo imageAddIconInfo2 = new ImageIconInfo();
-		imageAddIconInfo2.setResourceId(R.drawable.bill_icon_add);
-		imageAddIconInfo2.setName("添加");
-		associateList.add(imageAddIconInfo2);
+		billDao = AppDatabase.getInstance(this).billDao();
+		//todo 删除
+		mock();
 
 		LayoutManager layoutManager = new GridLayoutManager(this, 5);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewBill.setLayoutManager(layoutManager);
@@ -105,7 +101,26 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 					case 15:
 						button.setText("保存");
 						button.setOnClickListener(v -> {
-
+							DashboardFragment fragment = (DashboardFragment)MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getFragment();
+							DashBoardSharedData dataBinding = fragment.getDataBinding();
+							Project project1 = dataBinding.getProject();
+							if (project1 == null) {
+								ToastUtils.showLong("请先创建项目");
+								return;
+							}
+							List<ImageIconInfo> collect = iconList.stream().filter(ImageIconInfo::isSelected).collect(Collectors.toList());
+							String name = collect.stream().map(ImageIconInfo::getName).collect(Collectors.joining(","));
+							Bill bill = new Bill();
+							bill.setName(name);
+							bill.setProjectId(project1.getId());
+							bill.setAmount(0L);
+							bill.setConsumeTime(DateTimeUtil.format(new Date()));
+							bill.setAssociateId("12345");
+							bill.setCreateTime("12345");
+							bill.setModifyTime("1234");
+							bill.setRemark("123456");
+							billDao.insert(bill);
+							ToastUtils.showLong(JacksonUtil.toString(collect) + "\n" + JacksonUtil.toString(dataBinding) + "\n" + JacksonUtil.toString(bill));
 						});
 						break;
 					case 0:
@@ -145,5 +160,30 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 				return 16;
 			}
 		});
+	}
+
+	private void mock() {
+		Arrays.stream(IconEnum.values()).forEach(iconEnum -> {
+			ImageIconInfo imageIconInfo = new ImageIconInfo();
+			imageIconInfo.setResourceId(iconEnum.getResourceId());
+			imageIconInfo.setName(iconEnum.getDescription());
+			imageIconInfo.setSelected(false);
+			iconList.add(imageIconInfo);
+		});
+
+		ImageIconInfo imageAddIconInfo = new ImageIconInfo();
+		imageAddIconInfo.setResourceId(R.drawable.bill_icon_add);
+		imageAddIconInfo.setName("添加");
+		iconList.add(imageAddIconInfo);
+
+		ImageIconInfo imageAddIconInfoMe = new ImageIconInfo();
+		imageAddIconInfoMe.setResourceId(R.drawable.vector_drawable_my);
+		imageAddIconInfoMe.setName("我");
+		associateList.add(imageAddIconInfoMe);
+
+		ImageIconInfo imageAddIconInfo2 = new ImageIconInfo();
+		imageAddIconInfo2.setResourceId(R.drawable.bill_icon_add);
+		imageAddIconInfo2.setName("添加");
+		associateList.add(imageAddIconInfo2);
 	}
 }
