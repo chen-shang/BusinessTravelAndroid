@@ -32,13 +32,24 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding, ShareD
 		projects = projectDao.selectAll();
 		Project project = new Project();
 		project.setId(0L);
-		project.setName("ghjkl");
+		project.setName("项目1");
 		project.setStartTime("56789");
 		project.setEndTime("98765");
 		project.setCreateTime("ghjk");
 		project.setModifyTime("56789");
 		project.setRemark("12345");
 		projects.add(project);
+
+		Project project2 = new Project();
+		project2.setId(1L);
+		project2.setName("项目2");
+		project2.setStartTime("56789");
+		project2.setEndTime("98765");
+		project2.setCreateTime("ghjk");
+		project2.setModifyTime("56789");
+		project2.setRemark("12345");
+		projects.add(project2);
+
 
 		RecyclerView uiRecyclerView = viewBinding.uiProjectFragmentSwipeRecyclerView;
 		uiRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));

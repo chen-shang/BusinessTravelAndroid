@@ -11,7 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/UI_AddBillActivity_ConstraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="90dp"
             android:background="@color/teal_800">
 
         <TextView
@@ -70,7 +70,6 @@
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:backgroundTint="@color/white"
             android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -145,14 +144,22 @@
                     android:background="@color/gray"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!--小键盘-->
-        <GridView
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:id="@+id/keyboard"
-                android:padding="10dp"
                 android:layout_height="match_parent"
-                >
-        </GridView>
+                android:padding="1dp">
+
+            <!--小键盘-->
+            <com.yanzhenjie.recyclerview.SwipeRecyclerView
+                    android:id="@+id/UI_AddBillActivity_SwipeRecyclerView_Keyboard"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     </LinearLayout>
     <!--  小键盘  -->
     <!--    todo -->
