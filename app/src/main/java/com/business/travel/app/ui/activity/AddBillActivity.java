@@ -5,15 +5,26 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import android.annotation.SuppressLint;
+import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListAdapter;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.business.travel.app.R;
 import com.business.travel.app.databinding.ActivityAddBillBinding;
 import com.business.travel.app.enums.IconEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.ShareData;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author chenshang
@@ -42,17 +53,6 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding, ShareD
 		imageAddIconInfo.setName("添加");
 		iconList.add(imageAddIconInfo);
 
-		for (int i = 0; i < 9; i++) {
-			ImageIconInfo imageIconInfo = new ImageIconInfo();
-			if (i % 2 == 0) {
-				imageIconInfo.setResourceId(R.drawable.bill_icon_man);
-			} else {
-				imageIconInfo.setResourceId(R.drawable.bill_icon_woman);
-			}
-			imageIconInfo.setName("张" + i);
-			imageIconInfo.setSelected(false);
-			associateList.add(imageIconInfo);
-		}
 		ImageIconInfo imageAddIconInfo2 = new ImageIconInfo();
 		imageAddIconInfo2.setResourceId(R.drawable.bill_icon_add);
 		imageAddIconInfo2.setName("添加");
