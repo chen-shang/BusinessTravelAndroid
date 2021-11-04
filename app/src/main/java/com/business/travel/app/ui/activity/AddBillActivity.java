@@ -22,7 +22,6 @@ import com.business.travel.app.enums.IconEnum;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.base.BaseActivity;
-import com.business.travel.app.ui.base.ShareData;
 import com.business.travel.app.ui.fragment.DashBoardSharedData;
 import com.business.travel.app.ui.fragment.DashboardFragment;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
  * @author chenshang
  * 添加账单
  */
-public class AddBillActivity extends BaseActivity<ActivityAddBillBinding, ShareData> {
+public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 
 	private final List<ImageIconInfo> iconList = new ArrayList<>();
 	private final List<ImageIconInfo> associateList = new ArrayList<>();
@@ -66,12 +65,12 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding, ShareD
 
 		LayoutManager layoutManager = new GridLayoutManager(this, 5);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewBill.setLayoutManager(layoutManager);
-		viewBinding.UIAddBillActivitySwipeRecyclerViewBill.setAdapter(new AddBillAdapter(iconList));
+		viewBinding.UIAddBillActivitySwipeRecyclerViewBill.setAdapter(new IconRecyclerViewAdapter(iconList, this));
 
 		//同行人列表
 		LayoutManager layoutManager2 = new GridLayoutManager(this, 5);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setLayoutManager(layoutManager2);
-		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setAdapter(new AddBillAdapter(associateList));
+		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setAdapter(new IconRecyclerViewAdapter(associateList, this));
 
 		GridLayoutManager layoutManager3 = new GridLayoutManager(this, 4) {
 			@Override
@@ -105,6 +104,9 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding, ShareD
 						break;
 					case 15:
 						button.setText("保存");
+						button.setOnClickListener(v -> {
+
+						});
 						break;
 					case 0:
 						button.setText("1");

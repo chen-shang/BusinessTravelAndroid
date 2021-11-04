@@ -11,24 +11,27 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import androidx.viewbinding.ViewBinding;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.blankj.utilcode.util.ResourceUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.model.ImageIconInfo;
-import com.business.travel.app.ui.activity.AddBillAdapter.AddBillImageViewHolder;
+import com.business.travel.app.ui.activity.IconRecyclerViewAdapter.AddBillImageViewHolder;
+import com.business.travel.app.ui.base.BaseActivity;
+import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author chenshang
  */
-public class AddBillAdapter extends RecyclerView.Adapter<AddBillImageViewHolder> {
-	private final List<ImageIconInfo> list;
+public class IconRecyclerViewAdapter extends BaseRecyclerViewAdapter<AddBillImageViewHolder, ImageIconInfo> {
 
-	public AddBillAdapter(List<ImageIconInfo> list) {this.list = list;}
+	public IconRecyclerViewAdapter(List<ImageIconInfo> imageIconInfos, BaseActivity<? extends ViewBinding> baseActivity) {
+		super(imageIconInfos, baseActivity);
+	}
 
 	@NonNull
 	@NotNull
@@ -41,7 +44,7 @@ public class AddBillAdapter extends RecyclerView.Adapter<AddBillImageViewHolder>
 
 	@Override
 	public void onBindViewHolder(@NonNull @NotNull AddBillImageViewHolder holder, int position) {
-		ImageIconInfo imageIconInfo = list.get(position);
+		ImageIconInfo imageIconInfo = dataList.get(position);
 		ImageView uIImageViewIcon = holder.uIImageViewIcon;
 		uIImageViewIcon.setImageResource(imageIconInfo.getResourceId());
 		TextView uiTextViewDescription = holder.uiTextViewDescription;
@@ -73,11 +76,6 @@ public class AddBillAdapter extends RecyclerView.Adapter<AddBillImageViewHolder>
 		Drawable wrap = DrawableCompat.wrap(drawable);
 		DrawableCompat.setTint(wrap, color);
 		return drawable;
-	}
-
-	@Override
-	public int getItemCount() {
-		return list.size();
 	}
 
 	static class AddBillImageViewHolder extends ViewHolder {

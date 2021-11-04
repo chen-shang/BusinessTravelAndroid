@@ -21,7 +21,6 @@ import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.User;
 import com.business.travel.app.databinding.ActivityTestBinding;
 import com.business.travel.app.ui.base.BaseActivity;
-import com.business.travel.app.ui.base.ShareData;
 import com.business.travel.utils.JacksonUtil;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import com.yanzhenjie.recyclerview.touch.OnItemMoveListener;
@@ -31,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author chenshang
  */
-public class TestActivity extends BaseActivity<ActivityTestBinding, ShareData> {
+public class TestActivity extends BaseActivity<ActivityTestBinding> {
 	MyAdapter adapter;
 	private UserDao userDao;
 	private List<User> mDataList;

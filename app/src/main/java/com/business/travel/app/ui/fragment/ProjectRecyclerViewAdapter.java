@@ -13,23 +13,20 @@ import androidx.viewbinding.ViewBinding;
 import androidx.viewpager2.widget.ViewPager2;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
-import com.business.travel.app.ui.base.ShareData;
-import com.business.travel.app.ui.fragment.ProjectAdapter.ProjectAdapterHolder;
-import com.business.travel.utils.JacksonUtil;
+import com.business.travel.app.ui.fragment.ProjectRecyclerViewAdapter.ProjectAdapterHolder;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author chenshang
  */
-public class ProjectAdapter extends BaseRecyclerViewAdapter<ProjectAdapterHolder, Project> {
+public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectAdapterHolder, Project> {
 
-	public ProjectAdapter(List<Project> dataList, BaseActivity<? extends ViewBinding, ShareData> baseActivity) {
+	public ProjectRecyclerViewAdapter(List<Project> dataList, BaseActivity<? extends ViewBinding> baseActivity) {
 		super(dataList, baseActivity);
 	}
 
@@ -46,7 +43,6 @@ public class ProjectAdapter extends BaseRecyclerViewAdapter<ProjectAdapterHolder
 		Project project = dataList.get(position);
 		holder.textViewName.setText(project.getName());
 		holder.cardView.setOnClickListener(v -> {
-			ToastUtils.showShort(JacksonUtil.toString(project));
 			ViewPager2 viewPager2 = activity.findViewById(R.id.viewPager);
 			viewPager2.setCurrentItem(MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition());
 			DashboardFragment dashboardFragment = (DashboardFragment)MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getFragment();

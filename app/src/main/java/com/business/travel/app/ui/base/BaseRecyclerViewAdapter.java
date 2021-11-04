@@ -13,13 +13,13 @@ public abstract class BaseRecyclerViewAdapter<VH extends ViewHolder, DATA> exten
 	/**
 	 * 加载的activity
 	 */
-	protected final BaseActivity<? extends ViewBinding, ShareData> activity;
+	protected final BaseActivity<? extends ViewBinding> activity;
 	/**
 	 * 加载的数据模型
 	 */
 	protected final List<DATA> dataList;
 
-	public BaseRecyclerViewAdapter(List<DATA> dataList, BaseActivity<? extends ViewBinding, ShareData> baseActivity) {
+	public BaseRecyclerViewAdapter(List<DATA> dataList, BaseActivity<? extends ViewBinding> baseActivity) {
 		this.dataList = dataList;
 		this.activity = baseActivity;
 	}

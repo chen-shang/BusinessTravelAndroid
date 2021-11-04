@@ -16,7 +16,7 @@ import com.business.travel.app.ui.base.ShareData;
 /**
  * @author chenshang
  */
-public class MainActivity extends BaseActivity<ActivityMainBinding, ShareData> {
+public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

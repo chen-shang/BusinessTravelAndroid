@@ -53,8 +53,8 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding, ShareD
 
 		RecyclerView uiRecyclerView = viewBinding.uiProjectFragmentSwipeRecyclerView;
 		uiRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-		ProjectAdapter projectAdapter = new ProjectAdapter(projects, (MasterActivity)requireActivity());
-		uiRecyclerView.setAdapter(projectAdapter);
+		ProjectRecyclerViewAdapter projectRecyclerViewAdapter = new ProjectRecyclerViewAdapter(projects, (MasterActivity)requireActivity());
+		uiRecyclerView.setAdapter(projectRecyclerViewAdapter);
 
 		viewBinding.uiProjectFragmentSwipeRefreshLayout.setOnRefreshListener(() -> {
 			projects.clear();

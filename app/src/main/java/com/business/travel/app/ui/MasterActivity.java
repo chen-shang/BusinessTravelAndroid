@@ -13,13 +13,12 @@ import com.business.travel.app.databinding.ActivityMasterBinding;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.ui.activity.AddBillActivity;
 import com.business.travel.app.ui.base.BaseActivity;
-import com.business.travel.app.ui.base.ShareData;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author chenshang
  */
-public class MasterActivity extends BaseActivity<ActivityMasterBinding, ShareData> {
+public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
