@@ -66,7 +66,6 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
 		textView.setText(project.getName());
 
 		List<Bill> bills = billDao.selectByProjectId(project.getId());
-		ToastUtils.showShort(JacksonUtil.toString(bills));
 
 		LayoutManager layoutManager = new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false);
 		viewBinding.recyclerView.setLayoutManager(layoutManager);

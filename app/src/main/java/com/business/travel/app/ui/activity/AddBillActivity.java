@@ -2,6 +2,7 @@ package com.business.travel.app.ui.activity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 import android.os.Bundle;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.dao.BillDao;
@@ -25,7 +27,7 @@ import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.fragment.DashBoardSharedData;
 import com.business.travel.app.ui.fragment.DashboardFragment;
 import com.business.travel.utils.DateTimeUtil;
-import org.apache.commons.lang3.StringUtils;
+import com.yanzhenjie.recyclerview.touch.OnItemMoveListener;
 
 /**
  * @author chenshang
@@ -55,12 +57,59 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 
 		LayoutManager layoutManager = new GridLayoutManager(this, 5);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewBill.setLayoutManager(layoutManager);
-		viewBinding.UIAddBillActivitySwipeRecyclerViewBill.setAdapter(new IconRecyclerViewAdapter(iconList, this));
+		IconRecyclerViewAdapter adapter = new IconRecyclerViewAdapter(iconList, this);
+		viewBinding.UIAddBillActivitySwipeRecyclerViewBill.setAdapter(adapter);
+
+		viewBinding.UIAddBillActivitySwipeRecyclerViewBill.setLongPressDragEnabled(true);
+		viewBinding.UIAddBillActivitySwipeRecyclerViewBill.setOnItemMoveListener(new OnItemMoveListener() {
+			@Override
+			public boolean onItemMove(ViewHolder srcHolder, ViewHolder targetHolder) {
+				// 此方法在Item拖拽交换位置时被调用。
+				// 第一个参数是要交换为之的Item，第二个是目标位置的Item。
+
+				// 交换数据，并更新adapter。
+				int fromPosition = srcHolder.getAdapterPosition();
+				int toPosition = targetHolder.getAdapterPosition();
+				Collections.swap(iconList, fromPosition, toPosition);
+				adapter.notifyItemMoved(fromPosition, toPosition);
+
+				// 返回true，表示数据交换成功，ItemView可以交换位置。
+				return true;
+			}
+
+			@Override
+			public void onItemDismiss(ViewHolder srcHolder) {
+
+			}
+		});
 
 		//同行人列表
 		LayoutManager layoutManager2 = new GridLayoutManager(this, 5);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setLayoutManager(layoutManager2);
-		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setAdapter(new IconRecyclerViewAdapter(associateList, this));
+		IconRecyclerViewAdapter iconRecyclerViewAdapter = new IconRecyclerViewAdapter(associateList, this);
+		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setAdapter(iconRecyclerViewAdapter);
+		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setLongPressDragEnabled(true);
+		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setOnItemMoveListener(new OnItemMoveListener() {
+			@Override
+			public boolean onItemMove(ViewHolder srcHolder, ViewHolder targetHolder) {
+				// 此方法在Item拖拽交换位置时被调用。
+				// 第一个参数是要交换为之的Item，第二个是目标位置的Item。
+
+				// 交换数据，并更新adapter。
+				int fromPosition = srcHolder.getAdapterPosition();
+				int toPosition = targetHolder.getAdapterPosition();
+				Collections.swap(associateList, fromPosition, toPosition);
+				iconRecyclerViewAdapter.notifyItemMoved(fromPosition, toPosition);
+
+				// 返回true，表示数据交换成功，ItemView可以交换位置。
+				return true;
+			}
+
+			@Override
+			public void onItemDismiss(ViewHolder srcHolder) {
+
+			}
+		});
 
 		GridLayoutManager layoutManager3 = new GridLayoutManager(this, 4) {
 			@Override
