@@ -19,7 +19,7 @@ import com.blankj.utilcode.util.ResourceUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.model.ImageIconInfo;
-import com.business.travel.app.ui.activity.IconRecyclerViewAdapter.AddBillImageViewHolder;
+import com.business.travel.app.ui.activity.IconRecyclerViewAdapter.IconRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author chenshang
  */
-public class IconRecyclerViewAdapter extends BaseRecyclerViewAdapter<AddBillImageViewHolder, ImageIconInfo> {
+public class IconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRecyclerViewAdapterViewHolder, ImageIconInfo> {
 
 	public IconRecyclerViewAdapter(List<ImageIconInfo> imageIconInfos, BaseActivity<? extends ViewBinding> baseActivity) {
 		super(imageIconInfos, baseActivity);
@@ -36,14 +36,14 @@ public class IconRecyclerViewAdapter extends BaseRecyclerViewAdapter<AddBillImag
 	@NonNull
 	@NotNull
 	@Override
-	public AddBillImageViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+	public IconRecyclerViewAdapterViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
 		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_bill_icon_item, parent, false);
-		return new AddBillImageViewHolder(view) {
+		return new IconRecyclerViewAdapterViewHolder(view) {
 		};
 	}
 
 	@Override
-	public void onBindViewHolder(@NonNull @NotNull AddBillImageViewHolder holder, int position) {
+	public void onBindViewHolder(@NonNull @NotNull IconRecyclerViewAdapterViewHolder holder, int position) {
 		ImageIconInfo imageIconInfo = dataList.get(position);
 		ImageView uIImageViewIcon = holder.uIImageViewIcon;
 		uIImageViewIcon.setImageResource(imageIconInfo.getResourceId());
@@ -78,13 +78,13 @@ public class IconRecyclerViewAdapter extends BaseRecyclerViewAdapter<AddBillImag
 		return drawable;
 	}
 
-	static class AddBillImageViewHolder extends ViewHolder {
+	static class IconRecyclerViewAdapterViewHolder extends ViewHolder {
 		@BindView(R.id.UI_ImageView_Icon)
 		ImageView uIImageViewIcon;
 		@BindView(R.id.UI_TextView_Description)
 		TextView uiTextViewDescription;
 
-		public AddBillImageViewHolder(@NonNull @NotNull View itemView) {
+		public IconRecyclerViewAdapterViewHolder(@NonNull @NotNull View itemView) {
 			super(itemView);
 			ButterKnife.bind(this, itemView);
 		}
