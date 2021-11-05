@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.dao.BillDao;
+import com.business.travel.app.dal.dao.ProjectDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.dal.entity.Project;
@@ -32,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, DashBoardSharedData> {
 
 	private BillDao billDao;
+	private ProjectDao projectDao;
 	private FloatingActionButton floatingActionButton;
 
 	@Override
@@ -39,6 +41,12 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
 		View view = super.onCreateView(inflater, container, savedInstanceState);
 		floatingActionButton = requireActivity().findViewById(R.id.floatingActionButton);
 		billDao = AppDatabase.getInstance(this.getContext()).billDao();
+		projectDao = AppDatabase.getInstance(this.getContext()).projectDao();
+		Project project = projectDao.selectLatestModify();
+		if (project != null) {
+			show(project);
+			dataBinding.setProject(project);
+		}
 		return view;
 	}
 
@@ -50,6 +58,10 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
 		if (project == null) {
 			return;
 		}
+		show(project);
+	}
+
+	private void show(Project project) {
 		TextView textView = viewBinding.textDashboard;
 		textView.setText(project.getName());
 

@@ -29,4 +29,7 @@ public interface ProjectDao extends BaseDao<Project> {
 	 */
 	@Query("SELECT * FROM project where name=:projectName")
 	Project selectByName(String projectName);
+
+	@Query("SELECT * FROM project order by modifyTime limit 1")
+	Project selectLatestModify();
 }
