@@ -2,15 +2,20 @@ package com.business.travel.app.ui.activity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import android.os.Bundle;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
+import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.dao.BillDao;
+import com.business.travel.app.dal.dao.ProjectDao;
 import com.business.travel.app.dal.db.AppDatabase;
+import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityAddBillBinding;
 import com.business.travel.app.enums.IconEnum;
@@ -19,6 +24,8 @@ import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.fragment.DashBoardSharedData;
 import com.business.travel.app.ui.fragment.DashboardFragment;
+import com.business.travel.utils.DateTimeUtil;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author chenshang
@@ -30,6 +37,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	private final List<ImageIconInfo> associateList = new ArrayList<>();
 
 	private BillDao billDao;
+	private ProjectDao projectDao;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +49,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 			viewBinding.UIAddBillActivityTextViewProjectName.setText(project.getName());
 		}
 		billDao = AppDatabase.getInstance(this).billDao();
+		projectDao = AppDatabase.getInstance(this).projectDao();
 		//todo 删除
 		mock();
 
@@ -61,6 +70,50 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		};
 		viewBinding.UIAddBillActivitySwipeRecyclerViewKeyboard.setLayoutManager(layoutManager3);
 		KeyboardRecyclerViewAdapter keyboardRecyclerViewAdapter = new KeyboardRecyclerViewAdapter(new ArrayList<>(), this);
+		keyboardRecyclerViewAdapter.setOnSaveClick(v -> {
+			//各种参数校验
+			//根据名字查询project
+			//如果没有对应的project则新建project
+			String projectName = viewBinding.UIAddBillActivityTextViewProjectName.getText().toString();
+			Project project0 = projectDao.selectByName(projectName);
+			if (project0 == null) {
+				Project project1 = new Project();
+				project1.setName(projectName);
+				project1.setStartTime(DateTimeUtil.format(new Date()));
+				project1.setEndTime(DateTimeUtil.format(new Date()));
+				project1.setCreateTime(DateTimeUtil.format(new Date()));
+				project1.setModifyTime(DateTimeUtil.format(new Date()));
+				project1.setRemark(DateTimeUtil.format(new Date()));
+				projectDao.insert(project1);
+
+				project0 = projectDao.selectByName(projectName);
+			}
+
+			if (project0 == null) {
+				ToastUtils.make().setLeftIcon(R.mipmap.ic_error).show("项目创建失败");
+				return;
+			}
+
+			Bill bill = new Bill();
+			String name = iconList.stream().filter(ImageIconInfo::isSelected).map(ImageIconInfo::getName).collect(Collectors.joining(","));
+			bill.setName(name);
+			bill.setProjectId(project0.getId());
+			String amount = viewBinding.textView5.getText().toString();
+			bill.setAmount(Long.valueOf(amount));
+
+			bill.setConsumeTime(DateTimeUtil.format(new Date()));
+			//同行人
+			String associateId = associateList.stream().filter(ImageIconInfo::isSelected).map(ImageIconInfo::getName).collect(Collectors.joining(","));
+			bill.setAssociateId(associateId);
+			bill.setCreateTime(DateTimeUtil.format(new Date()));
+			bill.setModifyTime(DateTimeUtil.format(new Date()));
+
+			String remark = viewBinding.editText.getText().toString();
+			bill.setRemark(remark);
+			billDao.insert(bill);
+			//然后在新建账单
+			ToastUtils.showLong("添加成功");
+		});
 		viewBinding.UIAddBillActivitySwipeRecyclerViewKeyboard.setAdapter(keyboardRecyclerViewAdapter);
 	}
 

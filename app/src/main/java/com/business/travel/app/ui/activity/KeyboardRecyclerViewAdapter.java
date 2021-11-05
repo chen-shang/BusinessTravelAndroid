@@ -16,7 +16,7 @@ import com.business.travel.app.R;
 import com.business.travel.app.ui.activity.KeyboardRecyclerViewAdapter.KeyboardRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
-import org.apache.commons.lang3.StringUtils;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -24,9 +24,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public class KeyboardRecyclerViewAdapter extends BaseRecyclerViewAdapter<KeyboardRecyclerViewAdapterViewHolder, Integer> {
 
-	public OnClickListener onSaveClick;
-	public OnClickListener onDeleteClick;
-	public OnClickListener onReRecordClick;
+	@Setter
+	private OnClickListener onSaveClick;
+	@Setter
+	private OnClickListener onDeleteClick;
+	@Setter
+	private OnClickListener onReRecordClick;
 
 	public KeyboardRecyclerViewAdapter(List<Integer> integers, BaseActivity<? extends ViewBinding> baseActivity) {
 		super(integers, baseActivity);

@@ -27,4 +27,7 @@ public interface BillDao extends BaseDao<Bill> {
 
 	@Query("SELECT sum(amount) FROM bill where projectId=:projectId")
 	Long sumTotalMoney(Long projectId);
+
+	@Query("SELECT * FROM bill where projectId=:projectId")
+	List<Bill> selectByProjectId(Long projectId);
 }

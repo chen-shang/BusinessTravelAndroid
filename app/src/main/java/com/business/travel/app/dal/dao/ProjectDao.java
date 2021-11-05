@@ -23,4 +23,10 @@ public interface ProjectDao extends BaseDao<Project> {
 	 */
 	@Query("SELECT * FROM project limit 1")
 	Project selectOne();
+
+	/**
+	 * 查询单条
+	 */
+	@Query("SELECT * FROM project where name=:projectName")
+	Project selectByName(String projectName);
 }

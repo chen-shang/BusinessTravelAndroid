@@ -32,8 +32,6 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding, ShareD
 		View view = super.onCreateView(inflater, container, savedInstanceState);
 		projectDao = AppDatabase.getInstance(getContext()).projectDao();
 		projects = projectDao.selectAll();
-		//TODO 删除
-		mock();
 
 		SwipeRecyclerView projectListRecyclerView = viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList;
 		projectListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));

@@ -46,15 +46,14 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
 	public void onResume() {
 		super.onResume();
 		AnimalUtil.show(floatingActionButton);
-		DashBoardSharedData sharedData = getDataBinding();
-		Project project = sharedData.getProject();
+		Project project = dataBinding.getProject();
 		if (project == null) {
 			return;
 		}
 		TextView textView = viewBinding.textDashboard;
 		textView.setText(project.getName());
 
-		List<Bill> bills = billDao.selectAll();
+		List<Bill> bills = billDao.selectByProjectId(project.getId());
 		ToastUtils.showShort(JacksonUtil.toString(bills));
 
 		LayoutManager layoutManager = new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false);
