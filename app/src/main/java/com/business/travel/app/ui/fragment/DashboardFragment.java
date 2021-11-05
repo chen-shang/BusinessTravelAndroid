@@ -7,9 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
@@ -74,7 +72,7 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
 			@Override
 			public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
 				Bill bill = bills.get(position);
-				TextView textView1 = holder.itemView.findViewById(R.id.text_view_name);
+				TextView textView1 = holder.itemView.findViewById(R.id.UI_ProjectItem_TextView_ProjectName);
 				textView1.setText(JacksonUtil.toString(bill));
 				textView1.setTextSize(10);
 			}

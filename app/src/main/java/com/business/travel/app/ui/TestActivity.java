@@ -133,11 +133,11 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 
 		@Override
 		public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-			TextView userInfo = holder.itemView.findViewById(R.id.text_view_name);
+			TextView userInfo = holder.itemView.findViewById(R.id.UI_ProjectItem_TextView_ProjectName);
 			User user = userList.get(position);
 			userInfo.setText(JacksonUtil.toString(user));
 
-			CardView cardView = holder.itemView.findViewById(R.id.card_view);
+			CardView cardView = holder.itemView.findViewById(R.id.UI_ProjectItem_CardView);
 			cardView.setOnClickListener(v -> {
 				ToastUtils.showLong(userInfo.getText());
 			});

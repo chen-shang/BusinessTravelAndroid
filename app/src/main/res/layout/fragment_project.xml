@@ -49,7 +49,7 @@
             app:layout_constraintTop_toBottomOf="@id/UI_ProjectFragment_ConstraintLayout">
 
         <com.yanzhenjie.recyclerview.SwipeRecyclerView
-                android:id="@+id/ui_ProjectFragment_SwipeRecyclerView"
+                android:id="@+id/UI_ProjectFragment_SwipeRecyclerView_Project_List"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
