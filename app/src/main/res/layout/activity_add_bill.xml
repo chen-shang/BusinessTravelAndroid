@@ -161,8 +161,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:padding="1dp">
+                app:layout_constraintEnd_toEndOf="parent">
 
             <!--小键盘-->
             <com.yanzhenjie.recyclerview.SwipeRecyclerView
