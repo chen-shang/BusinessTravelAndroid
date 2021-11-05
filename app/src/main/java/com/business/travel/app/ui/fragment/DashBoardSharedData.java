@@ -13,6 +13,5 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString(callSuper = true)
 public class DashBoardSharedData extends ShareData {
-
 	private Project project;
 }

@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
-import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.dao.BillDao;
 import com.business.travel.app.dal.dao.ProjectDao;
@@ -42,12 +41,17 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
 		floatingActionButton = requireActivity().findViewById(R.id.floatingActionButton);
 		billDao = AppDatabase.getInstance(this.getContext()).billDao();
 		projectDao = AppDatabase.getInstance(this.getContext()).projectDao();
+		return view;
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		//FIXME 页面启动后展示最新一条修改过的项目对应的账单列表
 		Project project = projectDao.selectLatestModify();
 		if (project != null) {
-			show(project);
 			dataBinding.setProject(project);
 		}
-		return view;
 	}
 
 	@Override

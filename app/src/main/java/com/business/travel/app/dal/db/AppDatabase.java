@@ -29,6 +29,7 @@ public abstract class AppDatabase extends RoomDatabase {
 		if (INSTANCE == null) {
 			INSTANCE =
 					Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "app.db")
+							//FIXME 后续改成异步,所有用到数据库的地方不能用UI线程
 							.allowMainThreadQueries()
 							.build();
 		}
