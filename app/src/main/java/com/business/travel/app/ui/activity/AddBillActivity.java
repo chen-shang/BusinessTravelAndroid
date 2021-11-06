@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import com.blankj.utilcode.util.ToastUtils;
@@ -22,7 +22,6 @@ import com.business.travel.app.databinding.ActivityAddBillBinding;
 import com.business.travel.app.enums.IconEnum;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.model.ImageIconInfo;
-import com.business.travel.app.ui.MasterActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
 import com.business.travel.app.ui.fragment.DashBoardSharedData;
@@ -99,9 +98,16 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 			createBill(project);
 			//5.更新项目的修改时间
 			updateProjectModifyTime(project);
+			//6.初始化选框
+			iconList.forEach(item -> item.setSelected(false));
+			associateList.forEach(item -> item.setSelected(false));
+			billRecyclerViewAdapter.notifyDataSetChanged();
+			iconRecyclerViewAdapter.notifyDataSetChanged();
+			viewBinding.UIAddBillActivityTextViewAmount.setText(null);
+
 			//6.账单创建完成后跳转到 DashboardFragment
-			Intent intent = new Intent(AddBillActivity.this, MasterActivity.class);
-			startActivity(intent);
+			//Intent intent = new Intent(AddBillActivity.this, MasterActivity.class);
+			//startActivity(intent);
 		}).onDeleteClick(v -> {
 			//当键盘删除键点击之后
 			//控制金额文本框的金额删除
@@ -136,15 +142,17 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 				.collect(Collectors.joining(","));
 		//3. 日期、备注、金额
 		String calender = viewBinding.UIAddBillActivityTextViewCalendar.getText().toString();
-		String remark = viewBinding.UIAddBillActivityEditTextRemark.getText().toString();
-		String amount = viewBinding.UIAddBillActivityTextViewAmount.getText().toString();
+		String remark = viewBinding.UIAddBillActivityEditTextRemark.getText().toString().trim();
+		String amount = viewBinding.UIAddBillActivityTextViewAmount.getText().toString().trim();
 		if (StringUtils.isBlank(amount)) {
-			ToastUtils.make().setLeftIcon(R.mipmap.ic_error).show("请输入消费金额");
+			ToastUtils.make().setGravity(Gravity.CENTER, 0, 0).setLeftIcon(R.mipmap.ic_error).show("请输入消费金额");
+			return;
 		}
 
 		Bill bill = new Bill();
 		bill.setName(consumerItemList);
 		bill.setProjectId(project.getId());
+
 		bill.setAmount(100 * Float.valueOf(amount).longValue());
 		// TODO: 2021/11/6
 		bill.setConsumeTime(DateTimeUtil.format(new Date()));

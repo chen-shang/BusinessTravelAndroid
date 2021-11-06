@@ -2,6 +2,7 @@ package com.business.travel.app.ui.activity;
 
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,12 +46,19 @@ public class IconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRecycle
 	@Override
 	public void onBindViewHolder(@NonNull @NotNull IconRecyclerViewAdapterViewHolder holder, int position) {
 		ImageIconInfo imageIconInfo = dataList.get(position);
-		ImageView uIImageViewIcon = holder.uIImageViewIcon;
-		uIImageViewIcon.setImageResource(imageIconInfo.getResourceId());
+		ImageView uiImageViewIcon = holder.uiImageViewIcon;
+
+		//初始化 uiImageViewIcon
+		uiImageViewIcon.setImageResource(imageIconInfo.getResourceId());
+		int initColor = ContextCompat.getColor(uiImageViewIcon.getContext(), R.color.black_100);
+		uiImageViewIcon.setImageDrawable(changeToColor(imageIconInfo.getResourceId(), initColor));
+
+		//初始化 uiTextViewDescription
 		TextView uiTextViewDescription = holder.uiTextViewDescription;
 		uiTextViewDescription.setText(imageIconInfo.getName());
+		uiTextViewDescription.setTextColor(initColor);
 
-		uIImageViewIcon.setOnClickListener(v -> {
+		uiImageViewIcon.setOnClickListener(v -> {
 			if (imageIconInfo.getResourceId() == R.drawable.bill_icon_add) {
 				//TODO 新增
 				ToastUtils.showShort("新增");
@@ -58,13 +66,13 @@ public class IconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRecycle
 			}
 
 			if (imageIconInfo.isSelected()) {
-				int color = ContextCompat.getColor(uIImageViewIcon.getContext(), R.color.black_100);
-				uIImageViewIcon.setImageDrawable(changeToColor(imageIconInfo.getResourceId(), color));
+				int color = ContextCompat.getColor(uiImageViewIcon.getContext(), R.color.black_100);
+				uiImageViewIcon.setImageDrawable(changeToColor(imageIconInfo.getResourceId(), color));
 				uiTextViewDescription.setTextColor(color);
 				imageIconInfo.setSelected(false);
 			} else {
-				int color = ContextCompat.getColor(uIImageViewIcon.getContext(), R.color.teal_800);
-				uIImageViewIcon.setImageDrawable(changeToColor(imageIconInfo.getResourceId(), color));
+				int color = ContextCompat.getColor(uiImageViewIcon.getContext(), R.color.teal_800);
+				uiImageViewIcon.setImageDrawable(changeToColor(imageIconInfo.getResourceId(), color));
 				uiTextViewDescription.setTextColor(color);
 				imageIconInfo.setSelected(true);
 			}
@@ -78,9 +86,10 @@ public class IconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRecycle
 		return drawable;
 	}
 
+	@SuppressLint("NonConstantResourceId")
 	static class IconRecyclerViewAdapterViewHolder extends ViewHolder {
 		@BindView(R.id.UI_ImageView_Icon)
-		ImageView uIImageViewIcon;
+		ImageView uiImageViewIcon;
 		@BindView(R.id.UI_TextView_Description)
 		TextView uiTextViewDescription;
 
