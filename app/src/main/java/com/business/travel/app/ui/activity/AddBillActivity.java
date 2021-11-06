@@ -5,12 +5,21 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnFocusChangeListener;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
+import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.KeyboardUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.dao.BillDao;
@@ -45,6 +54,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Objects.requireNonNull(getSupportActionBar()).hide();
+		KeyboardUtils.fixAndroidBug5497(this);
 
 		billDao = AppDatabase.getInstance(this).billDao();
 		projectDao = AppDatabase.getInstance(this).projectDao();
@@ -77,51 +87,105 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		};
 		viewBinding.UIAddBillActivitySwipeRecyclerViewKeyboard.setLayoutManager(layoutManager3);
 		KeyboardRecyclerViewAdapter keyboardRecyclerViewAdapter = new KeyboardRecyclerViewAdapter(new ArrayList<>(), this).onSaveClick(v -> {
-			//当键盘保存按钮点击之后
-			//1.参数校验
-			String projectName = viewBinding.UIAddBillActivityTextViewProjectName.getText().toString();
-			if (StringUtils.isBlank(projectName)) {
-				return;
+			try {
+				//当键盘保存按钮点击之后
+				saveBill(billRecyclerViewAdapter, iconRecyclerViewAdapter);
+				//6.账单创建完成后跳转到 DashboardFragment
+				ActivityUtils.finishActivity(AddBillActivity.this, true);
+			} catch (Exception e) {
+				ToastUtils.make().setLeftIcon(R.drawable.icon_error).setGravity(Gravity.CENTER, 0, 0).setDurationIsLong(true).show(e.getMessage());
 			}
-			//2.根据项目名称查询是否存在该项目
-			Project project = projectDao.selectByName(projectName);
-			//3.如果不存在则新增项目
-			if (project == null) {
-				createProject(projectName);
-				project = projectDao.selectByName(projectName);
-			}
-			if (project == null) {
-				//TODO 创建失败
-				return;
-			}
-			//4.如果存在则在当前项目下创建账单
-			createBill(project);
-			//5.更新项目的修改时间
-			updateProjectModifyTime(project);
-			//6.初始化选框
-			iconList.forEach(item -> item.setSelected(false));
-			associateList.forEach(item -> item.setSelected(false));
-			billRecyclerViewAdapter.notifyDataSetChanged();
-			iconRecyclerViewAdapter.notifyDataSetChanged();
-			viewBinding.UIAddBillActivityTextViewAmount.setText(null);
-
-			//6.账单创建完成后跳转到 DashboardFragment
-			//Intent intent = new Intent(AddBillActivity.this, MasterActivity.class);
-			//startActivity(intent);
 		}).onDeleteClick(v -> {
 			//当键盘删除键点击之后
 			//控制金额文本框的金额删除
 
 		}).onReRecordClick(v -> {
-			//当键盘再记按钮点击之后
-			//1.参数校验
-			//2.根据项目名称查询是否存在该项目
-			//3.如果不存在则新增项目
-			//4.如果存在则在当前项目下创建账单
-			//5.更新项目的修改时间
-			//6.注意不用留在当前页面
+			try {
+				//当键盘保存按钮点击之后
+				saveBill(billRecyclerViewAdapter, iconRecyclerViewAdapter);
+			} catch (Exception e) {
+				ToastUtils.make().setLeftIcon(R.drawable.icon_error).setGravity(Gravity.CENTER, 0, 0).setDurationIsLong(true).show(e.getMessage());
+			}
 		});
 		viewBinding.UIAddBillActivitySwipeRecyclerViewKeyboard.setAdapter(keyboardRecyclerViewAdapter);
+	}
+
+	private void saveBill(IconRecyclerViewAdapter billRecyclerViewAdapter, IconRecyclerViewAdapter iconRecyclerViewAdapter) {
+		//参数校验
+		String projectName = viewBinding.UIAddBillActivityTextViewProjectName.getText().toString();
+		if (StringUtils.isBlank(projectName)) {
+			throw new IllegalArgumentException("请输入项目名称");
+		}
+		//根据项目名称查询是否存在该项目
+		Project project = projectDao.selectByName(projectName);
+		//3.如果不存在则新增项目
+		project = Optional.ofNullable(project).orElseGet(() -> {
+			//新增
+			createProject(projectName);
+			//并获取新增的项目
+			return projectDao.selectByName(projectName);
+		});
+		//如果项目不存在并且创建失败的话抛出异常
+		Optional.ofNullable(project).orElseThrow(() -> new IllegalArgumentException("请输入项目名称"));
+		//如果存在则在当前项目下创建账单
+		createBill(project);
+		//更新项目的修改时间
+		updateProjectModifyTime(project);
+		//初始化数据
+		iconList.forEach(item -> item.setSelected(false));
+		associateList.forEach(item -> item.setSelected(false));
+		billRecyclerViewAdapter.notifyDataSetChanged();
+		iconRecyclerViewAdapter.notifyDataSetChanged();
+
+		viewBinding.UIAddBillActivityTextViewAmount.setText(null);
+		//更新返回页的数据
+		DashboardFragment dashboardFragment = MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getFragment();
+		DashBoardSharedData sharedData = dashboardFragment.getDataBinding();
+		sharedData.setProject(project);
+	}
+
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+			View v = getCurrentFocus();
+			if (isShouldHideInput(v, ev)) {
+
+				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+				if (imm != null) {
+					imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+				}
+			}
+			return super.dispatchTouchEvent(ev);
+		}
+		// 必不可少，否则所有的组件都不会有TouchEvent了
+		if (getWindow().superDispatchTouchEvent(ev)) {
+			return true;
+		}
+		return onTouchEvent(ev);
+	}
+
+	public boolean isShouldHideInput(View v, MotionEvent event) {
+		if (v != null && (v instanceof EditText)) {
+			int[] leftTop = {0, 0};
+			//获取输入框当前的location位置
+			v.getLocationInWindow(leftTop);
+			int left = leftTop[0];
+			int top = leftTop[1];
+			int bottom = top + v.getHeight();
+			int right = left + v.getWidth();
+			if (event.getX() > left && event.getX() < right
+					&& event.getY() > top && event.getY() < bottom) {
+				// 点击的是输入框区域，保留点击EditText的事件
+				return false;
+			} else {
+				//使EditText触发一次失去焦点事件
+				v.setFocusable(false);
+				//                v.setFocusable(true); //这里不需要是因为下面一句代码会同时实现这个功能
+				v.setFocusableInTouchMode(true);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void updateProjectModifyTime(Project project) {
@@ -130,24 +194,25 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	}
 
 	private void createBill(Project project) {
-		//1. 选中的消费项目
-		String consumerItemList = iconList.stream()
-				.filter(ImageIconInfo::isSelected)
-				.map(ImageIconInfo::getName)
-				.collect(Collectors.joining(","));
-		//2. 选中的同行人
-		String associateItemList = associateList.stream()
-				.filter(ImageIconInfo::isSelected)
-				.map(ImageIconInfo::getName)
-				.collect(Collectors.joining(","));
 		//3. 日期、备注、金额
 		String calender = viewBinding.UIAddBillActivityTextViewCalendar.getText().toString();
 		String remark = viewBinding.UIAddBillActivityEditTextRemark.getText().toString().trim();
 		String amount = viewBinding.UIAddBillActivityTextViewAmount.getText().toString().trim();
 		if (StringUtils.isBlank(amount)) {
-			ToastUtils.make().setGravity(Gravity.CENTER, 0, 0).setLeftIcon(R.mipmap.ic_error).show("请输入消费金额");
-			return;
+			throw new IllegalArgumentException("请输入消费金额");
 		}
+		//1. 选中的消费项目
+		String consumerItemList = iconList.stream()
+				.filter(ImageIconInfo::isSelected)
+				.map(ImageIconInfo::getName)
+				.filter(StringUtils::isBlank)
+				.collect(Collectors.joining(","));
+		//2. 选中的同行人
+		String associateItemList = associateList.stream()
+				.filter(ImageIconInfo::isSelected)
+				.map(ImageIconInfo::getName)
+				.filter(StringUtils::isBlank)
+				.collect(Collectors.joining(","));
 
 		Bill bill = new Bill();
 		bill.setName(consumerItemList);
@@ -167,10 +232,10 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		Project project = new Project();
 		project.setName(projectName);
 		project.setStartTime(DateTimeUtil.format(new Date()));
-		project.setEndTime(DateTimeUtil.format(new Date()));
+		project.setEndTime(null);
 		project.setCreateTime(DateTimeUtil.format(new Date()));
 		project.setModifyTime(DateTimeUtil.format(new Date()));
-		project.setRemark(DateTimeUtil.format(new Date()));
+		project.setRemark(null);
 		projectDao.insert(project);
 	}
 

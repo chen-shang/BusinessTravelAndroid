@@ -6,7 +6,9 @@ import java.util.Map;
 
 import android.os.Build.VERSION_CODES;
 import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
+import androidx.viewbinding.ViewBinding;
+import com.business.travel.app.ui.base.BaseFragment;
+import com.business.travel.app.ui.base.ShareData;
 import com.business.travel.app.ui.fragment.DashboardFragment;
 import com.business.travel.app.ui.fragment.MyFragment;
 import com.business.travel.app.ui.fragment.ProjectFragment;
@@ -31,9 +33,9 @@ public enum MasterFragmentPositionEnum {
 	}
 
 	private final int position;
-	private final Fragment fragment;
+	private final BaseFragment<? extends ViewBinding, ? extends ShareData> fragment;
 
-	MasterFragmentPositionEnum(int code, Fragment fragment) {
+	MasterFragmentPositionEnum(int code, BaseFragment<? extends ViewBinding, ? extends ShareData> fragment) {
 		this.position = code;
 		this.fragment = fragment;
 	}
@@ -42,8 +44,8 @@ public enum MasterFragmentPositionEnum {
 		return MAP.get(position);
 	}
 
-	public Fragment getFragment() {
-		return fragment;
+	public <T extends BaseFragment<? extends ViewBinding, ? extends ShareData>> T getFragment() {
+		return (T)fragment;
 	}
 
 	public int getPosition() {

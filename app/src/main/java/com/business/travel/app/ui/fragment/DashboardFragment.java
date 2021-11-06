@@ -41,17 +41,11 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
 		floatingActionButton = requireActivity().findViewById(R.id.floatingActionButton);
 		billDao = AppDatabase.getInstance(this.getContext()).billDao();
 		projectDao = AppDatabase.getInstance(this.getContext()).projectDao();
-		return view;
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-		//FIXME 页面启动后展示最新一条修改过的项目对应的账单列表
 		Project project = projectDao.selectLatestModify();
 		if (project != null) {
 			dataBinding.setProject(project);
 		}
+		return view;
 	}
 
 	@Override

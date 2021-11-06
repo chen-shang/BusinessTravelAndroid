@@ -1,6 +1,7 @@
 package com.business.travel.app.ui.fragment;
 
 import java.util.List;
+import java.util.Optional;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -14,7 +15,6 @@ import androidx.viewbinding.ViewBinding;
 import androidx.viewpager2.widget.ViewPager2;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.dao.BillDao;
 import com.business.travel.app.dal.db.AppDatabase;
@@ -48,11 +48,18 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 	public void onBindViewHolder(@NonNull @NotNull ProjectAdapterHolder holder, int position) {
 		Project project = dataList.get(position);
 		if (project == null) {
-			ToastUtils.make().setLeftIcon(R.mipmap.ic_error).show("项目为空");
 			return;
 		}
-		String startTime = DateTimeUtil.format(DateTimeUtil.parseDate(project.getStartTime()), "MM月dd日");
-		String endTime = DateTimeUtil.format(DateTimeUtil.parseDate(project.getEndTime()), "MM月dd日");
+		String startTime = Optional.ofNullable(project.getStartTime())
+				.map(DateTimeUtil::parseDate)
+				.map(datetime -> DateTimeUtil.format(datetime, "MM月dd日"))
+				.orElse("");
+
+		String endTime = Optional.ofNullable(project.getEndTime())
+				.map(DateTimeUtil::parseDate)
+				.map(datetime -> DateTimeUtil.format(datetime, "MM月dd日"))
+				.orElse("");
+
 		holder.dateTextView.setText(startTime + "-" + endTime);
 
 		BillDao billDao = AppDatabase.getInstance(holder.itemView.getContext()).billDao();
@@ -63,13 +70,15 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 		holder.cardView.setOnClickListener(v -> {
 			ViewPager2 viewPager2 = activity.findViewById(R.id.viewPager);
 			viewPager2.setCurrentItem(MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition());
-			DashboardFragment dashboardFragment = (DashboardFragment)MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getFragment();
+
+			DashboardFragment dashboardFragment = MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getFragment();
 			DashBoardSharedData sharedData = dashboardFragment.getDataBinding();
 			sharedData.setProject(project);
 		});
 	}
 
-	class ProjectAdapterHolder extends ViewHolder {
+	@SuppressLint("NonConstantResourceId")
+	static class ProjectAdapterHolder extends ViewHolder {
 		@BindView(R.id.UI_ProjectItem_TextView_ProjectName)
 		public TextView projectNameTextView;
 		@BindView(R.id.UI_ProjectItem_TextView_Date)
