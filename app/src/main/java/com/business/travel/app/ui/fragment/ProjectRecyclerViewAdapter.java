@@ -23,7 +23,9 @@ import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.ui.fragment.ProjectRecyclerViewAdapter.ProjectAdapterHolder;
+import com.business.travel.app.utils.LogToast;
 import com.business.travel.utils.DateTimeUtil;
+import com.business.travel.utils.JacksonUtil;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -75,6 +77,13 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 			DashBoardSharedData sharedData = dashboardFragment.getDataBinding();
 			sharedData.setProject(project);
 		});
+
+		holder.cardView.setOnLongClickListener(v -> {
+			LogToast.infoShow(JacksonUtil.toPrettyString(project));
+			//// TODO: 2021/11/7 弹出对话框
+			return true;
+		});
+
 	}
 
 	@SuppressLint("NonConstantResourceId")

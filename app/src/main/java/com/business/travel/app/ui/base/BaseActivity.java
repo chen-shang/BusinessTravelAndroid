@@ -5,9 +5,14 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Objects;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewbinding.ViewBinding;
@@ -44,6 +49,47 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
 		super.onDestroy();
 		//activity销毁的时候清空,有助于快速回收垃圾
 		viewBinding = null;
+	}
+
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		if (ev.getAction() != MotionEvent.ACTION_DOWN) {
+			return getWindow().superDispatchTouchEvent(ev) || onTouchEvent(ev);
+		}
+
+		View v = getCurrentFocus();
+		if (!isShouldHideInput(v, ev)) {
+			return super.dispatchTouchEvent(ev);
+		}
+
+		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		if (imm != null) {
+			imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+		}
+		return super.dispatchTouchEvent(ev);
+		// 必不可少，否则所有的组件都不会有TouchEvent了
+	}
+
+	public boolean isShouldHideInput(View v, MotionEvent event) {
+		if (!(v instanceof EditText)) {
+			return false;
+		}
+
+		int[] leftTop = {0, 0};
+		//获取输入框当前的location位置
+		v.getLocationInWindow(leftTop);
+		int left = leftTop[0];
+		int top = leftTop[1];
+		int bottom = top + v.getHeight();
+		int right = left + v.getWidth();
+		if (event.getX() > left && event.getX() < right && event.getY() > top && event.getY() < bottom) {
+			// 点击的是输入框区域，保留点击EditText的事件
+			return false;
+		} else {
+			v.setFocusable(false);
+			v.setFocusableInTouchMode(true);
+			return true;
+		}
 	}
 }
 

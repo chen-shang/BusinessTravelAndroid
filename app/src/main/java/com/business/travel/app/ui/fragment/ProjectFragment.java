@@ -16,7 +16,6 @@ import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.FragmentProjectBinding;
 import com.business.travel.app.ui.MasterActivity;
 import com.business.travel.app.ui.base.BaseFragment;
-import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
 import com.business.travel.app.ui.base.ShareData;
 
 /**
@@ -36,12 +35,6 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding, ShareD
 		viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
 		projectListRecyclerViewAdapter = new ProjectRecyclerViewAdapter(projects, (MasterActivity)requireActivity());
 		viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList.setAdapter(projectListRecyclerViewAdapter);
-		//开启滑动删除
-		viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList.setItemViewSwipeEnabled(true);
-		viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(projects, projectListRecyclerViewAdapter).onItemMove(() -> {
-			//FIXME 滑动删除后的功能 @郑大朝
-		}));
-
 		viewBinding.UIProjectFragmentSwipeRefreshLayout.setOnRefreshListener(() -> {
 			//下滑刷新项目列表
 			ThreadPoolConstant.COMMON_THREAD_POOL.submit(() -> {
