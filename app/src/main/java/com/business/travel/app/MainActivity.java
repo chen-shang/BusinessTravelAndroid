@@ -11,7 +11,6 @@ import com.business.travel.app.databinding.ActivityMainBinding;
 import com.business.travel.app.ui.MasterActivity;
 import com.business.travel.app.ui.TestActivity;
 import com.business.travel.app.ui.base.BaseActivity;
-import com.business.travel.app.ui.base.ShareData;
 
 /**
  * @author chenshang
@@ -26,7 +25,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 		viewBinding = ActivityMainBinding.inflate(getLayoutInflater());
 		setContentView(viewBinding.getRoot());
 
-		viewBinding.textViewSignUp.setOnClickListener(v -> {
+		viewBinding.UIMainActivityImageViewIcon.setOnClickListener(v -> {
 			Intent intent = new Intent(this, TestActivity.class);
 			startActivity(intent);
 		});

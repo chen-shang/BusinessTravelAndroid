@@ -70,7 +70,7 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 		holder.projectNameTextView.setText(project.getName());
 
 		holder.cardView.setOnClickListener(v -> {
-			ViewPager2 viewPager2 = activity.findViewById(R.id.viewPager);
+			ViewPager2 viewPager2 = activity.findViewById(R.id.UI_MasterActivity_ViewPager2);
 			viewPager2.setCurrentItem(MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition());
 
 			DashboardFragment dashboardFragment = MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getFragment();

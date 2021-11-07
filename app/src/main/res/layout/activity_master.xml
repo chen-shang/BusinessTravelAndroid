@@ -8,23 +8,22 @@
         tools:context=".ui.MasterActivity">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/nav_view"
+            android:id="@+id/UI_MasterActivity_BottomNavigationView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="0dp"
             android:layout_marginEnd="0dp"
-            android:background="?android:attr/windowBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:menu="@menu/bottom_navigation_view_menu"/>
 
     <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewPager"
+            android:id="@+id/UI_MasterActivity_ViewPager2"
             android:layout_width="match_parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/nav_view"
+            app:layout_constraintBottom_toTopOf="@+id/UI_MasterActivity_BottomNavigationView"
             />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -33,7 +32,7 @@
             android:clickable="true"
             android:src="@drawable/vector_drawable_dashbord"
             android:backgroundTint="?android:attr/windowBackground"
-            android:id="@+id/floatingActionButton"
+            android:id="@+id/UI_MasterActivity_FloatingActionButton"
             app:elevation="8dp"
             app:borderWidth="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

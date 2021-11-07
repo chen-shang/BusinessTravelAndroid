@@ -14,6 +14,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import com.blankj.utilcode.util.KeyboardUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.dao.UserDao;
@@ -80,10 +81,10 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 		recyclerView.setOnItemMoveListener(mItemMoveListener);
 		viewBinding.recyclerView.setAdapter(adapter);
 
-		viewBinding.swipeRedreshLayout.setOnRefreshListener(() -> {
-			select(null);
-			viewBinding.swipeRedreshLayout.setRefreshing(false);
-		});
+		//viewBinding.swipeRedreshLayout.setOnRefreshListener(() -> {
+		//	select(null);
+		//	viewBinding.swipeRedreshLayout.setRefreshing(false);
+		//});
 
 	}
 

@@ -16,6 +16,7 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewbinding.ViewBinding;
+import com.blankj.utilcode.util.KeyboardUtils;
 
 /**
  * @author chenshang
@@ -51,6 +52,12 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
 		viewBinding = null;
 	}
 
+	/**
+	 * 弹出的键盘在失去焦点的时候收回
+	 *
+	 * @param ev
+	 * @return
+	 */
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
 		if (ev.getAction() != MotionEvent.ACTION_DOWN) {
@@ -85,11 +92,10 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
 		if (event.getX() > left && event.getX() < right && event.getY() > top && event.getY() < bottom) {
 			// 点击的是输入框区域，保留点击EditText的事件
 			return false;
-		} else {
-			v.setFocusable(false);
-			v.setFocusableInTouchMode(true);
-			return true;
 		}
+		v.setFocusable(false);
+		v.setFocusableInTouchMode(true);
+		return true;
 	}
 }
 

@@ -43,7 +43,7 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = super.onCreateView(inflater, container, savedInstanceState);
-		floatingActionButton = requireActivity().findViewById(R.id.floatingActionButton);
+		floatingActionButton = requireActivity().findViewById(R.id.UI_MasterActivity_FloatingActionButton);
 		billDao = AppDatabase.getInstance(this.getContext()).billDao();
 		projectDao = AppDatabase.getInstance(this.getContext()).projectDao();
 		Project project = projectDao.selectLatestModify();
