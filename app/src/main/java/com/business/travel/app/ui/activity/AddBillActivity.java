@@ -29,6 +29,7 @@ import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
 import com.business.travel.app.ui.fragment.DashBoardSharedData;
 import com.business.travel.app.ui.fragment.DashboardFragment;
+import com.business.travel.app.utils.LogToast;
 import com.business.travel.utils.DateTimeUtil;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -88,7 +89,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 				//6.账单创建完成后跳转到 DashboardFragment
 				ActivityUtils.finishActivity(AddBillActivity.this, true);
 			} catch (Exception e) {
-				ToastUtils.make().setLeftIcon(R.drawable.icon_error).setGravity(Gravity.CENTER, 0, 0).setDurationIsLong(true).show(e.getMessage());
+				LogToast.errorShow(e.getMessage());
 			}
 		}).onDeleteClick(v -> {
 			//当键盘删除键点击之后

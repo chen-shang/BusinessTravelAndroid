@@ -40,10 +40,11 @@ public class AsyncAspect {
 		Integer timeoutSecond = Optional.ofNullable(asyncAnnotation).map(Async::timeout).orElse(5);
 		return CompletableFuture.supplyAsync(() -> {
 			try {
+				LogUtils.i("开始异步执行 " + method.getName());
 				return joinPoint.proceed();
 			} catch (Throwable e) {
-				LogUtils.i("任务执行异常", e);
-				throw new RuntimeException("任务执行异常", e);
+				LogUtils.e("异步执行异常", e);
+				throw new RuntimeException(e.getMessage(), e);
 			}
 		}, COMMON_THREAD_POOL).get(timeoutSecond, TimeUnit.SECONDS);
 	}

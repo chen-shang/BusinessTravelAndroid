@@ -1,5 +1,6 @@
 package com.business.travel.app.ui;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.blankj.utilcode.util.KeyboardUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
+import com.business.travel.app.api.BusinessTravelApi;
 import com.business.travel.app.dal.dao.UserDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.User;
@@ -41,6 +44,12 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 		super.onCreate(savedInstanceState);
 		userDao = AppDatabase.getInstance(this).userDao();
 		SwipeRecyclerView recyclerView = viewBinding.recyclerView;
+		try {
+			String s = BusinessTravelApi.healthCheck();
+			ToastUtils.showShort(s);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		mDataList = userDao.selectAll();
 		adapter = new MyAdapter(mDataList);
