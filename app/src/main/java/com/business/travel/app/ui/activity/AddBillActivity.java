@@ -30,6 +30,7 @@ import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
 import com.business.travel.app.ui.fragment.DashBoardSharedData;
 import com.business.travel.app.ui.fragment.DashboardFragment;
 import com.business.travel.utils.DateTimeUtil;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -155,22 +156,22 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		String consumerItemList = iconList.stream()
 				.filter(ImageIconInfo::isSelected)
 				.map(ImageIconInfo::getName)
-				.filter(StringUtils::isBlank)
+				.filter(StringUtils::isNotBlank)
 				.collect(Collectors.joining(","));
 		//2. 选中的同行人
 		String associateItemList = associateList.stream()
 				.filter(ImageIconInfo::isSelected)
 				.map(ImageIconInfo::getName)
-				.filter(StringUtils::isBlank)
+				.filter(StringUtils::isNotBlank)
 				.collect(Collectors.joining(","));
 
 		Bill bill = new Bill();
 		bill.setName(consumerItemList);
 		bill.setProjectId(project.getId());
-
-		bill.setAmount(100 * Float.valueOf(amount).longValue());
+		bill.setAmount(Double.parseDouble(amount));
 		// TODO: 2021/11/6
-		bill.setConsumeTime(DateTimeUtil.format(new Date()));
+		int i = RandomUtils.nextInt(0, 10);
+		bill.setConsumeDate(DateTimeUtil.format(DateTimeUtil.toLocalDateTime(new Date()).plusDays(i), "yyyy-MM-dd"));
 		bill.setAssociateId(associateItemList);
 		bill.setCreateTime(DateTimeUtil.format(new Date()));
 		bill.setModifyTime(DateTimeUtil.format(new Date()));

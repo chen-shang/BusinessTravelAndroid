@@ -25,11 +25,11 @@ public class Bill {
 	/**
 	 * 账单金额,单位分
 	 */
-	private Long amount;
+	private Double amount;
 	/**
-	 * 消费时间,yyyy-MM-dd HH:mm:ss
+	 * 消费时间,yyyy-MM-dd
 	 */
-	private String consumeTime;
+	private String consumeDate;
 	/**
 	 * 差旅同行人id,逗号分割
 	 */

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "e3086619087daaec480b4b85b9643777",
+    "identityHash": "db6afb4e89a005fbd6a2f08735ae828b",
     "entities": [
       {
         "tableName": "User",
@@ -38,7 +38,7 @@
       },
       {
         "tableName": "Bill",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `projectId` INTEGER, `amount` INTEGER, `consumeTime` TEXT, `associateId` TEXT, `createTime` TEXT, `modifyTime` TEXT, `remark` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `projectId` INTEGER, `amount` REAL, `consumeDate` TEXT, `associateId` TEXT, `createTime` TEXT, `modifyTime` TEXT, `remark` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -61,12 +61,12 @@
           {
             "fieldPath": "amount",
             "columnName": "amount",
-            "affinity": "INTEGER",
+            "affinity": "REAL",
             "notNull": false
           },
           {
-            "fieldPath": "consumeTime",
-            "columnName": "consumeTime",
+            "fieldPath": "consumeDate",
+            "columnName": "consumeDate",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -223,7 +223,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e3086619087daaec480b4b85b9643777')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'db6afb4e89a005fbd6a2f08735ae828b')"
     ]
   }
 }

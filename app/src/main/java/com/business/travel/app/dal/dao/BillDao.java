@@ -30,4 +30,10 @@ public interface BillDao extends BaseDao<Bill> {
 
 	@Query("SELECT * FROM bill where projectId=:projectId")
 	List<Bill> selectByProjectId(Long projectId);
+
+	@Query("SELECT distinct consumeDate FROM bill where projectId=:projectId")
+	List<String> selectConsumeDateByProjectId(Long projectId);
+
+	@Query("SELECT * FROM bill where projectId=:projectId and consumeDate=:consumeDate")
+	List<Bill> selectByProjectIdAndConsumeDate(Long projectId, String consumeDate);
 }
