@@ -11,7 +11,7 @@ import com.business.travel.app.dal.entity.Item;
  * @author chenshang
  */
 @Dao
-public interface ConsumeItemDao extends BaseDao<Item> {
+public interface ItemDao extends BaseDao<Item> {
     /**
      * 查询全部
      */

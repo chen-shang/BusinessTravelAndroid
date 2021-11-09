@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 /**
  * @author chenshang
  */
-@Entity(indices = {@Index(value =["name", "icon", "type"], unique = true)})
+@Entity(indices = {@Index(value = {"name", "icon", "type"}, unique = true)})
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class Item extends BaseEntity {

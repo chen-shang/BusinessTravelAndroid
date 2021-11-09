@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "6922eb8a64349b4a00ef7ce967c1753a",
+    "identityHash": "7c5963f3b830a95511216345ca5440bf",
     "entities": [
       {
         "tableName": "Bill",
@@ -192,12 +192,73 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "Item",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `icon` TEXT, `type` INTEGER, `createTime` TEXT, `modifyTime` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "icon",
+            "columnName": "icon",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createTime",
+            "columnName": "createTime",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "modifyTime",
+            "columnName": "modifyTime",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_Item_name_icon_type",
+            "unique": true,
+            "columnNames": [
+              "name",
+              "icon",
+              "type"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Item_name_icon_type` ON `${TABLE_NAME}` (`name`, `icon`, `type`)"
+          }
+        ],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6922eb8a64349b4a00ef7ce967c1753a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7c5963f3b830a95511216345ca5440bf')"
     ]
   }
 }

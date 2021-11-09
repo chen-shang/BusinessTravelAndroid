@@ -1,8 +1,10 @@
 package com.business.travel.app.ui;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -17,15 +19,18 @@ import androidx.recyclerview.widget.RecyclerView.Adapter;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
-import com.business.travel.app.api.BusinessTravelApi;
 import com.business.travel.app.dal.dao.ProjectDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityTestBinding;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.utils.JacksonUtil;
+import com.pixplicity.sharp.Sharp;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import com.yanzhenjie.recyclerview.touch.OnItemMoveListener;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Request.Builder;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -40,13 +45,16 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         projectDao = AppDatabase.getInstance(this).projectDao();
-        SwipeRecyclerView recyclerView = viewBinding.recyclerView;
+
+        Request request = new Builder().url("https://gitee.com/chen-shang/business-travel-resource/raw/master/icon/1%20%E9%A5%AE%E9%A3%9F/1%20%E8%94%AC%E8%8F%9C.svg").build();
         try {
-            String s = BusinessTravelApi.healthCheck();
-            ToastUtils.showShort(s);
+            final InputStream inputStream = Objects.requireNonNull(new OkHttpClient().newCall(request).execute().body()).byteStream();
+            Sharp.loadInputStream(inputStream).into(viewBinding.image1);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        SwipeRecyclerView recyclerView = viewBinding.recyclerView;
 
         mDataList = projectDao.selectAll();
         adapter = new MyAdapter(mDataList);
