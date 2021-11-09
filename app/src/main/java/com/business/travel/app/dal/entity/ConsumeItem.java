@@ -11,22 +11,18 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Associate extends BaseEntity {
+public class ConsumeItem extends BaseEntity {
     /**
      * 主键id
      */
     @PrimaryKey(autoGenerate = true)
     private Long id;
     /**
-     * 同行人姓名
+     * 消费项名称
      */
     private String name;
     /**
-     * 性别: 0=男 1=女
+     * 消费项图标
      */
-    private Integer gender;
-    /**
-     * 头像
-     */
-    private String avatar;
+    private String icon;
 }

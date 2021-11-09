@@ -165,7 +165,6 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
         Bill bill = new Bill();
         bill.setName(consumerItemList);
         bill.setProjectId(project.getId());
-        bill.setAmount(Double.parseDouble(amount));
         // TODO: 2021/11/6
         int i = RandomUtils.nextInt(0, 10);
         bill.setConsumeDate(DateTimeUtil.format(DateTimeUtil.toLocalDateTime(new Date()).plusDays(i), "yyyy-MM-dd"));

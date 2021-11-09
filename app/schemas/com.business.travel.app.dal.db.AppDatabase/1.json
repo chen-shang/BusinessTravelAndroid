@@ -2,48 +2,22 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "db6afb4e89a005fbd6a2f08735ae828b",
+    "identityHash": "6922eb8a64349b4a00ef7ce967c1753a",
     "entities": [
       {
-        "tableName": "User",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `firstName` TEXT, `lastName` TEXT)",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "firstName",
-            "columnName": "firstName",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "lastName",
-            "columnName": "lastName",
-            "affinity": "TEXT",
-            "notNull": false
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": true
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
         "tableName": "Bill",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `projectId` INTEGER, `amount` REAL, `consumeDate` TEXT, `associateId` TEXT, `createTime` TEXT, `modifyTime` TEXT, `remark` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `icon` TEXT, `name` TEXT, `amount` TEXT, `consumeDate` TEXT, `associateId` TEXT, `remark` TEXT, `projectId` INTEGER, `createTime` TEXT, `modifyTime` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "icon",
+            "columnName": "icon",
+            "affinity": "TEXT",
             "notNull": false
           },
           {
@@ -53,15 +27,9 @@
             "notNull": false
           },
           {
-            "fieldPath": "projectId",
-            "columnName": "projectId",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
             "fieldPath": "amount",
             "columnName": "amount",
-            "affinity": "REAL",
+            "affinity": "TEXT",
             "notNull": false
           },
           {
@@ -77,6 +45,18 @@
             "notNull": false
           },
           {
+            "fieldPath": "remark",
+            "columnName": "remark",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "projectId",
+            "columnName": "projectId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
             "fieldPath": "createTime",
             "columnName": "createTime",
             "affinity": "TEXT",
@@ -85,12 +65,6 @@
           {
             "fieldPath": "modifyTime",
             "columnName": "modifyTime",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "remark",
-            "columnName": "remark",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -106,7 +80,7 @@
       },
       {
         "tableName": "Project",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `startTime` TEXT, `endTime` TEXT, `createTime` TEXT, `modifyTime` TEXT, `remark` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `startTime` TEXT, `endTime` TEXT, `remark` TEXT, `createTime` TEXT, `modifyTime` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -133,6 +107,12 @@
             "notNull": false
           },
           {
+            "fieldPath": "remark",
+            "columnName": "remark",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
             "fieldPath": "createTime",
             "columnName": "createTime",
             "affinity": "TEXT",
@@ -141,12 +121,6 @@
           {
             "fieldPath": "modifyTime",
             "columnName": "modifyTime",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "remark",
-            "columnName": "remark",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -171,7 +145,7 @@
       },
       {
         "tableName": "Associate",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `avatar` TEXT, `createTime` TEXT, `modifyTime` TEXT, `remark` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `gender` INTEGER, `avatar` TEXT, `createTime` TEXT, `modifyTime` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -183,6 +157,12 @@
             "fieldPath": "name",
             "columnName": "name",
             "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "gender",
+            "columnName": "gender",
+            "affinity": "INTEGER",
             "notNull": false
           },
           {
@@ -202,12 +182,6 @@
             "columnName": "modifyTime",
             "affinity": "TEXT",
             "notNull": false
-          },
-          {
-            "fieldPath": "remark",
-            "columnName": "remark",
-            "affinity": "TEXT",
-            "notNull": false
           }
         ],
         "primaryKey": {
@@ -223,7 +197,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'db6afb4e89a005fbd6a2f08735ae828b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6922eb8a64349b4a00ef7ce967c1753a')"
     ]
   }
 }

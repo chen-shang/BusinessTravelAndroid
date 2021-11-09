@@ -1,7 +1,5 @@
 package com.business.travel.app.ui;
 
-import java.util.Objects;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;

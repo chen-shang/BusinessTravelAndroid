@@ -10,169 +10,172 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
-import com.blankj.utilcode.util.KeyboardUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.api.BusinessTravelApi;
-import com.business.travel.app.dal.dao.UserDao;
+import com.business.travel.app.dal.dao.ProjectDao;
 import com.business.travel.app.dal.db.AppDatabase;
-import com.business.travel.app.dal.entity.User;
+import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityTestBinding;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.utils.JacksonUtil;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import com.yanzhenjie.recyclerview.touch.OnItemMoveListener;
-import org.apache.commons.lang3.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author chenshang
  */
 public class TestActivity extends BaseActivity<ActivityTestBinding> {
-	MyAdapter adapter;
-	private UserDao userDao;
-	private List<User> mDataList;
+    MyAdapter adapter;
+    private ProjectDao projectDao;
+    private List<Project> mDataList;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		userDao = AppDatabase.getInstance(this).userDao();
-		SwipeRecyclerView recyclerView = viewBinding.recyclerView;
-		try {
-			String s = BusinessTravelApi.healthCheck();
-			ToastUtils.showShort(s);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        projectDao = AppDatabase.getInstance(this).projectDao();
+        SwipeRecyclerView recyclerView = viewBinding.recyclerView;
+        try {
+            String s = BusinessTravelApi.healthCheck();
+            ToastUtils.showShort(s);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-		mDataList = userDao.selectAll();
-		adapter = new MyAdapter(mDataList);
+        mDataList = projectDao.selectAll();
+        adapter = new MyAdapter(mDataList);
 
-		recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-		// 拖拽排序，默认关闭。
-		recyclerView.setLongPressDragEnabled(true);
-		// 侧滑删除，默认关闭。
-		recyclerView.setItemViewSwipeEnabled(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        // 拖拽排序，默认关闭。
+        recyclerView.setLongPressDragEnabled(true);
+        // 侧滑删除，默认关闭。
+        recyclerView.setItemViewSwipeEnabled(true);
 
-		OnItemMoveListener mItemMoveListener = new OnItemMoveListener() {
-			@Override
-			public boolean onItemMove(ViewHolder srcHolder, ViewHolder targetHolder) {
-				// 此方法在Item拖拽交换位置时被调用。
-				// 第一个参数是要交换为之的Item，第二个是目标位置的Item。
+        OnItemMoveListener mItemMoveListener = new OnItemMoveListener() {
+            @Override
+            public boolean onItemMove(ViewHolder srcHolder, ViewHolder targetHolder) {
+                // 此方法在Item拖拽交换位置时被调用。
+                // 第一个参数是要交换为之的Item，第二个是目标位置的Item。
 
-				// 交换数据，并更新adapter。
-				int fromPosition = srcHolder.getAdapterPosition();
-				int toPosition = targetHolder.getAdapterPosition();
-				Collections.swap(mDataList, fromPosition, toPosition);
-				adapter.notifyItemMoved(fromPosition, toPosition);
+                // 交换数据，并更新adapter。
+                int fromPosition = srcHolder.getAdapterPosition();
+                int toPosition = targetHolder.getAdapterPosition();
+                Collections.swap(mDataList, fromPosition, toPosition);
+                adapter.notifyItemMoved(fromPosition, toPosition);
 
-				// 返回true，表示数据交换成功，ItemView可以交换位置。
-				return true;
-			}
+                // 返回true，表示数据交换成功，ItemView可以交换位置。
+                return true;
+            }
 
-			@Override
-			public void onItemDismiss(ViewHolder srcHolder) {
-				// 此方法在Item在侧滑删除时被调用。
+            @Override
+            public void onItemDismiss(ViewHolder srcHolder) {
+                // 此方法在Item在侧滑删除时被调用。
 
-				// 从数据源移除该Item对应的数据，并刷新Adapter。
-				int position = srcHolder.getAdapterPosition();
-				mDataList.remove(position);
-				adapter.notifyItemRemoved(position);
-			}
-		};
-		// 监听拖拽，更新UI
-		recyclerView.setOnItemMoveListener(mItemMoveListener);
-		viewBinding.recyclerView.setAdapter(adapter);
+                // 从数据源移除该Item对应的数据，并刷新Adapter。
+                int position = srcHolder.getAdapterPosition();
+                mDataList.remove(position);
+                adapter.notifyItemRemoved(position);
+            }
+        };
+        // 监听拖拽，更新UI
+        recyclerView.setOnItemMoveListener(mItemMoveListener);
+        viewBinding.recyclerView.setAdapter(adapter);
 
-		//viewBinding.swipeRedreshLayout.setOnRefreshListener(() -> {
-		//	select(null);
-		//	viewBinding.swipeRedreshLayout.setRefreshing(false);
-		//});
+        //viewBinding.swipeRedreshLayout.setOnRefreshListener(() -> {
+        //	select(null);
+        //	viewBinding.swipeRedreshLayout.setRefreshing(false);
+        //});
 
-	}
+    }
 
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		AppDatabase.getInstance(this).close();
-	}
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AppDatabase.getInstance(this).close();
+    }
 
-	public void insert(View view) {
-		User user = new User();
-		user.setFirstName("chen" + RandomUtils.nextInt());
-		user.setLastName("shang" + RandomUtils.nextInt());
-		Long id = userDao.insert(user);
-		user.setId(id);
-		ToastUtils.showShort("插入成功:" + JacksonUtil.toString(user));
+    public void insert(View view) {
+        Project user = new Project();
+        user.setId(0L);
+        user.setName("");
+        user.setStartTime("");
+        user.setEndTime("");
+        user.setRemark("");
+        user.setCreateTime("");
+        user.setModifyTime("");
 
-		mDataList.add(user);
-		adapter.notifyDataSetChanged();
-	}
+        Long id = projectDao.insert(user);
+        user.setId(id);
+        ToastUtils.showShort("插入成功:" + JacksonUtil.toString(user));
 
-	public void select(View view) {
-		mDataList.clear();
-		mDataList.addAll(userDao.selectAll());
-		adapter.notifyDataSetChanged();
-	}
+        mDataList.add(user);
+        adapter.notifyDataSetChanged();
+    }
 
-	public void delete(View view) {
-		userDao.selectAll().forEach(userDao::delete);
-		mDataList.clear();
-		adapter.notifyDataSetChanged();
-	}
+    public void select(View view) {
+        mDataList.clear();
+        mDataList.addAll(projectDao.selectAll());
+        adapter.notifyDataSetChanged();
+    }
 
-	private class MyAdapter extends Adapter {
-		private final List<User> userList;
+    public void delete(View view) {
+        projectDao.selectAll().forEach(projectDao::delete);
+        mDataList.clear();
+        adapter.notifyDataSetChanged();
+    }
 
-		public MyAdapter(List<User> userList) {this.userList = userList;}
+    private class MyAdapter extends Adapter {
+        private final List<Project> userList;
 
-		@NonNull
-		@NotNull
-		@Override
-		public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-			View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_project_item, parent, false);
-			return new ViewHolder(view) {
-			};
-		}
+        public MyAdapter(List<Project> userList) {this.userList = userList;}
 
-		@Override
-		public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-			TextView userInfo = holder.itemView.findViewById(R.id.UI_ProjectItem_TextView_ProjectName);
-			User user = userList.get(position);
-			userInfo.setText(JacksonUtil.toString(user));
+        @NonNull
+        @NotNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_project_item, parent, false);
+            return new ViewHolder(view) {
+            };
+        }
 
-			CardView cardView = holder.itemView.findViewById(R.id.UI_ProjectItem_CardView);
-			cardView.setOnClickListener(v -> {
-				ToastUtils.showLong(userInfo.getText());
-			});
+        @Override
+        public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
+            TextView userInfo = holder.itemView.findViewById(R.id.UI_ProjectItem_TextView_ProjectName);
+            Project user = userList.get(position);
+            userInfo.setText(JacksonUtil.toString(user));
 
-			cardView.setOnLongClickListener(v -> {
-				new AlertDialog.Builder(cardView.getContext())
-						.setTitle("删除")
-						.setMessage("确定删除？？？")
-						.setPositiveButton("确定", (dialog, which) -> {
-							ToastUtils.showLong("点击了确定:" + which);
-							userDao.delete(user);
-							mDataList.remove(position);
-							adapter.notifyDataSetChanged();
-						})
-						.setNegativeButton("取消", null)
-						.show();
-				return false;
-			});
+            CardView cardView = holder.itemView.findViewById(R.id.UI_ProjectItem_CardView);
+            cardView.setOnClickListener(v -> {
+                ToastUtils.showLong(userInfo.getText());
+            });
 
-		}
+            cardView.setOnLongClickListener(v -> {
+                new AlertDialog.Builder(cardView.getContext())
+                        .setTitle("删除")
+                        .setMessage("确定删除？？？")
+                        .setPositiveButton("确定", (dialog, which) -> {
+                            ToastUtils.showLong("点击了确定:" + which);
+                            projectDao.delete(user);
+                            mDataList.remove(position);
+                            adapter.notifyDataSetChanged();
+                        })
+                        .setNegativeButton("取消", null)
+                        .show();
+                return false;
+            });
 
-		@Override
-		public int getItemCount() {
-			return userList.size();
-		}
-	}
+        }
+
+        @Override
+        public int getItemCount() {
+            return userList.size();
+        }
+    }
 }
 
