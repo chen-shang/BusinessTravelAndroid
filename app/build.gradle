@@ -117,6 +117,9 @@ dependencies {
     implementation 'com.caverock:androidsvg-aar:1.4'
     //加载svg
     implementation 'com.pixplicity.sharp:library:1.1.0'
+
+    implementation 'me.laoyuyu.aria:core:3.8.16'
+    annotationProcessor 'me.laoyuyu.aria:compiler:3.8.16'
 }
 
 //编译的时候织入代码

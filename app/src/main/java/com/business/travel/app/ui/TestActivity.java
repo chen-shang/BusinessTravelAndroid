@@ -1,10 +1,11 @@
 package com.business.travel.app.ui;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -12,11 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import com.blankj.utilcode.util.FileIOUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.dao.ProjectDao;
@@ -24,6 +27,7 @@ import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityTestBinding;
 import com.business.travel.app.ui.base.BaseActivity;
+import com.business.travel.app.utils.CompletableFutureUtil;
 import com.business.travel.utils.JacksonUtil;
 import com.pixplicity.sharp.Sharp;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
@@ -45,14 +49,39 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         projectDao = AppDatabase.getInstance(this).projectDao();
+        CompletableFutureUtil.runAsync(() -> {
 
-        Request request = new Builder().url("https://gitee.com/chen-shang/business-travel-resource/raw/master/icon/1%20%E9%A5%AE%E9%A3%9F/1%20%E8%94%AC%E8%8F%9C.svg").build();
-        try {
-            final InputStream inputStream = Objects.requireNonNull(new OkHttpClient().newCall(request).execute().body()).byteStream();
-            Sharp.loadInputStream(inputStream).into(viewBinding.image1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            Request request = new Builder()
+                    .url("https://gitee.com/chen-shang/business-travel-resource/raw/master/icon/12%20%E4%B8%AA%E6%8A%A4/3%20%E5%8F%A3%E7%BA%A2.svg")
+                    .build();
+            try {
+                final InputStream inputStream = new OkHttpClient().newCall(request).execute().body().byteStream();
+                final String path = getFilesDir().getPath();
+                //final String path = Environment.getExternalStorageDirectory().getPath();
+                //final String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath();
+                //final String path1 = Environment.getExternalStorageDirectory().getPath();
+                System.out.println("+++++++++++++++++++++" + path);
+                File file = new File(path, "test23332.svg");
+                FileIOUtils.writeFileFromIS(file, inputStream, false);
+                Sharp.loadFile(file).into(viewBinding.image1);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            String externalCacheDir = getExternalCacheDir().getPath();
+            File file = new File(externalCacheDir, "test.txt");
+            try {
+                FileOutputStream stream = new FileOutputStream(file);
+                for (int i = 0; i < 66; i++) {
+                    stream.write("Hello world!\n".getBytes());
+                }
+                stream.flush();
+                stream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
         SwipeRecyclerView recyclerView = viewBinding.recyclerView;
 
