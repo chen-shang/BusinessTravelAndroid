@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
@@ -50,78 +51,79 @@ public class KeyboardRecyclerViewAdapter extends BaseRecyclerViewAdapter<Keyboar
 	@NotNull
 	@Override
 	public KeyboardRecyclerViewAdapterViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_keyboard_item, parent, false);
-		return new KeyboardRecyclerViewAdapterViewHolder(view);
+		final LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+		switch (viewType) {
+			case 3:
+				//date 日期按钮样式
+				return new KeyboardRecyclerViewAdapterViewHolder(layoutInflater.inflate(R.layout.recyclerview_keyboard_item_date, parent, false));
+			case 14:
+				//回退按钮样式
+				return new KeyboardRecyclerViewAdapterViewHolder(layoutInflater.inflate(R.layout.recyclerview_keyboard_item_back, parent, false));
+			default:
+				return new KeyboardRecyclerViewAdapterViewHolder(layoutInflater.inflate(R.layout.recyclerview_keyboard_item_num, parent, false));
+		}
 	}
 
 	@Override
 	public void onBindViewHolder(@NonNull @NotNull KeyboardRecyclerViewAdapterViewHolder holder, int position) {
-		Button button = holder.itemView.findViewById(R.id.num);
-		TextView textView = activity.findViewById(R.id.UI_AddBillActivity_TextView_Amount);
-		TextView textView4 = activity.findViewById(R.id.UI_AddBillActivity_TextView_PayType);
-
 		switch (position) {
 			case 3:
-				button.setText("删除");
-				button.setOnClickListener(onDeleteClick);
+				//date 日期按钮样式
+				break;
+			case 14:
+				//回退按钮
 				break;
 			case 7:
-				button.setText("-");
-				//FIXME
+				//负号
 				break;
 			case 11:
-				button.setText("+");
-				//FIXME
+				//正号
 				break;
 			case 15:
 				holder.itemView.setBackgroundColor(ColorUtils.getColor(R.color.teal_800));
-				button.setText("保存");
-				button.setOnClickListener(onSaveClick);
+				holder.numButton.setText("保存");
+				holder.numButton.setOnClickListener(onSaveClick);
 				break;
 			case 0:
-				button.setText("1");
-				button.setOnClickListener(v -> textView.append("1"));
+				holder.numButton.setText("1");
+				holder.numButton.setOnClickListener(v -> holder.amountTextView.append("1"));
 				break;
 			case 1:
-				button.setText("2");
-				button.setOnClickListener(v -> textView.append("2"));
+				holder.numButton.setText("2");
+				holder.numButton.setOnClickListener(v -> holder.amountTextView.append("2"));
 				break;
 			case 2:
-				button.setText("3");
-				button.setOnClickListener(v -> textView.append("3"));
+				holder.numButton.setText("3");
+				holder.numButton.setOnClickListener(v -> holder.amountTextView.append("3"));
 				break;
 			case 8:
-				button.setText("7");
-				button.setOnClickListener(v -> textView.append("7"));
+				holder.numButton.setText("7");
+				holder.numButton.setOnClickListener(v -> holder.amountTextView.append("7"));
 				break;
 			case 9:
-				button.setText("8");
-				button.setOnClickListener(v -> textView.append("8"));
+				holder.numButton.setText("8");
+				holder.numButton.setOnClickListener(v -> holder.amountTextView.append("8"));
 				break;
 			case 10:
-				button.setText("9");
-				button.setOnClickListener(v -> textView.append("9"));
+				holder.numButton.setText("9");
+				holder.numButton.setOnClickListener(v -> holder.amountTextView.append("9"));
 				break;
 			case 13:
-				button.setText("0");
-				button.setOnClickListener(v -> textView.append("0"));
+				holder.numButton.setText("0");
+				holder.numButton.setOnClickListener(v -> holder.amountTextView.append("0"));
 				break;
 			case 12:
-				button.setText(".");
-				button.setOnClickListener(v -> {
-					if (textView.getText().toString().contains(".")) {
+				holder.numButton.setText(".");
+				holder.numButton.setOnClickListener(v -> {
+					if (holder.amountTextView.getText().toString().contains(".")) {
 						return;
 					}
-					textView.append(".");
+					holder.amountTextView.append(".");
 				});
 				break;
-			case 14:
-				button.setText("再记");
-				button.setOnClickListener(onReRecordClick);
-				break;
 			default:
-				button.setText(String.valueOf(position));
-				button.setOnClickListener(v -> textView.append(String.valueOf(position)));
+				holder.numButton.setText(String.valueOf(position));
+				holder.numButton.setOnClickListener(v -> holder.amountTextView.append(String.valueOf(position)));
 		}
 	}
 
@@ -130,9 +132,23 @@ public class KeyboardRecyclerViewAdapter extends BaseRecyclerViewAdapter<Keyboar
 		return 16;
 	}
 
+	@Override
+	public int getItemViewType(int position) {
+		return position;
+	}
+
 	class KeyboardRecyclerViewAdapterViewHolder extends ViewHolder {
+		public TextView deleteTextView;
+		public ImageButton dateImageButton;
+		public Button numButton;
+		public TextView amountTextView;
+
 		public KeyboardRecyclerViewAdapterViewHolder(@NonNull @NotNull View itemView) {
 			super(itemView);
+			deleteTextView = itemView.findViewById(R.id.UI_Keyboard_Item_Delete);
+			dateImageButton = itemView.findViewById(R.id.UI_KeyboardItem_ImageButton_Date);
+			amountTextView = activity.findViewById(R.id.UI_AddBillActivity_TextView_Amount);
+			numButton = itemView.findViewById(R.id.UI_KeyboardItem_Button_Num);
 		}
 	}
 }

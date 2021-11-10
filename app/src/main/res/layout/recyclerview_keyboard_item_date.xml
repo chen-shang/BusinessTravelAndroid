@@ -5,17 +5,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <Button
-            android:id="@+id/num"
+    <TextView
+            android:id="@+id/UI_Keyboard_Item_Delete"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="1"
-            android:backgroundTint="@color/white"
+            android:layout_height="match_parent"
+            android:text="今天"
+            android:gravity="center"
+            android:drawablePadding="3dp"
             style="?android:attr/borderlessButtonStyle"
+            app:drawableStartCompat="@drawable/icon_date"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-    </Button>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+    </TextView>
 </androidx.constraintlayout.widget.ConstraintLayout>
