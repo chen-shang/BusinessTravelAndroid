@@ -9,7 +9,7 @@ import com.business.travel.app.dal.dao.BillDao;
 import com.business.travel.app.dal.dao.ProjectDao;
 import com.business.travel.app.dal.entity.Associate;
 import com.business.travel.app.dal.entity.Bill;
-import com.business.travel.app.dal.entity.Item;
+import com.business.travel.app.dal.entity.ConsumerItem;
 import com.business.travel.app.dal.entity.Project;
 
 /**
@@ -19,7 +19,7 @@ import com.business.travel.app.dal.entity.Project;
         Bill.class,
         Project.class,
         Associate.class,
-        Item.class
+        ConsumerItem.class
 }, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;

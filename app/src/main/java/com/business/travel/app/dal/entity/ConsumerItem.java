@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 @Entity(indices = {@Index(value = {"name", "icon", "type"}, unique = true)})
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Item extends BaseEntity {
+public class ConsumerItem extends BaseEntity {
     /**
      * 主键id
      */
