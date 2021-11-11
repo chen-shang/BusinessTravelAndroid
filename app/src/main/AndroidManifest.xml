@@ -14,7 +14,7 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.BusinessTravelAndroid">
-        <activity android:name=".ui.activity.ConsumerItemActivity">
+        <activity android:name=".ui.activity.item.ConsumerItemActivity">
         </activity>
         <activity android:name=".ui.activity.AddBillActivity">
         </activity>
