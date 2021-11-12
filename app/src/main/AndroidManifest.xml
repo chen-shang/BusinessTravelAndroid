@@ -15,6 +15,11 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.BusinessTravelAndroid">
         <activity android:name=".ui.activity.item.ConsumerItemActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
         <activity android:name=".ui.activity.AddBillActivity">
         </activity>
@@ -23,11 +28,6 @@
         <activity android:name=".ui.MasterActivity">
         </activity>
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
     </application>
 
