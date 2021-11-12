@@ -30,7 +30,6 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Objects.requireNonNull(getSupportActionBar()).hide();
         //利用反射先实例化 ViewBinding & dataBinding
         Type superclass = getClass().getGenericSuperclass();
         //第一个参数是 ViewBinding

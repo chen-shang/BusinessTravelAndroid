@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -47,6 +48,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Objects.requireNonNull(getSupportActionBar()).hide();
 
 		billDao = AppDatabase.getInstance(this).billDao();
 		projectDao = AppDatabase.getInstance(this).projectDao();
