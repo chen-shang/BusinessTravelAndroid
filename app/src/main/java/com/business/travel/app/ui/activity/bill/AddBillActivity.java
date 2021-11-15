@@ -1,4 +1,4 @@
-package com.business.travel.app.ui.activity;
+package com.business.travel.app.ui.activity.bill;
 
 import java.util.ArrayList;
 import java.util.Arrays;

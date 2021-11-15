@@ -1,4 +1,4 @@
-package com.business.travel.app.ui.activity;
+package com.business.travel.app.ui.activity.bill;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ import com.blankj.utilcode.util.ResourceUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.model.ImageIconInfo;
-import com.business.travel.app.ui.activity.IconRecyclerViewAdapter.IconRecyclerViewAdapterViewHolder;
+import com.business.travel.app.ui.activity.bill.IconRecyclerViewAdapter.IconRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import org.jetbrains.annotations.NotNull;

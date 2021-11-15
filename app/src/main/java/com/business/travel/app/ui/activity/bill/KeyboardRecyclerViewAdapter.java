@@ -1,4 +1,4 @@
-package com.business.travel.app.ui.activity;
+package com.business.travel.app.ui.activity.bill;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import androidx.viewbinding.ViewBinding;
 import com.blankj.utilcode.util.ColorUtils;
 import com.business.travel.app.R;
-import com.business.travel.app.ui.activity.KeyboardRecyclerViewAdapter.KeyboardRecyclerViewAdapterViewHolder;
+import com.business.travel.app.ui.activity.bill.KeyboardRecyclerViewAdapter.KeyboardRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import org.jetbrains.annotations.NotNull;

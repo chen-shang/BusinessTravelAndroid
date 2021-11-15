@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
 
     <application
             android:allowBackup="true"
@@ -14,16 +16,14 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.BusinessTravelAndroid">
-        <activity android:name=".ui.activity.item.ConsumerItemActivity">
+        <activity android:name=".ui.activity.item.AddConsumerItemActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.AddBillActivity">
-        </activity>
-        <activity android:name=".ui.TestActivity">
+        <activity android:name=".ui.activity.item.ConsumerItemActivity">
         </activity>
         <activity android:name=".ui.MasterActivity">
         </activity>

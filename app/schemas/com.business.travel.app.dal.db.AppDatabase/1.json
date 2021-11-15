@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "26ae72622d02ac8d70ca57536711bf68",
+    "identityHash": "0189ffd63eb62b2673b4b74cc881423d",
     "entities": [
       {
         "tableName": "Bill",
@@ -195,7 +195,7 @@
       },
       {
         "tableName": "ConsumerItem",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `icon` TEXT, `type` INTEGER, `createTime` TEXT, `modifyTime` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `iconPath` TEXT, `iconName` TEXT, `type` INTEGER, `createTime` TEXT, `modifyTime` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -210,8 +210,14 @@
             "notNull": false
           },
           {
-            "fieldPath": "icon",
-            "columnName": "icon",
+            "fieldPath": "iconPath",
+            "columnName": "iconPath",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iconName",
+            "columnName": "iconName",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -240,25 +246,14 @@
           ],
           "autoGenerate": true
         },
-        "indices": [
-          {
-            "name": "index_ConsumerItem_name_icon_type",
-            "unique": true,
-            "columnNames": [
-              "name",
-              "icon",
-              "type"
-            ],
-            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_ConsumerItem_name_icon_type` ON `${TABLE_NAME}` (`name`, `icon`, `type`)"
-          }
-        ],
+        "indices": [],
         "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '26ae72622d02ac8d70ca57536711bf68')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0189ffd63eb62b2673b4b74cc881423d')"
     ]
   }
 }

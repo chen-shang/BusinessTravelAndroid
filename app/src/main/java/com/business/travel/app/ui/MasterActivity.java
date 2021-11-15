@@ -11,7 +11,7 @@ import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback;
 import com.business.travel.app.R;
 import com.business.travel.app.databinding.ActivityMasterBinding;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
-import com.business.travel.app.ui.activity.AddBillActivity;
+import com.business.travel.app.ui.activity.bill.AddBillActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import org.jetbrains.annotations.NotNull;
 
