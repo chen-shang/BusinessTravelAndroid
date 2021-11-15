@@ -20,12 +20,13 @@ import com.business.travel.app.dal.dao.BillDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
+import com.business.travel.app.ui.activity.master.fragment.ProjectRecyclerViewAdapter.ProjectAdapterHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
-import com.business.travel.app.ui.activity.master.fragment.ProjectRecyclerViewAdapter.ProjectAdapterHolder;
 import com.business.travel.app.utils.LogToast;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.JacksonUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -53,11 +54,13 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 			return;
 		}
 		String startTime = Optional.ofNullable(project.getStartTime())
+				.filter(StringUtils::isNotBlank)
 				.map(DateTimeUtil::parseDate)
 				.map(datetime -> DateTimeUtil.format(datetime, "MM月dd日"))
 				.orElse("");
 
 		String endTime = Optional.ofNullable(project.getEndTime())
+				.filter(StringUtils::isNotBlank)
 				.map(DateTimeUtil::parseDate)
 				.map(datetime -> DateTimeUtil.format(datetime, "MM月dd日"))
 				.orElse("");

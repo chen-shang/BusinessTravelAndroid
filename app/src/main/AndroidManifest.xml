@@ -17,18 +17,19 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.BusinessTravelAndroid">
         <activity android:name=".ui.activity.item.AddConsumerItemActivity">
+        </activity>
+        <activity android:name=".ui.activity.item.ConsumerItemActivity">
+        </activity>
+        <activity android:name=".ui.activity.master.MasterActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.item.ConsumerItemActivity">
-        </activity>
-        <activity android:name=".ui.activity.master.MasterActivity">
-        </activity>
         <activity android:name=".MainActivity">
         </activity>
+        <activity android:name=".ui.activity.bill.AddBillActivity"/>
     </application>
 
 </manifest>
