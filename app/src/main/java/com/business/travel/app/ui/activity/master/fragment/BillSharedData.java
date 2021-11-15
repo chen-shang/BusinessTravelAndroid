@@ -1,4 +1,4 @@
-package com.business.travel.app.ui.fragment;
+package com.business.travel.app.ui.activity.master.fragment;
 
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.ui.base.ShareData;
@@ -14,6 +14,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class DashBoardSharedData extends ShareData {
+public class BillSharedData extends ShareData {
 	private Project project;
 }

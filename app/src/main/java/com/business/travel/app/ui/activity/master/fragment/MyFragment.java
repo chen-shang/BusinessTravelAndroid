@@ -1,4 +1,4 @@
-package com.business.travel.app.ui.fragment;
+package com.business.travel.app.ui.activity.master.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

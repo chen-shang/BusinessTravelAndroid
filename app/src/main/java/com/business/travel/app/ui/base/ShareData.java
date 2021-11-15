@@ -14,5 +14,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class ShareData {
+	/**
+	 * 共享数据的map
+	 */
 	private Map<Object, Object> shareMap = new ConcurrentHashMap<>();
 }

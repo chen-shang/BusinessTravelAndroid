@@ -26,8 +26,8 @@ import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
-import com.business.travel.app.ui.fragment.DashBoardSharedData;
-import com.business.travel.app.ui.fragment.DashboardFragment;
+import com.business.travel.app.ui.activity.master.fragment.BillSharedData;
+import com.business.travel.app.ui.activity.master.fragment.BillFragment;
 import com.business.travel.app.utils.LogToast;
 import com.business.travel.utils.DateTimeUtil;
 import org.apache.commons.lang3.RandomUtils;
@@ -133,8 +133,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 
 		viewBinding.UIAddBillActivityTextViewAmount.setText(null);
 		//更新返回页的数据
-		DashboardFragment dashboardFragment = MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getFragment();
-		DashBoardSharedData sharedData = dashboardFragment.getDataBinding();
+		BillFragment billFragment = MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getFragment();
+		BillSharedData sharedData = billFragment.getDataBinding();
 		sharedData.setProject(project);
 	}
 
@@ -191,7 +191,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	protected void onStart() {
 		super.onStart();
 		//启动的时候刷新当前页面的标题
-		DashBoardSharedData dataBinding = ((DashboardFragment)MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getFragment()).getDataBinding();
+		BillSharedData dataBinding = ((BillFragment)MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getFragment()).getDataBinding();
 		Project project = dataBinding.getProject();
 		if (project != null) {
 			viewBinding.UIAddBillActivityTextViewProjectName.setText(project.getName());

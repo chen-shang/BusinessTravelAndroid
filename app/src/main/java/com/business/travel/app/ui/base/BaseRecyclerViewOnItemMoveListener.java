@@ -11,9 +11,9 @@ import com.yanzhenjie.recyclerview.touch.OnItemMoveListener;
 /**
  * @author chenshang
  */
-public class BaseRecyclerViewOnItemMoveListener<T> implements OnItemMoveListener {
+public class BaseRecyclerViewOnItemMoveListener<T, VH extends ViewHolder> implements OnItemMoveListener {
 	private final List<T> list;
-	private final RecyclerView.Adapter adapter;
+	private final RecyclerView.Adapter<VH> adapter;
 
 	/**
 	 * 删除时候执行的业务逻辑
@@ -29,12 +29,12 @@ public class BaseRecyclerViewOnItemMoveListener<T> implements OnItemMoveListener
 		this.adapter = adapter;
 	}
 
-	public BaseRecyclerViewOnItemMoveListener<T> onItemMove(Runnable onItemMove) {
+	public BaseRecyclerViewOnItemMoveListener<T, VH> onItemMove(Runnable onItemMove) {
 		this.onItemMove = onItemMove;
 		return this;
 	}
 
-	public BaseRecyclerViewOnItemMoveListener<T> onItemDismiss(Runnable onItemDismiss) {
+	public BaseRecyclerViewOnItemMoveListener<T, VH> onItemDismiss(Runnable onItemDismiss) {
 		this.onItemDismiss = onItemDismiss;
 		return this;
 	}

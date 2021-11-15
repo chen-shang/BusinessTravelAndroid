@@ -9,9 +9,9 @@ import androidx.annotation.RequiresApi;
 import androidx.viewbinding.ViewBinding;
 import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.ui.base.ShareData;
-import com.business.travel.app.ui.fragment.DashboardFragment;
-import com.business.travel.app.ui.fragment.MyFragment;
-import com.business.travel.app.ui.fragment.ProjectFragment;
+import com.business.travel.app.ui.activity.master.fragment.BillFragment;
+import com.business.travel.app.ui.activity.master.fragment.MyFragment;
+import com.business.travel.app.ui.activity.master.fragment.ProjectFragment;
 
 /**
  * @author chenshang
@@ -22,7 +22,7 @@ public enum MasterFragmentPositionEnum {
 	 * ProjectFragment
 	 */
 	PROJECT_FRAGMENT(0, new ProjectFragment()),
-	DASHBOARD_FRAGMENT(1, new DashboardFragment()),
+	DASHBOARD_FRAGMENT(1, new BillFragment()),
 	MY_FRAGMENT(2, new MyFragment()),
 	;
 

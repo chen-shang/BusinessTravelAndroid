@@ -5,7 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.fragment.ProjectFragment"
+        tools:context=".ui.activity.master.fragment.ProjectFragment"
         android:orientation="vertical">
     <!--头部绿色区域-->
     <androidx.constraintlayout.widget.ConstraintLayout

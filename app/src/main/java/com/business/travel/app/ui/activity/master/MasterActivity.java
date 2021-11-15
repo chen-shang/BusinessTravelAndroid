@@ -1,4 +1,4 @@
-package com.business.travel.app.ui;
+package com.business.travel.app.ui.activity.master;
 
 import java.util.Objects;
 

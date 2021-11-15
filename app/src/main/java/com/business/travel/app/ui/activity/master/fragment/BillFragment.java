@@ -1,4 +1,4 @@
-package com.business.travel.app.ui.fragment;
+package com.business.travel.app.ui.activity.master.fragment;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author chenshang
  */
-public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, DashBoardSharedData> {
+public class BillFragment extends BaseFragment<FragmentDashboardBinding, BillSharedData> {
 
 	private BillDao billDao;
 	private ProjectDao projectDao;

@@ -8,7 +8,7 @@ import android.view.View;
 import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.ColorUtils;
 import com.business.travel.app.databinding.ActivityMainBinding;
-import com.business.travel.app.ui.MasterActivity;
+import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.TestActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 
