@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class ConsumerItem extends BaseEntity {
+public class ConsumptionItem extends BaseEntity {
 	/**
 	 * 主键id
 	 */

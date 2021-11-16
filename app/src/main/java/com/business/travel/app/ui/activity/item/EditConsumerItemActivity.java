@@ -19,7 +19,7 @@ import com.blankj.utilcode.util.ColorUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.dao.ConsumerItemDao;
 import com.business.travel.app.dal.db.AppDatabase;
-import com.business.travel.app.dal.entity.ConsumerItem;
+import com.business.travel.app.dal.entity.ConsumptionItem;
 import com.business.travel.app.databinding.ActivityEditConsumerItemBinding;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @author chenshang
  */
 public class EditConsumerItemActivity extends BaseActivity<ActivityEditConsumerItemBinding> {
-	List<ConsumerItem> consumerItemList = new ArrayList<>();
+	List<ConsumptionItem> consumptionItemList = new ArrayList<>();
 	private ConsumerItemDao consumerItemDao;
 
 	@Override
@@ -37,8 +37,8 @@ public class EditConsumerItemActivity extends BaseActivity<ActivityEditConsumerI
 		super.onCreate(savedInstanceState);
 		Objects.requireNonNull(getSupportActionBar()).hide();
 		consumerItemDao = AppDatabase.getInstance(this).consumerItemDao();
-		final List<ConsumerItem> consumerItems = consumerItemDao.selectAll();
-		consumerItemList.addAll(consumerItems);
+		final List<ConsumptionItem> consumptionItems = consumerItemDao.selectAll();
+		consumptionItemList.addAll(consumptionItems);
 		mock();
 
 		LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -57,9 +57,9 @@ public class EditConsumerItemActivity extends BaseActivity<ActivityEditConsumerI
 			@Override
 			public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
 				ImageView imageView = holder.itemView.findViewById(R.id.bill_icon);
-				final ConsumerItem consumerItem = consumerItemList.get(position);
-				final String iconPath = consumerItem.getIconPath();
-				final String iconName = consumerItem.getIconName();
+				final ConsumptionItem consumptionItem = consumptionItemList.get(position);
+				final String iconPath = consumptionItem.getIconPath();
+				final String iconName = consumptionItem.getIconName();
 				//CompletableFutureUtil.runAsync(() -> {
 				//	final InputStream inputStream = BusinessTravelResourceApi.getIcon(iconPath, iconName);
 				//	Sharp.loadInputStream(inputStream).into(imageView);
@@ -68,13 +68,13 @@ public class EditConsumerItemActivity extends BaseActivity<ActivityEditConsumerI
 
 			@Override
 			public int getItemCount() {
-				return consumerItemList.size();
+				return consumptionItemList.size();
 			}
 		};
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setAdapter(adapter);
 		//长按移动排序
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setLongPressDragEnabled(true);
-		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(consumerItemList, adapter));
+		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(consumptionItemList, adapter));
 
 		//支出按钮的背景
 		GradientDrawable gradientDrawableExpense = (GradientDrawable)viewBinding.UIConsumerItemTextViewExpense.getBackground();
@@ -100,15 +100,15 @@ public class EditConsumerItemActivity extends BaseActivity<ActivityEditConsumerI
 
 	private void mock() {
 		for (int i = 0; i < 100; i++) {
-			ConsumerItem consumerItem = new ConsumerItem();
-			consumerItem.setId(0L);
-			consumerItem.setName(i + "");
-			consumerItem.setIconPath("");
-			consumerItem.setIconName("");
-			consumerItem.setType(0);
-			consumerItem.setCreateTime("");
-			consumerItem.setModifyTime("");
-			consumerItemList.add(consumerItem);
+			ConsumptionItem consumptionItem = new ConsumptionItem();
+			consumptionItem.setId(0L);
+			consumptionItem.setName(i + "");
+			consumptionItem.setIconPath("");
+			consumptionItem.setIconName("");
+			consumptionItem.setType(0);
+			consumptionItem.setCreateTime("");
+			consumptionItem.setModifyTime("");
+			consumptionItemList.add(consumptionItem);
 		}
 	}
 }
