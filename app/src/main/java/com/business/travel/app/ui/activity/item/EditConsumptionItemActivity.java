@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author chenshang
  */
-public class EditConsumerItemActivity extends BaseActivity<ActivityEditConsumerItemBinding> {
+public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsumerItemBinding> {
 	List<ConsumptionItem> consumptionItemList = new ArrayList<>();
 	private ConsumerItemDao consumerItemDao;
 

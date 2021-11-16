@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author chenshang
  */
-public class AddConsumerItemActivity extends BaseActivity<ActivityAddConsumerItemBinding> {
+public class AddConsumptionItemActivity extends BaseActivity<ActivityAddConsumerItemBinding> {
 
 	private final List<String> typeList = new ArrayList<>();
 	private final List<ImageIconInfo> iconList = new ArrayList<>();
@@ -52,9 +52,9 @@ public class AddConsumerItemActivity extends BaseActivity<ActivityAddConsumerIte
 			@Override
 			public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
 				final SwipeRecyclerView swipeRecyclerView = holder.itemView.findViewById(R.id.SwipeRecyclerView2);
-				LayoutManager layoutManager = new GridLayoutManager(AddConsumerItemActivity.this, 5);
+				LayoutManager layoutManager = new GridLayoutManager(AddConsumptionItemActivity.this, 5);
 				swipeRecyclerView.setLayoutManager(layoutManager);
-				IconRecyclerViewAdapter billRecyclerViewAdapter = new IconRecyclerViewAdapter(iconList, AddConsumerItemActivity.this);
+				IconRecyclerViewAdapter billRecyclerViewAdapter = new IconRecyclerViewAdapter(iconList, AddConsumptionItemActivity.this);
 				swipeRecyclerView.setAdapter(billRecyclerViewAdapter);
 			}
 
