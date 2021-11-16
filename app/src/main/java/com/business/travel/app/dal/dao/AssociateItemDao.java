@@ -11,18 +11,18 @@ import com.business.travel.app.dal.entity.AssociateItem;
  * @author chenshang
  */
 @Dao
-public interface AssociateDao extends BaseDao<AssociateItem> {
+public interface AssociateItemDao extends BaseDao<AssociateItem> {
 
 	/**
 	 * 查询全部
 	 */
-	@Query("SELECT * FROM AssociateItem")
+	@Query("SELECT * FROM associateItem")
 	List<AssociateItem> selectAll();
 
 	/**
 	 * 查询单条
 	 */
-	@Query("SELECT * FROM AssociateItem limit 1")
+	@Query("SELECT * FROM associateItem limit 1")
 	AssociateItem selectOne();
 
 }

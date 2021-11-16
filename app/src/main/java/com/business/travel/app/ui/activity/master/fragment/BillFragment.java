@@ -28,21 +28,28 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
  */
 public class BillFragment extends BaseFragment<FragmentBillBinding, BillSharedData> {
 
-	private BillDao billDao;
-	private ProjectDao projectDao;
+	private final List<String> dateList = new ArrayList<>();
+	private BillRecyclerViewAdapter billRecyclerViewAdapter;
 	private FloatingActionButton floatingActionButton;
-	private List<String> dateList = new ArrayList<>();
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = super.onCreateView(inflater, container, savedInstanceState);
 		floatingActionButton = requireActivity().findViewById(R.id.UI_MasterActivity_FloatingActionButton);
-		billDao = AppDatabase.getInstance(this.getContext()).billDao();
-		projectDao = AppDatabase.getInstance(this.getContext()).projectDao();
+
+		final BillDao billDao = AppDatabase.getInstance(this.getContext()).billDao();
+		ProjectDao projectDao = AppDatabase.getInstance(this.getContext()).projectDao();
+
+		//刚进入账单页面的时候,查询上次最后编辑或查看过的项目
 		Project project = projectDao.selectLatestModify();
 		if (project != null) {
 			dataBinding.setProject(project);
 		}
+		//初始化
+		LayoutManager layoutManager = new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false);
+		viewBinding.UIDashboardFragmentSwipeRecyclerViewBillList.setLayoutManager(layoutManager);
+		billRecyclerViewAdapter = new BillRecyclerViewAdapter(project, dateList, (MasterActivity)requireActivity());
+		viewBinding.UIDashboardFragmentSwipeRecyclerViewBillList.setAdapter(billRecyclerViewAdapter);
 		return view;
 	}
 
@@ -58,12 +65,12 @@ public class BillFragment extends BaseFragment<FragmentBillBinding, BillSharedDa
 	}
 
 	private void show(Project project) {
+		final BillDao billDao = AppDatabase.getInstance(this.getContext()).billDao();
 		TextView textView = viewBinding.textDashboard;
 		textView.setText(project.getName());
-		dateList = billDao.selectConsumeDateByProjectId(project.getId());
-		LayoutManager layoutManager = new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false);
-		viewBinding.UIDashboardFragmentSwipeRecyclerViewBillList.setLayoutManager(layoutManager);
-		viewBinding.UIDashboardFragmentSwipeRecyclerViewBillList.setAdapter(new BillRecyclerViewAdapter(project, dateList, (MasterActivity)requireActivity()));
+		dateList.clear();
+		dateList.addAll(billDao.selectConsumeDateByProjectId(project.getId()));
+		billRecyclerViewAdapter.notifyDataSetChanged();
 	}
 
 	@Override

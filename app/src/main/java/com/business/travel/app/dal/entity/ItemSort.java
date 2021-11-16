@@ -1,13 +1,18 @@
 package com.business.travel.app.dal.entity;
 
+import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import com.business.travel.app.dal.entity.base.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author chenshang
  */
+@Entity
 @Data
-public class ItemSortInfo extends BaseEntity {
+@EqualsAndHashCode(callSuper = false)
+public class ItemSort extends BaseEntity {
 	@PrimaryKey(autoGenerate = true)
 	private Long id;
 	/**

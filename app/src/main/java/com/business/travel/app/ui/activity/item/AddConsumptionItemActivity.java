@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView.Adapter;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.business.travel.app.R;
-import com.business.travel.app.databinding.ActivityAddConsumerItemBinding;
+import com.business.travel.app.databinding.ActivityAddConsumptionItemBinding;
 import com.business.travel.app.enums.IconEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.activity.bill.IconRecyclerViewAdapter;
@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author chenshang
  */
-public class AddConsumptionItemActivity extends BaseActivity<ActivityAddConsumerItemBinding> {
+public class AddConsumptionItemActivity extends BaseActivity<ActivityAddConsumptionItemBinding> {
 
 	private final List<String> typeList = new ArrayList<>();
 	private final List<ImageIconInfo> iconList = new ArrayList<>();

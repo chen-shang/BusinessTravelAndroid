@@ -5,10 +5,6 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:focusedByDefault="false"
-        tools:context=".ui.activity.bill.AddBillActivity"
         android:orientation="vertical">
     <!--头部绿色区域-->
     <androidx.constraintlayout.widget.ConstraintLayout

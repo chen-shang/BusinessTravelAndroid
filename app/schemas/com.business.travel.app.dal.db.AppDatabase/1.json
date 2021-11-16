@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0189ffd63eb62b2673b4b74cc881423d",
+    "identityHash": "8d2871c1fa18da7e3ad20b9ec7650bb1",
     "entities": [
       {
         "tableName": "Bill",
@@ -144,8 +144,8 @@
         "foreignKeys": []
       },
       {
-        "tableName": "Associate",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `gender` INTEGER, `avatar` TEXT, `createTime` TEXT, `modifyTime` TEXT)",
+        "tableName": "AssociateItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `gender` INTEGER, `iconPath` TEXT, `iconName` TEXT, `createTime` TEXT, `modifyTime` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -166,8 +166,14 @@
             "notNull": false
           },
           {
-            "fieldPath": "avatar",
-            "columnName": "avatar",
+            "fieldPath": "iconPath",
+            "columnName": "iconPath",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iconName",
+            "columnName": "iconName",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -194,7 +200,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "ConsumerItem",
+        "tableName": "ConsumptionItem",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `iconPath` TEXT, `iconName` TEXT, `type` INTEGER, `createTime` TEXT, `modifyTime` TEXT)",
         "fields": [
           {
@@ -253,7 +259,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0189ffd63eb62b2673b4b74cc881423d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8d2871c1fa18da7e3ad20b9ec7650bb1')"
     ]
   }
 }

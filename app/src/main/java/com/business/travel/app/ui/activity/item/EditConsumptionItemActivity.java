@@ -17,10 +17,10 @@ import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.blankj.utilcode.util.ColorUtils;
 import com.business.travel.app.R;
-import com.business.travel.app.dal.dao.ConsumerItemDao;
+import com.business.travel.app.dal.dao.ConsumptionItemDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.ConsumptionItem;
-import com.business.travel.app.databinding.ActivityEditConsumerItemBinding;
+import com.business.travel.app.databinding.ActivityEditConsumptionItemBinding;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
 import org.jetbrains.annotations.NotNull;
@@ -28,15 +28,15 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author chenshang
  */
-public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsumerItemBinding> {
+public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsumptionItemBinding> {
 	List<ConsumptionItem> consumptionItemList = new ArrayList<>();
-	private ConsumerItemDao consumerItemDao;
+	private ConsumptionItemDao consumerItemDao;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Objects.requireNonNull(getSupportActionBar()).hide();
-		consumerItemDao = AppDatabase.getInstance(this).consumerItemDao();
+		consumerItemDao = AppDatabase.getInstance(this).consumptionItemDao();
 		final List<ConsumptionItem> consumptionItems = consumerItemDao.selectAll();
 		consumptionItemList.addAll(consumptionItems);
 		mock();

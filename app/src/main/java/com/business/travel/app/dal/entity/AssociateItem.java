@@ -2,6 +2,7 @@ package com.business.travel.app.dal.entity;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import com.business.travel.app.dal.entity.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
