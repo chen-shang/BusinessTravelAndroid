@@ -29,6 +29,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecyclerViewAdapterViewHolder, String> {
 	final List<Bill> bills = new ArrayList<>();
+	/**
+	 * @Nullable
+	 */
 	private final Project project;
 
 	public BillRecyclerViewAdapter(Project project, List<String> dataList, BaseActivity<? extends ViewBinding> baseActivity) {
@@ -47,9 +50,15 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 
 	@Override
 	public void onBindViewHolder(@NonNull @NotNull BillRecyclerViewAdapterViewHolder holder, int position) {
+		if (dataList == null) {
+			return;
+		}
+		if (project == null) {
+			return;
+		}
+
 		String datetime = dataList.get(position);
 		holder.dateTextView.setText(datetime);
-
 		//根据project和日期获取当天的账单
 		final BillDao billDao = AppDatabase.getInstance(activity).billDao();
 		bills.clear();

@@ -2,150 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "8d2871c1fa18da7e3ad20b9ec7650bb1",
+    "identityHash": "8a0870fb20008e9203065dc65dddb765",
     "entities": [
       {
-        "tableName": "Bill",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `icon` TEXT, `name` TEXT, `amount` TEXT, `consumeDate` TEXT, `associateId` TEXT, `remark` TEXT, `projectId` INTEGER, `createTime` TEXT, `modifyTime` TEXT)",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "icon",
-            "columnName": "icon",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "name",
-            "columnName": "name",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "amount",
-            "columnName": "amount",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "consumeDate",
-            "columnName": "consumeDate",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "associateId",
-            "columnName": "associateId",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "remark",
-            "columnName": "remark",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "projectId",
-            "columnName": "projectId",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "createTime",
-            "columnName": "createTime",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "modifyTime",
-            "columnName": "modifyTime",
-            "affinity": "TEXT",
-            "notNull": false
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": true
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
-        "tableName": "Project",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `startTime` TEXT, `endTime` TEXT, `remark` TEXT, `createTime` TEXT, `modifyTime` TEXT)",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "name",
-            "columnName": "name",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "startTime",
-            "columnName": "startTime",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "endTime",
-            "columnName": "endTime",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "remark",
-            "columnName": "remark",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "createTime",
-            "columnName": "createTime",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "modifyTime",
-            "columnName": "modifyTime",
-            "affinity": "TEXT",
-            "notNull": false
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": true
-        },
-        "indices": [
-          {
-            "name": "index_Project_name",
-            "unique": true,
-            "columnNames": [
-              "name"
-            ],
-            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Project_name` ON `${TABLE_NAME}` (`name`)"
-          }
-        ],
-        "foreignKeys": []
-      },
-      {
         "tableName": "AssociateItem",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `gender` INTEGER, `iconPath` TEXT, `iconName` TEXT, `createTime` TEXT, `modifyTime` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `gender` INTEGER, `iconPath` TEXT, `iconName` TEXT, `create_time` TEXT, `modify_time` TEXT DEFAULT CURRENT_TIMESTAMP, `is_deleted` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -179,14 +40,108 @@
           },
           {
             "fieldPath": "createTime",
-            "columnName": "createTime",
+            "columnName": "create_time",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "modifyTime",
-            "columnName": "modifyTime",
+            "columnName": "modify_time",
             "affinity": "TEXT",
+            "notNull": false,
+            "defaultValue": "CURRENT_TIMESTAMP"
+          },
+          {
+            "fieldPath": "isDeleted",
+            "columnName": "is_deleted",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Bill",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `icon` TEXT, `name` TEXT, `amount` TEXT, `type` TEXT, `consumeDate` TEXT, `associateId` TEXT, `remark` TEXT, `projectId` INTEGER, `create_time` TEXT, `modify_time` TEXT DEFAULT CURRENT_TIMESTAMP, `is_deleted` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "icon",
+            "columnName": "icon",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "consumeDate",
+            "columnName": "consumeDate",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "associateId",
+            "columnName": "associateId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "remark",
+            "columnName": "remark",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "projectId",
+            "columnName": "projectId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createTime",
+            "columnName": "create_time",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "modifyTime",
+            "columnName": "modify_time",
+            "affinity": "TEXT",
+            "notNull": false,
+            "defaultValue": "CURRENT_TIMESTAMP"
+          },
+          {
+            "fieldPath": "isDeleted",
+            "columnName": "is_deleted",
+            "affinity": "INTEGER",
             "notNull": false
           }
         ],
@@ -201,7 +156,7 @@
       },
       {
         "tableName": "ConsumptionItem",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `iconPath` TEXT, `iconName` TEXT, `type` INTEGER, `createTime` TEXT, `modifyTime` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `iconPath` TEXT, `iconName` TEXT, `type` INTEGER, `create_time` TEXT, `modify_time` TEXT DEFAULT CURRENT_TIMESTAMP, `is_deleted` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -235,14 +190,21 @@
           },
           {
             "fieldPath": "createTime",
-            "columnName": "createTime",
+            "columnName": "create_time",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "modifyTime",
-            "columnName": "modifyTime",
+            "columnName": "modify_time",
             "affinity": "TEXT",
+            "notNull": false,
+            "defaultValue": "CURRENT_TIMESTAMP"
+          },
+          {
+            "fieldPath": "isDeleted",
+            "columnName": "is_deleted",
+            "affinity": "INTEGER",
             "notNull": false
           }
         ],
@@ -254,12 +216,135 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "ItemSort",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `type` TEXT, `sortIds` TEXT, `create_time` TEXT, `modify_time` TEXT DEFAULT CURRENT_TIMESTAMP, `is_deleted` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sortIds",
+            "columnName": "sortIds",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createTime",
+            "columnName": "create_time",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "modifyTime",
+            "columnName": "modify_time",
+            "affinity": "TEXT",
+            "notNull": false,
+            "defaultValue": "CURRENT_TIMESTAMP"
+          },
+          {
+            "fieldPath": "isDeleted",
+            "columnName": "is_deleted",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Project",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `startTime` TEXT, `endTime` TEXT, `remark` TEXT, `create_time` TEXT, `modify_time` TEXT DEFAULT CURRENT_TIMESTAMP, `is_deleted` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "startTime",
+            "columnName": "startTime",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "endTime",
+            "columnName": "endTime",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "remark",
+            "columnName": "remark",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createTime",
+            "columnName": "create_time",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "modifyTime",
+            "columnName": "modify_time",
+            "affinity": "TEXT",
+            "notNull": false,
+            "defaultValue": "CURRENT_TIMESTAMP"
+          },
+          {
+            "fieldPath": "isDeleted",
+            "columnName": "is_deleted",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_Project_name",
+            "unique": true,
+            "columnNames": [
+              "name"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Project_name` ON `${TABLE_NAME}` (`name`)"
+          }
+        ],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8d2871c1fa18da7e3ad20b9ec7650bb1')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8a0870fb20008e9203065dc65dddb765')"
     ]
   }
 }

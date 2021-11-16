@@ -14,6 +14,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class BillSharedData extends ShareData {
+public class BillFragmentShareData extends ShareData {
 	private Project project;
 }

@@ -25,8 +25,25 @@ public interface BillDao extends BaseDao<Bill> {
 	@Query("SELECT * FROM bill limit 1")
 	Bill selectOne();
 
-	@Query("SELECT sum(amount) FROM bill where projectId=:projectId")
-	Long sumTotalMoney(Long projectId);
+	/**
+	 * 统计项目的总支出
+	 *
+	 * @param projectId
+	 * @return
+	 * @see com.business.travel.app.enums.ConsumptionItemTypeEnum
+	 */
+	@Query("SELECT sum(amount) FROM bill where projectId=:projectId and type=1 and is_deleted=1")
+	Long sumTotalSpendingMoney(Long projectId);
+
+	/**
+	 * 统计项目的总收入
+	 *
+	 * @param projectId
+	 * @return
+	 * @see com.business.travel.app.enums.ConsumptionItemTypeEnum
+	 */
+	@Query("SELECT sum(amount) FROM bill where projectId=:projectId and type=0 and is_deleted=1")
+	Long sumTotalIncomeMoney(Long projectId);
 
 	@Query("SELECT * FROM bill where projectId=:projectId")
 	List<Bill> selectByProjectId(Long projectId);

@@ -58,7 +58,7 @@
     </LinearLayout>
 
     <androidx.cardview.widget.CardView
-            android:id="@+id/UI_ProjectItem_CardView"
+            android:id="@+id/UI_ProjectItem_CardView2"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:clickable="true"

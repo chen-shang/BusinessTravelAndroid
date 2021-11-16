@@ -29,6 +29,12 @@ public class Bill extends BaseEntity {
 	 */
 	private String amount;
 	/**
+	 * 消费类型
+	 *
+	 * @see com.business.travel.app.enums.ConsumptionItemTypeEnum
+	 */
+	private String type;
+	/**
 	 * 消费时间,yyyy-MM-dd
 	 */
 	private String consumeDate;

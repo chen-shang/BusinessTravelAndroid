@@ -26,25 +26,22 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 /**
  * @author chenshang
  */
-public class BillFragment extends BaseFragment<FragmentBillBinding, BillSharedData> {
+public class BillFragment extends BaseFragment<FragmentBillBinding, BillFragmentShareData> {
 
 	private final List<String> dateList = new ArrayList<>();
 	private BillRecyclerViewAdapter billRecyclerViewAdapter;
-	private FloatingActionButton floatingActionButton;
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = super.onCreateView(inflater, container, savedInstanceState);
-		floatingActionButton = requireActivity().findViewById(R.id.UI_MasterActivity_FloatingActionButton);
 
-		final BillDao billDao = AppDatabase.getInstance(this.getContext()).billDao();
 		ProjectDao projectDao = AppDatabase.getInstance(this.getContext()).projectDao();
-
 		//刚进入账单页面的时候,查询上次最后编辑或查看过的项目
 		Project project = projectDao.selectLatestModify();
 		if (project != null) {
 			dataBinding.setProject(project);
 		}
+
 		//初始化
 		LayoutManager layoutManager = new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false);
 		viewBinding.UIDashboardFragmentSwipeRecyclerViewBillList.setLayoutManager(layoutManager);
@@ -56,6 +53,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding, BillSharedDa
 	@Override
 	public void onResume() {
 		super.onResume();
+		FloatingActionButton floatingActionButton = requireActivity().findViewById(R.id.UI_MasterActivity_FloatingActionButton);
 		AnimalUtil.show(floatingActionButton);
 		Project project = dataBinding.getProject();
 		if (project == null) {
@@ -76,6 +74,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding, BillSharedDa
 	@Override
 	public void onPause() {
 		super.onPause();
+		FloatingActionButton floatingActionButton = requireActivity().findViewById(R.id.UI_MasterActivity_FloatingActionButton);
 		AnimalUtil.reset(floatingActionButton);
 	}
 }
