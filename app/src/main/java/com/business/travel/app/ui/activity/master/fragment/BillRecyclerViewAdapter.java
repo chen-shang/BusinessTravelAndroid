@@ -1,28 +1,26 @@
 package com.business.travel.app.ui.activity.master.fragment;
 
-import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView.Adapter;
-import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import androidx.viewbinding.ViewBinding;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.business.travel.app.R;
+import com.business.travel.app.dal.dao.BillDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.ui.activity.master.fragment.BillRecyclerViewAdapter.BillRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
-import com.business.travel.utils.DateTimeUtil;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
  * @author chenshang
  */
 public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecyclerViewAdapterViewHolder, String> {
+	final List<Bill> bills = new ArrayList<>();
 	private final Project project;
 
 	public BillRecyclerViewAdapter(Project project, List<String> dataList, BaseActivity<? extends ViewBinding> baseActivity) {
@@ -41,7 +40,7 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 	@NotNull
 	@Override
 	public BillRecyclerViewAdapterViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_dashboard_item, parent, false);
+		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bill, parent, false);
 		return new BillRecyclerViewAdapterViewHolder(view) {
 		};
 	}
@@ -49,51 +48,35 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 	@Override
 	public void onBindViewHolder(@NonNull @NotNull BillRecyclerViewAdapterViewHolder holder, int position) {
 		String datetime = dataList.get(position);
+		holder.dateTextView.setText(datetime);
 
-		TextView textView1 = holder.itemView.findViewById(R.id.UI_BillItem_TextView_Date);
-		DayOfWeek dayOfWeek = DateTimeUtil.parseLocalDateTime(datetime, "yyyy-MM-dd").getDayOfWeek();
-		textView1.setText(datetime + " " + dayOfWeek);
-		TextView textView2 = holder.itemView.findViewById(R.id.UI_BillItem_TextView_PAY);
-		SwipeRecyclerView recyclerView = holder.itemView.findViewById(R.id.UI_BillItem_SwipeRecyclerView_List);
-		LayoutManager layoutManager2 = new LinearLayoutManager(activity.getApplicationContext(), RecyclerView.VERTICAL, false);
-		recyclerView.setLayoutManager(layoutManager2);
+		//根据project和日期获取当天的账单
+		final BillDao billDao = AppDatabase.getInstance(activity).billDao();
+		bills.clear();
+		bills.addAll(billDao.selectByProjectIdAndConsumeDate(project.getId(), datetime));
+		mock();
+		holder.swipeRecyclerView.setLayoutManager(new LinearLayoutManager(activity.getApplicationContext()));
+		holder.swipeRecyclerView.setAdapter(new BillItemRecyclerViewAdapter(bills, activity));
+	}
 
-		List<Bill> bills = AppDatabase.getInstance(activity).billDao().selectByProjectIdAndConsumeDate(project.getId(), datetime);
-		Adapter adapter = new Adapter() {
-			@NonNull
-			@NotNull
-			@Override
-			public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-				View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_bill_item, parent, false);
-				return new ViewHolder(view) {
-				};
-			}
+	private void mock() {
+		for (int i = 0; i < 10; i++) {
+			Bill bill = new Bill();
+			bills.add(bill);
+		}
 
-			@Override
-			public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-				ImageView billIcon = holder.itemView.findViewById(R.id.bill_icon);
-				TextView textView = holder.itemView.findViewById(R.id.bill_info);
-				TextView bill_info2 = holder.itemView.findViewById(R.id.bill_info2);
-				Bill bill = bills.get(position);
-				billIcon.setImageResource(R.drawable.bill_icon_daily);
-				textView.setText(bill.getName());
-				//根据同行人ID转换成名字 TODO
-				bill_info2.setText(bill.getAssociateId());
-				TextView bill_info3 = holder.itemView.findViewById(R.id.bill_info3);
-				bill_info3.setText(String.valueOf(bill.getAmount()));
-			}
-
-			@Override
-			public int getItemCount() {
-				return bills.size();
-			}
-		};
-		recyclerView.setAdapter(adapter);
 	}
 
 	static class BillRecyclerViewAdapterViewHolder extends ViewHolder {
+
+		@BindView(R.id.UI_MasterActivity_Bill_Date)
+		public TextView dateTextView;
+		@BindView(R.id.s1)
+		public SwipeRecyclerView swipeRecyclerView;
+
 		public BillRecyclerViewAdapterViewHolder(@NonNull @NotNull View itemView) {
 			super(itemView);
+			ButterKnife.bind(this, itemView);
 		}
 	}
 }

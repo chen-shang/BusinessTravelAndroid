@@ -20,7 +20,7 @@ import com.business.travel.app.R;
 import com.business.travel.app.dal.dao.ConsumerItemDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.ConsumerItem;
-import com.business.travel.app.databinding.ActivityConsumerItemBinding;
+import com.business.travel.app.databinding.ActivityEditConsumerItemBinding;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author chenshang
  */
-public class ConsumerItemActivity extends BaseActivity<ActivityConsumerItemBinding> {
+public class EditConsumerItemActivity extends BaseActivity<ActivityEditConsumerItemBinding> {
 	List<ConsumerItem> consumerItemList = new ArrayList<>();
 	private ConsumerItemDao consumerItemDao;
 

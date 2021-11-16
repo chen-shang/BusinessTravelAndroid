@@ -17,7 +17,7 @@ import com.business.travel.app.dal.dao.BillDao;
 import com.business.travel.app.dal.dao.ProjectDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Project;
-import com.business.travel.app.databinding.FragmentDashboardBinding;
+import com.business.travel.app.databinding.FragmentBillBinding;
 import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.utils.AnimalUtil;
@@ -26,7 +26,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 /**
  * @author chenshang
  */
-public class BillFragment extends BaseFragment<FragmentDashboardBinding, BillSharedData> {
+public class BillFragment extends BaseFragment<FragmentBillBinding, BillSharedData> {
 
 	private BillDao billDao;
 	private ProjectDao projectDao;

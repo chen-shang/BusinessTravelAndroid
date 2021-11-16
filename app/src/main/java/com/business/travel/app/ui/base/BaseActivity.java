@@ -16,6 +16,7 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewbinding.ViewBinding;
+import lombok.Getter;
 
 /**
  * @author chenshang
@@ -25,6 +26,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
 	 * viewBinding 用于绑定该Activity对应的view的
 	 * 免去写各种findViewById的方法
 	 */
+	@Getter
 	protected VB viewBinding;
 
 	@Override
