@@ -69,7 +69,7 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 		if (ConsumptionItemTypeEnum.INCOME.name().equals(type)) {
 			amountText = "" + amount;
 		} else if (ConsumptionItemTypeEnum.SPENDING.name().equals(type)) {
-			amountText = "-" + amountText;
+			amountText = "-" + amount;
 		}
 		holder.amountTextView.setText(amountText);
 	}

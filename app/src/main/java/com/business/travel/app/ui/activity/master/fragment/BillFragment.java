@@ -89,10 +89,11 @@ public class BillFragment extends BaseFragment<FragmentBillBinding, BillFragment
 			return;
 		}
 
+		dateBillInfoList.clear();
 		billList.stream().collect(Collectors.groupingBy(Bill::getConsumeDate)).forEach((consumeDate, bills) -> {
 			DateBillInfo dateBillInfo = new DateBillInfo();
 			dateBillInfo.setDate(consumeDate);
-			dateBillInfo.setBillList(billList);
+			dateBillInfo.setBillList(bills);
 			dateBillInfoList.add(dateBillInfo);
 		});
 
