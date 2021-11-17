@@ -17,6 +17,10 @@ public class ImageIconInfo {
 	 */
 	private String name;
 	/**
+	 * 图标路径
+	 */
+	private String iconFullName;
+	/**
 	 * 是否被选中
 	 */
 	private boolean selected;

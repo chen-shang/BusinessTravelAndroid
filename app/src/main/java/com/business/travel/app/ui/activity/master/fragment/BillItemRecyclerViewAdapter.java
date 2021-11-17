@@ -22,6 +22,7 @@ import com.business.travel.app.enums.ConsumptionItemTypeEnum;
 import com.business.travel.app.ui.activity.master.fragment.BillItemRecyclerViewAdapter.BillItemRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
+import com.business.travel.app.utils.CompletableFutureUtil;
 import com.pixplicity.sharp.Sharp;
 import org.jetbrains.annotations.NotNull;
 
@@ -54,8 +55,10 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 		}
 
 		String icon = bill.getIcon();
-		InputStream iconInputStream = BusinessTravelResourceApi.getIcon(icon);
-		Sharp.loadInputStream(iconInputStream).into(holder.iconImageView);
+		CompletableFutureUtil.runAsync(() -> {
+			final InputStream iconInputStream = BusinessTravelResourceApi.getIcon(icon);
+			Sharp.loadInputStream(iconInputStream).into(holder.iconImageView);
+		});
 
 		String name = bill.getName();
 		holder.consumptionItemTextView.setText(name);

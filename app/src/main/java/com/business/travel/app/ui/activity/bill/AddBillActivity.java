@@ -21,13 +21,14 @@ import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityAddBillBinding;
+import com.business.travel.app.enums.ConsumptionItemTypeEnum;
 import com.business.travel.app.enums.IconEnum;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.model.ImageIconInfo;
+import com.business.travel.app.ui.activity.master.fragment.BillFragment;
+import com.business.travel.app.ui.activity.master.fragment.BillFragmentShareData;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
-import com.business.travel.app.ui.activity.master.fragment.BillFragmentShareData;
-import com.business.travel.app.ui.activity.master.fragment.BillFragment;
 import com.business.travel.app.utils.LogToast;
 import com.business.travel.utils.DateTimeUtil;
 import org.apache.commons.lang3.RandomUtils;
@@ -166,13 +167,23 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		Bill bill = new Bill();
 		bill.setName(consumerItemList);
 		bill.setProjectId(project.getId());
+		bill.setAmount(Long.valueOf(amount));
 		// TODO: 2021/11/6
 		int i = RandomUtils.nextInt(0, 10);
 		bill.setConsumeDate(DateTimeUtil.format(DateTimeUtil.toLocalDateTime(new Date()).plusDays(i), "yyyy-MM-dd"));
 		bill.setAssociateId(associateItemList);
 		bill.setCreateTime(DateTimeUtil.format(new Date()));
 		bill.setModifyTime(DateTimeUtil.format(new Date()));
+		if (i > 5) {
+			bill.setType(ConsumptionItemTypeEnum.INCOME.name());
+		} else {
+			bill.setType(ConsumptionItemTypeEnum.SPENDING.name());
+		}
 		bill.setRemark(remark);
+		String iconFullName = iconList.get(0).getIconFullName();
+		//todo
+		iconFullName = "/支出/10办公/6taishiji.svg";
+		bill.setIcon(iconFullName);
 		billDao.insert(bill);
 	}
 
