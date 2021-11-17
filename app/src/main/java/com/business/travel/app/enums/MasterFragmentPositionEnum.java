@@ -22,7 +22,7 @@ public enum MasterFragmentPositionEnum {
 	 * ProjectFragment
 	 */
 	PROJECT_FRAGMENT(0, new ProjectFragment()),
-	DASHBOARD_FRAGMENT(1, new BillFragment()),
+	BILL_FRAGMENT(1, new BillFragment()),
 	MY_FRAGMENT(2, new MyFragment()),
 	;
 

@@ -4,8 +4,8 @@ package com.business.travel.app.enums;
  * 消费类型
  */
 public enum ConsumptionItemTypeEnum {
-	income(0, "收入"),
-	spending(1, "支出"),
+	INCOME(0, "收入"),
+	SPENDING(1, "支出"),
 	;
 
 	private final int code;

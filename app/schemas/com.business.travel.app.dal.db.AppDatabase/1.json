@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "8a0870fb20008e9203065dc65dddb765",
+    "identityHash": "c7a1aefd0fcbd0408a333d523d63a4c3",
     "entities": [
       {
         "tableName": "AssociateItem",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `gender` INTEGER, `iconPath` TEXT, `iconName` TEXT, `create_time` TEXT, `modify_time` TEXT DEFAULT CURRENT_TIMESTAMP, `is_deleted` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `gender` INTEGER, `iconPath` TEXT, `iconName` TEXT, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -40,20 +40,20 @@
           },
           {
             "fieldPath": "createTime",
-            "columnName": "create_time",
+            "columnName": "createTime",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "modifyTime",
-            "columnName": "modify_time",
+            "columnName": "modifyTime",
             "affinity": "TEXT",
             "notNull": false,
             "defaultValue": "CURRENT_TIMESTAMP"
           },
           {
             "fieldPath": "isDeleted",
-            "columnName": "is_deleted",
+            "columnName": "isDeleted",
             "affinity": "INTEGER",
             "notNull": false
           }
@@ -69,7 +69,7 @@
       },
       {
         "tableName": "Bill",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `icon` TEXT, `name` TEXT, `amount` TEXT, `type` TEXT, `consumeDate` TEXT, `associateId` TEXT, `remark` TEXT, `projectId` INTEGER, `create_time` TEXT, `modify_time` TEXT DEFAULT CURRENT_TIMESTAMP, `is_deleted` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `icon` TEXT, `name` TEXT, `amount` INTEGER, `type` TEXT, `consumeDate` TEXT, `associateId` TEXT, `remark` TEXT, `projectId` INTEGER, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -92,7 +92,7 @@
           {
             "fieldPath": "amount",
             "columnName": "amount",
-            "affinity": "TEXT",
+            "affinity": "INTEGER",
             "notNull": false
           },
           {
@@ -127,20 +127,20 @@
           },
           {
             "fieldPath": "createTime",
-            "columnName": "create_time",
+            "columnName": "createTime",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "modifyTime",
-            "columnName": "modify_time",
+            "columnName": "modifyTime",
             "affinity": "TEXT",
             "notNull": false,
             "defaultValue": "CURRENT_TIMESTAMP"
           },
           {
             "fieldPath": "isDeleted",
-            "columnName": "is_deleted",
+            "columnName": "isDeleted",
             "affinity": "INTEGER",
             "notNull": false
           }
@@ -156,7 +156,7 @@
       },
       {
         "tableName": "ConsumptionItem",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `iconPath` TEXT, `iconName` TEXT, `type` INTEGER, `create_time` TEXT, `modify_time` TEXT DEFAULT CURRENT_TIMESTAMP, `is_deleted` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `iconPath` TEXT, `iconName` TEXT, `type` INTEGER, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -190,20 +190,20 @@
           },
           {
             "fieldPath": "createTime",
-            "columnName": "create_time",
+            "columnName": "createTime",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "modifyTime",
-            "columnName": "modify_time",
+            "columnName": "modifyTime",
             "affinity": "TEXT",
             "notNull": false,
             "defaultValue": "CURRENT_TIMESTAMP"
           },
           {
             "fieldPath": "isDeleted",
-            "columnName": "is_deleted",
+            "columnName": "isDeleted",
             "affinity": "INTEGER",
             "notNull": false
           }
@@ -219,7 +219,7 @@
       },
       {
         "tableName": "ItemSort",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `type` TEXT, `sortIds` TEXT, `create_time` TEXT, `modify_time` TEXT DEFAULT CURRENT_TIMESTAMP, `is_deleted` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `type` TEXT, `sortIds` TEXT, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -241,20 +241,20 @@
           },
           {
             "fieldPath": "createTime",
-            "columnName": "create_time",
+            "columnName": "createTime",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "modifyTime",
-            "columnName": "modify_time",
+            "columnName": "modifyTime",
             "affinity": "TEXT",
             "notNull": false,
             "defaultValue": "CURRENT_TIMESTAMP"
           },
           {
             "fieldPath": "isDeleted",
-            "columnName": "is_deleted",
+            "columnName": "isDeleted",
             "affinity": "INTEGER",
             "notNull": false
           }
@@ -270,7 +270,7 @@
       },
       {
         "tableName": "Project",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `startTime` TEXT, `endTime` TEXT, `remark` TEXT, `create_time` TEXT, `modify_time` TEXT DEFAULT CURRENT_TIMESTAMP, `is_deleted` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `startTime` TEXT, `endTime` TEXT, `remark` TEXT, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -304,20 +304,20 @@
           },
           {
             "fieldPath": "createTime",
-            "columnName": "create_time",
+            "columnName": "createTime",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "modifyTime",
-            "columnName": "modify_time",
+            "columnName": "modifyTime",
             "affinity": "TEXT",
             "notNull": false,
             "defaultValue": "CURRENT_TIMESTAMP"
           },
           {
             "fieldPath": "isDeleted",
-            "columnName": "is_deleted",
+            "columnName": "isDeleted",
             "affinity": "INTEGER",
             "notNull": false
           }
@@ -344,7 +344,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8a0870fb20008e9203065dc65dddb765')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c7a1aefd0fcbd0408a333d523d63a4c3')"
     ]
   }
 }

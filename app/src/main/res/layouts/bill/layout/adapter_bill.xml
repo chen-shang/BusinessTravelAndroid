@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-        >
+              tools:context=".ui.activity.master.fragment.BillRecyclerViewAdapter">
 
     <androidx.cardview.widget.CardView
-            android:id="@+id/UI_BillItem_CardView"
+            android:id="@+id/UI_BillFragment_BillAdapter_CardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:foreground="?android:attr/selectableItemBackground"
@@ -27,21 +28,30 @@
                     >
 
                 <TextView
+                        android:id="@+id/UI_BillFragment_BillAdapter_ConsumeDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="08月09日 星期一"
-                        android:id="@+id/UI_MasterActivity_Bill_Date"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
+                        android:id="@+id/UI_BillFragment_BillAdapter_TextView_Pay"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="支出:100"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                        android:id="@+id/UI_BillFragment_BillAdapter_TextView_Income"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginEnd="76dp"
+                        app:layout_constraintVertical_bias="0.0"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
             <!--横线-->
             <View
@@ -52,7 +62,7 @@
                     android:background="@color/gray"/>
 
             <com.yanzhenjie.recyclerview.SwipeRecyclerView
-                    android:id="@+id/s1"
+                    android:id="@+id/UI_BillFragment_BillAdapter_SwipeRecyclerView_BillItem"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
         </LinearLayout>

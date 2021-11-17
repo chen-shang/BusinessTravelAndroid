@@ -27,7 +27,7 @@ public class Bill extends BaseEntity {
 	/**
 	 * 账单金额,单位分
 	 */
-	private String amount;
+	private Long amount;
 	/**
 	 * 消费类型
 	 *

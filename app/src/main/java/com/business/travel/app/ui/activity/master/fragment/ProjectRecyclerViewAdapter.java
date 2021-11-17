@@ -1,5 +1,7 @@
 package com.business.travel.app.ui.activity.master.fragment;
 
+import com.google.common.collect.Maps;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -57,31 +59,31 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 		if (project == null) {
 			return;
 		}
-		String productTime = getProductTime(project);
+		String productTime = project.getProductTime();
 		holder.dateTextView.setText(productTime);
 
 		BillDao billDao = AppDatabase.getInstance(holder.itemView.getContext()).billDao();
-		final Long sumTotalMoney = billDao.sumTotalSpendingMoney(project.getId());
-		if (sumTotalMoney == null || sumTotalMoney == 0) {
+		final Long sumTotalSpendingMoney = billDao.sumTotalSpendingMoney(project.getId());
+		if (sumTotalSpendingMoney == null || sumTotalSpendingMoney == 0) {
 			holder.payTextView.setVisibility(View.GONE);
 		} else {
-			holder.payTextView.setText("支出:" + sumTotalMoney);
+			holder.payTextView.setText("支出:" + sumTotalSpendingMoney);
 		}
 
-		final Long sumTotalSpendingMoney = billDao.sumTotalIncomeMoney(project.getId());
-		if (sumTotalSpendingMoney == null || sumTotalSpendingMoney == 0) {
+		final Long sumTotalIncomeMoney = billDao.sumTotalIncomeMoney(project.getId());
+		if (sumTotalIncomeMoney == null || sumTotalIncomeMoney == 0) {
 			holder.incomeTextView.setVisibility(View.GONE);
 		} else {
-			holder.incomeTextView.setText("收入:" + sumTotalSpendingMoney);
+			holder.incomeTextView.setText("收入:" + sumTotalIncomeMoney);
 		}
 
 		holder.projectNameTextView.setText(project.getName());
 		holder.cardView.setOnClickListener(v -> {
 			ViewPager2 viewPager2 = activity.findViewById(R.id.UI_MasterActivity_ViewPager2);
-			viewPager2.setCurrentItem(MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition());
+			viewPager2.setCurrentItem(MasterFragmentPositionEnum.BILL_FRAGMENT.getPosition());
 
 			//把选中的数据传递给 BillFragment 页面
-			BillFragment billFragment = MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getFragment();
+			BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
 			BillFragmentShareData billFragmentShareData = billFragment.getDataBinding();
 			billFragmentShareData.setProject(project);
 		});
@@ -92,26 +94,6 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 			return true;
 		});
 
-	}
-
-	@NotNull
-	private String getProductTime(Project project) {
-		String startTime = Optional.ofNullable(project.getStartTime())
-				.filter(StringUtils::isNotBlank)
-				.map(DateTimeUtil::parseDate)
-				.map(datetime -> DateTimeUtil.format(datetime, "MM月dd日"))
-				.orElse("");
-
-		String endTime = Optional.ofNullable(project.getEndTime())
-				.filter(StringUtils::isNotBlank)
-				.map(DateTimeUtil::parseDate)
-				.map(datetime -> DateTimeUtil.format(datetime, "MM月dd日"))
-				.orElse("");
-		String productTime = startTime;
-		if (StringUtils.isNotBlank(endTime)) {
-			productTime = productTime + " - " + endTime;
-		}
-		return productTime;
 	}
 
 	@SuppressLint("NonConstantResourceId")

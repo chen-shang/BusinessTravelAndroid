@@ -13,26 +13,63 @@
             app:layout_constraintTop_toTopOf="parent"
             android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:background="@color/teal_800">
 
+
             <TextView
-                    android:id="@+id/text_dashboard"
-                    android:layout_width="match_parent"
+                    android:id="@+id/UI_BillFragment_TextView_ProjectName"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/app_name"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:textAlignment="center"
-                    android:textSize="20sp"
+                    android:textColor="@color/white"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintHorizontal_bias="0.056"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-        </LinearLayout>
+                    app:layout_constraintVertical_bias="0.504">
+            </TextView>
+
+            <TextView
+                    android:id="@+id/UI_BillFragment_TextView_Date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintHorizontal_bias="0.05"
+                    app:layout_constraintVertical_bias="0.85">
+            </TextView>
+
+            <TextView
+                    android:id="@+id/UI_BillFragment_TextView_Pay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.05"
+                    app:layout_constraintVertical_bias="0.85"
+                    android:layout_marginEnd="28dp">
+            </TextView>
+
+            <TextView
+                    android:id="@+id/UI_BillFragment_TextView_Income"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.85"
+                    app:layout_constraintEnd_toStartOf="@+id/UI_BillFragment_TextView_Pay"
+                    android:layout_marginEnd="20dp">
+            </TextView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
                 android:layout_width="match_parent"

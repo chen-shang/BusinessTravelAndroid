@@ -56,7 +56,7 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 
 			@Override
 			public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-				ImageView imageView = holder.itemView.findViewById(R.id.bill_icon);
+				ImageView imageView = holder.itemView.findViewById(R.id.UI_BillFragment_BillItemAdapter_Icon);
 				final ConsumptionItem consumptionItem = consumptionItemList.get(position);
 				final String iconPath = consumptionItem.getIconPath();
 				final String iconName = consumptionItem.getIconName();

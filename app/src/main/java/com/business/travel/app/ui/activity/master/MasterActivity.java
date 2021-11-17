@@ -38,10 +38,10 @@ public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 	private void initFloatingActionButton() {
 		viewBinding.UIMasterActivityFloatingActionButton.setOnClickListener(view -> {
 			int position = viewBinding.UIMasterActivityViewPager2.getCurrentItem();
-			if (MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition() != position) {
+			if (MasterFragmentPositionEnum.BILL_FRAGMENT.getPosition() != position) {
 				//如果当前不是 DASHBOARD_FRAGMENT 页面,当点击+号的时候显示DASHBOARD_FRAGMENT页面
 				//当显示DASHBOARD_FRAGMENT页面的时候回自动执行上升和放大的动画
-				viewBinding.UIMasterActivityViewPager2.setCurrentItem(MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition());
+				viewBinding.UIMasterActivityViewPager2.setCurrentItem(MasterFragmentPositionEnum.BILL_FRAGMENT.getPosition());
 			} else {
 				//如果是DASHBOARD_FRAGMENT页面,当点击的时候则跳转到新增账单页面
 				startActivity(new Intent(this, AddBillActivity.class));
@@ -55,7 +55,7 @@ public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 	private void initViewPager() {
 		viewBinding.UIMasterActivityViewPager2.setAdapter(buildViewPagerFragmentStateAdapter());
 		//默认第一页面展示DASHBOARD_FRAGMENT
-		viewBinding.UIMasterActivityViewPager2.setCurrentItem(MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition());
+		viewBinding.UIMasterActivityViewPager2.setCurrentItem(MasterFragmentPositionEnum.BILL_FRAGMENT.getPosition());
 		viewBinding.UIMasterActivityViewPager2.registerOnPageChangeCallback(new OnPageChangeCallback() {
 			@Override
 			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -78,7 +78,7 @@ public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 				viewBinding.UIMasterActivityViewPager2.setCurrentItem(MasterFragmentPositionEnum.PROJECT_FRAGMENT.getPosition());
 				break;
 			case R.id.navigation_dashboard:
-				viewBinding.UIMasterActivityViewPager2.setCurrentItem(MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getPosition());
+				viewBinding.UIMasterActivityViewPager2.setCurrentItem(MasterFragmentPositionEnum.BILL_FRAGMENT.getPosition());
 				break;
 			case R.id.navigation_my:
 				viewBinding.UIMasterActivityViewPager2.setCurrentItem(MasterFragmentPositionEnum.MY_FRAGMENT.getPosition());

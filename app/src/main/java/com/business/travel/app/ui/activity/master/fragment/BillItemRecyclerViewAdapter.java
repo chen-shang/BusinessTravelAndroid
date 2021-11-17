@@ -1,19 +1,28 @@
 package com.business.travel.app.ui.activity.master.fragment;
 
+import java.io.InputStream;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import androidx.viewbinding.ViewBinding;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
+import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.dal.entity.Bill;
+import com.business.travel.app.enums.ConsumptionItemTypeEnum;
 import com.business.travel.app.ui.activity.master.fragment.BillItemRecyclerViewAdapter.BillItemRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
+import com.pixplicity.sharp.Sharp;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -36,10 +45,43 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 
 	@Override
 	public void onBindViewHolder(@NonNull @NotNull BillItemRecyclerViewAdapterViewHolder holder, int position) {
+		if (CollectionUtils.isEmpty(dataList)) {
+			return;
+		}
+		Bill bill = dataList.get(position);
+		if (bill == null) {
+			return;
+		}
 
+		String icon = bill.getIcon();
+		InputStream iconInputStream = BusinessTravelResourceApi.getIcon(icon);
+		Sharp.loadInputStream(iconInputStream).into(holder.iconImageView);
+
+		String name = bill.getName();
+		holder.consumptionItemTextView.setText(name);
+
+		Long amount = bill.getAmount();
+		String type = bill.getType();
+		String amountText = "";
+		if (ConsumptionItemTypeEnum.INCOME.name().equals(type)) {
+			amountText = "" + amount;
+		} else if (ConsumptionItemTypeEnum.SPENDING.name().equals(type)) {
+			amountText = "-" + amountText;
+		}
+		holder.amountTextView.setText(amountText);
 	}
 
+	@SuppressLint("NonConstantResourceId")
 	static class BillItemRecyclerViewAdapterViewHolder extends ViewHolder {
+
+		@BindView(R.id.UI_BillFragment_BillItemAdapter_Icon)
+		public ImageView iconImageView;
+		@BindView(R.id.UI_BillFragment_BillItemAdapter_Amount)
+		public TextView amountTextView;
+		@BindView(R.id.UI_BillFragment_BillItemAdapter_Associate)
+		public TextView associateTextView;
+		@BindView(R.id.UI_BillFragment_BillItemAdapter_ConsumptionItem)
+		public TextView consumptionItemTextView;
 
 		public BillItemRecyclerViewAdapterViewHolder(@NonNull @NotNull View itemView) {
 			super(itemView);

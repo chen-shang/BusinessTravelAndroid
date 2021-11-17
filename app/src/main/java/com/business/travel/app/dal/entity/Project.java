@@ -1,11 +1,15 @@
 package com.business.travel.app.dal.entity;
 
+import java.util.Optional;
+
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import com.business.travel.app.dal.entity.base.BaseEntity;
+import com.business.travel.utils.DateTimeUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author chenshang
@@ -33,4 +37,23 @@ public class Project extends BaseEntity {
 	 * 备注
 	 */
 	private String remark;
+
+	public String getProductTime() {
+		String startTime = Optional.ofNullable(this.getStartTime())
+				.filter(StringUtils::isNotBlank)
+				.map(DateTimeUtil::parseDate)
+				.map(datetime -> DateTimeUtil.format(datetime, "MM月dd日"))
+				.orElse("");
+
+		String endTime = Optional.ofNullable(this.getEndTime())
+				.filter(StringUtils::isNotBlank)
+				.map(DateTimeUtil::parseDate)
+				.map(datetime -> DateTimeUtil.format(datetime, "MM月dd日"))
+				.orElse("");
+		String productTime = startTime;
+		if (StringUtils.isNotBlank(endTime)) {
+			productTime = productTime + " - " + endTime;
+		}
+		return productTime;
+	}
 }

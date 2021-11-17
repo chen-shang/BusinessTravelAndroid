@@ -2,14 +2,15 @@
 <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        >
+        tools:context=".ui.activity.master.fragment.BillItemRecyclerViewAdapter">
 
     <ImageView
-            android:id="@+id/bill_icon"
+            android:id="@+id/UI_BillFragment_BillItemAdapter_Icon"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:src="@drawable/bill_icon_man"
@@ -19,37 +20,34 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
-            android:id="@+id/bill_info"
+            android:id="@+id/UI_BillFragment_BillItemAdapter_ConsumptionItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="午餐"
-            android:textSize="20dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/bill_icon"
+            app:layout_constraintStart_toEndOf="@+id/UI_BillFragment_BillItemAdapter_Icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0.081">
+            app:layout_constraintHorizontal_bias="0.08">
     </TextView>
 
     <TextView
-            android:id="@+id/bill_info2"
+            android:id="@+id/UI_BillFragment_BillItemAdapter_Associate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="陈尚、王晓红"
-            android:textSize="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/bill_info"
-            app:layout_constraintHorizontal_bias="0.224">
+            app:layout_constraintStart_toEndOf="@+id/UI_BillFragment_BillItemAdapter_ConsumptionItem"
+            app:layout_constraintHorizontal_bias="0.2">
     </TextView>
 
     <TextView
-            android:id="@+id/bill_info3"
+            android:id="@+id/UI_BillFragment_BillItemAdapter_Amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="-100"
-            android:textSize="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent">

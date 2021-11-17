@@ -133,7 +133,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 
 		viewBinding.UIAddBillActivityTextViewAmount.setText(null);
 		//更新返回页的数据
-		BillFragment billFragment = MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getFragment();
+		BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
 		BillFragmentShareData sharedData = billFragment.getDataBinding();
 		sharedData.setProject(project);
 	}
@@ -191,7 +191,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	protected void onStart() {
 		super.onStart();
 		//启动的时候刷新当前页面的标题
-		BillFragmentShareData dataBinding = ((BillFragment)MasterFragmentPositionEnum.DASHBOARD_FRAGMENT.getFragment()).getDataBinding();
+		BillFragmentShareData dataBinding = ((BillFragment)MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment()).getDataBinding();
 		Project project = dataBinding.getProject();
 		if (project != null) {
 			viewBinding.UIAddBillActivityTextViewProjectName.setText(project.getName());
