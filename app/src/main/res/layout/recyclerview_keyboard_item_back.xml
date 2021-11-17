@@ -6,7 +6,7 @@
         android:layout_height="wrap_content">
 
     <ImageButton
-            android:id="@+id/UI_KeyboardItem_ImageButton_Date"
+            android:id="@+id/UI_KeyboardItem_ImageButton_Back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@drawable/icon_back"

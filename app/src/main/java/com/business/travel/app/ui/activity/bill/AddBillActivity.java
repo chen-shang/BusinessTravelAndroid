@@ -58,12 +58,12 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 
 		//消费项目列表
 		LayoutManager layoutManager = new GridLayoutManager(this, 5);
-		viewBinding.UIAddBillActivitySwipeRecyclerViewBill.setLayoutManager(layoutManager);
+		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setLayoutManager(layoutManager);
 		IconRecyclerViewAdapter billRecyclerViewAdapter = new IconRecyclerViewAdapter(iconList, this);
-		viewBinding.UIAddBillActivitySwipeRecyclerViewBill.setAdapter(billRecyclerViewAdapter);
+		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setAdapter(billRecyclerViewAdapter);
 		//长按移动排序
-		viewBinding.UIAddBillActivitySwipeRecyclerViewBill.setLongPressDragEnabled(true);
-		viewBinding.UIAddBillActivitySwipeRecyclerViewBill.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(iconList, billRecyclerViewAdapter));
+		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setLongPressDragEnabled(true);
+		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(iconList, billRecyclerViewAdapter));
 
 		//同行人列表
 		LayoutManager layoutManager2 = new GridLayoutManager(this, 5);
@@ -203,6 +203,9 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		super.onStart();
 		//启动的时候刷新当前页面的标题
 		BillFragmentShareData dataBinding = ((BillFragment)MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment()).getDataBinding();
+		if (dataBinding == null) {
+			return;
+		}
 		Project project = dataBinding.getProject();
 		if (project != null) {
 			viewBinding.UIAddBillActivityTextViewProjectName.setText(project.getName());

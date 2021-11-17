@@ -17,7 +17,8 @@ import com.business.travel.app.R;
 import com.business.travel.app.ui.activity.bill.KeyboardRecyclerViewAdapter.KeyboardRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
-import com.business.travel.app.ui.base.ShareData;
+import com.business.travel.app.utils.LogToast;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -70,15 +71,28 @@ public class KeyboardRecyclerViewAdapter extends BaseRecyclerViewAdapter<Keyboar
 		switch (position) {
 			case 3:
 				//date 日期按钮样式
+				holder.dateTextView.setOnClickListener(v -> {
+					LogToast.infoShow("弹出日历选框");
+				});
 				break;
 			case 14:
 				//回退按钮
+				holder.backImageButton.setOnClickListener(v -> {
+					String amount = holder.amountTextView.getText().toString();
+					if (StringUtils.isBlank(amount)) {
+						return;
+					}
+					String newAmount = amount.trim().substring(0, amount.trim().length() - 1);
+					holder.amountTextView.setText(newAmount);
+				});
 				break;
 			case 7:
-				//负号
+				//正号
+				holder.numButton.setText("+");
 				break;
 			case 11:
-				//正号
+				//负号
+				holder.numButton.setText("-");
 				break;
 			case 15:
 				holder.itemView.setBackgroundColor(ColorUtils.getColor(R.color.teal_800));
@@ -139,17 +153,17 @@ public class KeyboardRecyclerViewAdapter extends BaseRecyclerViewAdapter<Keyboar
 	}
 
 	class KeyboardRecyclerViewAdapterViewHolder extends ViewHolder {
-		public TextView deleteTextView;
-		public ImageButton dateImageButton;
+		public TextView dateTextView;
 		public Button numButton;
+		public ImageButton backImageButton;
 		public TextView amountTextView;
 
 		public KeyboardRecyclerViewAdapterViewHolder(@NonNull @NotNull View itemView) {
 			super(itemView);
-			deleteTextView = itemView.findViewById(R.id.UI_Keyboard_Item_Delete);
-			dateImageButton = itemView.findViewById(R.id.UI_KeyboardItem_ImageButton_Date);
+			dateTextView = itemView.findViewById(R.id.UI_KeyboardItem_TextView_Date);
 			amountTextView = activity.findViewById(R.id.UI_AddBillActivity_TextView_Amount);
 			numButton = itemView.findViewById(R.id.UI_KeyboardItem_Button_Num);
+			backImageButton = itemView.findViewById(R.id.UI_KeyboardItem_ImageButton_Back);
 		}
 	}
 }
