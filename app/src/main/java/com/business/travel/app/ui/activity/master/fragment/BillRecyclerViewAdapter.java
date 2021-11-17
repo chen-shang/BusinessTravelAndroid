@@ -70,6 +70,7 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 				if (sumTotalMoney == 0) {
 					holder.incomeTextView.setVisibility(View.GONE);
 				} else {
+					holder.incomeTextView.setVisibility(View.VISIBLE);
 					holder.incomeTextView.setText("收入:" + sumTotalMoney);
 				}
 
@@ -78,6 +79,7 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 				if (sumTotalMoney == 0) {
 					holder.payTextView.setVisibility(View.GONE);
 				} else {
+					holder.incomeTextView.setVisibility(View.VISIBLE);
 					holder.payTextView.setText("支出:" + sumTotalMoney);
 				}
 			}

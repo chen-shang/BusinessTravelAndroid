@@ -11,8 +11,8 @@
 
     <ImageView
             android:id="@+id/UI_BillFragment_BillItemAdapter_Icon"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:src="@drawable/bill_icon_man"
             android:background="@drawable/corners_shape_unselect"
             app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +23,6 @@
             android:id="@+id/UI_BillFragment_BillItemAdapter_ConsumptionItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="午餐"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/UI_BillFragment_BillItemAdapter_Icon"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -35,7 +34,6 @@
             android:id="@+id/UI_BillFragment_BillItemAdapter_Associate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="陈尚、王晓红"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -47,7 +45,6 @@
             android:id="@+id/UI_BillFragment_BillItemAdapter_Amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="-100"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent">

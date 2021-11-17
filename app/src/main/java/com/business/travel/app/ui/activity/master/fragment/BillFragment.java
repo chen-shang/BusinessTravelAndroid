@@ -76,12 +76,14 @@ public class BillFragment extends BaseFragment<FragmentBillBinding, BillFragment
 		if (sumTotalIncomeMoney == null || sumTotalIncomeMoney == 0) {
 			viewBinding.UIBillFragmentTextViewIncome.setVisibility(View.GONE);
 		} else {
+			viewBinding.UIBillFragmentTextViewIncome.setVisibility(View.VISIBLE);
 			viewBinding.UIBillFragmentTextViewIncome.setText("收入:" + sumTotalIncomeMoney);
 		}
 		final Long sumTotalSpendingMoney = billDao.sumTotalSpendingMoney(project.getId());
 		if (sumTotalSpendingMoney == null || sumTotalSpendingMoney == 0) {
 			viewBinding.UIBillFragmentTextViewPay.setVisibility(View.GONE);
 		} else {
+			viewBinding.UIBillFragmentTextViewIncome.setVisibility(View.VISIBLE);
 			viewBinding.UIBillFragmentTextViewPay.setText("支出:" + sumTotalSpendingMoney);
 		}
 		final List<Bill> billList = billDao.selectByProjectId(project.getId());

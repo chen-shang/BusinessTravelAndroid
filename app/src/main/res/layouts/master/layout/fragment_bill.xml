@@ -51,12 +51,13 @@
                     android:id="@+id/UI_BillFragment_TextView_Pay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.05"
                     app:layout_constraintVertical_bias="0.85"
-                    android:layout_marginEnd="28dp">
+                    android:layout_marginEnd="20dp">
             </TextView>
 
             <TextView
@@ -66,6 +67,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.85"
+                    android:textColor="@color/white"
                     app:layout_constraintEnd_toStartOf="@+id/UI_BillFragment_TextView_Pay"
                     android:layout_marginEnd="20dp">
             </TextView>
