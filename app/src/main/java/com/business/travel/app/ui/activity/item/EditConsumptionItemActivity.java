@@ -8,7 +8,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
-import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.ColorUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.dao.ConsumptionItemDao;
@@ -18,9 +17,9 @@ import com.business.travel.app.dal.entity.ConsumptionItem;
 import com.business.travel.app.dal.entity.ItemSort;
 import com.business.travel.app.databinding.ActivityEditConsumptionItemBinding;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
-import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
+import com.business.travel.app.utils.LogToast;
 import com.business.travel.utils.SplitUtil;
 
 /**
@@ -54,6 +53,7 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 			viewBinding.UIConsumerItemTextViewIncome.setTextColor(ColorUtils.getColor(R.color.white));
 			gradientDrawableIncome.setColor(ColorUtils.getColor(R.color.teal_800));
 
+			refreshConsumptionItem(ConsumptionTypeEnum.SPENDING);
 		});
 
 		viewBinding.UIConsumerItemTextViewIncome.setOnClickListener(v -> {
@@ -62,6 +62,8 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 
 			viewBinding.UIConsumerItemTextViewExpense.setTextColor(ColorUtils.getColor(R.color.white));
 			gradientDrawableExpense.setColor(ColorUtils.getColor(R.color.teal_800));
+
+			refreshConsumptionItem(ConsumptionTypeEnum.INCOME);
 		});
 
 		//返回按钮点击后
@@ -73,17 +75,17 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 	@Override
 	protected void onStart() {
 		super.onStart();
-		refreshConsumptionItem();
+		refreshConsumptionItem(ConsumptionTypeEnum.SPENDING);
 	}
 
-	private void refreshConsumptionItem() {
+	private void refreshConsumptionItem(ConsumptionTypeEnum consumptionTypeEnum) {
 		ItemSortDao itemSortDao = AppDatabase.getInstance(this).itemSortDao();
 		ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
 		//先获取排序
-		ItemSort itemSort = itemSortDao.selectOneByType(ItemTypeEnum.CONSUMPTION.name());
+		ItemSort itemSort = itemSortDao.selectOneByType(consumptionTypeEnum.name());
 		List<ConsumptionItem> newConsumptionItemList = new ArrayList<>();
 		if (itemSort == null) {
-			newConsumptionItemList = consumptionItemDao.selectByType(ItemTypeEnum.CONSUMPTION.name());
+			newConsumptionItemList = consumptionItemDao.selectByType(consumptionTypeEnum.name());
 		} else {
 			String sortIds = itemSort.getSortIds();
 			List<Long> idList = SplitUtil.trimToLongList(sortIds);
@@ -97,10 +99,11 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 		consumptionItemList.addAll(newConsumptionItemList);
 		mock();
 		editConsumptionItemRecyclerViewAdapter.notifyDataSetChanged();
+		LogToast.infoShow("消费类型" + consumptionTypeEnum.getMsg());
 	}
 
 	private void mock() {
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			ConsumptionItem consumptionItem = new ConsumptionItem();
 			consumptionItem.setId(0L);
 			consumptionItem.setName(i + "");

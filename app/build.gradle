@@ -140,6 +140,11 @@ dependencies {
     implementation 'com.nex3z:toggle-button-group:1.2.3'
     //标题栏
     implementation 'com.github.getActivity:TitleBar:9.2'
+
+    //为了防止不必要的依赖冲突，0.0.3开始需要自行依赖google material库
+    implementation 'com.google.android.material:material:1.4.0'
+    //查看最新版本请前往github，仅支持androidx
+    implementation 'com.github.loperSeven:DateTimePicker:0.1.0'
 }
 
 //编译的时候织入代码
