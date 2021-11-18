@@ -3,6 +3,7 @@ package com.business.travel.app.ui.activity.bill;
 import java.util.List;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,10 +18,12 @@ import androidx.viewbinding.ViewBinding;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.blankj.utilcode.util.ResourceUtils;
-import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
+import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.activity.bill.IconRecyclerViewAdapter.IconRecyclerViewAdapterViewHolder;
+import com.business.travel.app.ui.activity.item.EditAssociateItemActivity;
+import com.business.travel.app.ui.activity.item.EditConsumptionItemActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -30,8 +33,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public class IconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRecyclerViewAdapterViewHolder, ImageIconInfo> {
 
-	public IconRecyclerViewAdapter(List<ImageIconInfo> imageIconInfos, BaseActivity<? extends ViewBinding> baseActivity) {
+	private ItemTypeEnum itemTypeEnum;
+
+	public IconRecyclerViewAdapter(ItemTypeEnum itemTypeEnum, List<ImageIconInfo> imageIconInfos, BaseActivity<? extends ViewBinding> baseActivity) {
 		super(imageIconInfos, baseActivity);
+		this.itemTypeEnum = itemTypeEnum;
 	}
 
 	@NonNull
@@ -60,9 +66,16 @@ public class IconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRecycle
 
 		uiImageViewIcon.setOnClickListener(v -> {
 			if (imageIconInfo.getResourceId() == R.drawable.bill_icon_add) {
-				//TODO 新增
-				ToastUtils.showShort("新增");
-				return;
+				switch (itemTypeEnum) {
+					case AssociateItem:
+						activity.startActivity(new Intent(activity, EditAssociateItemActivity.class));
+						return;
+					case ConsumptionItem:
+						activity.startActivity(new Intent(activity, EditConsumptionItemActivity.class));
+						return;
+					default:
+						return;
+				}
 			}
 
 			if (imageIconInfo.isSelected()) {

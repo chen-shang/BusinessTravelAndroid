@@ -16,6 +16,10 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.BusinessTravelAndroid">
+        <activity android:name=".ui.activity.item.AddAssociateItemActivity">
+        </activity>
+        <activity android:name=".ui.activity.item.EditAssociateItemActivity">
+        </activity>
         <activity android:name=".ui.activity.item.AddConsumptionItemActivity">
         </activity>
         <activity android:name=".ui.activity.item.EditConsumptionItemActivity">

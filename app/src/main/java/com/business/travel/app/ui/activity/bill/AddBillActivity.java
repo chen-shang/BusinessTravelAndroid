@@ -23,6 +23,7 @@ import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityAddBillBinding;
 import com.business.travel.app.enums.ConsumptionItemTypeEnum;
 import com.business.travel.app.enums.IconEnum;
+import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.activity.master.fragment.BillFragment;
@@ -59,7 +60,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		//消费项目列表
 		LayoutManager layoutManager = new GridLayoutManager(this, 5);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setLayoutManager(layoutManager);
-		IconRecyclerViewAdapter billRecyclerViewAdapter = new IconRecyclerViewAdapter(iconList, this);
+		IconRecyclerViewAdapter billRecyclerViewAdapter = new IconRecyclerViewAdapter(ItemTypeEnum.ConsumptionItem, iconList, this);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setAdapter(billRecyclerViewAdapter);
 		//长按移动排序
 		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setLongPressDragEnabled(true);
@@ -68,7 +69,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		//同行人列表
 		LayoutManager layoutManager2 = new GridLayoutManager(this, 5);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setLayoutManager(layoutManager2);
-		IconRecyclerViewAdapter iconRecyclerViewAdapter = new IconRecyclerViewAdapter(associateList, this);
+		IconRecyclerViewAdapter iconRecyclerViewAdapter = new IconRecyclerViewAdapter(ItemTypeEnum.AssociateItem, associateList, this);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setAdapter(iconRecyclerViewAdapter);
 		//长按移动排序
 		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setLongPressDragEnabled(true);

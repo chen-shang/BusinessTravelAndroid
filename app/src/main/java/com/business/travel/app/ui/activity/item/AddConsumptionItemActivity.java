@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.business.travel.app.R;
 import com.business.travel.app.databinding.ActivityAddConsumptionItemBinding;
 import com.business.travel.app.enums.IconEnum;
+import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.activity.bill.IconRecyclerViewAdapter;
 import com.business.travel.app.ui.base.BaseActivity;
@@ -54,7 +55,7 @@ public class AddConsumptionItemActivity extends BaseActivity<ActivityAddConsumpt
 				final SwipeRecyclerView swipeRecyclerView = holder.itemView.findViewById(R.id.SwipeRecyclerView2);
 				LayoutManager layoutManager = new GridLayoutManager(AddConsumptionItemActivity.this, 5);
 				swipeRecyclerView.setLayoutManager(layoutManager);
-				IconRecyclerViewAdapter billRecyclerViewAdapter = new IconRecyclerViewAdapter(iconList, AddConsumptionItemActivity.this);
+				IconRecyclerViewAdapter billRecyclerViewAdapter = new IconRecyclerViewAdapter(ItemTypeEnum.ConsumptionItem, iconList, AddConsumptionItemActivity.this);
 				swipeRecyclerView.setAdapter(billRecyclerViewAdapter);
 			}
 
