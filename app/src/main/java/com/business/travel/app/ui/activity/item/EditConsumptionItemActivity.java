@@ -96,6 +96,11 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 			viewBinding.UIConsumerItemTextViewExpense.setTextColor(ColorUtils.getColor(R.color.white));
 			gradientDrawableExpense.setColor(ColorUtils.getColor(R.color.teal_800));
 		});
+
+		viewBinding.UIEditConsumptionActivityImageButtonBack.setOnClickListener(v -> {
+			this.finish();
+		});
+
 	}
 
 	private void mock() {
