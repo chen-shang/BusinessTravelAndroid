@@ -6,6 +6,7 @@ import androidx.room.Dao;
 import androidx.room.Query;
 import com.business.travel.app.dal.dao.base.BaseDao;
 import com.business.travel.app.dal.entity.Bill;
+import com.business.travel.app.enums.ConsumptionTypeEnum;
 
 /**
  * @author chenshang
@@ -30,9 +31,9 @@ public interface BillDao extends BaseDao<Bill> {
 	 *
 	 * @param projectId
 	 * @return
-	 * @see com.business.travel.app.enums.ConsumptionItemTypeEnum
+	 * @see ConsumptionTypeEnum
 	 */
-	@Query("SELECT sum(amount) FROM bill where projectId=:projectId and type='SPENDING' and isDeleted=1")
+	@Query("SELECT sum(amount) FROM bill where projectId=:projectId and consumptionType='SPENDING' and isDeleted=1")
 	Long sumTotalSpendingMoney(Long projectId);
 
 	/**
@@ -40,9 +41,9 @@ public interface BillDao extends BaseDao<Bill> {
 	 *
 	 * @param projectId
 	 * @return
-	 * @see com.business.travel.app.enums.ConsumptionItemTypeEnum
+	 * @see ConsumptionTypeEnum
 	 */
-	@Query("SELECT sum(amount) FROM bill where projectId=:projectId and type='INCOME' and isDeleted=1")
+	@Query("SELECT sum(amount) FROM bill where projectId=:projectId and consumptionType='INCOME' and isDeleted=1")
 	Long sumTotalIncomeMoney(Long projectId);
 
 	@Query("SELECT * FROM bill where projectId=:projectId and isDeleted=1")

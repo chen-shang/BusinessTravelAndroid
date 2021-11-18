@@ -23,4 +23,16 @@ public interface ConsumptionItemDao extends BaseDao<ConsumptionItem> {
 	 */
 	@Query("SELECT * FROM consumptionItem limit 1")
 	ConsumptionItem selectOne();
+
+	/**
+	 * 查询单条
+	 */
+	@Query("SELECT * FROM consumptionItem where id in (:idList)")
+	List<ConsumptionItem> selectByIds(List<Long> idList);
+
+	/**
+	 * 查询单条
+	 */
+	@Query("SELECT * FROM consumptionItem where consumptionType=:consumptionType")
+	List<ConsumptionItem> selectByType(String consumptionType);
 }

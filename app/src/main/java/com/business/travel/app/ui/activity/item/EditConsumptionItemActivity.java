@@ -6,75 +6,42 @@ import java.util.Objects;
 
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView.Adapter;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
-import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.ColorUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.dao.ConsumptionItemDao;
+import com.business.travel.app.dal.dao.ItemSortDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.ConsumptionItem;
+import com.business.travel.app.dal.entity.ItemSort;
 import com.business.travel.app.databinding.ActivityEditConsumptionItemBinding;
+import com.business.travel.app.enums.ConsumptionTypeEnum;
+import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
-import org.jetbrains.annotations.NotNull;
+import com.business.travel.utils.SplitUtil;
 
 /**
  * @author chenshang
  */
 public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsumptionItemBinding> {
 	List<ConsumptionItem> consumptionItemList = new ArrayList<>();
-	private ConsumptionItemDao consumerItemDao;
+	private EditConsumptionItemRecyclerViewAdapter editConsumptionItemRecyclerViewAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Objects.requireNonNull(getSupportActionBar()).hide();
-		consumerItemDao = AppDatabase.getInstance(this).consumptionItemDao();
-		final List<ConsumptionItem> consumptionItems = consumerItemDao.selectAll();
-		consumptionItemList.addAll(consumptionItems);
-		mock();
-
 		LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setLayoutManager(layoutManager);
+		editConsumptionItemRecyclerViewAdapter = new EditConsumptionItemRecyclerViewAdapter(consumptionItemList, this);
+		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setAdapter(editConsumptionItemRecyclerViewAdapter);
 
-		final Adapter adapter = new Adapter() {
-			@NonNull
-			@NotNull
-			@Override
-			public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-				View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_consumer_item, parent, false);
-				return new ViewHolder(view) {
-				};
-			}
-
-			@Override
-			public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-				ImageView imageView = holder.itemView.findViewById(R.id.UI_BillFragment_BillItemAdapter_Icon);
-				final ConsumptionItem consumptionItem = consumptionItemList.get(position);
-				final String iconPath = consumptionItem.getIconPath();
-				final String iconName = consumptionItem.getIconName();
-				//CompletableFutureUtil.runAsync(() -> {
-				//	final InputStream inputStream = BusinessTravelResourceApi.getIcon(iconPath, iconName);
-				//	Sharp.loadInputStream(inputStream).into(imageView);
-				//});
-			}
-
-			@Override
-			public int getItemCount() {
-				return consumptionItemList.size();
-			}
-		};
-		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setAdapter(adapter);
 		//长按移动排序
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setLongPressDragEnabled(true);
-		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(consumptionItemList, adapter));
+		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(consumptionItemList, editConsumptionItemRecyclerViewAdapter));
 
 		//支出按钮的背景
 		GradientDrawable gradientDrawableExpense = (GradientDrawable)viewBinding.UIConsumerItemTextViewExpense.getBackground();
@@ -97,10 +64,39 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 			gradientDrawableExpense.setColor(ColorUtils.getColor(R.color.teal_800));
 		});
 
+		//返回按钮点击后
 		viewBinding.UIEditConsumptionActivityImageButtonBack.setOnClickListener(v -> {
 			this.finish();
 		});
+	}
 
+	@Override
+	protected void onStart() {
+		super.onStart();
+		refreshConsumptionItem();
+	}
+
+	private void refreshConsumptionItem() {
+
+		ItemSortDao itemSortDao = AppDatabase.getInstance(this).itemSortDao();
+		ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
+		//先获取排序
+		ItemSort itemSort = itemSortDao.selectOneByType(ItemTypeEnum.CONSUMPTION.name());
+		List<ConsumptionItem> newConsumptionItemList = new ArrayList<>();
+		if (itemSort == null) {
+			newConsumptionItemList = consumptionItemDao.selectByType(ItemTypeEnum.CONSUMPTION.name());
+		} else {
+			String sortIds = itemSort.getSortIds();
+			List<Long> idList = SplitUtil.trimToLongList(sortIds);
+			newConsumptionItemList = consumptionItemDao.selectByIds(idList);
+		}
+		if (CollectionUtils.isEmpty(newConsumptionItemList)) {
+			return;
+		}
+		consumptionItemList.clear();
+		consumptionItemList.addAll(newConsumptionItemList);
+		mock();
+		editConsumptionItemRecyclerViewAdapter.notifyDataSetChanged();
 	}
 
 	private void mock() {
@@ -110,7 +106,7 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 			consumptionItem.setName(i + "");
 			consumptionItem.setIconPath("");
 			consumptionItem.setIconName("");
-			consumptionItem.setType(0);
+			consumptionItem.setConsumptionType(ConsumptionTypeEnum.INCOME.name());
 			consumptionItem.setCreateTime("");
 			consumptionItem.setModifyTime("");
 			consumptionItemList.add(consumptionItem);

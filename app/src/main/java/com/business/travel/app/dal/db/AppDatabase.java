@@ -56,7 +56,7 @@ public abstract class AppDatabase extends RoomDatabase {
 	 */
 	public abstract ConsumptionItemDao consumptionItemDao();
 
-	public abstract ItemSortDao ttemSortDao();
+	public abstract ItemSortDao itemSortDao();
 
 	public abstract ProjectDao projectDao();
 }

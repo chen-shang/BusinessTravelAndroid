@@ -18,7 +18,7 @@ import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.dal.entity.Project;
-import com.business.travel.app.enums.ConsumptionItemTypeEnum;
+import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.model.DateBillInfo;
 import com.business.travel.app.ui.activity.master.fragment.BillRecyclerViewAdapter.BillRecyclerViewAdapterViewHolder;
@@ -64,9 +64,9 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 		if (CollectionUtils.isEmpty(billList)) {
 			return;
 		}
-		billList.stream().collect(Collectors.groupingBy(Bill::getType)).forEach((type, bills) -> {
+		billList.stream().collect(Collectors.groupingBy(Bill::getConsumptionType)).forEach((type, bills) -> {
 			long sumTotalMoney = bills.stream().map(Bill::getAmount).reduce(Long::sum).orElse(0L);
-			if (ConsumptionItemTypeEnum.INCOME.name().equals(type)) { //收入
+			if (ConsumptionTypeEnum.INCOME.name().equals(type)) { //收入
 				if (sumTotalMoney == 0) {
 					holder.incomeTextView.setVisibility(View.GONE);
 				} else {
@@ -75,7 +75,7 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 				}
 
 			}
-			if (ConsumptionItemTypeEnum.SPENDING.name().equals(type)) {
+			if (ConsumptionTypeEnum.SPENDING.name().equals(type)) {
 				if (sumTotalMoney == 0) {
 					holder.payTextView.setVisibility(View.GONE);
 				} else {

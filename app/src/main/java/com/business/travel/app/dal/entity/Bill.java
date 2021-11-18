@@ -3,6 +3,7 @@ package com.business.travel.app.dal.entity;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import com.business.travel.app.dal.entity.base.BaseEntity;
+import com.business.travel.app.enums.ConsumptionTypeEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -31,9 +32,9 @@ public class Bill extends BaseEntity {
 	/**
 	 * 消费类型
 	 *
-	 * @see com.business.travel.app.enums.ConsumptionItemTypeEnum
+	 * @see ConsumptionTypeEnum
 	 */
-	private String type;
+	private String consumptionType;
 	/**
 	 * 消费时间,yyyy-MM-dd
 	 */

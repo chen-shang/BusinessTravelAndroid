@@ -18,7 +18,7 @@ import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.dal.entity.Bill;
-import com.business.travel.app.enums.ConsumptionItemTypeEnum;
+import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.ui.activity.master.fragment.BillItemRecyclerViewAdapter.BillItemRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
@@ -64,11 +64,11 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 		holder.consumptionItemTextView.setText(name);
 
 		Long amount = bill.getAmount();
-		String type = bill.getType();
+		String type = bill.getConsumptionType();
 		String amountText = "";
-		if (ConsumptionItemTypeEnum.INCOME.name().equals(type)) {
+		if (ConsumptionTypeEnum.INCOME.name().equals(type)) {
 			amountText = "" + amount;
-		} else if (ConsumptionItemTypeEnum.SPENDING.name().equals(type)) {
+		} else if (ConsumptionTypeEnum.SPENDING.name().equals(type)) {
 			amountText = "-" + amount;
 		}
 		holder.amountTextView.setText(amountText);

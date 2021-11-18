@@ -17,8 +17,10 @@ public class ItemSort extends BaseEntity {
 	private Long id;
 	/**
 	 * 记录的排序的类型
+	 *
+	 * @see com.business.travel.app.enums.ItemTypeEnum
 	 */
-	private String type;
+	private String itemType;
 	/**
 	 * 排序的ID
 	 */

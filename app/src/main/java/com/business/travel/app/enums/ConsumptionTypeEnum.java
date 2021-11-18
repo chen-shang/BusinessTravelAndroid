@@ -3,7 +3,7 @@ package com.business.travel.app.enums;
 /**
  * 消费类型
  */
-public enum ConsumptionItemTypeEnum {
+public enum ConsumptionTypeEnum {
 	INCOME(0, "收入"),
 	SPENDING(1, "支出"),
 	;
@@ -11,7 +11,7 @@ public enum ConsumptionItemTypeEnum {
 	private final int code;
 	private final String msg;
 
-	ConsumptionItemTypeEnum(int code, String msg) {
+	ConsumptionTypeEnum(int code, String msg) {
 		this.code = code;
 		this.msg = msg;
 	}

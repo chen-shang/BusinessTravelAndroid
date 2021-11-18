@@ -55,7 +55,7 @@ public class AddConsumptionItemActivity extends BaseActivity<ActivityAddConsumpt
 				final SwipeRecyclerView swipeRecyclerView = holder.itemView.findViewById(R.id.SwipeRecyclerView2);
 				LayoutManager layoutManager = new GridLayoutManager(AddConsumptionItemActivity.this, 5);
 				swipeRecyclerView.setLayoutManager(layoutManager);
-				IconRecyclerViewAdapter billRecyclerViewAdapter = new IconRecyclerViewAdapter(ItemTypeEnum.ConsumptionItem, iconList, AddConsumptionItemActivity.this);
+				IconRecyclerViewAdapter billRecyclerViewAdapter = new IconRecyclerViewAdapter(ItemTypeEnum.CONSUMPTION, iconList, AddConsumptionItemActivity.this);
 				swipeRecyclerView.setAdapter(billRecyclerViewAdapter);
 			}
 

@@ -21,7 +21,7 @@ import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityAddBillBinding;
-import com.business.travel.app.enums.ConsumptionItemTypeEnum;
+import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.enums.IconEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
@@ -60,7 +60,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		//消费项目列表
 		LayoutManager layoutManager = new GridLayoutManager(this, 5);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setLayoutManager(layoutManager);
-		IconRecyclerViewAdapter billRecyclerViewAdapter = new IconRecyclerViewAdapter(ItemTypeEnum.ConsumptionItem, iconList, this);
+		IconRecyclerViewAdapter billRecyclerViewAdapter = new IconRecyclerViewAdapter(ItemTypeEnum.CONSUMPTION, iconList, this);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setAdapter(billRecyclerViewAdapter);
 		//长按移动排序
 		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setLongPressDragEnabled(true);
@@ -69,7 +69,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		//同行人列表
 		LayoutManager layoutManager2 = new GridLayoutManager(this, 5);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setLayoutManager(layoutManager2);
-		IconRecyclerViewAdapter iconRecyclerViewAdapter = new IconRecyclerViewAdapter(ItemTypeEnum.AssociateItem, associateList, this);
+		IconRecyclerViewAdapter iconRecyclerViewAdapter = new IconRecyclerViewAdapter(ItemTypeEnum.ASSOCIATE, associateList, this);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setAdapter(iconRecyclerViewAdapter);
 		//长按移动排序
 		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setLongPressDragEnabled(true);
@@ -176,9 +176,9 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		bill.setCreateTime(DateTimeUtil.format(new Date()));
 		bill.setModifyTime(DateTimeUtil.format(new Date()));
 		if (i > 5) {
-			bill.setType(ConsumptionItemTypeEnum.INCOME.name());
+			bill.setConsumptionType(ConsumptionTypeEnum.INCOME.name());
 		} else {
-			bill.setType(ConsumptionItemTypeEnum.SPENDING.name());
+			bill.setConsumptionType(ConsumptionTypeEnum.SPENDING.name());
 		}
 		bill.setRemark(remark);
 		String iconFullName = iconList.get(0).getIconFullName();

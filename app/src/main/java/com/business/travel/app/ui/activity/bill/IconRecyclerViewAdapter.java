@@ -67,10 +67,10 @@ public class IconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRecycle
 		uiImageViewIcon.setOnClickListener(v -> {
 			if (imageIconInfo.getResourceId() == R.drawable.bill_icon_add) {
 				switch (itemTypeEnum) {
-					case AssociateItem:
+					case ASSOCIATE:
 						activity.startActivity(new Intent(activity, EditAssociateItemActivity.class));
 						return;
-					case ConsumptionItem:
+					case CONSUMPTION:
 						activity.startActivity(new Intent(activity, EditConsumptionItemActivity.class));
 						return;
 					default:

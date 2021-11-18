@@ -5,7 +5,6 @@ import java.util.List;
 import androidx.room.Dao;
 import androidx.room.Query;
 import com.business.travel.app.dal.dao.base.BaseDao;
-import com.business.travel.app.dal.entity.ConsumptionItem;
 import com.business.travel.app.dal.entity.ItemSort;
 
 /**
@@ -24,4 +23,10 @@ public interface ItemSortDao extends BaseDao<ItemSort> {
 	 */
 	@Query("SELECT * FROM itemSort limit 1")
 	ItemSort selectOne();
+
+	/**
+	 * 查询单条
+	 */
+	@Query("SELECT * FROM itemSort where itemType=:type limit 1")
+	ItemSort selectOneByType(String type);
 }
