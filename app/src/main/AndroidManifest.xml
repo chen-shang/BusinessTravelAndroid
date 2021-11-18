@@ -35,6 +35,8 @@
         </activity>
         <activity android:name=".ui.activity.bill.AddBillActivity">
         </activity>
+        <activity android:name=".ui.TestActivity">
+        </activity>
     </application>
 
 </manifest>
