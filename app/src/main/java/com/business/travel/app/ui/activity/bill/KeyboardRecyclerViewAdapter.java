@@ -130,6 +130,7 @@ public class KeyboardRecyclerViewAdapter extends BaseRecyclerViewAdapter<Keyboar
 			case 12:
 				holder.numButton.setText(".");
 				holder.numButton.setOnClickListener(v -> {
+					//如果已经包含点了,再点击没有效果
 					if (holder.amountTextView.getText().toString().contains(".")) {
 						return;
 					}

@@ -41,9 +41,15 @@ public class BillFragment extends BaseFragment<FragmentBillBinding, BillFragment
 
 		//初始化
 		LayoutManager layoutManager = new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false);
-		viewBinding.UIDashboardFragmentSwipeRecyclerViewBillList.setLayoutManager(layoutManager);
+		viewBinding.UIBillFragmentSwipeRecyclerViewBillList.setLayoutManager(layoutManager);
 		billRecyclerViewAdapter = new BillRecyclerViewAdapter(dateBillInfoList, (MasterActivity)requireActivity());
-		viewBinding.UIDashboardFragmentSwipeRecyclerViewBillList.setAdapter(billRecyclerViewAdapter);
+		viewBinding.UIBillFragmentSwipeRecyclerViewBillList.setAdapter(billRecyclerViewAdapter);
+
+		viewBinding.UIBillFragmentSwipeRefreshLayout.setOnRefreshListener(() -> {
+			//下滑刷新项目列表
+			refreshBillList(dataBinding.getProject());
+			viewBinding.UIBillFragmentSwipeRefreshLayout.setRefreshing(false);
+		});
 		return view;
 	}
 
@@ -74,16 +80,16 @@ public class BillFragment extends BaseFragment<FragmentBillBinding, BillFragment
 		final BillDao billDao = AppDatabase.getInstance(requireActivity()).billDao();
 		final Long sumTotalIncomeMoney = billDao.sumTotalIncomeMoney(project.getId());
 		if (sumTotalIncomeMoney == null || sumTotalIncomeMoney == 0) {
-			viewBinding.UIBillFragmentTextViewIncome.setVisibility(View.GONE);
+			viewBinding.UIBillFragmentTextViewIncome.setVisibility(View.INVISIBLE);
 		} else {
 			viewBinding.UIBillFragmentTextViewIncome.setVisibility(View.VISIBLE);
 			viewBinding.UIBillFragmentTextViewIncome.setText("收入:" + sumTotalIncomeMoney);
 		}
 		final Long sumTotalSpendingMoney = billDao.sumTotalSpendingMoney(project.getId());
 		if (sumTotalSpendingMoney == null || sumTotalSpendingMoney == 0) {
-			viewBinding.UIBillFragmentTextViewPay.setVisibility(View.GONE);
+			viewBinding.UIBillFragmentTextViewPay.setVisibility(View.INVISIBLE);
 		} else {
-			viewBinding.UIBillFragmentTextViewIncome.setVisibility(View.VISIBLE);
+			viewBinding.UIBillFragmentTextViewPay.setVisibility(View.VISIBLE);
 			viewBinding.UIBillFragmentTextViewPay.setText("支出:" + sumTotalSpendingMoney);
 		}
 		final List<Bill> billList = billDao.selectByProjectId(project.getId());

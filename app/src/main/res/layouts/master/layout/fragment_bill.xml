@@ -81,13 +81,13 @@
 
             <!--  下面的项目列表数据   -->
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                    android:id="@+id/UI_DashboardFragment_SwipeRefreshLayout"
+                    android:id="@+id/UI_BillFragment_SwipeRefreshLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layout_constraintTop_toBottomOf="@id/UI_ProjectFragment_ConstraintLayout">
 
                 <com.yanzhenjie.recyclerview.SwipeRecyclerView
-                        android:id="@+id/UI_DashboardFragment_SwipeRecyclerView_Bill_List"
+                        android:id="@+id/UI_BillFragment_SwipeRecyclerView_BillList"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"/>
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "c7a1aefd0fcbd0408a333d523d63a4c3",
+    "identityHash": "2daaac67be8545bc895fe0cbae726353",
     "entities": [
       {
         "tableName": "AssociateItem",
@@ -69,7 +69,7 @@
       },
       {
         "tableName": "Bill",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `icon` TEXT, `name` TEXT, `amount` INTEGER, `type` TEXT, `consumeDate` TEXT, `associateId` TEXT, `remark` TEXT, `projectId` INTEGER, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `icon` TEXT, `name` TEXT, `amount` INTEGER, `consumptionType` TEXT, `consumeDate` TEXT, `associateId` TEXT, `remark` TEXT, `projectId` INTEGER, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -96,8 +96,8 @@
             "notNull": false
           },
           {
-            "fieldPath": "type",
-            "columnName": "type",
+            "fieldPath": "consumptionType",
+            "columnName": "consumptionType",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -156,7 +156,7 @@
       },
       {
         "tableName": "ConsumptionItem",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `iconPath` TEXT, `iconName` TEXT, `type` INTEGER, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `iconPath` TEXT, `iconName` TEXT, `consumptionType` TEXT, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -183,9 +183,9 @@
             "notNull": false
           },
           {
-            "fieldPath": "type",
-            "columnName": "type",
-            "affinity": "INTEGER",
+            "fieldPath": "consumptionType",
+            "columnName": "consumptionType",
+            "affinity": "TEXT",
             "notNull": false
           },
           {
@@ -219,7 +219,7 @@
       },
       {
         "tableName": "ItemSort",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `type` TEXT, `sortIds` TEXT, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `itemType` TEXT, `sortIds` TEXT, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -228,8 +228,8 @@
             "notNull": false
           },
           {
-            "fieldPath": "type",
-            "columnName": "type",
+            "fieldPath": "itemType",
+            "columnName": "itemType",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -344,7 +344,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c7a1aefd0fcbd0408a333d523d63a4c3')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2daaac67be8545bc895fe0cbae726353')"
     ]
   }
 }

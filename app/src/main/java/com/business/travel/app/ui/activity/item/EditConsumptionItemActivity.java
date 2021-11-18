@@ -77,7 +77,6 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 	}
 
 	private void refreshConsumptionItem() {
-
 		ItemSortDao itemSortDao = AppDatabase.getInstance(this).itemSortDao();
 		ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
 		//先获取排序
@@ -90,9 +89,10 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 			List<Long> idList = SplitUtil.trimToLongList(sortIds);
 			newConsumptionItemList = consumptionItemDao.selectByIds(idList);
 		}
-		if (CollectionUtils.isEmpty(newConsumptionItemList)) {
-			return;
-		}
+		//todo
+		//if (CollectionUtils.isEmpty(newConsumptionItemList)) {
+		//	return;
+		//}
 		consumptionItemList.clear();
 		consumptionItemList.addAll(newConsumptionItemList);
 		mock();
