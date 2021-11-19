@@ -2,6 +2,7 @@ package com.business.travel.app.ui;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import com.business.travel.app.dal.dao.ProjectDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityTestBinding;
+import com.business.travel.app.model.GiteeContent;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.CompletableFutureUtil;
 import com.business.travel.utils.JacksonUtil;
@@ -136,8 +138,24 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 
 		CompletableFutureUtil.runAsync(() -> {
 			try {
-				final List<com.business.travel.app.model.Content> v5ReposOwnerRepoContents = BusinessTravelResourceApi.getV5ReposOwnerRepoContents("/icon/收入");
-				System.out.println(JacksonUtil.toPrettyString(v5ReposOwnerRepoContents));
+				//final List<GiteeContent> v5ReposOwnerRepoGiteeContentsIncome = BusinessTravelResourceApi.getV5ReposOwnerRepoContents("/icon/收入");
+				//System.out.println(JacksonUtil.toPrettyString(v5ReposOwnerRepoGiteeContentsIncome));
+
+				final List<GiteeContent> v5ReposOwnerRepoGiteeContentsSpend = BusinessTravelResourceApi.getV5ReposOwnerRepoContents("/icon/支出");
+				final List<String> collect = v5ReposOwnerRepoGiteeContentsSpend.stream()
+						.filter(item -> "dir".equals(item.getType()))
+						.map(GiteeContent::getName)
+						.collect(Collectors.toList());
+				System.out.println(JacksonUtil.toPrettyString(v5ReposOwnerRepoGiteeContentsSpend));
+				System.out.println("=================");
+				System.out.println(JacksonUtil.toPrettyString(collect));
+
+				collect.forEach(item -> {
+					final List<GiteeContent> v5ReposOwnerRepoContents = BusinessTravelResourceApi.getV5ReposOwnerRepoContents("/icon/支出/" + item);
+					System.out.println("=========v5ReposOwnerRepoContents========");
+					System.out.println(JacksonUtil.toPrettyString(v5ReposOwnerRepoContents));
+				});
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -201,5 +219,5 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 
 @Data
 class Content {
-	private List<com.business.travel.app.model.Content> contents;
+	private List<GiteeContent> giteeContents;
 }

@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.business.travel.app.exceptions.ApiException;
-import com.business.travel.app.model.Content;
+import com.business.travel.app.model.GiteeContent;
 import com.business.travel.app.utils.HttpWrapper;
 import com.business.travel.utils.JacksonUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -16,6 +16,7 @@ import okhttp3.Request;
 import okhttp3.Request.Builder;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author chenshang
@@ -55,15 +56,15 @@ public class BusinessTravelResourceApi {
 	 * 获取仓库具体路径下的内容
 	 * https://gitee.com/api/v5/swagger#/getV5ReposOwnerRepoContents(Path)
 	 */
-	public static List<Content> getV5ReposOwnerRepoContents(String path) {
+	public static List<GiteeContent> getV5ReposOwnerRepoContents(String path) {
 		HttpUrl.Builder urlBuilder = HttpUrl.parse(URL_ + "/contents/" + path).newBuilder().addQueryParameter("access_token", ACCESS_TOKEN);
 		Request request = new Builder().url(urlBuilder.build()).build();
 		try {
 			String response = httpClient.sendRequest(request);
-			if (response == null) {
+			if (StringUtils.isEmpty(response)) {
 				return Collections.emptyList();
 			}
-			return JacksonUtil.toBean(response, new TypeReference<List<Content>>() {});
+			return JacksonUtil.toBean(response, new TypeReference<List<GiteeContent>>() {});
 		} catch (IOException e) {
 			throw new ApiException(-1, "网络异常,请稍后重试");
 		}
