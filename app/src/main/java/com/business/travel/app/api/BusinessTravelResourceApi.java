@@ -2,8 +2,15 @@ package com.business.travel.app.api;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
+import java.util.List;
 
+import com.business.travel.app.exceptions.ApiException;
+import com.business.travel.app.model.Content;
 import com.business.travel.app.utils.HttpWrapper;
+import com.business.travel.utils.JacksonUtil;
+import com.fasterxml.jackson.core.type.TypeReference;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Request.Builder;
@@ -15,8 +22,12 @@ import okhttp3.ResponseBody;
  */
 public class BusinessTravelResourceApi {
 
-	private static final String URL_ = "https://gitee.com/chen-shang/business-travel-resource/raw/master/icon";
 	private static final HttpWrapper httpClient = HttpWrapper.withOkHttpClient(new OkHttpClient());
+	private static final String OWNER = "chen-shang";
+	private static final String REPOSITORY = "business-travel-resource";
+	private static final String BASE_URL = "https://gitee.com/api/v5/repos";
+	private static final String ACCESS_TOKEN = "fcb0502695e67e54ca26e27a6a56d86f";
+	private static final String URL_ = BASE_URL + "/" + OWNER + "/" + REPOSITORY;
 
 	public static InputStream getIcon(String iconFullName) {
 		try {
@@ -38,5 +49,23 @@ public class BusinessTravelResourceApi {
 
 	public static InputStream getIcon(String iconPath, String iconName) {
 		return getIcon(iconPath + "/" + iconName);
+	}
+
+	/**
+	 * 获取仓库具体路径下的内容
+	 * https://gitee.com/api/v5/swagger#/getV5ReposOwnerRepoContents(Path)
+	 */
+	public static List<Content> getV5ReposOwnerRepoContents(String path) {
+		HttpUrl.Builder urlBuilder = HttpUrl.parse(URL_ + "/contents/" + path).newBuilder().addQueryParameter("access_token", ACCESS_TOKEN);
+		Request request = new Builder().url(urlBuilder.build()).build();
+		try {
+			String response = httpClient.sendRequest(request);
+			if (response == null) {
+				return Collections.emptyList();
+			}
+			return JacksonUtil.toBean(response, new TypeReference<List<Content>>() {});
+		} catch (IOException e) {
+			throw new ApiException(-1, "网络异常,请稍后重试");
+		}
 	}
 }

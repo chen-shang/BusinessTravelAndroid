@@ -1,7 +1,5 @@
 package com.business.travel.app.ui;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,20 +16,17 @@ import androidx.recyclerview.widget.RecyclerView.Adapter;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
+import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.dal.dao.ProjectDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityTestBinding;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.CompletableFutureUtil;
-import com.business.travel.app.utils.HttpWrapper;
 import com.business.travel.utils.JacksonUtil;
-import com.pixplicity.sharp.Sharp;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import com.yanzhenjie.recyclerview.touch.OnItemMoveListener;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Request.Builder;
+import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -46,21 +41,21 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		projectDao = AppDatabase.getInstance(this).projectDao();
-		CompletableFutureUtil.runAsync(() -> {
-
-			try {
-
-				final String s = HttpWrapper.withOkHttpClient(new OkHttpClient()).doGet("https://gitee.com/chen-shang/business-travel-resource/raw/master/config/icon.json");
-				final Request build = new Builder().url("https://gitee.com/chen-shang/business-travel-resource/raw/master/icon/12%20%E4%B8%AA%E6%8A%A4/3%20%E5%8F%A3%E7%BA%A2.svg").build();
-				final InputStream inputStream = new OkHttpClient().newCall(build).execute().body().byteStream();
-				Sharp.loadInputStream(inputStream).into(viewBinding.image1);
-				System.out.println("+========" + s);
-				ToastUtils.showShort(s);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-		});
+		//CompletableFutureUtil.runAsync(() -> {
+		//
+		//	try {
+		//
+		//		final String s = HttpWrapper.withOkHttpClient(new OkHttpClient()).doGet("https://gitee.com/chen-shang/business-travel-resource/raw/master/config/icon.json");
+		//		final Request build = new Builder().url("https://gitee.com/chen-shang/business-travel-resource/raw/master/icon/12%20%E4%B8%AA%E6%8A%A4/3%20%E5%8F%A3%E7%BA%A2.svg").build();
+		//		final InputStream inputStream = new OkHttpClient().newCall(build).execute().body().byteStream();
+		//		Sharp.loadInputStream(inputStream).into(viewBinding.image1);
+		//		System.out.println("+========" + s);
+		//		ToastUtils.showShort(s);
+		//	} catch (IOException e) {
+		//		e.printStackTrace();
+		//	}
+		//
+		//});
 
 		SwipeRecyclerView recyclerView = viewBinding.recyclerView;
 
@@ -138,6 +133,15 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 		mDataList.clear();
 		mDataList.addAll(projectDao.selectAll());
 		adapter.notifyDataSetChanged();
+
+		CompletableFutureUtil.runAsync(() -> {
+			try {
+				final List<com.business.travel.app.model.Content> v5ReposOwnerRepoContents = BusinessTravelResourceApi.getV5ReposOwnerRepoContents("/icon/收入");
+				System.out.println(JacksonUtil.toPrettyString(v5ReposOwnerRepoContents));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
 	}
 
 	public void delete(View view) {
@@ -195,3 +199,7 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 	}
 }
 
+@Data
+class Content {
+	private List<com.business.travel.app.model.Content> contents;
+}

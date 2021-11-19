@@ -96,19 +96,19 @@ public class HttpWrapper {
 
 	/**
 	 * @param request
-	 * @return
+	 * @return @Nullable
 	 * @throws IOException
 	 */
-	private String sendRequest(Request request) throws IOException {
+	public String sendRequest(Request request) throws IOException {
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
 				throw new RuntimeException("请求失败:" + response.code() + ",请稍后再试");
 			}
 			ResponseBody body = response.body();
-			if (body == null) {
-				return "";
+			if (body != null) {
+				return body.string();
 			}
-			return body.string();
+			return null;
 		}
 	}
 }
