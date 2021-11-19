@@ -75,7 +75,11 @@ android {
                             'src/main/res/layouts/master',
                             'src/main/res/layouts/base',
                             'src/main/res/layouts',
-                            'src/main/res'
+                            'src/main/res',
+                            'src/main/res/drawables',
+                            'src/main/res/drawables/icon',
+                            'src/main/res/drawables/corner',
+                            'src/main/res/drawables/shape',
                     ]
         }
     }

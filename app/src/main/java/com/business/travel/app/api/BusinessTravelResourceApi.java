@@ -27,13 +27,13 @@ public class BusinessTravelResourceApi {
 	private static final String OWNER = "chen-shang";
 	private static final String REPOSITORY = "business-travel-resource";
 	private static final String BASE_URL = "https://gitee.com/api/v5/repos";
-	private static final String ACCESS_TOKEN = "fcb0502695e67e54ca26e27a6a56d86f";
+	private static final String ACCESS_TOKEN = "a1b50339ccf80a7c96f6a96fa97fcdaf";
 	private static final String URL_ = BASE_URL + "/" + OWNER + "/" + REPOSITORY;
 
 	public static InputStream getIcon(String iconFullName) {
 		try {
 			//TODO 缓存
-			Request request = new Builder().url(URL_ + iconFullName).build();
+			Request request = new Builder().url(iconFullName).build();
 			Response response = new OkHttpClient().newCall(request).execute();
 			if (!response.isSuccessful()) {
 				throw new RuntimeException("请求失败:" + response.code() + ",请稍后再试");

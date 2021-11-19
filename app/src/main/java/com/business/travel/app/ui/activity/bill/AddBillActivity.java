@@ -60,7 +60,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		//消费项目列表
 		LayoutManager layoutManager = new GridLayoutManager(this, 5);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setLayoutManager(layoutManager);
-		IconRecyclerViewAdapter billRecyclerViewAdapter = new IconRecyclerViewAdapter(ItemTypeEnum.CONSUMPTION, iconList, this);
+		ItemIconRecyclerViewAdapter billRecyclerViewAdapter = new ItemIconRecyclerViewAdapter(ItemTypeEnum.CONSUMPTION, iconList, this);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setAdapter(billRecyclerViewAdapter);
 		//长按移动排序
 		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setLongPressDragEnabled(true);
@@ -69,11 +69,11 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		//同行人列表
 		LayoutManager layoutManager2 = new GridLayoutManager(this, 5);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setLayoutManager(layoutManager2);
-		IconRecyclerViewAdapter iconRecyclerViewAdapter = new IconRecyclerViewAdapter(ItemTypeEnum.ASSOCIATE, associateList, this);
-		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setAdapter(iconRecyclerViewAdapter);
+		ItemIconRecyclerViewAdapter itemIconRecyclerViewAdapter = new ItemIconRecyclerViewAdapter(ItemTypeEnum.ASSOCIATE, associateList, this);
+		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setAdapter(itemIconRecyclerViewAdapter);
 		//长按移动排序
 		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setLongPressDragEnabled(true);
-		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(associateList, iconRecyclerViewAdapter));
+		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(associateList, itemIconRecyclerViewAdapter));
 
 		GridLayoutManager layoutManager3 = new GridLayoutManager(this, 4) {
 			@Override
@@ -85,7 +85,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		KeyboardRecyclerViewAdapter keyboardRecyclerViewAdapter = new KeyboardRecyclerViewAdapter(new ArrayList<>(), this).onSaveClick(v -> {
 			try {
 				//当键盘保存按钮点击之后
-				saveBill(billRecyclerViewAdapter, iconRecyclerViewAdapter);
+				saveBill(billRecyclerViewAdapter, itemIconRecyclerViewAdapter);
 				//6.账单创建完成后跳转到 DashboardFragment
 				ActivityUtils.finishActivity(AddBillActivity.this, true);
 			} catch (Exception e) {
@@ -98,7 +98,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		}).onReRecordClick(v -> {
 			try {
 				//当键盘保存按钮点击之后
-				saveBill(billRecyclerViewAdapter, iconRecyclerViewAdapter);
+				saveBill(billRecyclerViewAdapter, itemIconRecyclerViewAdapter);
 			} catch (Exception e) {
 				ToastUtils.make().setLeftIcon(R.drawable.icon_error).setGravity(Gravity.CENTER, 0, 0).setDurationIsLong(true).show(e.getMessage());
 			}
@@ -106,7 +106,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		viewBinding.UIAddBillActivitySwipeRecyclerViewKeyboard.setAdapter(keyboardRecyclerViewAdapter);
 	}
 
-	private void saveBill(IconRecyclerViewAdapter billRecyclerViewAdapter, IconRecyclerViewAdapter iconRecyclerViewAdapter) {
+	private void saveBill(ItemIconRecyclerViewAdapter billRecyclerViewAdapter, ItemIconRecyclerViewAdapter itemIconRecyclerViewAdapter) {
 		//参数校验
 		String projectName = viewBinding.UIAddBillActivityTextViewProjectName.getText().toString();
 		if (StringUtils.isBlank(projectName)) {
@@ -131,7 +131,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		iconList.forEach(item -> item.setSelected(false));
 		associateList.forEach(item -> item.setSelected(false));
 		billRecyclerViewAdapter.notifyDataSetChanged();
-		iconRecyclerViewAdapter.notifyDataSetChanged();
+		itemIconRecyclerViewAdapter.notifyDataSetChanged();
 
 		viewBinding.UIAddBillActivityTextViewAmount.setText(null);
 		//更新返回页的数据
@@ -155,13 +155,13 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		//1. 选中的消费项目
 		String consumerItemList = iconList.stream()
 				.filter(ImageIconInfo::isSelected)
-				.map(ImageIconInfo::getName)
+				.map(ImageIconInfo::getIconName)
 				.filter(StringUtils::isNotBlank)
 				.collect(Collectors.joining(","));
 		//2. 选中的同行人
 		String associateItemList = associateList.stream()
 				.filter(ImageIconInfo::isSelected)
-				.map(ImageIconInfo::getName)
+				.map(ImageIconInfo::getIconName)
 				.filter(StringUtils::isNotBlank)
 				.collect(Collectors.joining(","));
 
@@ -181,7 +181,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 			bill.setConsumptionType(ConsumptionTypeEnum.SPENDING.name());
 		}
 		bill.setRemark(remark);
-		String iconFullName = iconList.get(0).getIconFullName();
+		String iconFullName = iconList.get(0).getIconDownloadUrl();
 		//todo
 		iconFullName = "/支出/10办公/6taishiji.svg";
 		bill.setIcon(iconFullName);
@@ -217,24 +217,24 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		Arrays.stream(IconEnum.values()).forEach(iconEnum -> {
 			ImageIconInfo imageIconInfo = new ImageIconInfo();
 			imageIconInfo.setResourceId(iconEnum.getResourceId());
-			imageIconInfo.setName(iconEnum.getDescription());
+			imageIconInfo.setIconName(iconEnum.getDescription());
 			imageIconInfo.setSelected(false);
 			iconList.add(imageIconInfo);
 		});
 
 		ImageIconInfo imageAddIconInfo = new ImageIconInfo();
 		imageAddIconInfo.setResourceId(R.drawable.bill_icon_add);
-		imageAddIconInfo.setName("添加");
+		imageAddIconInfo.setIconName("添加");
 		iconList.add(imageAddIconInfo);
 
 		ImageIconInfo imageAddIconInfoMe = new ImageIconInfo();
 		imageAddIconInfoMe.setResourceId(R.drawable.vector_drawable_my);
-		imageAddIconInfoMe.setName("我");
+		imageAddIconInfoMe.setIconName("我");
 		associateList.add(imageAddIconInfoMe);
 
 		ImageIconInfo imageAddIconInfo2 = new ImageIconInfo();
 		imageAddIconInfo2.setResourceId(R.drawable.bill_icon_add);
-		imageAddIconInfo2.setName("添加");
+		imageAddIconInfo2.setIconName("添加");
 		associateList.add(imageAddIconInfo2);
 	}
 }

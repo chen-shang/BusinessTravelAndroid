@@ -15,11 +15,11 @@ public class ImageIconInfo {
 	/**
 	 * 名称
 	 */
-	private String name;
+	private String iconName;
 	/**
-	 * 图标路径
+	 * 图标地址
 	 */
-	private String iconFullName;
+	private String iconDownloadUrl;
 	/**
 	 * 是否被选中
 	 */

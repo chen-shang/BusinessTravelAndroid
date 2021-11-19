@@ -1,5 +1,6 @@
 package com.business.travel.app.ui.activity.bill;
 
+import java.io.InputStream;
 import java.util.List;
 
 import android.annotation.SuppressLint;
@@ -17,25 +18,29 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import androidx.viewbinding.ViewBinding;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.ResourceUtils;
 import com.business.travel.app.R;
+import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.ImageIconInfo;
-import com.business.travel.app.ui.activity.bill.IconRecyclerViewAdapter.IconRecyclerViewAdapterViewHolder;
+import com.business.travel.app.ui.activity.bill.ItemIconRecyclerViewAdapter.IconRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.activity.item.EditAssociateItemActivity;
 import com.business.travel.app.ui.activity.item.EditConsumptionItemActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
+import com.business.travel.app.utils.CompletableFutureUtil;
+import com.pixplicity.sharp.Sharp;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author chenshang
  */
-public class IconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRecyclerViewAdapterViewHolder, ImageIconInfo> {
+public class ItemIconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRecyclerViewAdapterViewHolder, ImageIconInfo> {
 
 	private ItemTypeEnum itemTypeEnum;
 
-	public IconRecyclerViewAdapter(ItemTypeEnum itemTypeEnum, List<ImageIconInfo> imageIconInfos, BaseActivity<? extends ViewBinding> baseActivity) {
+	public ItemIconRecyclerViewAdapter(ItemTypeEnum itemTypeEnum, List<ImageIconInfo> imageIconInfos, BaseActivity<? extends ViewBinding> baseActivity) {
 		super(imageIconInfos, baseActivity);
 		this.itemTypeEnum = itemTypeEnum;
 	}
@@ -51,18 +56,35 @@ public class IconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRecycle
 
 	@Override
 	public void onBindViewHolder(@NonNull @NotNull IconRecyclerViewAdapterViewHolder holder, int position) {
+		if (CollectionUtils.isEmpty(dataList)) {
+			return;
+		}
 		ImageIconInfo imageIconInfo = dataList.get(position);
+		if (imageIconInfo == null) {
+			return;
+		}
+
 		ImageView uiImageViewIcon = holder.uiImageViewIcon;
 
 		//初始化 uiImageViewIcon
-		uiImageViewIcon.setImageResource(imageIconInfo.getResourceId());
-		int initColor = ContextCompat.getColor(uiImageViewIcon.getContext(), R.color.black_100);
-		uiImageViewIcon.setImageDrawable(changeToColor(imageIconInfo.getResourceId(), initColor));
+		final int resourceId = imageIconInfo.getResourceId();
+		if (resourceId != 0) {
+			uiImageViewIcon.setImageResource(resourceId);
+		}
+
+		CompletableFutureUtil.runAsync(() -> {
+			final String iconFullName = imageIconInfo.getIconDownloadUrl();
+			final InputStream icon = BusinessTravelResourceApi.getIcon(iconFullName);
+			Sharp.loadInputStream(icon).into(uiImageViewIcon);
+		});
+
+		//int initColor = ContextCompat.getColor(uiImageViewIcon.getContext(), R.color.black_100);
+		//uiImageViewIcon.setImageDrawable(changeToColor(imageIconInfo.getResourceId(), initColor));
 
 		//初始化 uiTextViewDescription
 		TextView uiTextViewDescription = holder.uiTextViewDescription;
-		uiTextViewDescription.setText(imageIconInfo.getName());
-		uiTextViewDescription.setTextColor(initColor);
+		uiTextViewDescription.setText(imageIconInfo.getIconName());
+		//uiTextViewDescription.setTextColor(initColor);
 
 		uiImageViewIcon.setOnClickListener(v -> {
 			if (imageIconInfo.getResourceId() == R.drawable.bill_icon_add) {
