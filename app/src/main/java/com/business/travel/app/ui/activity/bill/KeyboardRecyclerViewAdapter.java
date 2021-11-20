@@ -1,6 +1,8 @@
 package com.business.travel.app.ui.activity.bill;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Stack;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.LogToast;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tomcat.util.digester.ArrayStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -29,6 +32,7 @@ public class KeyboardRecyclerViewAdapter extends BaseRecyclerViewAdapter<Keyboar
 	private OnClickListener onSaveClick;
 	private OnClickListener onDeleteClick;
 	private OnClickListener onReRecordClick;
+	private Stack<Long> stack = new Stack<>();
 
 	public KeyboardRecyclerViewAdapter(List<Integer> integers, BaseActivity<? extends ViewBinding> baseActivity) {
 		super(integers, baseActivity);
@@ -89,10 +93,26 @@ public class KeyboardRecyclerViewAdapter extends BaseRecyclerViewAdapter<Keyboar
 			case 7:
 				//正号
 				holder.numButton.setText("+");
+				holder.numButton.setOnClickListener(v -> {
+					String amount = holder.amountTextView.getText().toString();
+					if (StringUtils.isBlank(amount)) {
+						return;
+					}
+					if (stack.isEmpty()) {
+						new BigDecimal(amount).multiply();
+					}
+				});
 				break;
 			case 11:
 				//负号
 				holder.numButton.setText("-");
+				holder.numButton.setOnClickListener(v -> {
+					String amount = holder.amountTextView.getText().toString();
+					if (StringUtils.isBlank(amount)) {
+						return;
+					}
+
+				});
 				break;
 			case 15:
 				holder.itemView.setBackgroundColor(ColorUtils.getColor(R.color.teal_800));

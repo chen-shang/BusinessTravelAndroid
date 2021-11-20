@@ -20,8 +20,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.ResourceUtils;
+import com.blankj.utilcode.util.StringUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.api.BusinessTravelResourceApi;
+import com.business.travel.app.enums.ItemIconEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.activity.bill.ItemIconRecyclerViewAdapter.IconRecyclerViewAdapterViewHolder;
@@ -29,9 +31,11 @@ import com.business.travel.app.ui.activity.item.EditAssociateItemActivity;
 import com.business.travel.app.ui.activity.item.EditConsumptionItemActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
-import com.business.travel.app.utils.CompletableFutureUtil;
 import com.pixplicity.sharp.Sharp;
 import org.jetbrains.annotations.NotNull;
+
+import static com.business.travel.app.enums.ItemTypeEnum.ASSOCIATE;
+import static com.business.travel.app.enums.ItemTypeEnum.CONSUMPTION;
 
 /**
  * @author chenshang
@@ -63,20 +67,21 @@ public class ItemIconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRec
 		if (imageIconInfo == null) {
 			return;
 		}
-
-		ImageView uiImageViewIcon = holder.uiImageViewIcon;
-
-		//初始化 uiImageViewIcon
-		final int resourceId = imageIconInfo.getResourceId();
-		if (resourceId != 0) {
-			uiImageViewIcon.setImageResource(resourceId);
+		//先根据RUL地址查询本地资源
+		String iconDownloadUrl = imageIconInfo.getIconDownloadUrl();
+		if (StringUtils.isEmpty(iconDownloadUrl)) {
+			return;
 		}
 
-		CompletableFutureUtil.runAsync(() -> {
-			final String iconFullName = imageIconInfo.getIconDownloadUrl();
-			final InputStream icon = BusinessTravelResourceApi.getIcon(iconFullName);
-			Sharp.loadInputStream(icon).into(uiImageViewIcon);
-		});
+		ImageView uiImageViewIcon = holder.uiImageViewIcon;
+		ItemIconEnum itemIconEnum = ItemIconEnum.ofUrl(iconDownloadUrl);
+		if (itemIconEnum != null) {
+			//发起网络请求
+			uiImageViewIcon.setImageResource(itemIconEnum.getResourceId());
+		} else {
+			InputStream iconInputStream = BusinessTravelResourceApi.getIcon(iconDownloadUrl);
+			Sharp.loadInputStream(iconInputStream).into(uiImageViewIcon);
+		}
 
 		//int initColor = ContextCompat.getColor(uiImageViewIcon.getContext(), R.color.black_100);
 		//uiImageViewIcon.setImageDrawable(changeToColor(imageIconInfo.getResourceId(), initColor));
@@ -85,30 +90,31 @@ public class ItemIconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRec
 		TextView uiTextViewDescription = holder.uiTextViewDescription;
 		uiTextViewDescription.setText(imageIconInfo.getIconName());
 		//uiTextViewDescription.setTextColor(initColor);
-
+		//编辑按钮
+		boolean isEditImageButton = ItemIconEnum.ItemIconEdit.getIconDownloadUrl().equals(iconDownloadUrl);
 		uiImageViewIcon.setOnClickListener(v -> {
-			if (imageIconInfo.getResourceId() == R.drawable.bill_icon_add) {
-				switch (itemTypeEnum) {
-					case ASSOCIATE:
-						activity.startActivity(new Intent(activity, EditAssociateItemActivity.class));
-						return;
-					case CONSUMPTION:
-						activity.startActivity(new Intent(activity, EditConsumptionItemActivity.class));
-						return;
-					default:
-						return;
-				}
+			if (isEditImageButton && ASSOCIATE == itemTypeEnum) {
+				activity.startActivity(new Intent(activity, EditAssociateItemActivity.class));
+				return;
+			}
+
+			if (isEditImageButton && CONSUMPTION == itemTypeEnum) {
+				activity.startActivity(new Intent(activity, EditConsumptionItemActivity.class));
+				return;
 			}
 
 			if (imageIconInfo.isSelected()) {
+
 				int color = ContextCompat.getColor(uiImageViewIcon.getContext(), R.color.black_100);
-				uiImageViewIcon.setImageDrawable(changeToColor(imageIconInfo.getResourceId(), color));
+				//uiImageViewIcon.setImageDrawable(changeToColor(imageIconInfo.getResourceId(), color));
 				uiTextViewDescription.setTextColor(color);
+
 				imageIconInfo.setSelected(false);
 			} else {
 				int color = ContextCompat.getColor(uiImageViewIcon.getContext(), R.color.teal_800);
-				uiImageViewIcon.setImageDrawable(changeToColor(imageIconInfo.getResourceId(), color));
+				//uiImageViewIcon.setImageDrawable(changeToColor(imageIconInfo.getResourceId(), color));
 				uiTextViewDescription.setTextColor(color);
+
 				imageIconInfo.setSelected(true);
 			}
 		});

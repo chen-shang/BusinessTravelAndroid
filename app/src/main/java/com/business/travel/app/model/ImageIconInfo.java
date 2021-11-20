@@ -9,10 +9,6 @@ import lombok.Data;
 @Data
 public class ImageIconInfo {
 	/**
-	 * 资源id
-	 */
-	private int resourceId;
-	/**
 	 * 名称
 	 */
 	private String iconName;

@@ -216,25 +216,23 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	private void mock() {
 		Arrays.stream(IconEnum.values()).forEach(iconEnum -> {
 			ImageIconInfo imageIconInfo = new ImageIconInfo();
-			imageIconInfo.setResourceId(iconEnum.getResourceId());
 			imageIconInfo.setIconName(iconEnum.getDescription());
 			imageIconInfo.setSelected(false);
 			iconList.add(imageIconInfo);
 		});
 
 		ImageIconInfo imageAddIconInfo = new ImageIconInfo();
-		imageAddIconInfo.setResourceId(R.drawable.bill_icon_add);
 		imageAddIconInfo.setIconName("添加");
+		imageAddIconInfo.setIconDownloadUrl("");
 		iconList.add(imageAddIconInfo);
 
 		ImageIconInfo imageAddIconInfoMe = new ImageIconInfo();
-		imageAddIconInfoMe.setResourceId(R.drawable.vector_drawable_my);
 		imageAddIconInfoMe.setIconName("我");
 		associateList.add(imageAddIconInfoMe);
 
 		ImageIconInfo imageAddIconInfo2 = new ImageIconInfo();
-		imageAddIconInfo2.setResourceId(R.drawable.bill_icon_add);
 		imageAddIconInfo2.setIconName("添加");
+		imageAddIconInfo2.setIconDownloadUrl("");
 		associateList.add(imageAddIconInfo2);
 	}
 }

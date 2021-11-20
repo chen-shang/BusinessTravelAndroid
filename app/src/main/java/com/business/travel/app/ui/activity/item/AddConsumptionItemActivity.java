@@ -98,7 +98,7 @@ public class AddConsumptionItemActivity extends BaseActivity<ActivityAddConsumpt
 		}
 		Arrays.stream(IconEnum.values()).forEach(iconEnum -> {
 			ImageIconInfo imageIconInfo = new ImageIconInfo();
-			imageIconInfo.setResourceId(iconEnum.getResourceId());
+			//imageIconInfo.setResourceId(iconEnum.getResourceId());
 			imageIconInfo.setIconName(iconEnum.getDescription());
 			imageIconInfo.setSelected(false);
 			iconList.add(imageIconInfo);
@@ -124,7 +124,7 @@ public class AddConsumptionItemActivity extends BaseActivity<ActivityAddConsumpt
 					.filter(item -> item.getName().endsWith("svg"))
 					.map(item -> {
 						ImageIconInfo imageIconInfo = new ImageIconInfo();
-						imageIconInfo.setResourceId(0);
+						//imageIconInfo.setResourceId(0);
 						imageIconInfo.setIconDownloadUrl(item.getDownloadUrl());
 						imageIconInfo.setSelected(false);
 						return imageIconInfo;
