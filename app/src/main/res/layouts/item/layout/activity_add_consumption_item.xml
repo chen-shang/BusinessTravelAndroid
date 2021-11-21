@@ -80,7 +80,7 @@
                         android:id="@+id/UI_ImageView_Icon_1"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
-                        android:src="@drawable/bill_icon_food"
+                        android:src="@drawable/ic_base_placeholder"
                         android:background="@drawable/corners_shape_unselect"
                         android:layout_margin="10dp"
                         app:layout_constraintEnd_toEndOf="parent"
