@@ -27,11 +27,11 @@ public class AssociateItem extends BaseEntity {
 	 */
 	private Integer gender;
 	/**
-	 * 消费项图标大类
+	 * 图标地址
 	 */
-	private String iconPath;
+	private String iconDownloadUrl;
 	/**
-	 * 消费项图标名称
+	 * 图标名称
 	 */
 	private String iconName;
 }

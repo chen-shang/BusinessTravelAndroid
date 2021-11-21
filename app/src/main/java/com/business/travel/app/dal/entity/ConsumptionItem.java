@@ -24,9 +24,9 @@ public class ConsumptionItem extends BaseEntity {
 	 */
 	private String name;
 	/**
-	 * 消费项图标大类
+	 * 图标地址
 	 */
-	private String iconPath;
+	private String iconDownloadUrl;
 	/**
 	 * 消费项图标名称
 	 */

@@ -54,9 +54,9 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 			return;
 		}
 
-		String icon = bill.getIcon();
+		String iconDownloadUrl = bill.getIconDownloadUrl();
 		CompletableFutureUtil.runAsync(() -> {
-			final InputStream iconInputStream = BusinessTravelResourceApi.getIcon(icon);
+			final InputStream iconInputStream = BusinessTravelResourceApi.getIcon(iconDownloadUrl);
 			Sharp.loadInputStream(iconInputStream).into(holder.iconImageView);
 		});
 

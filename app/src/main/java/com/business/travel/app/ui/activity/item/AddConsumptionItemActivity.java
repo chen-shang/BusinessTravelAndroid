@@ -1,43 +1,90 @@
 package com.business.travel.app.ui.activity.item;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.api.BusinessTravelResourceApi;
+import com.business.travel.app.dal.dao.ConsumptionItemDao;
+import com.business.travel.app.dal.db.AppDatabase;
+import com.business.travel.app.dal.entity.ConsumptionItem;
 import com.business.travel.app.databinding.ActivityAddConsumptionItemBinding;
+import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.model.GiteeContent;
 import com.business.travel.app.model.ItemIconInfo;
 import com.business.travel.app.model.ItemIconInfo.ImageIconInfo;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.CompletableFutureUtil;
+import com.business.travel.app.utils.LogToast;
+import com.business.travel.utils.DateTimeUtil;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
+
+import static com.business.travel.app.enums.ConsumptionTypeEnum.INCOME;
 
 /**
  * @author chenshang
+ * 添加消费项页
  */
 public class AddConsumptionItemActivity extends BaseActivity<ActivityAddConsumptionItemBinding> {
 
 	private final List<ItemIconInfo> itemIconInfoList = new ArrayList<>();
-
 	private AddConsumptionItemRecyclerViewAdapter addConsumptionItemRecyclerViewAdapter;
+	/**
+	 * 最后被选中的icon的ViewImageView
+	 */
+	@Setter
+	@Getter
+	private ImageView lastSelectedImageView;
+
+	/**
+	 * 最后被选中的icon的ImageIconInfo
+	 */
+	@Setter
+	@Getter
+	private ImageIconInfo lastSelectedImageIcon;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Objects.requireNonNull(getSupportActionBar()).hide();
 
-		viewBinding.SwipeRecyclerView1.setLayoutManager(new LinearLayoutManager(this));
+		//消费项icon分类和列表
+		viewBinding.UIAddConsumptionItemSwipeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 		addConsumptionItemRecyclerViewAdapter = new AddConsumptionItemRecyclerViewAdapter(itemIconInfoList, this);
-		viewBinding.SwipeRecyclerView1.setAdapter(addConsumptionItemRecyclerViewAdapter);
+		viewBinding.UIAddConsumptionItemSwipeRecyclerView.setAdapter(addConsumptionItemRecyclerViewAdapter);
 
-		viewBinding.retn.setOnClickListener(v -> {
+		//返回按钮被点击后
+		viewBinding.UIAddConsumptionItemImageButtonReturn.setOnClickListener(v -> {
 			finish();
+		});
+
+		final String consumptionType = getIntent().getStringExtra("consumptionType");
+		//保存按钮被点击后
+		final ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
+		viewBinding.UIAddConsumptionItemTextViewSave.setOnClickListener(v -> {
+			final String iconDownloadUrl = lastSelectedImageIcon.getIconDownloadUrl();
+			String name = viewBinding.UIAddConsumptionItemEditTextName.getText().toString();
+
+			ConsumptionItem consumptionItem = new ConsumptionItem();
+			consumptionItem.setName(name);
+			consumptionItem.setIconDownloadUrl(lastSelectedImageIcon.getIconDownloadUrl());
+			consumptionItem.setIconName(lastSelectedImageIcon.getName());
+			consumptionItem.setConsumptionType(consumptionType);
+			consumptionItem.setCreateTime(DateTimeUtil.format(new Date()));
+			consumptionItem.setModifyTime(DateTimeUtil.format(new Date()));
+			consumptionItem.setIsDeleted(1);
+			consumptionItemDao.insert(consumptionItem);
+			LogToast.infoShow(iconDownloadUrl + ":" + name);
 		});
 	}
 
@@ -45,8 +92,12 @@ public class AddConsumptionItemActivity extends BaseActivity<ActivityAddConsumpt
 	@Override
 	protected void onStart() {
 		super.onStart();
-		CompletableFutureUtil.runAsync(() -> refreshIconItem("1")).get(20, TimeUnit.SECONDS);
-		addConsumptionItemRecyclerViewAdapter.notifyDataSetChanged();
+		CompletableFutureUtil.runAsync(() -> refreshIconItem("1")).whenComplete(new BiConsumer<Void, Throwable>() {
+			@Override
+			public void accept(Void unused, Throwable throwable) {
+				addConsumptionItemRecyclerViewAdapter.notifyDataSetChanged();
+			}
+		});
 	}
 
 	public void refreshIconItem(String type) {

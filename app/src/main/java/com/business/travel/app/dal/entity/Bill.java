@@ -20,7 +20,7 @@ public class Bill extends BaseEntity {
 	/**
 	 * 账单图标
 	 */
-	private String icon;
+	private String iconDownloadUrl;
 	/**
 	 * 账单名字,逗号分隔
 	 */

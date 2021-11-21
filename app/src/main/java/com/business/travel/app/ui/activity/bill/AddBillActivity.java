@@ -1,7 +1,6 @@
 package com.business.travel.app.ui.activity.bill;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -13,6 +12,7 @@ import android.view.Gravity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.dao.BillDao;
@@ -20,6 +20,7 @@ import com.business.travel.app.dal.dao.ConsumptionItemDao;
 import com.business.travel.app.dal.dao.ProjectDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Bill;
+import com.business.travel.app.dal.entity.ConsumptionItem;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityAddBillBinding;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
@@ -35,6 +36,7 @@ import com.business.travel.app.utils.LogToast;
 import com.business.travel.utils.DateTimeUtil;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author chenshang
@@ -47,6 +49,13 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 
 	private BillDao billDao;
 	private ProjectDao projectDao;
+
+	private ItemIconRecyclerViewAdapter billRecyclerViewAdapter;
+
+	/**
+	 * 当前被选中的是支出还是收入
+	 */
+	private ConsumptionTypeEnum consumptionType = ConsumptionTypeEnum.SPENDING;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +70,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		//消费项目列表
 		LayoutManager layoutManager = new GridLayoutManager(this, 5);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setLayoutManager(layoutManager);
-		ItemIconRecyclerViewAdapter billRecyclerViewAdapter = new ItemIconRecyclerViewAdapter(ItemTypeEnum.CONSUMPTION, iconList, this);
+		billRecyclerViewAdapter = new ItemIconRecyclerViewAdapter(ItemTypeEnum.CONSUMPTION, iconList, this);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setAdapter(billRecyclerViewAdapter);
 		//长按移动排序
 		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setLongPressDragEnabled(true);
@@ -105,6 +114,19 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 			}
 		});
 		viewBinding.UIAddBillActivitySwipeRecyclerViewKeyboard.setAdapter(keyboardRecyclerViewAdapter);
+
+		viewBinding.UIAddBillActivityTextViewPayType.setOnClickListener(v -> {
+			String payType = viewBinding.UIAddBillActivityTextViewPayType.getText().toString();
+			if (ConsumptionTypeEnum.INCOME.getMsg().equals(payType)) {
+				consumptionType = ConsumptionTypeEnum.SPENDING;
+				viewBinding.UIAddBillActivityTextViewPayType.setText(ConsumptionTypeEnum.SPENDING.getMsg());
+			} else if (ConsumptionTypeEnum.SPENDING.getMsg().equals(payType)) {
+				consumptionType = ConsumptionTypeEnum.INCOME;
+				viewBinding.UIAddBillActivityTextViewPayType.setText(ConsumptionTypeEnum.INCOME.getMsg());
+			} else {
+				//todo 异常
+			}
+		});
 	}
 
 	private void saveBill(ItemIconRecyclerViewAdapter billRecyclerViewAdapter, ItemIconRecyclerViewAdapter itemIconRecyclerViewAdapter) {
@@ -171,22 +193,23 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		bill.setProjectId(project.getId());
 		bill.setAmount(Long.valueOf(amount));
 		// TODO: 2021/11/6
-		int i = RandomUtils.nextInt(0, 10);
-		bill.setConsumeDate(DateTimeUtil.format(DateTimeUtil.toLocalDateTime(new Date()).plusDays(i), "yyyy-MM-dd"));
+		final String format = mockDate();
+		bill.setConsumeDate(format);
 		bill.setAssociateId(associateItemList);
 		bill.setCreateTime(DateTimeUtil.format(new Date()));
 		bill.setModifyTime(DateTimeUtil.format(new Date()));
-		if (i > 5) {
-			bill.setConsumptionType(ConsumptionTypeEnum.INCOME.name());
-		} else {
-			bill.setConsumptionType(ConsumptionTypeEnum.SPENDING.name());
-		}
+		bill.setConsumptionType(consumptionType.name());
 		bill.setRemark(remark);
-		String iconFullName = iconList.get(0).getIconDownloadUrl();
-		//todo
-		iconFullName = "/支出/10办公/6taishiji.svg";
-		bill.setIcon(iconFullName);
+		final String iconDownloadUrl = iconList.stream().filter(ImageIconInfo::isSelected).findFirst().map(ImageIconInfo::getIconDownloadUrl).orElse("");
+		bill.setIconDownloadUrl(iconDownloadUrl);
 		billDao.insert(bill);
+	}
+
+	@NotNull
+	private String mockDate() {
+		int i = RandomUtils.nextInt(0, 10);
+		final String format = DateTimeUtil.format(DateTimeUtil.toLocalDateTime(new Date()).plusDays(i), "yyyy-MM-dd");
+		return format;
 	}
 
 	private void createProject(String projectName) {
@@ -217,25 +240,51 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		refreshConsumptionIcon(ConsumptionTypeEnum.INCOME);
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		//启动的时候刷新当前页面的标题
+		BillFragmentShareData dataBinding = ((BillFragment)MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment()).getDataBinding();
+		if (dataBinding == null) {
+			return;
+		}
+		Project project = dataBinding.getProject();
+		if (project != null) {
+			viewBinding.UIAddBillActivityTextViewProjectName.setText(project.getName());
+		}
+
+		//先获取当前是支出还是收入类型
+		refreshConsumptionIcon(ConsumptionTypeEnum.INCOME);
+	}
+
 	public void refreshConsumptionIcon(ConsumptionTypeEnum consumptionType) {
 		final ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
+		List<ConsumptionItem> consumptionItems = consumptionItemDao.selectByType(consumptionType.name());
+		if (CollectionUtils.isEmpty(consumptionItems)) {
+			consumptionItems = new ArrayList<>();
+			// 搞默认值 插入数据库 todo
+		}
+
+		final List<ImageIconInfo> imageIconInfos = consumptionItems.stream().map(consumptionItem -> {
+			ImageIconInfo imageIconInfo = new ImageIconInfo();
+			imageIconInfo.setName(consumptionItem.getName());
+			imageIconInfo.setIconDownloadUrl(consumptionItem.getIconDownloadUrl());
+			imageIconInfo.setSelected(false);
+			return imageIconInfo;
+		}).collect(Collectors.toList());
+		//添加编辑按钮
+		ImageIconInfo imageIconInfo = new ImageIconInfo();
+		imageIconInfo.setName(ItemIconEnum.ItemIconEdit.getName());
+		imageIconInfo.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
+		imageIconInfo.setSelected(false);
+		imageIconInfos.add(imageIconInfo);
+
+		iconList.clear();
+		iconList.addAll(imageIconInfos);
+		billRecyclerViewAdapter.notifyDataSetChanged();
 	}
 
 	private void mock() {
-		Arrays.stream(ItemIconEnum.values()).forEach(iconEnum -> {
-			ImageIconInfo imageIconInfo = new ImageIconInfo();
-			imageIconInfo.setName(iconEnum.getName());
-			imageIconInfo.setIconDownloadUrl(iconEnum.getIconDownloadUrl());
-			imageIconInfo.setSelected(false);
-			iconList.add(imageIconInfo);
-		});
-
-		ImageIconInfo imageIconInfo = new ImageIconInfo();
-		imageIconInfo.setName("测试");
-		imageIconInfo.setIconDownloadUrl("https://gitee.com/chen-shang/business-travel-resource/raw/master/%E6%94%AF%E5%87%BA/%E4%BD%8F%E5%AE%BF/%E6%B0%91%E5%AE%BF.svg");
-		imageIconInfo.setSelected(false);
-		iconList.add(imageIconInfo);
-
 		ImageIconInfo imageAddIconInfo2 = new ImageIconInfo();
 		imageAddIconInfo2.setName(ItemIconEnum.ItemIconEdit.getName());
 		imageAddIconInfo2.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());

@@ -20,7 +20,6 @@ import com.business.travel.app.databinding.ActivityEditConsumptionItemBinding;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
-import com.business.travel.app.utils.LogToast;
 import com.business.travel.utils.SplitUtil;
 
 /**
@@ -29,6 +28,11 @@ import com.business.travel.utils.SplitUtil;
 public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsumptionItemBinding> {
 	List<ConsumptionItem> consumptionItemList = new ArrayList<>();
 	private EditConsumptionItemRecyclerViewAdapter editConsumptionItemRecyclerViewAdapter;
+
+	/**
+	 * 当前被选中的是支出还是收入
+	 */
+	private ConsumptionTypeEnum consumptionType;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +57,7 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 
 			viewBinding.UIConsumerItemTextViewIncome.setTextColor(ColorUtils.getColor(R.color.white));
 			gradientDrawableIncome.setColor(ColorUtils.getColor(R.color.teal_800));
-
+			this.consumptionType = ConsumptionTypeEnum.SPENDING;
 			refreshConsumptionItem(ConsumptionTypeEnum.SPENDING);
 		});
 
@@ -63,16 +67,36 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 
 			viewBinding.UIConsumerItemTextViewExpense.setTextColor(ColorUtils.getColor(R.color.white));
 			gradientDrawableExpense.setColor(ColorUtils.getColor(R.color.teal_800));
-
+			this.consumptionType = ConsumptionTypeEnum.INCOME;
 			refreshConsumptionItem(ConsumptionTypeEnum.INCOME);
 		});
 
-		//返回按钮点击后
-		viewBinding.UIEditConsumptionActivityImageButtonBack.setOnClickListener(v -> this.finish());
+		//注册返回按钮操作事件
+		registerEditConsumptionActivityImageButtonBack();
 
-		viewBinding.button4.setOnClickListener(v -> {
+		//注册添加按钮操作事件
+		registerConsumerItemButtonAddItem();
+	}
+
+	/**
+	 * 注册添加按钮操作事件
+	 */
+	private void registerConsumerItemButtonAddItem() {
+		viewBinding.UIConsumerItemButtonAddItem.setOnClickListener(v -> {
 			Intent intent = new Intent(this, AddConsumptionItemActivity.class);
+			intent.putExtra("consumptionType", consumptionType.name());
 			startActivity(intent);
+		});
+	}
+
+	/**
+	 * 注册返回按钮操作事件
+	 */
+	private void registerEditConsumptionActivityImageButtonBack() {
+		//返回按钮点击后
+		viewBinding.UIEditConsumptionActivityImageButtonBack.setOnClickListener(v -> {
+			//记得保存一下顺序
+			this.finish();
 		});
 	}
 
@@ -82,7 +106,17 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 		refreshConsumptionItem(ConsumptionTypeEnum.SPENDING);
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		refreshConsumptionItem(consumptionType);
+	}
+
 	private void refreshConsumptionItem(ConsumptionTypeEnum consumptionTypeEnum) {
+		if (consumptionTypeEnum == null) {
+			return;
+		}
+
 		ItemSortDao itemSortDao = AppDatabase.getInstance(this).itemSortDao();
 		ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
 		//先获取排序
@@ -95,28 +129,8 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 			List<Long> idList = SplitUtil.trimToLongList(sortIds);
 			newConsumptionItemList = consumptionItemDao.selectByIds(idList);
 		}
-		//todo
-		//if (CollectionUtils.isEmpty(newConsumptionItemList)) {
-		//	return;
-		//}
 		consumptionItemList.clear();
 		consumptionItemList.addAll(newConsumptionItemList);
-		mock();
 		editConsumptionItemRecyclerViewAdapter.notifyDataSetChanged();
-		LogToast.infoShow("消费类型" + consumptionTypeEnum.getMsg());
-	}
-
-	private void mock() {
-		for (int i = 0; i < 10; i++) {
-			ConsumptionItem consumptionItem = new ConsumptionItem();
-			consumptionItem.setId(0L);
-			consumptionItem.setName(i + "");
-			consumptionItem.setIconPath("");
-			consumptionItem.setIconName("");
-			consumptionItem.setConsumptionType(ConsumptionTypeEnum.INCOME.name());
-			consumptionItem.setCreateTime("");
-			consumptionItem.setModifyTime("");
-			consumptionItemList.add(consumptionItem);
-		}
 	}
 }
