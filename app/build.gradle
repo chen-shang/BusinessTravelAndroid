@@ -78,6 +78,7 @@ android {
                             'src/main/res',
                             'src/main/res/drawables',
                             'src/main/res/drawables/icon',
+                            'src/main/res/drawables/icon/common',
                             'src/main/res/drawables/icon/consumption',
                             'src/main/res/drawables/icon/consumption/income',
                             'src/main/res/drawables/icon/consumption/spending',

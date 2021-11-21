@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -67,8 +68,11 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 		});
 
 		//返回按钮点击后
-		viewBinding.UIEditConsumptionActivityImageButtonBack.setOnClickListener(v -> {
-			this.finish();
+		viewBinding.UIEditConsumptionActivityImageButtonBack.setOnClickListener(v -> this.finish());
+
+		viewBinding.button4.setOnClickListener(v -> {
+			Intent intent = new Intent(this, AddConsumptionItemActivity.class);
+			startActivity(intent);
 		});
 	}
 

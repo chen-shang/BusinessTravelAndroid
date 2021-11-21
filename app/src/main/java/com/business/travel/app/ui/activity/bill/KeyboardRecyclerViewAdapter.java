@@ -99,7 +99,7 @@ public class KeyboardRecyclerViewAdapter extends BaseRecyclerViewAdapter<Keyboar
 						return;
 					}
 					if (stack.isEmpty()) {
-						new BigDecimal(amount).multiply();
+						//new BigDecimal(amount).multiply();
 					}
 				});
 				break;

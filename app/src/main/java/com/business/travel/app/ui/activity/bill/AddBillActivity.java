@@ -16,16 +16,17 @@ import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.dao.BillDao;
+import com.business.travel.app.dal.dao.ConsumptionItemDao;
 import com.business.travel.app.dal.dao.ProjectDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityAddBillBinding;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
-import com.business.travel.app.enums.IconEnum;
+import com.business.travel.app.enums.ItemIconEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
-import com.business.travel.app.model.ImageIconInfo;
+import com.business.travel.app.model.ItemIconInfo.ImageIconInfo;
 import com.business.travel.app.ui.activity.master.fragment.BillFragment;
 import com.business.travel.app.ui.activity.master.fragment.BillFragmentShareData;
 import com.business.travel.app.ui.base.BaseActivity;
@@ -155,13 +156,13 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		//1. 选中的消费项目
 		String consumerItemList = iconList.stream()
 				.filter(ImageIconInfo::isSelected)
-				.map(ImageIconInfo::getIconName)
+				.map(ImageIconInfo::getName)
 				.filter(StringUtils::isNotBlank)
 				.collect(Collectors.joining(","));
 		//2. 选中的同行人
 		String associateItemList = associateList.stream()
 				.filter(ImageIconInfo::isSelected)
-				.map(ImageIconInfo::getIconName)
+				.map(ImageIconInfo::getName)
 				.filter(StringUtils::isNotBlank)
 				.collect(Collectors.joining(","));
 
@@ -211,28 +212,33 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		if (project != null) {
 			viewBinding.UIAddBillActivityTextViewProjectName.setText(project.getName());
 		}
+
+		//先获取当前是支出还是收入类型
+		refreshConsumptionIcon(ConsumptionTypeEnum.INCOME);
+	}
+
+	public void refreshConsumptionIcon(ConsumptionTypeEnum consumptionType) {
+		final ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
 	}
 
 	private void mock() {
-		Arrays.stream(IconEnum.values()).forEach(iconEnum -> {
+		Arrays.stream(ItemIconEnum.values()).forEach(iconEnum -> {
 			ImageIconInfo imageIconInfo = new ImageIconInfo();
-			imageIconInfo.setIconName(iconEnum.getDescription());
+			imageIconInfo.setName(iconEnum.getName());
+			imageIconInfo.setIconDownloadUrl(iconEnum.getIconDownloadUrl());
 			imageIconInfo.setSelected(false);
 			iconList.add(imageIconInfo);
 		});
 
-		ImageIconInfo imageAddIconInfo = new ImageIconInfo();
-		imageAddIconInfo.setIconName("添加");
-		imageAddIconInfo.setIconDownloadUrl("");
-		iconList.add(imageAddIconInfo);
-
-		ImageIconInfo imageAddIconInfoMe = new ImageIconInfo();
-		imageAddIconInfoMe.setIconName("我");
-		associateList.add(imageAddIconInfoMe);
+		ImageIconInfo imageIconInfo = new ImageIconInfo();
+		imageIconInfo.setName("测试");
+		imageIconInfo.setIconDownloadUrl("https://gitee.com/chen-shang/business-travel-resource/raw/master/%E6%94%AF%E5%87%BA/%E4%BD%8F%E5%AE%BF/%E6%B0%91%E5%AE%BF.svg");
+		imageIconInfo.setSelected(false);
+		iconList.add(imageIconInfo);
 
 		ImageIconInfo imageAddIconInfo2 = new ImageIconInfo();
-		imageAddIconInfo2.setIconName("添加");
-		imageAddIconInfo2.setIconDownloadUrl("");
+		imageAddIconInfo2.setName(ItemIconEnum.ItemIconEdit.getName());
+		imageAddIconInfo2.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
 		associateList.add(imageAddIconInfo2);
 	}
 }
