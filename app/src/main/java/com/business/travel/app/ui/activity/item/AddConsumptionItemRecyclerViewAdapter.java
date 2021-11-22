@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.model.ItemIconInfo;
-import com.business.travel.app.model.ItemIconInfo.ImageIconInfo;
+import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.activity.item.AddConsumptionItemRecyclerViewAdapter.AddConsumptionItemRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;

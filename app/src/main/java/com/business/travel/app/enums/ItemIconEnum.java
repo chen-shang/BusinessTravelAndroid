@@ -15,6 +15,8 @@ public enum ItemIconEnum {
 	ItemIconZhuanZhang("https://gitee.com/chen-shang/business-travel-resource/raw/master/收入/转账.svg", R.drawable.ic_spending_zhuanzhang, "转账"),
 	ItemIconYinHangKa("https://gitee.com/chen-shang/business-travel-resource/raw/master/收入/银行卡.svg", R.drawable.ic_spending_yinhangka, "银行卡"),
 	ItemIconEdit("https://gitee.com/chen-shang/business-travel-resource/raw/master/基础/设置.svg", R.drawable.ic_base_setting, "编辑"),
+
+	ItemIconMe("https://gitee.com/chen-shang/business-travel-resource/raw/master/基础/设置.svg", R.drawable.ic_base_setting, "我"),
 	;
 
 	private static final Map<String, ItemIconEnum> MAP = new HashMap<>();

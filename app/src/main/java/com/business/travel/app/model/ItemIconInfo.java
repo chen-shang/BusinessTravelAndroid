@@ -4,6 +4,9 @@ import java.util.List;
 
 import lombok.Data;
 
+/**
+ * 消费项信息
+ */
 @Data
 public class ItemIconInfo {
 	/**
@@ -14,20 +17,4 @@ public class ItemIconInfo {
 	 * 图标信息
 	 */
 	private List<ImageIconInfo> imageIconInfos;
-
-	@Data
-	public static class ImageIconInfo {
-		/**
-		 * 名称
-		 */
-		private String name;
-		/**
-		 * 图标地址
-		 */
-		private String iconDownloadUrl;
-		/**
-		 * 是否被选中
-		 */
-		private boolean selected;
-	}
 }

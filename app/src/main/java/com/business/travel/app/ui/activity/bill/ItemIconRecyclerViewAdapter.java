@@ -22,7 +22,7 @@ import com.business.travel.app.R;
 import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.enums.ItemIconEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
-import com.business.travel.app.model.ItemIconInfo.ImageIconInfo;
+import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.activity.bill.ItemIconRecyclerViewAdapter.IconRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.activity.item.EditAssociateItemActivity;
 import com.business.travel.app.ui.activity.item.EditConsumptionItemActivity;

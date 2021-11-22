@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "30.0.0"
 
     defaultConfig {
@@ -93,9 +93,9 @@ android {
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -125,7 +125,6 @@ dependencies {
     implementation 'org.aspectj:aspectjrt:1.9.7'
     // if u use AndroidX, use the following
     implementation 'com.blankj:utilcodex:1.30.6'
-    implementation 'androidx.appcompat:appcompat:1.3.1'
 
     //圆角图片控件
     implementation 'de.hdodenhof:circleimageview:3.1.0'

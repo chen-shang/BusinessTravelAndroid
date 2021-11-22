@@ -7,7 +7,6 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,10 +16,9 @@ import com.business.travel.app.dal.dao.ConsumptionItemDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.ConsumptionItem;
 import com.business.travel.app.databinding.ActivityAddConsumptionItemBinding;
-import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.model.GiteeContent;
 import com.business.travel.app.model.ItemIconInfo;
-import com.business.travel.app.model.ItemIconInfo.ImageIconInfo;
+import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.CompletableFutureUtil;
 import com.business.travel.app.utils.LogToast;
@@ -28,8 +26,6 @@ import com.business.travel.utils.DateTimeUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
-
-import static com.business.travel.app.enums.ConsumptionTypeEnum.INCOME;
 
 /**
  * @author chenshang

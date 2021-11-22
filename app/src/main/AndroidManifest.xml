@@ -33,7 +33,9 @@
         </activity>
         <activity android:name=".MainActivity">
         </activity>
-        <activity android:name=".ui.activity.bill.AddBillActivity">
+        <activity
+                android:name=".ui.activity.bill.AddBillActivity"
+                android:windowSoftInputMode="stateHidden|adjustPan">
         </activity>
         <activity android:name=".ui.TestActivity">
         </activity>
