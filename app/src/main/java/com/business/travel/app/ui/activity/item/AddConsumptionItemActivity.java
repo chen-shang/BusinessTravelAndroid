@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import android.os.Bundle;
@@ -17,6 +16,7 @@ import com.business.travel.app.dal.dao.ConsumptionItemDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.ConsumptionItem;
 import com.business.travel.app.databinding.ActivityAddConsumptionItemBinding;
+import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.GiteeContent;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.model.ItemIconInfo;
@@ -27,6 +27,7 @@ import com.business.travel.utils.DateTimeUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author chenshang
@@ -49,6 +50,11 @@ public class AddConsumptionItemActivity extends BaseActivity<ActivityAddConsumpt
 	@Setter
 	@Getter
 	private ImageIconInfo lastSelectedImageIcon;
+
+	/**
+	 * 当前显示的是消费项的图标还是同行人的图标
+	 */
+	private ItemTypeEnum itemTypeEnum = ItemTypeEnum.CONSUMPTION;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,45 +99,49 @@ public class AddConsumptionItemActivity extends BaseActivity<ActivityAddConsumpt
 	@Override
 	protected void onStart() {
 		super.onStart();
-		CompletableFutureUtil.runAsync(() -> refreshIconItem("1")).whenComplete(new BiConsumer<Void, Throwable>() {
-			@Override
-			public void accept(Void unused, Throwable throwable) {
-				addConsumptionItemRecyclerViewAdapter.notifyDataSetChanged();
-			}
-		});
+		CompletableFutureUtil
+				.runAsync(() -> refreshIconItem(itemTypeEnum.name()))
+				.whenComplete((unused, throwable) -> addConsumptionItemRecyclerViewAdapter.notifyDataSetChanged());
 	}
 
 	public void refreshIconItem(String type) {
+		String baseDir = "/icon/" + type;
 		//先查询某类型下的目录
-		List<GiteeContent> v5ReposOwnerRepoGiteeContentsSpend = BusinessTravelResourceApi.getV5ReposOwnerRepoContents("/支出");
+		List<GiteeContent> v5ReposOwnerRepoGiteeContentsSpend = BusinessTravelResourceApi.getV5ReposOwnerRepoContents(baseDir);
 		List<String> dirList = v5ReposOwnerRepoGiteeContentsSpend.stream()
 				.filter(item -> "dir".equals(item.getType()))
 				.map(GiteeContent::getName)
 				.collect(Collectors.toList());
-
 		if (CollectionUtils.isEmpty(dirList)) {
 			return;
 		}
 
-		final List<ItemIconInfo> svg1 = dirList.stream().map(dir -> {
-			final List<GiteeContent> v5ReposOwnerRepoContents = BusinessTravelResourceApi.getV5ReposOwnerRepoContents("/支出/" + dir);
-			final List<ImageIconInfo> svg = v5ReposOwnerRepoContents.stream()
-					.filter(item -> "file".equals(item.getType()))
-					.filter(item -> item.getName().endsWith("svg"))
-					.map(item -> {
-						ImageIconInfo imageIconInfo = new ImageIconInfo();
-						imageIconInfo.setIconDownloadUrl(item.getDownloadUrl());
-						imageIconInfo.setName(item.getName());
-						imageIconInfo.setSelected(false);
-						return imageIconInfo;
-					}).collect(Collectors.toList());
-			ItemIconInfo itemIconInfo = new ItemIconInfo();
-			itemIconInfo.setPath(dir);
-			itemIconInfo.setImageIconInfos(svg);
-			return itemIconInfo;
-		}).collect(Collectors.toList());
+		final List<ItemIconInfo> itemIconInfoList = dirList.stream()
+				.map(dir -> BusinessTravelResourceApi.getV5ReposOwnerRepoContents(baseDir + "/" + dir))
+				.filter(CollectionUtils::isNotEmpty)
+				.map(v5ReposOwnerRepoContents -> {
+					List<ImageIconInfo> svg = v5ReposOwnerRepoContents.stream()
+							.filter(item -> "file".equals(item.getType()))
+							.filter(item -> item.getName().endsWith("svg"))
+							.map(this::convertToImageIconInfo)
+							.collect(Collectors.toList());
+					String path = v5ReposOwnerRepoContents.get(0).getPath();
+					ItemIconInfo itemIconInfo = new ItemIconInfo();
+					itemIconInfo.setPath(path);
+					itemIconInfo.setImageIconInfos(svg);
+					return itemIconInfo;
+				}).collect(Collectors.toList());
 
-		itemIconInfoList.clear();
-		itemIconInfoList.addAll(svg1);
+		this.itemIconInfoList.clear();
+		this.itemIconInfoList.addAll(itemIconInfoList);
+	}
+
+	@NotNull
+	private ImageIconInfo convertToImageIconInfo(GiteeContent item) {
+		ImageIconInfo imageIconInfo = new ImageIconInfo();
+		imageIconInfo.setIconDownloadUrl(item.getDownloadUrl());
+		imageIconInfo.setName(item.getName());
+		imageIconInfo.setSelected(false);
+		return imageIconInfo;
 	}
 }
