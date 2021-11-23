@@ -1,16 +1,18 @@
 package com.business.travel.app.ui.activity.item;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import android.os.Bundle;
 import android.widget.ImageView;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.dal.dao.ConsumptionItemDao;
 import com.business.travel.app.dal.db.AppDatabase;
@@ -19,15 +21,15 @@ import com.business.travel.app.databinding.ActivityAddConsumptionItemBinding;
 import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.GiteeContent;
 import com.business.travel.app.model.ImageIconInfo;
-import com.business.travel.app.model.ItemIconInfo;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.CompletableFutureUtil;
 import com.business.travel.app.utils.LogToast;
 import com.business.travel.utils.DateTimeUtil;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.SneakyThrows;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author chenshang
@@ -35,7 +37,24 @@ import org.jetbrains.annotations.NotNull;
  */
 public class AddConsumptionItemActivity extends BaseActivity<ActivityAddConsumptionItemBinding> {
 
-	private final List<ItemIconInfo> itemIconInfoList = new ArrayList<>();
+	/**
+	 * 缓存一下对应图标的目录信息
+	 * 前提用户倾向于在这个页面停留时间较长,且图标文件万年不变
+	 */
+	private static final LoadingCache<String, List<GiteeContent>> CACHE = CacheBuilder.newBuilder().maximumSize(5).expireAfterWrite(1, TimeUnit.MINUTES).build(new CacheLoader<String, List<GiteeContent>>() {
+		@Override
+		public List<GiteeContent> load(String path) {
+			return BusinessTravelResourceApi.getV5ReposOwnerRepoContents(path).stream().filter(item -> "dir".equals(item.getType())).collect(Collectors.toList());
+		}
+	});
+	/**
+	 * 图标大类列表
+	 */
+	private final List<GiteeContent> iconTypeList = new ArrayList<>();
+	/**
+	 * 当前显示的是消费项的图标还是同行人的图标
+	 */
+	private ItemTypeEnum itemTypeEnum = ItemTypeEnum.CONSUMPTION;
 	private AddConsumptionItemRecyclerViewAdapter addConsumptionItemRecyclerViewAdapter;
 	/**
 	 * 最后被选中的icon的ViewImageView
@@ -43,18 +62,12 @@ public class AddConsumptionItemActivity extends BaseActivity<ActivityAddConsumpt
 	@Setter
 	@Getter
 	private ImageView lastSelectedImageView;
-
 	/**
 	 * 最后被选中的icon的ImageIconInfo
 	 */
 	@Setter
 	@Getter
 	private ImageIconInfo lastSelectedImageIcon;
-
-	/**
-	 * 当前显示的是消费项的图标还是同行人的图标
-	 */
-	private ItemTypeEnum itemTypeEnum = ItemTypeEnum.CONSUMPTION;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +76,7 @@ public class AddConsumptionItemActivity extends BaseActivity<ActivityAddConsumpt
 
 		//消费项icon分类和列表
 		viewBinding.UIAddConsumptionItemSwipeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-		addConsumptionItemRecyclerViewAdapter = new AddConsumptionItemRecyclerViewAdapter(itemIconInfoList, this);
+		addConsumptionItemRecyclerViewAdapter = new AddConsumptionItemRecyclerViewAdapter(iconTypeList, this);
 		viewBinding.UIAddConsumptionItemSwipeRecyclerView.setAdapter(addConsumptionItemRecyclerViewAdapter);
 
 		//返回按钮被点击后
@@ -90,59 +103,41 @@ public class AddConsumptionItemActivity extends BaseActivity<ActivityAddConsumpt
 			consumptionItem.setSortId(maxSortId + 1);
 			consumptionItem.setIsDeleted(1);
 			consumptionItemDao.insert(consumptionItem);
-			LogToast.infoShow(iconDownloadUrl + ":" + name);
 			finish();
 		});
+
+		//itemTypeEnum 跳过来的是什么类型 TODO
 	}
 
-	@SneakyThrows
 	@Override
 	protected void onStart() {
 		super.onStart();
-		CompletableFutureUtil
-				.runAsync(() -> refreshIconItem(itemTypeEnum.name()))
-				.whenComplete((unused, throwable) -> addConsumptionItemRecyclerViewAdapter.notifyDataSetChanged());
+		//todo
+		refreshData();
 	}
 
-	public void refreshIconItem(String type) {
-		String baseDir = "/icon/" + type;
-		//先查询某类型下的目录
-		List<GiteeContent> v5ReposOwnerRepoGiteeContentsSpend = BusinessTravelResourceApi.getV5ReposOwnerRepoContents(baseDir);
-		List<String> dirList = v5ReposOwnerRepoGiteeContentsSpend.stream()
-				.filter(item -> "dir".equals(item.getType()))
-				.map(GiteeContent::getName)
-				.collect(Collectors.toList());
-		if (CollectionUtils.isEmpty(dirList)) {
-			return;
+	private void refreshData() {
+		try {
+			//如果5秒钟,拿不回数据,说明网络剧不好
+			CompletableFutureUtil.supplyAsync(() -> {
+				String path = "/icon/" + itemTypeEnum.name();
+				return getIconTypeListFromCache(path);
+			}).thenAccept(list -> {
+				iconTypeList.clear();
+				iconTypeList.addAll(list);
+			}).get(5, TimeUnit.SECONDS);
+		} catch (Exception e) {
+			LogToast.errorShow("网络环境较差,请稍后重试");
 		}
-
-		final List<ItemIconInfo> itemIconInfoList = dirList.stream()
-				.map(dir -> BusinessTravelResourceApi.getV5ReposOwnerRepoContents(baseDir + "/" + dir))
-				.filter(CollectionUtils::isNotEmpty)
-				.map(v5ReposOwnerRepoContents -> {
-					List<ImageIconInfo> svg = v5ReposOwnerRepoContents.stream()
-							.filter(item -> "file".equals(item.getType()))
-							.filter(item -> item.getName().endsWith("svg"))
-							.map(this::convertToImageIconInfo)
-							.collect(Collectors.toList());
-					String path = v5ReposOwnerRepoContents.get(0).getPath();
-					//todo path name
-					ItemIconInfo itemIconInfo = new ItemIconInfo();
-					itemIconInfo.setPath(path);
-					itemIconInfo.setImageIconInfos(svg);
-					return itemIconInfo;
-				}).collect(Collectors.toList());
-
-		this.itemIconInfoList.clear();
-		this.itemIconInfoList.addAll(itemIconInfoList);
+		addConsumptionItemRecyclerViewAdapter.notifyDataSetChanged();
 	}
 
-	@NotNull
-	private ImageIconInfo convertToImageIconInfo(GiteeContent item) {
-		ImageIconInfo imageIconInfo = new ImageIconInfo();
-		imageIconInfo.setIconDownloadUrl(item.getDownloadUrl());
-		imageIconInfo.setName(item.getName());
-		imageIconInfo.setSelected(false);
-		return imageIconInfo;
+	private List<GiteeContent> getIconTypeListFromCache(String path) {
+		try {
+			return CACHE.get(path);
+		} catch (ExecutionException e) {
+			LogToast.errorShow("网络环境较差,请稍后重试");
+		}
+		return Collections.emptyList();
 	}
 }

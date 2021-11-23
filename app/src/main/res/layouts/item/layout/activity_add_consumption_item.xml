@@ -111,5 +111,6 @@
     <com.yanzhenjie.recyclerview.SwipeRecyclerView
             android:id="@+id/UI_AddConsumptionItem_SwipeRecyclerView"
             android:layout_width="match_parent"
+            android:nestedScrollingEnabled="false"
             android:layout_height="match_parent"/>
 </LinearLayout>

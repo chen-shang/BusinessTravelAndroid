@@ -48,10 +48,6 @@ public class BusinessTravelResourceApi {
 		}
 	}
 
-	public static InputStream getIcon(String iconPath, String iconName) {
-		return getIcon(iconPath + "/" + iconName);
-	}
-
 	/**
 	 * 获取仓库具体路径下的内容
 	 * https://gitee.com/api/v5/swagger#/getV5ReposOwnerRepoContents(Path)
