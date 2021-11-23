@@ -12,15 +12,12 @@ import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import com.blankj.utilcode.util.ColorUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.dao.ConsumptionItemDao;
-import com.business.travel.app.dal.dao.ItemSortDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.ConsumptionItem;
-import com.business.travel.app.dal.entity.ItemSort;
 import com.business.travel.app.databinding.ActivityEditConsumptionItemBinding;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
-import com.business.travel.utils.SplitUtil;
 
 /**
  * @author chenshang
@@ -32,7 +29,7 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 	/**
 	 * 当前被选中的是支出还是收入
 	 */
-	private ConsumptionTypeEnum consumptionType;
+	private ConsumptionTypeEnum consumptionType = ConsumptionTypeEnum.SPENDING;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -116,19 +113,8 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 		if (consumptionTypeEnum == null) {
 			return;
 		}
-
-		ItemSortDao itemSortDao = AppDatabase.getInstance(this).itemSortDao();
 		ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
-		//先获取排序
-		ItemSort itemSort = itemSortDao.selectOneByType(consumptionTypeEnum.name());
-		List<ConsumptionItem> newConsumptionItemList = new ArrayList<>();
-		if (itemSort == null) {
-			newConsumptionItemList = consumptionItemDao.selectByType(consumptionTypeEnum.name());
-		} else {
-			String sortIds = itemSort.getSortIds();
-			List<Long> idList = SplitUtil.trimToLongList(sortIds);
-			newConsumptionItemList = consumptionItemDao.selectByIds(idList);
-		}
+		List<ConsumptionItem> newConsumptionItemList = consumptionItemDao.selectByType(consumptionTypeEnum.name());
 		consumptionItemList.clear();
 		consumptionItemList.addAll(newConsumptionItemList);
 		editConsumptionItemRecyclerViewAdapter.notifyDataSetChanged();

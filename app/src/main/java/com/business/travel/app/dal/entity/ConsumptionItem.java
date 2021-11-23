@@ -37,4 +37,8 @@ public class ConsumptionItem extends BaseEntity {
 	 * @see ConsumptionTypeEnum
 	 */
 	private String consumptionType;
+	/**
+	 * 顺序id
+	 */
+	private Long sortId;
 }

@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "e743e2dad912a23318ee6e06f2e7badf",
+    "identityHash": "73f510e044d84a61614a7f3facbcdd5f",
     "entities": [
       {
         "tableName": "AssociateItem",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `gender` INTEGER, `iconDownloadUrl` TEXT, `iconName` TEXT, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `gender` INTEGER, `iconDownloadUrl` TEXT, `iconName` TEXT, `sortId` INTEGER, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -36,6 +36,12 @@
             "fieldPath": "iconName",
             "columnName": "iconName",
             "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sortId",
+            "columnName": "sortId",
+            "affinity": "INTEGER",
             "notNull": false
           },
           {
@@ -156,7 +162,7 @@
       },
       {
         "tableName": "ConsumptionItem",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `iconDownloadUrl` TEXT, `iconName` TEXT, `consumptionType` TEXT, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `iconDownloadUrl` TEXT, `iconName` TEXT, `consumptionType` TEXT, `sortId` INTEGER, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -186,6 +192,12 @@
             "fieldPath": "consumptionType",
             "columnName": "consumptionType",
             "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sortId",
+            "columnName": "sortId",
+            "affinity": "INTEGER",
             "notNull": false
           },
           {
@@ -344,7 +356,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e743e2dad912a23318ee6e06f2e7badf')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '73f510e044d84a61614a7f3facbcdd5f')"
     ]
   }
 }

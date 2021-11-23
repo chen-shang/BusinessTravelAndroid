@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -17,8 +18,8 @@ import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.ConsumptionItem;
 import com.business.travel.app.databinding.ActivityAddConsumptionItemBinding;
 import com.business.travel.app.model.GiteeContent;
-import com.business.travel.app.model.ItemIconInfo;
 import com.business.travel.app.model.ImageIconInfo;
+import com.business.travel.app.model.ItemIconInfo;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.CompletableFutureUtil;
 import com.business.travel.app.utils.LogToast;
@@ -70,7 +71,6 @@ public class AddConsumptionItemActivity extends BaseActivity<ActivityAddConsumpt
 		viewBinding.UIAddConsumptionItemTextViewSave.setOnClickListener(v -> {
 			final String iconDownloadUrl = lastSelectedImageIcon.getIconDownloadUrl();
 			String name = viewBinding.UIAddConsumptionItemEditTextName.getText().toString();
-
 			ConsumptionItem consumptionItem = new ConsumptionItem();
 			consumptionItem.setName(name);
 			consumptionItem.setIconDownloadUrl(lastSelectedImageIcon.getIconDownloadUrl());
@@ -78,9 +78,14 @@ public class AddConsumptionItemActivity extends BaseActivity<ActivityAddConsumpt
 			consumptionItem.setConsumptionType(consumptionType);
 			consumptionItem.setCreateTime(DateTimeUtil.format(new Date()));
 			consumptionItem.setModifyTime(DateTimeUtil.format(new Date()));
+			//先查询最大的sortId
+			Long maxSortId = consumptionItemDao.selectMaxSortIdByType(consumptionType);
+			maxSortId = Optional.ofNullable(maxSortId).orElse(0L);
+			consumptionItem.setSortId(maxSortId + 1);
 			consumptionItem.setIsDeleted(1);
 			consumptionItemDao.insert(consumptionItem);
 			LogToast.infoShow(iconDownloadUrl + ":" + name);
+			finish();
 		});
 	}
 
@@ -115,8 +120,8 @@ public class AddConsumptionItemActivity extends BaseActivity<ActivityAddConsumpt
 					.filter(item -> item.getName().endsWith("svg"))
 					.map(item -> {
 						ImageIconInfo imageIconInfo = new ImageIconInfo();
-						//imageIconInfo.setResourceId(0);
 						imageIconInfo.setIconDownloadUrl(item.getDownloadUrl());
+						imageIconInfo.setName(item.getName());
 						imageIconInfo.setSelected(false);
 						return imageIconInfo;
 					}).collect(Collectors.toList());

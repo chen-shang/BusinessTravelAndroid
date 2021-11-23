@@ -34,4 +34,8 @@ public class AssociateItem extends BaseEntity {
 	 * 图标名称
 	 */
 	private String iconName;
+	/**
+	 * 顺序id
+	 */
+	private Long sortId;
 }

@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -77,12 +78,12 @@ public class AddConsumptionItemIconRecyclerViewAdapter extends BaseRecyclerViewA
 				uiImageViewIcon.setBackgroundResource(R.drawable.corners_shape_unselect);
 				imageIconInfo.setSelected(false);
 			} else {
-				//如果当前没有被选中
-				//之前的取消
-
-				//当前的选中
 				uiImageViewIcon.setBackgroundResource(R.drawable.corners_shape_select);
 				ImageView imageView = activity.findViewById(R.id.UI_ImageView_Icon_1);
+
+				EditText editTextName = activity.findViewById(R.id.UI_AddConsumptionItem_EditText_Name);
+				editTextName.setText(imageIconInfo.getName());
+
 				imageView.setImageDrawable(uiImageViewIcon.getDrawable());
 				imageIconInfo.setSelected(true);
 

@@ -63,8 +63,6 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Objects.requireNonNull(getSupportActionBar()).hide();
-		//todo 删除
-		mock();
 		//消费项目列表 todo 横向滑动
 		registerConsumptionItem();
 		//同行人列表 todo 横向滑动
@@ -79,7 +77,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		viewBinding.UIAddBillActivityTextViewPayType.setOnClickListener(v -> {
 			consumptionType = refreshConsumptionType();
 			viewBinding.UIAddBillActivityTextViewPayType.setText(this.consumptionType.getMsg());
-			refreshConsumptionIcon(this.consumptionType);
+			refreshConsumptionIcon(consumptionType);
 		});
 	}
 
@@ -258,9 +256,20 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 			viewBinding.UIAddBillActivityTextViewProjectName.setText(project.getName());
 		}
 
+		//当前是支出还是收入
 		consumptionType = refreshConsumptionType();
-		//先获取当前是支出还是收入类型
+		//刷新消费项列表
 		refreshConsumptionIcon(consumptionType);
+
+		//刷新同行人列表
+		refreshAssociateIcon();
+	}
+
+	private void refreshAssociateIcon() {
+		ImageIconInfo imageAddIconInfo2 = new ImageIconInfo();
+		imageAddIconInfo2.setName(ItemIconEnum.ItemIconEdit.getName());
+		imageAddIconInfo2.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
+		associateIconList.add(imageAddIconInfo2);
 	}
 
 	@Override
@@ -294,12 +303,5 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		consumptionItemIconList.clear();
 		consumptionItemIconList.addAll(imageIconInfos);
 		consumptionItemRecyclerViewAdapter.notifyDataSetChanged();
-	}
-
-	private void mock() {
-		ImageIconInfo imageAddIconInfo2 = new ImageIconInfo();
-		imageAddIconInfo2.setName(ItemIconEnum.ItemIconEdit.getName());
-		imageAddIconInfo2.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
-		associateIconList.add(imageAddIconInfo2);
 	}
 }

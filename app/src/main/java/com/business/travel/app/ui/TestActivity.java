@@ -28,7 +28,6 @@ import com.business.travel.app.utils.CompletableFutureUtil;
 import com.business.travel.utils.JacksonUtil;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import com.yanzhenjie.recyclerview.touch.OnItemMoveListener;
-import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -215,9 +214,4 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 			return userList.size();
 		}
 	}
-}
-
-@Data
-class Content {
-	private List<GiteeContent> giteeContents;
 }

@@ -25,14 +25,14 @@ public interface ConsumptionItemDao extends BaseDao<ConsumptionItem> {
 	ConsumptionItem selectOne();
 
 	/**
-	 * 查询单条
+	 * 查询全部 按照类型并排序
 	 */
-	@Query("SELECT * FROM consumptionItem where id in (:idList)")
-	List<ConsumptionItem> selectByIds(List<Long> idList);
+	@Query("SELECT * FROM consumptionItem where consumptionType=:consumptionType order by sortId asc")
+	List<ConsumptionItem> selectByType(String consumptionType);
 
 	/**
-	 * 查询单条
+	 * 查询最大的sortId
 	 */
-	@Query("SELECT * FROM consumptionItem where consumptionType=:consumptionType")
-	List<ConsumptionItem> selectByType(String consumptionType);
+	@Query("SELECT max(sortId) FROM consumptionItem where consumptionType=:consumptionType")
+	Long selectMaxSortIdByType(String consumptionType);
 }
