@@ -126,6 +126,7 @@ public class AddConsumptionItemActivity extends BaseActivity<ActivityAddConsumpt
 							.map(this::convertToImageIconInfo)
 							.collect(Collectors.toList());
 					String path = v5ReposOwnerRepoContents.get(0).getPath();
+					//todo path name
 					ItemIconInfo itemIconInfo = new ItemIconInfo();
 					itemIconInfo.setPath(path);
 					itemIconInfo.setImageIconInfos(svg);

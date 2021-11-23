@@ -42,7 +42,18 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 
 		//长按移动排序
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setLongPressDragEnabled(true);
-		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(consumptionItemList, editConsumptionItemRecyclerViewAdapter));
+		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setOnItemMoveListener(
+				new BaseRecyclerViewOnItemMoveListener<>(consumptionItemList, editConsumptionItemRecyclerViewAdapter)
+						.onItemMove((consumptionItems, fromPosition, toPosition) -> {
+							//更新排序 todo 优化
+							for (int i = 0; i < consumptionItems.size(); i++) {
+								ConsumptionItem consumptionItem = consumptionItems.get(i);
+								consumptionItem.setSortId((long)i);
+								final ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
+								consumptionItemDao.update(consumptionItem);
+							}
+						})
+		);
 
 		//支出按钮的背景
 		GradientDrawable gradientDrawableExpense = (GradientDrawable)viewBinding.UIConsumerItemTextViewExpense.getBackground();
