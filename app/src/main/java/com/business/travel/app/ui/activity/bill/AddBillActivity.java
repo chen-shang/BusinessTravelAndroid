@@ -75,8 +75,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 
 	private void registerConsumptionType() {
 		viewBinding.UIAddBillActivityTextViewPayType.setOnClickListener(v -> {
-			consumptionType = refreshConsumptionType();
-			viewBinding.UIAddBillActivityTextViewPayType.setText(this.consumptionType.getMsg());
+			consumptionType = changeConsumptionType(consumptionType);
+			viewBinding.UIAddBillActivityTextViewPayType.setText(consumptionType.getMsg());
 			refreshConsumptionIcon(consumptionType);
 		});
 	}
@@ -84,11 +84,21 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	private ConsumptionTypeEnum refreshConsumptionType() {
 		String payType = viewBinding.UIAddBillActivityTextViewPayType.getText().toString();
 		if (ConsumptionTypeEnum.INCOME.getMsg().equals(payType)) {
-			return ConsumptionTypeEnum.SPENDING;
-		} else if (ConsumptionTypeEnum.SPENDING.getMsg().equals(payType)) {
 			return ConsumptionTypeEnum.INCOME;
+		} else if (ConsumptionTypeEnum.SPENDING.getMsg().equals(payType)) {
+			return ConsumptionTypeEnum.SPENDING;
 		} else {
 			throw new IllegalArgumentException("未知的消费项类型标识:" + payType);
+		}
+	}
+
+	private ConsumptionTypeEnum changeConsumptionType(ConsumptionTypeEnum consumptionType) {
+		if (ConsumptionTypeEnum.SPENDING == consumptionType) {
+			return ConsumptionTypeEnum.INCOME;
+		} else if (ConsumptionTypeEnum.INCOME == consumptionType) {
+			return ConsumptionTypeEnum.SPENDING;
+		} else {
+			throw new IllegalArgumentException("未知的消费项类型标识");
 		}
 	}
 
@@ -239,14 +249,18 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		AppDatabase.getInstance(this).projectDao().insert(project);
 	}
 
-	@Override
-	protected void onStart() {
-		super.onStart();
-		refreshData();
-	}
-
 	private void refreshData() {
 		//启动的时候刷新当前页面的标题
+		refreshProjectName();
+		//当前是支出还是收入
+		consumptionType = refreshConsumptionType();
+		//刷新消费项列表
+		refreshConsumptionIcon(consumptionType);
+		//刷新同行人列表
+		refreshAssociateIcon();
+	}
+
+	private void refreshProjectName() {
 		BillFragmentShareData dataBinding = ((BillFragment)MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment()).getDataBinding();
 		if (dataBinding == null) {
 			return;
@@ -255,21 +269,17 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		if (project != null) {
 			viewBinding.UIAddBillActivityTextViewProjectName.setText(project.getName());
 		}
-
-		//当前是支出还是收入
-		consumptionType = refreshConsumptionType();
-		//刷新消费项列表
-		refreshConsumptionIcon(consumptionType);
-
-		//刷新同行人列表
-		refreshAssociateIcon();
 	}
 
 	private void refreshAssociateIcon() {
+		associateIconList.clear();
+
 		ImageIconInfo imageAddIconInfo2 = new ImageIconInfo();
 		imageAddIconInfo2.setName(ItemIconEnum.ItemIconEdit.getName());
 		imageAddIconInfo2.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
 		associateIconList.add(imageAddIconInfo2);
+
+		consumptionItemRecyclerViewAdapter.notifyDataSetChanged();
 	}
 
 	@Override
