@@ -16,8 +16,6 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.BusinessTravelAndroid">
-        <activity android:name=".ui.activity.item.associate.AddAssociateItemActivity">
-        </activity>
         <activity android:name=".ui.activity.item.associate.EditAssociateItemActivity">
         </activity>
         <activity android:name=".ui.activity.item.AddItemActivity">

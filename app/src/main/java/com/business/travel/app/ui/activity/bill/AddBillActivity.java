@@ -290,20 +290,25 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 
 	public void refreshConsumptionIcon(ConsumptionTypeEnum consumptionType) {
 		final ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
+		//如果数据库中一个数据都没有,就初始化数据,因为删除是逻辑删除,所以只要数据库里面没有数据就代表是用户第一次使用 todo
+		//根据是支出还是收入获取消费项列表
 		List<ConsumptionItem> consumptionItems = consumptionItemDao.selectByType(consumptionType.name());
 		if (CollectionUtils.isEmpty(consumptionItems)) {
 			consumptionItems = new ArrayList<>();
-			// 搞默认值 插入数据库 todo
 		}
 
 		final List<ImageIconInfo> imageIconInfos = consumptionItems.stream().map(consumptionItem -> {
 			ImageIconInfo imageIconInfo = new ImageIconInfo();
+			imageIconInfo.setId(consumptionItem.getId());
+			imageIconInfo.setIconName(consumptionItem.getIconName());
+			imageIconInfo.setItemType(ItemTypeEnum.CONSUMPTION.name());
 			imageIconInfo.setName(consumptionItem.getName());
+			imageIconInfo.setSortId(consumptionItem.getSortId());
 			imageIconInfo.setIconDownloadUrl(consumptionItem.getIconDownloadUrl());
 			imageIconInfo.setSelected(false);
 			return imageIconInfo;
 		}).collect(Collectors.toList());
-		//添加编辑按钮
+		//添加编辑按钮编辑按钮永远在最后
 		ImageIconInfo imageIconInfo = new ImageIconInfo();
 		imageIconInfo.setName(ItemIconEnum.ItemIconEdit.getName());
 		imageIconInfo.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());

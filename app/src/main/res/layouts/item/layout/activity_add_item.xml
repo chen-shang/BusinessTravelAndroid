@@ -109,7 +109,7 @@
     </androidx.cardview.widget.CardView>
 
     <com.yanzhenjie.recyclerview.SwipeRecyclerView
-            android:id="@+id/UI_AddItemRecyclerViewAdapter_SwipeRecyclerView"
+            android:id="@+id/UI_AddItemActivity_SwipeRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 </LinearLayout>

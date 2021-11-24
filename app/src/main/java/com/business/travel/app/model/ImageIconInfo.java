@@ -8,6 +8,10 @@ import lombok.Data;
 @Data
 public class ImageIconInfo {
 	/**
+	 * 主键ID
+	 */
+	private Long id;
+	/**
 	 * 名称
 	 */
 	private String name;
@@ -15,6 +19,18 @@ public class ImageIconInfo {
 	 * 图标地址
 	 */
 	private String iconDownloadUrl;
+	/**
+	 * 消费项图标名称
+	 */
+	private String iconName;
+	/**
+	 * @see com.business.travel.app.enums.ItemTypeEnum
+	 */
+	private String itemType;
+	/**
+	 * 顺序id
+	 */
+	private Long sortId;
 	/**
 	 * 是否被选中
 	 */

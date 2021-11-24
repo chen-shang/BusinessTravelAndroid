@@ -30,7 +30,6 @@ import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.FutureUtil;
 import com.business.travel.app.utils.LogToast;
 import com.business.travel.utils.DateTimeUtil;
-import com.business.travel.utils.SplitUtil;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -185,7 +184,7 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 			//如果5秒钟,拿不回数据,说明网络不好
 			String path = "/icon/" + itemTypeEnum.name();
 			FutureUtil.supplyAsync(() -> getIconTypeListFromCache(path))
-					.thenApply(list -> list.stream().sorted(Comparator.comparing(this::getItemSort)).collect(Collectors.toList()))
+					.thenApply(list -> list.stream().sorted(Comparator.comparing(GiteeContent::getItemSort)).collect(Collectors.toList()))
 					.thenAccept(list -> {
 						iconTypeList.clear();
 						iconTypeList.addAll(list);
@@ -194,22 +193,6 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 			LogToast.errorShow("网络环境较差,请稍后重试");
 		}
 		addItemRecyclerViewAdapter.notifyDataSetChanged();
-	}
-
-	private Integer getItemSort(GiteeContent giteeContent) {
-		if (giteeContent == null) {
-			return 1;
-		}
-
-		final String name = giteeContent.getName();
-		if (StringUtils.isBlank(name)) {
-			return 1;
-		}
-		final List<String> list = SplitUtil.trimToStringList(name, "-");
-		if (list.size() == 1) {
-			return 1;
-		}
-		return list.stream().findFirst().map(Integer::valueOf).orElse(1);
 	}
 
 	private List<GiteeContent> getIconTypeListFromCache(String path) {
