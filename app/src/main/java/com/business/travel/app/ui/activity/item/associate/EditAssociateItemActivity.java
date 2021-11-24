@@ -1,8 +1,9 @@
-package com.business.travel.app.ui.activity.item;
+package com.business.travel.app.ui.activity.item.associate;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
@@ -10,6 +11,8 @@ import com.business.travel.app.dal.dao.AssociateItemDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.AssociateItem;
 import com.business.travel.app.databinding.ActivityEditAssociateItemBinding;
+import com.business.travel.app.enums.ItemTypeEnum;
+import com.business.travel.app.ui.activity.item.AddItemActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
 
@@ -41,6 +44,16 @@ public class EditAssociateItemActivity extends BaseActivity<ActivityEditAssociat
 						})
 		);
 		registerEditConsumptionActivityImageButtonBack();
+		//注册添加按钮操作事件
+		registerConsumerItemButtonAddItem();
+	}
+
+	private void registerConsumerItemButtonAddItem() {
+		viewBinding.UIAssociateItemButtonAddItem.setOnClickListener(v -> {
+			Intent intent = new Intent(this, AddItemActivity.class);
+			intent.putExtra("itemType", ItemTypeEnum.ASSOCIATE.name());
+			startActivity(intent);
+		});
 	}
 
 	@Override

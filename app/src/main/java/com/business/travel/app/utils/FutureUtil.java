@@ -8,7 +8,7 @@ import com.business.travel.app.constant.ThreadPoolConstant;
 /**
  * @author chenshang
  */
-public class CompletableFutureUtil {
+public class FutureUtil {
     public static CompletableFuture<Void> runAsync(Runnable runnable) {
         return CompletableFuture.runAsync(runnable, ThreadPoolConstant.COMMON_THREAD_POOL);
     }

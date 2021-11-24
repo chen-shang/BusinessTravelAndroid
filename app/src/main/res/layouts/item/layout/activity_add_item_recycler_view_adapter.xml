@@ -12,7 +12,7 @@
             android:layout_height="wrap_content">
 
         <TextView
-                android:id="@+id/UI_AddConsumptionItem_TextView_IconPath"
+                android:id="@+id/UI_AddItemRecyclerViewAdapter_TextView_IconPath"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="饮食"
@@ -24,7 +24,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.yanzhenjie.recyclerview.SwipeRecyclerView
-            android:id="@+id/UI_AddConsumptionItem_SwipeRecyclerView"
+            android:id="@+id/UI_AddItemRecyclerViewAdapter_SwipeRecyclerView"
             android:layout_width="match_parent"
             android:nestedScrollingEnabled="false"
             android:layout_height="wrap_content"/>

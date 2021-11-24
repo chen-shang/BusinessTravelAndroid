@@ -1,4 +1,4 @@
-package com.business.travel.app.ui.activity.item;
+package com.business.travel.app.ui.activity.item.consumption;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +19,8 @@ import com.business.travel.app.dal.entity.ConsumptionItem;
 import com.business.travel.app.databinding.ActivityEditConsumptionItemBinding;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.enums.DeleteEnum;
+import com.business.travel.app.enums.ItemTypeEnum;
+import com.business.travel.app.ui.activity.item.AddItemActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
@@ -28,7 +30,13 @@ import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
  * @author chenshang
  */
 public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsumptionItemBinding> {
+	/**
+	 * 消费项图标信息列表
+	 */
 	List<ConsumptionItem> consumptionItemList = new ArrayList<>();
+	/**
+	 * 消费项图标列表适配器
+	 */
 	private EditConsumptionItemRecyclerViewAdapter editConsumptionItemRecyclerViewAdapter;
 
 	/**
@@ -142,8 +150,9 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 	 */
 	private void registerConsumerItemButtonAddItem() {
 		viewBinding.UIConsumerItemButtonAddItem.setOnClickListener(v -> {
-			Intent intent = new Intent(this, AddConsumptionItemActivity.class);
+			Intent intent = new Intent(this, AddItemActivity.class);
 			intent.putExtra("consumptionType", consumptionType.name());
+			intent.putExtra("itemType", ItemTypeEnum.CONSUMPTION.name());
 			startActivity(intent);
 		});
 	}

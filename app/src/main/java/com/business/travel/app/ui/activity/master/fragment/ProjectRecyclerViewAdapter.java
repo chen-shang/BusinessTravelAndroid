@@ -1,9 +1,6 @@
 package com.business.travel.app.ui.activity.master.fragment;
 
-import com.google.common.collect.Maps;
-
 import java.util.List;
-import java.util.Optional;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -27,9 +24,7 @@ import com.business.travel.app.ui.activity.master.fragment.ProjectRecyclerViewAd
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.LogToast;
-import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.JacksonUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -45,7 +40,7 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 	@NotNull
 	@Override
 	public ProjectAdapterHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_project_item, parent, false);
+		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_project_recyclerview, parent, false);
 		return new ProjectAdapterHolder(view);
 	}
 

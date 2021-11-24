@@ -22,11 +22,11 @@ import com.business.travel.app.enums.ItemIconEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.activity.bill.ItemIconRecyclerViewAdapter.IconRecyclerViewAdapterViewHolder;
-import com.business.travel.app.ui.activity.item.EditAssociateItemActivity;
-import com.business.travel.app.ui.activity.item.EditConsumptionItemActivity;
+import com.business.travel.app.ui.activity.item.associate.EditAssociateItemActivity;
+import com.business.travel.app.ui.activity.item.consumption.EditConsumptionItemActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
-import com.business.travel.app.utils.CompletableFutureUtil;
+import com.business.travel.app.utils.FutureUtil;
 import com.business.travel.app.utils.LoadImageUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -71,7 +71,7 @@ public class ItemIconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRec
 
 		ImageView uiImageViewIcon = holder.uiImageViewIcon;
 		//发起网络请求
-		CompletableFutureUtil.runAsync(() -> LoadImageUtil.loadImageToView(iconDownloadUrl, uiImageViewIcon));
+		FutureUtil.runAsync(() -> LoadImageUtil.loadImageToView(iconDownloadUrl, uiImageViewIcon));
 
 		int unSelectColor = ContextCompat.getColor(uiImageViewIcon.getContext(), R.color.black_100);
 		int selectColor = ContextCompat.getColor(uiImageViewIcon.getContext(), R.color.teal_800);

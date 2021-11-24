@@ -18,17 +18,17 @@ import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.model.ImageIconInfo;
-import com.business.travel.app.ui.activity.item.AddConsumptionItemIconRecyclerViewAdapter.AddConsumptionItemIconRecyclerViewAdapterViewHolder;
+import com.business.travel.app.ui.activity.item.AddItemRecyclerViewInnerAdapter.AddConsumptionItemIconRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
-import com.business.travel.app.utils.CompletableFutureUtil;
+import com.business.travel.app.utils.FutureUtil;
 import com.business.travel.app.utils.LoadImageUtil;
 import com.business.travel.utils.SplitUtil;
 import org.jetbrains.annotations.NotNull;
 
-public class AddConsumptionItemIconRecyclerViewAdapter extends BaseRecyclerViewAdapter<AddConsumptionItemIconRecyclerViewAdapterViewHolder, ImageIconInfo> {
+public class AddItemRecyclerViewInnerAdapter extends BaseRecyclerViewAdapter<AddConsumptionItemIconRecyclerViewAdapterViewHolder, ImageIconInfo> {
 
-	public AddConsumptionItemIconRecyclerViewAdapter(List<ImageIconInfo> imageIconInfos, BaseActivity<? extends ViewBinding> baseActivity) {
+	public AddItemRecyclerViewInnerAdapter(List<ImageIconInfo> imageIconInfos, BaseActivity<? extends ViewBinding> baseActivity) {
 		super(imageIconInfos, baseActivity);
 	}
 
@@ -57,7 +57,7 @@ public class AddConsumptionItemIconRecyclerViewAdapter extends BaseRecyclerViewA
 		}
 
 		ImageView uiImageViewIcon = holder.uiImageViewIcon;
-		CompletableFutureUtil.runAsync(() -> LoadImageUtil.loadImageToView(iconDownloadUrl, uiImageViewIcon));
+		FutureUtil.runAsync(() -> LoadImageUtil.loadImageToView(iconDownloadUrl, uiImageViewIcon));
 
 		//最后一个被选中的按钮
 		//当图片按钮被点击的时候
@@ -68,22 +68,22 @@ public class AddConsumptionItemIconRecyclerViewAdapter extends BaseRecyclerViewA
 				imageIconInfo.setSelected(false);
 			} else {
 				uiImageViewIcon.setBackgroundResource(R.drawable.corners_shape_select);
-				ImageView imageView = activity.findViewById(R.id.UI_ImageView_Icon_1);
+				ImageView imageView = activity.findViewById(R.id.UI_AddItemActivity_ImageView_ShowIcon);
 
-				EditText editTextName = activity.findViewById(R.id.UI_AddConsumptionItem_EditText_Name);
+				EditText editTextName = activity.findViewById(R.id.UI_AddItemActivity_EditText_Name);
 				String name = imageIconInfo.getName();
 				editTextName.setText(format(name));
 
 				imageView.setImageDrawable(uiImageViewIcon.getDrawable());
 				imageIconInfo.setSelected(true);
 
-				final AddConsumptionItemActivity addConsumptionItemActivity = (AddConsumptionItemActivity)this.activity;
-				if (addConsumptionItemActivity.getLastSelectedImageView() != null) {
-					addConsumptionItemActivity.getLastSelectedImageView().setBackgroundResource(R.drawable.corners_shape_unselect);
-					addConsumptionItemActivity.getLastSelectedImageIcon().setSelected(false);
+				final AddItemActivity addItemActivity = (AddItemActivity)this.activity;
+				if (addItemActivity.getLastSelectedImageView() != null) {
+					addItemActivity.getLastSelectedImageView().setBackgroundResource(R.drawable.corners_shape_unselect);
+					addItemActivity.getLastSelectedImageIcon().setSelected(false);
 				}
-				addConsumptionItemActivity.setLastSelectedImageView(uiImageViewIcon);
-				addConsumptionItemActivity.setLastSelectedImageIcon(imageIconInfo);
+				addItemActivity.setLastSelectedImageView(uiImageViewIcon);
+				addItemActivity.setLastSelectedImageIcon(imageIconInfo);
 			}
 		});
 	}

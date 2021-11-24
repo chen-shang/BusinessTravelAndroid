@@ -1,4 +1,4 @@
-package com.business.travel.app.ui.activity.item;
+package com.business.travel.app.ui.activity.item.associate;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -16,7 +16,7 @@ import butterknife.ButterKnife;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.AssociateItem;
-import com.business.travel.app.ui.activity.item.EditAssociatetemRecyclerViewAdapter.EditAssociatetemRecyclerViewAdapterViewHolder;
+import com.business.travel.app.ui.activity.item.associate.EditAssociatetemRecyclerViewAdapter.EditAssociatetemRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.LoadImageUtil;

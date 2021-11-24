@@ -1,4 +1,4 @@
-package com.business.travel.app.ui.activity.item;
+package com.business.travel.app.ui.activity.item.associate;
 
 import android.os.Bundle;
 import com.business.travel.app.databinding.ActivityAddAssociateItemBinding;

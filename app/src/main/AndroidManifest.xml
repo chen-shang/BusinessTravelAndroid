@@ -16,20 +16,20 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.BusinessTravelAndroid">
-        <activity android:name=".ui.activity.item.AddAssociateItemActivity">
+        <activity android:name=".ui.activity.item.associate.AddAssociateItemActivity">
         </activity>
-        <activity android:name=".ui.activity.item.EditAssociateItemActivity">
+        <activity android:name=".ui.activity.item.associate.EditAssociateItemActivity">
         </activity>
-        <activity android:name=".ui.activity.item.AddConsumptionItemActivity">
+        <activity android:name=".ui.activity.item.AddItemActivity">
         </activity>
-        <activity android:name=".ui.activity.item.EditConsumptionItemActivity">
+        <activity android:name=".ui.activity.item.consumption.EditConsumptionItemActivity">
+        </activity>
+        <activity android:name=".ui.activity.master.MasterActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
-        <activity android:name=".ui.activity.master.MasterActivity">
         </activity>
         <activity android:name=".MainActivity">
         </activity>

@@ -24,10 +24,10 @@ import com.business.travel.app.R;
 import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.model.GiteeContent;
 import com.business.travel.app.model.ImageIconInfo;
-import com.business.travel.app.ui.activity.item.AddConsumptionItemRecyclerViewAdapter.AddConsumptionItemRecyclerViewAdapterViewHolder;
+import com.business.travel.app.ui.activity.item.AddItemRecyclerViewAdapter.AddItemRecyclerViewAdapterViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
-import com.business.travel.app.utils.CompletableFutureUtil;
+import com.business.travel.app.utils.FutureUtil;
 import com.business.travel.app.utils.LogToast;
 import com.business.travel.utils.SplitUtil;
 import com.google.common.cache.CacheBuilder;
@@ -37,7 +37,7 @@ import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
-public class AddConsumptionItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<AddConsumptionItemRecyclerViewAdapterViewHolder, GiteeContent> {
+public class AddItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<AddItemRecyclerViewAdapterViewAdapterViewHolder, GiteeContent> {
 	private static final LoadingCache<String, List<GiteeContent>> cache =
 			CacheBuilder.newBuilder().maximumSize(5).expireAfterWrite(1, TimeUnit.MINUTES).build(new CacheLoader<String, List<GiteeContent>>() {
 				@Override
@@ -46,7 +46,7 @@ public class AddConsumptionItemRecyclerViewAdapter extends BaseRecyclerViewAdapt
 				}
 			});
 
-	public AddConsumptionItemRecyclerViewAdapter(List<GiteeContent> itemIconInfos, BaseActivity<? extends ViewBinding> baseActivity) {
+	public AddItemRecyclerViewAdapter(List<GiteeContent> itemIconInfos, BaseActivity<? extends ViewBinding> baseActivity) {
 		super(itemIconInfos, baseActivity);
 	}
 
@@ -61,32 +61,32 @@ public class AddConsumptionItemRecyclerViewAdapter extends BaseRecyclerViewAdapt
 	@NonNull
 	@NotNull
 	@Override
-	public AddConsumptionItemRecyclerViewAdapterViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_add_consumption_icon_item, parent, false);
-		return new AddConsumptionItemRecyclerViewAdapterViewHolder(view);
+	public AddItemRecyclerViewAdapterViewAdapterViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_add_item_recycler_view_adapter, parent, false);
+		return new AddItemRecyclerViewAdapterViewAdapterViewHolder(view);
 	}
 
 	@Override
-	public void onBindViewHolder(@NonNull @NotNull AddConsumptionItemRecyclerViewAdapterViewHolder holder, int position) {
+	public void onBindViewHolder(@NonNull @NotNull AddItemRecyclerViewAdapterViewAdapterViewHolder holder, int position) {
 		if (CollectionUtils.isEmpty(dataList)) {
 			return;
 		}
+		//先获取到类型,也就是文件夹的名字
 		GiteeContent giteeContent = dataList.get(position);
-
 		final String name = giteeContent.getName();
 		holder.iconPathTextView.setText(name);
 
+		//然后开始处理每一项下面的图标
 		List<ImageIconInfo> imageIconInfoList = new ArrayList<>();
 		String path = giteeContent.getPath();
-
 		//接下来是对icon的处理
 		LayoutManager layoutManager = new GridLayoutManager(activity, 5);
 		holder.imageIconInfoRecyclerView.setLayoutManager(layoutManager);
-		AddConsumptionItemIconRecyclerViewAdapter billRecyclerViewAdapter = new AddConsumptionItemIconRecyclerViewAdapter(imageIconInfoList, activity);
+		AddItemRecyclerViewInnerAdapter billRecyclerViewAdapter = new AddItemRecyclerViewInnerAdapter(imageIconInfoList, activity);
 		holder.imageIconInfoRecyclerView.setAdapter(billRecyclerViewAdapter);
 
 		try {
-			CompletableFutureUtil.supplyAsync(() -> getFromCache(path))
+			FutureUtil.supplyAsync(() -> getFromCache(path))
 					.thenApply(giteeContents -> giteeContents.stream()
 							.filter(item -> "file".equals(item.getType()))
 							.filter(item -> item.getName().endsWith("svg"))
@@ -125,14 +125,14 @@ public class AddConsumptionItemRecyclerViewAdapter extends BaseRecyclerViewAdapt
 	}
 
 	@SuppressLint("NonConstantResourceId")
-	static class AddConsumptionItemRecyclerViewAdapterViewHolder extends ViewHolder {
+	static class AddItemRecyclerViewAdapterViewAdapterViewHolder extends ViewHolder {
 
-		@BindView(R.id.UI_AddConsumptionItem_TextView_IconPath)
+		@BindView(R.id.UI_AddItemRecyclerViewAdapter_TextView_IconPath)
 		public TextView iconPathTextView;
-		@BindView(R.id.UI_AddConsumptionItem_SwipeRecyclerView)
+		@BindView(R.id.UI_AddItemRecyclerViewAdapter_SwipeRecyclerView)
 		public SwipeRecyclerView imageIconInfoRecyclerView;
 
-		public AddConsumptionItemRecyclerViewAdapterViewHolder(@NonNull @NotNull View itemView) {
+		public AddItemRecyclerViewAdapterViewAdapterViewHolder(@NonNull @NotNull View itemView) {
 			super(itemView);
 			ButterKnife.bind(this, itemView);
 		}

@@ -22,7 +22,7 @@ import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.ui.activity.master.fragment.BillItemRecyclerViewAdapter.BillItemRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
-import com.business.travel.app.utils.CompletableFutureUtil;
+import com.business.travel.app.utils.FutureUtil;
 import com.pixplicity.sharp.Sharp;
 import org.jetbrains.annotations.NotNull;
 
@@ -55,7 +55,7 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 		}
 
 		String iconDownloadUrl = bill.getIconDownloadUrl();
-		CompletableFutureUtil.runAsync(() -> {
+		FutureUtil.runAsync(() -> {
 			final InputStream iconInputStream = BusinessTravelResourceApi.getIcon(iconDownloadUrl);
 			Sharp.loadInputStream(iconInputStream).into(holder.iconImageView);
 		});

@@ -25,4 +25,9 @@ public interface AssociateItemDao extends BaseDao<AssociateItem> {
 	@Query("SELECT * FROM associateItem limit 1")
 	AssociateItem selectOne();
 
+	/**
+	 * 查询全部
+	 */
+	@Query("SELECT max(sortId) FROM associateItem where isDeleted=1")
+	Long selectMaxSort();
 }

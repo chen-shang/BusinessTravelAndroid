@@ -1,4 +1,4 @@
-package com.business.travel.app.ui.activity.item;
+package com.business.travel.app.ui.activity.item.consumption;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -16,7 +16,7 @@ import butterknife.ButterKnife;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.ConsumptionItem;
-import com.business.travel.app.ui.activity.item.EditConsumptionItemRecyclerViewAdapter.EditConsumptionItemRecyclerViewAdapterViewHolder;
+import com.business.travel.app.ui.activity.item.consumption.EditConsumptionItemRecyclerViewAdapter.EditConsumptionItemRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.LoadImageUtil;
@@ -42,9 +42,7 @@ public class EditConsumptionItemRecyclerViewAdapter extends BaseRecyclerViewAdap
 			return;
 		}
 		final ConsumptionItem consumptionItem = dataList.get(position);
-		CompletableFuture.runAsync(() -> {
-			LoadImageUtil.loadImageToView(consumptionItem.getIconDownloadUrl(), holder.imageView);
-		});
+		CompletableFuture.runAsync(() -> LoadImageUtil.loadImageToView(consumptionItem.getIconDownloadUrl(), holder.imageView));
 		holder.textView.setText(consumptionItem.getName());
 	}
 

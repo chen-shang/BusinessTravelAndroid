@@ -1,8 +1,8 @@
 package com.business.travel.app.enums;
 
 public enum DeleteEnum {
-	DELETE(0, "没有删除"),
-	NOT_DELETE(1, "已经删除"),
+	DELETE(0, "已删除"),
+	NOT_DELETE(1, "未删除"),
 	;
 	private final int code;
 	private final String msg;
