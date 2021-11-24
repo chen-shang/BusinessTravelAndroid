@@ -23,6 +23,7 @@ import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.CompletableFutureUtil;
 import com.business.travel.app.utils.LoadImageUtil;
+import com.business.travel.utils.SplitUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class AddConsumptionItemIconRecyclerViewAdapter extends BaseRecyclerViewAdapter<AddConsumptionItemIconRecyclerViewAdapterViewHolder, ImageIconInfo> {
@@ -70,7 +71,8 @@ public class AddConsumptionItemIconRecyclerViewAdapter extends BaseRecyclerViewA
 				ImageView imageView = activity.findViewById(R.id.UI_ImageView_Icon_1);
 
 				EditText editTextName = activity.findViewById(R.id.UI_AddConsumptionItem_EditText_Name);
-				editTextName.setText(imageIconInfo.getName());
+				String name = imageIconInfo.getName();
+				editTextName.setText(format(name));
 
 				imageView.setImageDrawable(uiImageViewIcon.getDrawable());
 				imageIconInfo.setSelected(true);
@@ -84,6 +86,17 @@ public class AddConsumptionItemIconRecyclerViewAdapter extends BaseRecyclerViewA
 				addConsumptionItemActivity.setLastSelectedImageIcon(imageIconInfo);
 			}
 		});
+	}
+
+	@NotNull
+	private String format(String name) {
+		//先去掉后缀名
+		name = name.substring(0, name.lastIndexOf("."));
+		if (name.contains("-")) {
+			name = SplitUtil.trimToStringList(name, "-").get(1);
+		}
+		name = name.replaceAll("\\d+", "");
+		return name;
 	}
 
 	@SuppressLint("NonConstantResourceId")
