@@ -15,12 +15,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
-import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.dal.entity.ConsumptionItem;
 import com.business.travel.app.ui.activity.item.EditConsumptionItemRecyclerViewAdapter.EditConsumptionItemRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
-import com.pixplicity.sharp.Sharp;
+import com.business.travel.app.utils.LoadImageUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class EditConsumptionItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<EditConsumptionItemRecyclerViewAdapterViewHolder, ConsumptionItem> {
@@ -44,7 +43,7 @@ public class EditConsumptionItemRecyclerViewAdapter extends BaseRecyclerViewAdap
 		}
 		final ConsumptionItem consumptionItem = dataList.get(position);
 		CompletableFuture.runAsync(() -> {
-			Sharp.loadInputStream(BusinessTravelResourceApi.getIcon(consumptionItem.getIconDownloadUrl())).into(holder.imageView);
+			LoadImageUtil.loadImageToView(consumptionItem.getIconDownloadUrl(), holder.imageView);
 		});
 		holder.textView.setText(consumptionItem.getName());
 	}

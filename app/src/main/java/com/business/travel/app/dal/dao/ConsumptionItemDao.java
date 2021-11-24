@@ -27,12 +27,12 @@ public interface ConsumptionItemDao extends BaseDao<ConsumptionItem> {
 	/**
 	 * 查询全部 按照类型并排序
 	 */
-	@Query("SELECT * FROM consumptionItem where consumptionType=:consumptionType order by sortId asc")
+	@Query("SELECT * FROM consumptionItem where consumptionType=:consumptionType and isDeleted=1 order by sortId asc")
 	List<ConsumptionItem> selectByType(String consumptionType);
 
 	/**
 	 * 查询最大的sortId
 	 */
-	@Query("SELECT max(sortId) FROM consumptionItem where consumptionType=:consumptionType")
+	@Query("SELECT max(sortId) FROM consumptionItem where consumptionType=:consumptionType and isDeleted=1")
 	Long selectMaxSortIdByType(String consumptionType);
 }

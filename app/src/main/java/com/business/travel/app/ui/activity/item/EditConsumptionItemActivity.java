@@ -16,6 +16,7 @@ import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.ConsumptionItem;
 import com.business.travel.app.databinding.ActivityEditConsumptionItemBinding;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
+import com.business.travel.app.enums.DeleteEnum;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
 
@@ -40,16 +41,29 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 		editConsumptionItemRecyclerViewAdapter = new EditConsumptionItemRecyclerViewAdapter(consumptionItemList, this);
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setAdapter(editConsumptionItemRecyclerViewAdapter);
 
+		ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
+
 		//长按移动排序
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setLongPressDragEnabled(true);
+		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setSwipeItemMenuEnabled(true);
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setOnItemMoveListener(
 				new BaseRecyclerViewOnItemMoveListener<>(consumptionItemList, editConsumptionItemRecyclerViewAdapter)
 						.onItemMove((consumptionItems, fromPosition, toPosition) -> {
 							//更新排序 todo 优化
-							for (int i = 0; i < consumptionItems.size(); i++) {
-								ConsumptionItem consumptionItem = consumptionItems.get(i);
+
+							for (int i = 0; i < consumptionItemList.size(); i++) {
+								ConsumptionItem consumptionItem = consumptionItemList.get(i);
 								consumptionItem.setSortId((long)i);
-								final ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
+								consumptionItemDao.update(consumptionItem);
+							}
+						}).onItemDismiss((consumptionItems, integer) -> {
+							consumptionItems.setIsDeleted(DeleteEnum.DELETE.getCode());
+							consumptionItemDao.softDelete(consumptionItems);
+
+							//数据库删除该元素
+							for (int i = 0; i < consumptionItemList.size(); i++) {
+								ConsumptionItem consumptionItem = consumptionItemList.get(i);
+								consumptionItem.setSortId((long)i);
 								consumptionItemDao.update(consumptionItem);
 							}
 						})

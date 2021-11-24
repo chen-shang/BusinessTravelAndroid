@@ -7,6 +7,11 @@
     <string name="button_name_wx_login">微信登录</string>
     <string name="button_name_account_login">账号密码登录</string>
     <string name="button_name_sign_up">注册</string>
+    <!--    textview 的 text -->
+    <string name="text_edit_type">设置类别</string>
+    <string name="text_add_type">添加类别</string>
+    <string name="text_edit_association">设置人员</string>
+    <string name="text_add_association">添加人员</string>
     <!-- 数字   -->
     <string name="num_1">1</string>
     <string name="num_2">2</string>

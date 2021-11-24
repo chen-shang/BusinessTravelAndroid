@@ -24,7 +24,7 @@ public class BaseRecyclerViewOnItemMoveListener<T, VH extends ViewHolder> implem
 	/**
 	 * 移动时候执行的业务逻辑
 	 */
-	private BiConsumer<List<T>, Integer> onItemDismiss;
+	private BiConsumer<T, Integer> onItemDismiss;
 
 	public BaseRecyclerViewOnItemMoveListener(List<T> list, Adapter adapter) {
 		this.list = list;
@@ -36,7 +36,7 @@ public class BaseRecyclerViewOnItemMoveListener<T, VH extends ViewHolder> implem
 		return this;
 	}
 
-	public BaseRecyclerViewOnItemMoveListener<T, VH> onItemDismiss(BiConsumer<List<T>, Integer> onItemDismiss) {
+	public BaseRecyclerViewOnItemMoveListener<T, VH> onItemDismiss(BiConsumer<T, Integer> onItemDismiss) {
 		this.onItemDismiss = onItemDismiss;
 		return this;
 	}
@@ -61,12 +61,13 @@ public class BaseRecyclerViewOnItemMoveListener<T, VH extends ViewHolder> implem
 	@Override
 	public void onItemDismiss(ViewHolder srcHolder) {
 		// 此方法在Item在侧滑删除时被调用。
-
 		// 从数据源移除该Item对应的数据，并刷新Adapter。
 		int position = srcHolder.getAdapterPosition();
+		T removeItem = list.get(position);
 		list.remove(position);
+
 		if (onItemDismiss != null) {
-			onItemDismiss.accept(list, position);
+			onItemDismiss.accept(removeItem, position);
 		}
 		adapter.notifyItemRemoved(position);
 	}

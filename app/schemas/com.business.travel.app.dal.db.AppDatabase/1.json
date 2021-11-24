@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "73f510e044d84a61614a7f3facbcdd5f",
+    "identityHash": "12187386544e648aee8bdf2191a6088e",
     "entities": [
       {
         "tableName": "AssociateItem",
@@ -230,57 +230,6 @@
         "foreignKeys": []
       },
       {
-        "tableName": "ItemSort",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `itemType` TEXT, `sortIds` TEXT, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "itemType",
-            "columnName": "itemType",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "sortIds",
-            "columnName": "sortIds",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "createTime",
-            "columnName": "createTime",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "modifyTime",
-            "columnName": "modifyTime",
-            "affinity": "TEXT",
-            "notNull": false,
-            "defaultValue": "CURRENT_TIMESTAMP"
-          },
-          {
-            "fieldPath": "isDeleted",
-            "columnName": "isDeleted",
-            "affinity": "INTEGER",
-            "notNull": false
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": true
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
         "tableName": "Project",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `startTime` TEXT, `endTime` TEXT, `remark` TEXT, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
         "fields": [
@@ -356,7 +305,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '73f510e044d84a61614a7f3facbcdd5f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '12187386544e648aee8bdf2191a6088e')"
     ]
   }
 }

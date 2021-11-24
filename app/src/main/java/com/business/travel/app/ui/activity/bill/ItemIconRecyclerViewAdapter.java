@@ -1,6 +1,5 @@
 package com.business.travel.app.ui.activity.bill;
 
-import java.io.InputStream;
 import java.util.List;
 
 import android.annotation.SuppressLint;
@@ -19,7 +18,6 @@ import butterknife.ButterKnife;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.business.travel.app.R;
-import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.enums.ItemIconEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.ImageIconInfo;
@@ -29,7 +27,7 @@ import com.business.travel.app.ui.activity.item.EditConsumptionItemActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.CompletableFutureUtil;
-import com.pixplicity.sharp.Sharp;
+import com.business.travel.app.utils.LoadImageUtil;
 import org.jetbrains.annotations.NotNull;
 
 import static com.business.travel.app.enums.ItemTypeEnum.ASSOCIATE;
@@ -72,16 +70,8 @@ public class ItemIconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRec
 		}
 
 		ImageView uiImageViewIcon = holder.uiImageViewIcon;
-		ItemIconEnum itemIconEnum = ItemIconEnum.ofUrl(iconDownloadUrl);
-		if (itemIconEnum != null) {
-			uiImageViewIcon.setImageResource(itemIconEnum.getResourceId());
-		} else {
-			//发起网络请求 todo 异步
-			CompletableFutureUtil.runAsync(() -> {
-				InputStream iconInputStream = BusinessTravelResourceApi.getIcon(iconDownloadUrl);
-				Sharp.loadInputStream(iconInputStream).into(uiImageViewIcon);
-			});
-		}
+		//发起网络请求
+		CompletableFutureUtil.runAsync(() -> LoadImageUtil.loadImageToView(iconDownloadUrl, uiImageViewIcon));
 
 		int unSelectColor = ContextCompat.getColor(uiImageViewIcon.getContext(), R.color.black_100);
 		int selectColor = ContextCompat.getColor(uiImageViewIcon.getContext(), R.color.teal_800);

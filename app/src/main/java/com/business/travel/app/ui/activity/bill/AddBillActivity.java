@@ -48,7 +48,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	 */
 	private final List<ImageIconInfo> consumptionItemIconList = new ArrayList<>();
 	/**
-	 * 同行人图标信息
+	 * 人员图标信息
 	 */
 	private final List<ImageIconInfo> associateIconList = new ArrayList<>();
 

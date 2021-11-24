@@ -2,6 +2,7 @@ package com.business.travel.app.ui.activity.item;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -25,11 +26,13 @@ import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.CompletableFutureUtil;
 import com.business.travel.app.utils.LogToast;
 import com.business.travel.utils.DateTimeUtil;
+import com.business.travel.utils.SplitUtil;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author chenshang
@@ -101,7 +104,6 @@ public class AddConsumptionItemActivity extends BaseActivity<ActivityAddConsumpt
 			Long maxSortId = consumptionItemDao.selectMaxSortIdByType(consumptionType);
 			maxSortId = Optional.ofNullable(maxSortId).orElse(0L);
 			consumptionItem.setSortId(maxSortId + 1);
-			consumptionItem.setIsDeleted(1);
 			consumptionItemDao.insert(consumptionItem);
 			finish();
 		});
@@ -112,17 +114,17 @@ public class AddConsumptionItemActivity extends BaseActivity<ActivityAddConsumpt
 	@Override
 	protected void onStart() {
 		super.onStart();
-		//todo
 		refreshData();
 	}
 
 	private void refreshData() {
 		try {
-			//如果5秒钟,拿不回数据,说明网络剧不好
+			//如果5秒钟,拿不回数据,说明网络不好
 			CompletableFutureUtil.supplyAsync(() -> {
 				String path = "/icon/" + itemTypeEnum.name();
 				return getIconTypeListFromCache(path);
-			}).thenAccept(list -> {
+			}).thenApply(list -> list.stream().sorted(Comparator.comparing(this::getItemSort)).collect(Collectors.toList())
+			).thenAccept(list -> {
 				iconTypeList.clear();
 				iconTypeList.addAll(list);
 			}).get(5, TimeUnit.SECONDS);
@@ -130,6 +132,22 @@ public class AddConsumptionItemActivity extends BaseActivity<ActivityAddConsumpt
 			LogToast.errorShow("网络环境较差,请稍后重试");
 		}
 		addConsumptionItemRecyclerViewAdapter.notifyDataSetChanged();
+	}
+
+	private Integer getItemSort(GiteeContent giteeContent) {
+		if (giteeContent == null) {
+			return 1;
+		}
+
+		final String name = giteeContent.getName();
+		if (StringUtils.isBlank(name)) {
+			return 1;
+		}
+		final List<String> list = SplitUtil.trimToStringList(name, "-");
+		if (list.size() == 1) {
+			return 1;
+		}
+		return list.stream().findFirst().map(Integer::valueOf).orElse(1);
 	}
 
 	private List<GiteeContent> getIconTypeListFromCache(String path) {

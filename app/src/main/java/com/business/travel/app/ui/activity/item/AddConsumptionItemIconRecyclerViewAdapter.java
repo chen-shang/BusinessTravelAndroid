@@ -1,6 +1,5 @@
 package com.business.travel.app.ui.activity.item;
 
-import java.io.InputStream;
 import java.util.List;
 
 import android.annotation.SuppressLint;
@@ -18,14 +17,12 @@ import butterknife.ButterKnife;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.business.travel.app.R;
-import com.business.travel.app.api.BusinessTravelResourceApi;
-import com.business.travel.app.enums.ItemIconEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.activity.item.AddConsumptionItemIconRecyclerViewAdapter.AddConsumptionItemIconRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.CompletableFutureUtil;
-import com.pixplicity.sharp.Sharp;
+import com.business.travel.app.utils.LoadImageUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class AddConsumptionItemIconRecyclerViewAdapter extends BaseRecyclerViewAdapter<AddConsumptionItemIconRecyclerViewAdapterViewHolder, ImageIconInfo> {
@@ -59,22 +56,13 @@ public class AddConsumptionItemIconRecyclerViewAdapter extends BaseRecyclerViewA
 		}
 
 		ImageView uiImageViewIcon = holder.uiImageViewIcon;
-		ItemIconEnum itemIconEnum = ItemIconEnum.ofUrl(iconDownloadUrl);
-		if (itemIconEnum != null) {
-			uiImageViewIcon.setImageResource(itemIconEnum.getResourceId());
-		} else {
-			//发起网络请求 todo 异步
-			CompletableFutureUtil.runAsync(() -> {
-				InputStream iconInputStream = BusinessTravelResourceApi.getIcon(iconDownloadUrl);
-				Sharp.loadInputStream(iconInputStream).into(uiImageViewIcon);
-			});
-		}
+		CompletableFutureUtil.runAsync(() -> LoadImageUtil.loadImageToView(iconDownloadUrl, uiImageViewIcon));
 
 		//最后一个被选中的按钮
 		//当图片按钮被点击的时候
 		holder.itemView.setOnClickListener(v -> {
-			if (imageIconInfo.isSelected()) { //如果当前被选中
-				//点击则取消选中
+			if (imageIconInfo.isSelected()) {
+				//如果当前被选中,点击则取消选中
 				uiImageViewIcon.setBackgroundResource(R.drawable.corners_shape_unselect);
 				imageIconInfo.setSelected(false);
 			} else {
@@ -87,13 +75,13 @@ public class AddConsumptionItemIconRecyclerViewAdapter extends BaseRecyclerViewA
 				imageView.setImageDrawable(uiImageViewIcon.getDrawable());
 				imageIconInfo.setSelected(true);
 
-				if (((AddConsumptionItemActivity)activity).getLastSelectedImageView() != null) {
-					((AddConsumptionItemActivity)activity).getLastSelectedImageView().setBackgroundResource(R.drawable.corners_shape_unselect);
-					((AddConsumptionItemActivity)activity).getLastSelectedImageIcon().setSelected(false);
+				final AddConsumptionItemActivity addConsumptionItemActivity = (AddConsumptionItemActivity)this.activity;
+				if (addConsumptionItemActivity.getLastSelectedImageView() != null) {
+					addConsumptionItemActivity.getLastSelectedImageView().setBackgroundResource(R.drawable.corners_shape_unselect);
+					addConsumptionItemActivity.getLastSelectedImageIcon().setSelected(false);
 				}
-
-				((AddConsumptionItemActivity)activity).setLastSelectedImageView(uiImageViewIcon);
-				((AddConsumptionItemActivity)activity).setLastSelectedImageIcon(imageIconInfo);
+				addConsumptionItemActivity.setLastSelectedImageView(uiImageViewIcon);
+				addConsumptionItemActivity.setLastSelectedImageIcon(imageIconInfo);
 			}
 		});
 	}

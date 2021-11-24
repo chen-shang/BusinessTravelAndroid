@@ -1,14 +1,13 @@
 package com.business.travel.app.ui.activity.item;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import com.business.travel.app.R;
+import com.business.travel.app.databinding.ActivityAddAssociateItemBinding;
+import com.business.travel.app.ui.base.BaseActivity;
 
-public class AddAssociateItemActivity extends AppCompatActivity {
+public class AddAssociateItemActivity extends BaseActivity<ActivityAddAssociateItemBinding> {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_add_associate_item);
 	}
 }

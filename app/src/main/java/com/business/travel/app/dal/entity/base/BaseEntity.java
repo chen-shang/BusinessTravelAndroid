@@ -1,6 +1,7 @@
 package com.business.travel.app.dal.entity.base;
 
 import androidx.room.ColumnInfo;
+import com.business.travel.app.enums.DeleteEnum;
 import lombok.Data;
 
 /**
@@ -21,5 +22,5 @@ public class BaseEntity {
 	/**
 	 * 软删除标志
 	 */
-	private Integer isDeleted = 1;
+	private Integer isDeleted = DeleteEnum.NOT_DELETE.getCode();
 }

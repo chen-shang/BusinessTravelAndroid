@@ -1,6 +1,7 @@
 package com.business.travel.app.ui.activity.item;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -28,10 +29,12 @@ import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.CompletableFutureUtil;
 import com.business.travel.app.utils.LogToast;
+import com.business.travel.utils.SplitUtil;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class AddConsumptionItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<AddConsumptionItemRecyclerViewAdapterViewHolder, GiteeContent> {
@@ -84,17 +87,17 @@ public class AddConsumptionItemRecyclerViewAdapter extends BaseRecyclerViewAdapt
 
 		try {
 			CompletableFutureUtil.supplyAsync(() -> getFromCache(path))
-					.thenApply(giteeContents ->
-							           giteeContents.stream()
-									           .filter(item -> "file".equals(item.getType()))
-									           .filter(item -> item.getName().endsWith("svg"))
-									           .map(item -> {
-										           ImageIconInfo itemIconInfo = new ImageIconInfo();
-										           itemIconInfo.setName(item.getName());
-										           itemIconInfo.setIconDownloadUrl(item.getDownloadUrl());
-										           itemIconInfo.setSelected(false);
-										           return itemIconInfo;
-									           }).collect(Collectors.toList())
+					.thenApply(giteeContents -> giteeContents.stream()
+							.filter(item -> "file".equals(item.getType()))
+							.filter(item -> item.getName().endsWith("svg"))
+							.sorted(Comparator.comparing(this::getItemSort))
+							.map(item -> {
+								ImageIconInfo itemIconInfo = new ImageIconInfo();
+								itemIconInfo.setName(item.getName());
+								itemIconInfo.setIconDownloadUrl(item.getDownloadUrl());
+								itemIconInfo.setSelected(false);
+								return itemIconInfo;
+							}).collect(Collectors.toList())
 					).thenAccept(item -> {
 						imageIconInfoList.clear();
 						imageIconInfoList.addAll(item);
@@ -103,6 +106,22 @@ public class AddConsumptionItemRecyclerViewAdapter extends BaseRecyclerViewAdapt
 			LogToast.errorShow("网络环境较差,请稍后重试");
 		}
 		billRecyclerViewAdapter.notifyDataSetChanged();
+	}
+
+	private Integer getItemSort(GiteeContent giteeContent) {
+		if (giteeContent == null) {
+			return 1;
+		}
+
+		final String name = giteeContent.getName();
+		if (StringUtils.isBlank(name)) {
+			return 1;
+		}
+		final List<String> list = SplitUtil.trimToStringList(name, "-");
+		if (list.size() == 1) {
+			return 1;
+		}
+		return list.stream().findFirst().map(Integer::valueOf).orElse(1);
 	}
 
 	@SuppressLint("NonConstantResourceId")

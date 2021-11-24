@@ -29,6 +29,14 @@ public interface BaseDao<T> {
 	@Delete
 	void delete(T record);
 
+	/**
+	 * 逻辑删除
+	 *
+	 * @param record
+	 */
+	@Update
+	void softDelete(T record);
+
 	@Delete
 	void batchDelete(List<T> records);
 
@@ -37,4 +45,5 @@ public interface BaseDao<T> {
 
 	@Update
 	void batchUpdate(List<T> records);
+
 }
