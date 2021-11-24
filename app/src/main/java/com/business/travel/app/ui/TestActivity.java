@@ -1,33 +1,38 @@
 package com.business.travel.app.ui;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import android.app.AlertDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import com.blankj.utilcode.util.ColorUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
-import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.dal.dao.ProjectDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityTestBinding;
-import com.business.travel.app.model.GiteeContent;
 import com.business.travel.app.ui.base.BaseActivity;
-import com.business.travel.app.utils.CompletableFutureUtil;
+import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.JacksonUtil;
+import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
+import com.yanzhenjie.recyclerview.SwipeMenuBridge;
+import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import com.yanzhenjie.recyclerview.touch.OnItemMoveListener;
+import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -64,12 +69,10 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 		adapter = new MyAdapter(mDataList);
 
 		recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-		// 拖拽排序，默认关闭。
-		recyclerView.setLongPressDragEnabled(true);
-		// 侧滑删除，默认关闭。
-		recyclerView.setItemViewSwipeEnabled(true);
 
-		OnItemMoveListener mItemMoveListener = new OnItemMoveListener() {
+		recyclerView.setLongPressDragEnabled(true);
+		// 监听拖拽，更新UI
+		recyclerView.setOnItemMoveListener(new OnItemMoveListener() {
 			@Override
 			public boolean onItemMove(ViewHolder srcHolder, ViewHolder targetHolder) {
 				// 此方法在Item拖拽交换位置时被调用。
@@ -94,11 +97,34 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 				mDataList.remove(position);
 				adapter.notifyItemRemoved(position);
 			}
-		};
-		// 监听拖拽，更新UI
-		recyclerView.setOnItemMoveListener(mItemMoveListener);
-		viewBinding.recyclerView.setAdapter(adapter);
+		});
 
+		//设置侧滑菜单
+		recyclerView.setSwipeMenuCreator((swipeLeftMenu, swipeRightMenu, viewType) -> {
+			SwipeMenuItem deleteItem = new SwipeMenuItem(TestActivity.this)
+					.setBackground(R.drawable.icon_beizhu)
+					.setImage(R.drawable.vector_drawable_my)
+					.setHeight(ViewGroup.LayoutParams.MATCH_PARENT)//设置高，这里使用match_parent，就是与item的高相同
+					.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);//设置宽
+			swipeRightMenu.addMenuItem(deleteItem);//设置右边的侧滑
+		});
+
+		recyclerView.setOnItemMenuClickListener(new OnItemMenuClickListener() {
+			@Override
+			public void onItemClick(SwipeMenuBridge menuBridge, int adapterPosition) {
+				menuBridge.closeMenu();
+				int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。0是左，右是1，暂时没有用到
+				//int adapterPosition = menuBridge.getPosition(); // RecyclerView的Item的position。
+				int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
+				Toast.makeText(TestActivity.this, "删除" + adapterPosition, Toast.LENGTH_SHORT).show();
+
+			}
+		});
+
+		recyclerView.addItemDecoration(new DefaultItemDecoration(Color.RED));
+
+		//设置侧滑菜单的点击事件
+		recyclerView.setAdapter(adapter);
 		//viewBinding.swipeRedreshLayout.setOnRefreshListener(() -> {
 		//	select(null);
 		//	viewBinding.swipeRedreshLayout.setRefreshing(false);
@@ -114,14 +140,12 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 
 	public void insert(View view) {
 		Project user = new Project();
-		user.setId(0L);
-		user.setName("");
-		user.setStartTime("");
-		user.setEndTime("");
-		user.setRemark("");
-		user.setCreateTime("");
-		user.setModifyTime("");
-
+		user.setName(DateTimeUtil.format(new Date()));
+		user.setStartTime(DateTimeUtil.format(new Date()));
+		user.setEndTime(DateTimeUtil.format(new Date()));
+		user.setRemark(DateTimeUtil.format(new Date()));
+		user.setCreateTime(DateTimeUtil.format(new Date()));
+		user.setModifyTime(DateTimeUtil.format(new Date()));
 		Long id = projectDao.insert(user);
 		user.setId(id);
 		ToastUtils.showShort("插入成功:" + JacksonUtil.toString(user));
@@ -135,30 +159,30 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 		mDataList.addAll(projectDao.selectAll());
 		adapter.notifyDataSetChanged();
 
-		CompletableFutureUtil.runAsync(() -> {
-			try {
-				//final List<GiteeContent> v5ReposOwnerRepoGiteeContentsIncome = BusinessTravelResourceApi.getV5ReposOwnerRepoContents("/icon/收入");
-				//System.out.println(JacksonUtil.toPrettyString(v5ReposOwnerRepoGiteeContentsIncome));
-
-				final List<GiteeContent> v5ReposOwnerRepoGiteeContentsSpend = BusinessTravelResourceApi.getV5ReposOwnerRepoContents("/icon/支出");
-				final List<String> collect = v5ReposOwnerRepoGiteeContentsSpend.stream()
-						.filter(item -> "dir".equals(item.getType()))
-						.map(GiteeContent::getName)
-						.collect(Collectors.toList());
-				System.out.println(JacksonUtil.toPrettyString(v5ReposOwnerRepoGiteeContentsSpend));
-				System.out.println("=================");
-				System.out.println(JacksonUtil.toPrettyString(collect));
-
-				collect.forEach(item -> {
-					final List<GiteeContent> v5ReposOwnerRepoContents = BusinessTravelResourceApi.getV5ReposOwnerRepoContents("/icon/支出/" + item);
-					System.out.println("=========v5ReposOwnerRepoContents========");
-					System.out.println(JacksonUtil.toPrettyString(v5ReposOwnerRepoContents));
-				});
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
+		//CompletableFutureUtil.runAsync(() -> {
+		//	try {
+		//		//final List<GiteeContent> v5ReposOwnerRepoGiteeContentsIncome = BusinessTravelResourceApi.getV5ReposOwnerRepoContents("/icon/收入");
+		//		//System.out.println(JacksonUtil.toPrettyString(v5ReposOwnerRepoGiteeContentsIncome));
+		//
+		//		final List<GiteeContent> v5ReposOwnerRepoGiteeContentsSpend = BusinessTravelResourceApi.getV5ReposOwnerRepoContents("/icon/支出");
+		//		final List<String> collect = v5ReposOwnerRepoGiteeContentsSpend.stream()
+		//				.filter(item -> "dir".equals(item.getType()))
+		//				.map(GiteeContent::getName)
+		//				.collect(Collectors.toList());
+		//		System.out.println(JacksonUtil.toPrettyString(v5ReposOwnerRepoGiteeContentsSpend));
+		//		System.out.println("=================");
+		//		System.out.println(JacksonUtil.toPrettyString(collect));
+		//
+		//		collect.forEach(item -> {
+		//			final List<GiteeContent> v5ReposOwnerRepoContents = BusinessTravelResourceApi.getV5ReposOwnerRepoContents("/icon/支出/" + item);
+		//			System.out.println("=========v5ReposOwnerRepoContents========");
+		//			System.out.println(JacksonUtil.toPrettyString(v5ReposOwnerRepoContents));
+		//		});
+		//
+		//	} catch (Exception e) {
+		//		e.printStackTrace();
+		//	}
+		//});
 	}
 
 	public void delete(View view) {
@@ -192,20 +216,20 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 				ToastUtils.showLong(userInfo.getText());
 			});
 
-			cardView.setOnLongClickListener(v -> {
-				new AlertDialog.Builder(cardView.getContext())
-						.setTitle("删除")
-						.setMessage("确定删除？？？")
-						.setPositiveButton("确定", (dialog, which) -> {
-							ToastUtils.showLong("点击了确定:" + which);
-							projectDao.delete(user);
-							mDataList.remove(position);
-							adapter.notifyDataSetChanged();
-						})
-						.setNegativeButton("取消", null)
-						.show();
-				return false;
-			});
+			//cardView.setOnLongClickListener(v -> {
+			//	new AlertDialog.Builder(cardView.getContext())
+			//			.setTitle("删除")
+			//			.setMessage("确定删除？？？")
+			//			.setPositiveButton("确定", (dialog, which) -> {
+			//				ToastUtils.showLong("点击了确定:" + which);
+			//				projectDao.delete(user);
+			//				mDataList.remove(position);
+			//				adapter.notifyDataSetChanged();
+			//			})
+			//			.setNegativeButton("取消", null)
+			//			.show();
+			//	return false;
+			//});
 
 		}
 

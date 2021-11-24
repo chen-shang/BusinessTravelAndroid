@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.Objects;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.view.ViewGroup.LayoutParams;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import com.blankj.utilcode.util.ColorUtils;
@@ -19,6 +21,8 @@ import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.enums.DeleteEnum;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
+import com.yanzhenjie.recyclerview.SwipeMenuItem;
+import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
 
 /**
  * @author chenshang
@@ -36,39 +40,17 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Objects.requireNonNull(getSupportActionBar()).hide();
-		LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setLayoutManager(layoutManager);
-		editConsumptionItemRecyclerViewAdapter = new EditConsumptionItemRecyclerViewAdapter(consumptionItemList, this);
-		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setAdapter(editConsumptionItemRecyclerViewAdapter);
+		//注册下拉列表事件
+		registerSwipeRecyclerView();
+		//注册收入支出按钮事件
+		registerButton();
+		//注册返回按钮操作事件
+		registerEditConsumptionActivityImageButtonBack();
+		//注册添加按钮操作事件
+		registerConsumerItemButtonAddItem();
+	}
 
-		ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
-
-		//长按移动排序
-		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setLongPressDragEnabled(true);
-		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setSwipeItemMenuEnabled(true);
-		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setOnItemMoveListener(
-				new BaseRecyclerViewOnItemMoveListener<>(consumptionItemList, editConsumptionItemRecyclerViewAdapter)
-						.onItemMove((consumptionItems, fromPosition, toPosition) -> {
-							//更新排序 todo 优化
-
-							for (int i = 0; i < consumptionItemList.size(); i++) {
-								ConsumptionItem consumptionItem = consumptionItemList.get(i);
-								consumptionItem.setSortId((long)i);
-								consumptionItemDao.update(consumptionItem);
-							}
-						}).onItemDismiss((consumptionItems, integer) -> {
-							consumptionItems.setIsDeleted(DeleteEnum.DELETE.getCode());
-							consumptionItemDao.softDelete(consumptionItems);
-
-							//数据库删除该元素
-							for (int i = 0; i < consumptionItemList.size(); i++) {
-								ConsumptionItem consumptionItem = consumptionItemList.get(i);
-								consumptionItem.setSortId((long)i);
-								consumptionItemDao.update(consumptionItem);
-							}
-						})
-		);
-
+	private void registerButton() {
 		//支出按钮的背景
 		GradientDrawable gradientDrawableExpense = (GradientDrawable)viewBinding.UIConsumerItemTextViewExpense.getBackground();
 		//收入按钮的背景
@@ -92,12 +74,67 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 			this.consumptionType = ConsumptionTypeEnum.INCOME;
 			refreshConsumptionItem(ConsumptionTypeEnum.INCOME);
 		});
+	}
 
-		//注册返回按钮操作事件
-		registerEditConsumptionActivityImageButtonBack();
+	private void registerSwipeRecyclerView() {
+		ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
+		editConsumptionItemRecyclerViewAdapter = new EditConsumptionItemRecyclerViewAdapter(consumptionItemList, this);
 
-		//注册添加按钮操作事件
-		registerConsumerItemButtonAddItem();
+		//设置布局
+		LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setLayoutManager(layoutManager);
+
+		//长按移动排序
+		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setLongPressDragEnabled(true);
+		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setOnItemMoveListener(
+				new BaseRecyclerViewOnItemMoveListener<>(consumptionItemList, editConsumptionItemRecyclerViewAdapter)
+						//当移动之后
+						.onItemMove((consumptionItems, fromPosition, toPosition) -> {
+							for (int i = fromPosition; i < toPosition; i++) {
+								//更新排序
+								ConsumptionItem consumptionItem = consumptionItemList.get(i);
+								consumptionItem.setSortId((long)i);
+								consumptionItemDao.update(consumptionItem);
+							}
+						})
+		);
+
+		//添加分隔线
+		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.addItemDecoration(new DefaultItemDecoration(Color.GRAY));
+		//添加删除按钮
+		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setSwipeMenuCreator((leftMenu, rightMenu, position) -> {
+			SwipeMenuItem deleteItem = new SwipeMenuItem(this)
+					.setImage(R.drawable.icon_error)
+					.setHeight(LayoutParams.WRAP_CONTENT)//设置高，这里使用match_parent，就是与item的高相同
+					.setWidth(LayoutParams.WRAP_CONTENT);//设置宽
+			rightMenu.addMenuItem(deleteItem);//设置右边的侧滑
+		});
+		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setOnItemMenuClickListener((menuBridge, adapterPosition) -> {
+			// 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
+			menuBridge.closeMenu();
+			// 左侧还是右侧菜单：0左1右
+			int direction = menuBridge.getDirection();
+			// 菜单在Item中的Position：
+			int menuPosition = menuBridge.getPosition();
+			//被删除的item
+			ConsumptionItem consumptionItem = consumptionItemList.get(adapterPosition);
+
+			//先删除该元素
+			consumptionItem.setIsDeleted(DeleteEnum.DELETE.getCode());
+			consumptionItemDao.softDelete(consumptionItem);
+
+			//移除元素
+			consumptionItemList.remove(adapterPosition);
+			editConsumptionItemRecyclerViewAdapter.notifyDataSetChanged();
+			//然后改元素后面的排序需要更新
+			for (int i = adapterPosition; i < consumptionItemList.size(); i++) {
+				consumptionItem = consumptionItemList.get(i);
+				consumptionItem.setSortId((long)i);
+				consumptionItemDao.update(consumptionItem);
+			}
+		});
+
+		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setAdapter(editConsumptionItemRecyclerViewAdapter);
 	}
 
 	/**
