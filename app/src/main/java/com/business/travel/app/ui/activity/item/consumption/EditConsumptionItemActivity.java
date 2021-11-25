@@ -3,6 +3,7 @@ package com.business.travel.app.ui.activity.item.consumption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -20,8 +21,10 @@ import com.business.travel.app.databinding.ActivityEditConsumptionItemBinding;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.enums.DeleteEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
+import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.service.ItemService;
 import com.business.travel.app.ui.activity.item.AddItemActivity;
+import com.business.travel.app.ui.activity.item.EditItemRecyclerViewAdapter;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
@@ -35,11 +38,11 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 	/**
 	 * 消费项图标信息列表
 	 */
-	List<ConsumptionItem> consumptionItemList = new ArrayList<>();
+	List<ImageIconInfo> consumptionItemList = new ArrayList<>();
 	/**
 	 * 消费项图标列表适配器
 	 */
-	private EditConsumptionItemRecyclerViewAdapter editConsumptionItemRecyclerViewAdapter;
+	private EditItemRecyclerViewAdapter editConsumptionItemRecyclerViewAdapter;
 	/**
 	 * 当前被选中的是支出还是收入
 	 */
@@ -87,7 +90,7 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 
 	private void registerSwipeRecyclerView() {
 		ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
-		editConsumptionItemRecyclerViewAdapter = new EditConsumptionItemRecyclerViewAdapter(consumptionItemList, this);
+		editConsumptionItemRecyclerViewAdapter = new EditItemRecyclerViewAdapter(consumptionItemList, this);
 
 		//设置布局
 		LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -101,7 +104,9 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 						.onItemMove((consumptionItems, fromPosition, toPosition) -> {
 							for (int i = fromPosition; i < toPosition; i++) {
 								//更新排序
-								ConsumptionItem consumptionItem = consumptionItemList.get(i);
+								ImageIconInfo imageIconInfo = consumptionItemList.get(i);
+								ConsumptionItem consumptionItem = new ConsumptionItem();
+								consumptionItem.setId(imageIconInfo.getId());
 								consumptionItem.setSortId((long)i);
 								consumptionItemDao.update(consumptionItem);
 							}
@@ -123,9 +128,11 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 			// 菜单在Item中的Position：
 			int menuPosition = menuBridge.getPosition();
 			//被删除的item
-			ConsumptionItem consumptionItem = consumptionItemList.get(adapterPosition);
+			ImageIconInfo imageIconInfo = consumptionItemList.get(adapterPosition);
 
 			//先删除该元素
+			ConsumptionItem consumptionItem = new ConsumptionItem();
+			consumptionItem.setId(imageIconInfo.getId());
 			consumptionItem.setIsDeleted(DeleteEnum.DELETE.getCode());
 			consumptionItemDao.softDelete(consumptionItem);
 
@@ -134,13 +141,19 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 			editConsumptionItemRecyclerViewAdapter.notifyDataSetChanged();
 			//然后改元素后面的排序需要更新
 			for (int i = adapterPosition; i < consumptionItemList.size(); i++) {
-				consumptionItem = consumptionItemList.get(i);
-				consumptionItem.setSortId((long)i);
-				consumptionItemDao.update(consumptionItem);
+				extracted(imageIconInfo, i);
 			}
 		});
 
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setAdapter(editConsumptionItemRecyclerViewAdapter);
+	}
+
+	private void extracted(ImageIconInfo imageIconInfo, int i) {
+		ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
+		ConsumptionItem consumptionItem = new ConsumptionItem();
+		consumptionItem.setId(imageIconInfo.getId());
+		consumptionItem.setSortId((long)i);
+		consumptionItemDao.update(consumptionItem);
 	}
 
 	/**
@@ -177,9 +190,19 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 			return;
 		}
 
-		List<ConsumptionItem> newConsumptionItemList = itemService.queryConsumptionItemByType(consumptionTypeEnum);
-		consumptionItemList.clear();
-		consumptionItemList.addAll(newConsumptionItemList);
+		List<ConsumptionItem> consumptionItemList = itemService.queryConsumptionItemByType(consumptionTypeEnum);
+		final List<ImageIconInfo> newImage = consumptionItemList.stream().map(consumptionItem -> {
+			ImageIconInfo imageIconInfo = new ImageIconInfo();
+			imageIconInfo.setName(consumptionItem.getName());
+			imageIconInfo.setIconDownloadUrl(consumptionItem.getIconDownloadUrl());
+			imageIconInfo.setIconName(consumptionItem.getIconName());
+			imageIconInfo.setItemType(ItemTypeEnum.CONSUMPTION.name());
+			imageIconInfo.setSortId(consumptionItem.getSortId());
+			return imageIconInfo;
+		}).collect(Collectors.toList());
+
+		this.consumptionItemList.clear();
+		this.consumptionItemList.addAll(newImage);
 		editConsumptionItemRecyclerViewAdapter.notifyDataSetChanged();
 	}
 }

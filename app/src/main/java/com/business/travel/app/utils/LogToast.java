@@ -16,6 +16,6 @@ public class LogToast {
 
 	@Async
 	public static void infoShow(String msg) {
-		ToastUtils.make().setLeftIcon(R.drawable.icon_info).setGravity(Gravity.CENTER, 0, 0).show(msg);
+		ToastUtils.make().setLeftIcon(R.drawable.ic_base_info).setGravity(Gravity.CENTER, 0, 0).show(msg);
 	}
 }
