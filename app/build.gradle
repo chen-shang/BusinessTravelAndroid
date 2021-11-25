@@ -154,6 +154,10 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     //查看最新版本请前往github，仅支持androidx
     implementation 'com.github.loperSeven:DateTimePicker:0.1.0'
+
+    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+    implementation 'org.mapstruct:mapstruct-jdk8:1.4.2.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 }
 
 //编译的时候织入代码

@@ -15,8 +15,7 @@ import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
-import com.business.travel.app.dal.dao.AssociateItemDao;
-import com.business.travel.app.dal.dao.ConsumptionItemDao;
+import com.business.travel.app.dal.dao.ConsumptionDao;
 import com.business.travel.app.dal.dao.ProjectDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Bill;
@@ -24,12 +23,12 @@ import com.business.travel.app.dal.entity.Consumption;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityAddBillBinding;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
-import com.business.travel.app.enums.DeleteEnum;
 import com.business.travel.app.enums.ItemIconEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.model.ImageIconInfo;
-import com.business.travel.app.service.ItemService;
+import com.business.travel.app.service.ConsumptionService;
+import com.business.travel.app.service.MemberService;
 import com.business.travel.app.ui.activity.master.fragment.BillFragment;
 import com.business.travel.app.ui.activity.master.fragment.BillFragmentShareData;
 import com.business.travel.app.ui.base.BaseActivity;
@@ -46,17 +45,18 @@ import org.jetbrains.annotations.NotNull;
  */
 public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 
-	private final ItemService itemService = new ItemService(this);
+	private final MemberService memberService = new MemberService(this);
+	private final ConsumptionService consumptionService = new ConsumptionService(this);
 	/**
 	 * 消费项图标信息
 	 */
-	private final List<ImageIconInfo> consumptionItemIconList = new ArrayList<>();
+	private final List<ImageIconInfo> consumptionImageIconList = new ArrayList<>();
 	/**
 	 * 人员图标信息
 	 */
-	private final List<ImageIconInfo> associateIconList = new ArrayList<>();
-	private ItemIconRecyclerViewAdapter consumptionItemRecyclerViewAdapter;
-	private ItemIconRecyclerViewAdapter associateRecyclerViewAdapter;
+	private final List<ImageIconInfo> memberIconList = new ArrayList<>();
+	private ItemIconRecyclerViewAdapter consumptionRecyclerViewAdapter;
+	private ItemIconRecyclerViewAdapter memberRecyclerViewAdapter;
 	/**
 	 * 当前被选中的是支出还是收入
 	 */
@@ -108,21 +108,21 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	private void registerAssociate() {
 		LayoutManager layoutManager2 = new GridLayoutManager(this, 5);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setLayoutManager(layoutManager2);
-		associateRecyclerViewAdapter = new ItemIconRecyclerViewAdapter(ItemTypeEnum.ASSOCIATE, associateIconList, this);
-		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setAdapter(associateRecyclerViewAdapter);
+		memberRecyclerViewAdapter = new ItemIconRecyclerViewAdapter(ItemTypeEnum.MEMBER, memberIconList, this);
+		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setAdapter(memberRecyclerViewAdapter);
 		//长按移动排序
 		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setLongPressDragEnabled(true);
-		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(associateIconList, associateRecyclerViewAdapter));
+		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(memberIconList, memberRecyclerViewAdapter));
 	}
 
 	private void registerConsumptionItem() {
 		LayoutManager layoutManager = new GridLayoutManager(this, 5);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setLayoutManager(layoutManager);
-		consumptionItemRecyclerViewAdapter = new ItemIconRecyclerViewAdapter(ItemTypeEnum.CONSUMPTION, consumptionItemIconList, this);
-		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setAdapter(consumptionItemRecyclerViewAdapter);
+		consumptionRecyclerViewAdapter = new ItemIconRecyclerViewAdapter(ItemTypeEnum.CONSUMPTION, consumptionImageIconList, this);
+		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setAdapter(consumptionRecyclerViewAdapter);
 		//长按移动排序
 		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setLongPressDragEnabled(true);
-		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(consumptionItemIconList, consumptionItemRecyclerViewAdapter));
+		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(consumptionImageIconList, consumptionRecyclerViewAdapter));
 	}
 
 	private void registerKeyboard() {
@@ -136,7 +136,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		KeyboardRecyclerViewAdapter keyboardRecyclerViewAdapter = new KeyboardRecyclerViewAdapter(new ArrayList<>(), this).onSaveClick(v -> {
 			try {
 				//当键盘保存按钮点击之后
-				saveBill(consumptionItemRecyclerViewAdapter, associateRecyclerViewAdapter);
+				saveBill(consumptionRecyclerViewAdapter, memberRecyclerViewAdapter);
 				//6.账单创建完成后跳转到 DashboardFragment
 				ActivityUtils.finishActivity(AddBillActivity.this, true);
 			} catch (Exception e) {
@@ -149,7 +149,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		}).onReRecordClick(v -> {
 			try {
 				//当键盘保存按钮点击之后
-				saveBill(consumptionItemRecyclerViewAdapter, associateRecyclerViewAdapter);
+				saveBill(consumptionRecyclerViewAdapter, memberRecyclerViewAdapter);
 			} catch (Exception e) {
 				ToastUtils.make().setLeftIcon(R.drawable.icon_error).setGravity(Gravity.CENTER, 0, 0).setDurationIsLong(true).show(e.getMessage());
 			}
@@ -180,8 +180,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		//更新项目的修改时间
 		updateProjectModifyTime(project);
 		//初始化数据
-		consumptionItemIconList.forEach(item -> item.setSelected(false));
-		associateIconList.forEach(item -> item.setSelected(false));
+		consumptionImageIconList.forEach(item -> item.setSelected(false));
+		memberIconList.forEach(item -> item.setSelected(false));
 		billRecyclerViewAdapter.notifyDataSetChanged();
 		itemIconRecyclerViewAdapter.notifyDataSetChanged();
 
@@ -205,13 +205,13 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 			throw new IllegalArgumentException("请输入消费金额");
 		}
 		//1. 选中的消费项目
-		String consumerItemList = consumptionItemIconList.stream()
+		String consumerItemList = consumptionImageIconList.stream()
 				.filter(ImageIconInfo::isSelected)
 				.map(ImageIconInfo::getName)
 				.filter(StringUtils::isNotBlank)
 				.collect(Collectors.joining(","));
 		//2. 选中的同行人
-		String associateItemList = associateIconList.stream()
+		String associateItemList = memberIconList.stream()
 				.filter(ImageIconInfo::isSelected)
 				.map(ImageIconInfo::getName)
 				.filter(StringUtils::isNotBlank)
@@ -229,7 +229,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		bill.setModifyTime(DateTimeUtil.format(new Date()));
 		bill.setConsumptionType(consumptionType.name());
 		bill.setRemark(remark);
-		final String iconDownloadUrl = consumptionItemIconList.stream().filter(ImageIconInfo::isSelected).findFirst().map(ImageIconInfo::getIconDownloadUrl).orElse("");
+		final String iconDownloadUrl = consumptionImageIconList.stream().filter(ImageIconInfo::isSelected).findFirst().map(ImageIconInfo::getIconDownloadUrl).orElse("");
 		bill.setIconDownloadUrl(iconDownloadUrl);
 		AppDatabase.getInstance(this).billDao().insert(bill);
 	}
@@ -237,7 +237,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		itemService.initItemWhenFirstIn();
+		consumptionService.initConsumption();
+		memberService.initMember();
 	}
 
 	@NotNull
@@ -280,16 +281,17 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	}
 
 	private void refreshAssociateIcon() {
-		final AssociateItemDao associateItemDao = AppDatabase.getInstance(this).associateItemDao();
-		associateItemDao.selectAll(DeleteEnum.NOT_DELETE.getCode());
-		associateIconList.clear();
 
-		ImageIconInfo imageAddIconInfo2 = new ImageIconInfo();
-		imageAddIconInfo2.setName(ItemIconEnum.ItemIconEdit.getName());
-		imageAddIconInfo2.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
-		associateIconList.add(imageAddIconInfo2);
+		List<ImageIconInfo> newLeastMemberIconList = memberService.queryAllMembersImageIconInfo();
+		memberIconList.clear();
+		memberIconList.addAll(newLeastMemberIconList);
 
-		consumptionItemRecyclerViewAdapter.notifyDataSetChanged();
+		//最后在添加一个编辑按钮
+		ImageIconInfo editImageIcon = new ImageIconInfo();
+		editImageIcon.setName(ItemIconEnum.ItemIconEdit.getName());
+		editImageIcon.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
+		memberIconList.add(editImageIcon);
+		consumptionRecyclerViewAdapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -299,9 +301,9 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	}
 
 	public void refreshConsumptionIcon(ConsumptionTypeEnum consumptionType) {
-		final ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
+		final ConsumptionDao consumptionDao = AppDatabase.getInstance(this).consumptionDao();
 		//根据是支出还是收入获取消费项列表
-		List<Consumption> consumptions = consumptionItemDao.selectByType(consumptionType.name());
+		List<Consumption> consumptions = consumptionDao.selectByType(consumptionType.name());
 		if (CollectionUtils.isEmpty(consumptions)) {
 			consumptions = new ArrayList<>();
 		}
@@ -324,8 +326,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		imageIconInfo.setSelected(false);
 		imageIconInfos.add(imageIconInfo);
 
-		consumptionItemIconList.clear();
-		consumptionItemIconList.addAll(imageIconInfos);
-		consumptionItemRecyclerViewAdapter.notifyDataSetChanged();
+		consumptionImageIconList.clear();
+		consumptionImageIconList.addAll(imageIconInfos);
+		consumptionRecyclerViewAdapter.notifyDataSetChanged();
 	}
 }

@@ -11,7 +11,7 @@ import com.business.travel.app.dal.entity.Member;
  * @author chenshang
  */
 @Dao
-public interface AssociateItemDao extends BaseDao<Member> {
+public interface MemberDao extends BaseDao<Member> {
 
 	/**
 	 * 查询全部
@@ -39,4 +39,7 @@ public interface AssociateItemDao extends BaseDao<Member> {
 
 	@Query("SELECT count(*) FROM Member")
 	Long count();
+
+	@Query("update member set sortId=:sortId where id=:id")
+	void updateSort(Long id, Long sortId);
 }

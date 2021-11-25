@@ -1,6 +1,7 @@
 package com.business.travel.app.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 图片图标信息

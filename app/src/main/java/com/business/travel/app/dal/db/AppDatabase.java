@@ -4,9 +4,9 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import com.business.travel.app.dal.dao.AssociateItemDao;
+import com.business.travel.app.dal.dao.ConsumptionDao;
+import com.business.travel.app.dal.dao.MemberDao;
 import com.business.travel.app.dal.dao.BillDao;
-import com.business.travel.app.dal.dao.ConsumptionItemDao;
 import com.business.travel.app.dal.dao.ProjectDao;
 import com.business.travel.app.dal.entity.Consumption;
 import com.business.travel.app.dal.entity.Member;
@@ -42,7 +42,7 @@ public abstract class AppDatabase extends RoomDatabase {
 	 *
 	 * @return AssociateItemDao
 	 */
-	public abstract AssociateItemDao associateItemDao();
+	public abstract MemberDao memberDao();
 
 	/**
 	 * 账单表
@@ -56,7 +56,7 @@ public abstract class AppDatabase extends RoomDatabase {
 	 *
 	 * @return
 	 */
-	public abstract ConsumptionItemDao consumptionItemDao();
+	public abstract ConsumptionDao consumptionDao();
 
 	/**
 	 * 项目表

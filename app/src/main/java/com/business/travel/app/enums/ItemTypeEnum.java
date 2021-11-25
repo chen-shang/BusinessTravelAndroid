@@ -1,11 +1,11 @@
 package com.business.travel.app.enums;
 
 /**
- * item 类型是消费项还是同行人项
+ * item 类型是消费项还是人员
  */
 public enum ItemTypeEnum {
 	CONSUMPTION("消费项"),
-	ASSOCIATE("同行人项");
+	MEMBER("人员");
 	/**
 	 * 枚举描述
 	 */

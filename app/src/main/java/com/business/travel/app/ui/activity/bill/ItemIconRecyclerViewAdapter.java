@@ -22,16 +22,16 @@ import com.business.travel.app.enums.ItemIconEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.activity.bill.ItemIconRecyclerViewAdapter.IconRecyclerViewAdapterViewHolder;
-import com.business.travel.app.ui.activity.item.member.EditMemberActivity;
 import com.business.travel.app.ui.activity.item.consumption.EditConsumptionActivity;
+import com.business.travel.app.ui.activity.item.member.EditMemberActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.FutureUtil;
 import com.business.travel.app.utils.LoadImageUtil;
 import org.jetbrains.annotations.NotNull;
 
-import static com.business.travel.app.enums.ItemTypeEnum.ASSOCIATE;
 import static com.business.travel.app.enums.ItemTypeEnum.CONSUMPTION;
+import static com.business.travel.app.enums.ItemTypeEnum.MEMBER;
 
 /**
  * @author chenshang
@@ -84,7 +84,7 @@ public class ItemIconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRec
 		boolean isEditImageButton = ItemIconEnum.ItemIconEdit.getIconDownloadUrl().equals(iconDownloadUrl);
 		//当图片按钮被点击的时候
 		uiImageViewIcon.setOnClickListener(v -> {
-			if (isEditImageButton && ASSOCIATE == itemTypeEnum) {
+			if (isEditImageButton && MEMBER == itemTypeEnum) {
 				activity.startActivity(new Intent(activity, EditMemberActivity.class));
 				return;
 			}

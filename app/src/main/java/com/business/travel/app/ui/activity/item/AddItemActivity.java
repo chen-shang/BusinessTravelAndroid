@@ -16,8 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.business.travel.app.api.BusinessTravelResourceApi;
-import com.business.travel.app.dal.dao.AssociateItemDao;
-import com.business.travel.app.dal.dao.ConsumptionItemDao;
+import com.business.travel.app.dal.dao.MemberDao;
+import com.business.travel.app.dal.dao.ConsumptionDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Member;
 import com.business.travel.app.dal.entity.Consumption;
@@ -108,7 +108,7 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 		saveButton.setOnClickListener(v -> {
 			if (itemTypeEnum == ItemTypeEnum.CONSUMPTION) {
 				saveConsumptionItem();
-			} else if (itemTypeEnum == ItemTypeEnum.ASSOCIATE) {
+			} else if (itemTypeEnum == ItemTypeEnum.MEMBER) {
 				saveMemberItem();
 			}
 			finish();
@@ -116,7 +116,7 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 	}
 
 	private void saveMemberItem() {
-		AssociateItemDao associateItemDao = AppDatabase.getInstance(this).associateItemDao();
+		MemberDao memberDao = AppDatabase.getInstance(this).memberDao();
 		Member member = new Member();
 
 		String name = viewBinding.UIAddItemActivityEditTextName.getText().toString();
@@ -125,10 +125,10 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 		member.setIconDownloadUrl(lastSelectedImageIcon.getIconDownloadUrl());
 		member.setIconName(lastSelectedImageIcon.getName());
 		//先查询最大的sortId
-		Long maxSortId = Optional.ofNullable(associateItemDao.selectMaxSort()).orElse(0L);
+		Long maxSortId = Optional.ofNullable(memberDao.selectMaxSort()).orElse(0L);
 		member.setSortId(maxSortId);
 		member.setCreateTime(DateTimeUtil.format(new Date()));
-		associateItemDao.insert(member);
+		memberDao.insert(member);
 	}
 
 	private void saveConsumptionItem() {
@@ -138,7 +138,7 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 		}
 		ConsumptionTypeEnum consumptionTypeEnum = ConsumptionTypeEnum.valueOf(consumptionType);
 
-		ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
+		ConsumptionDao consumptionDao = AppDatabase.getInstance(this).consumptionDao();
 
 		String name = viewBinding.UIAddItemActivityEditTextName.getText().toString();
 		Consumption consumption = new Consumption();
@@ -149,15 +149,15 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 		consumption.setCreateTime(DateTimeUtil.format(new Date()));
 		consumption.setModifyTime(DateTimeUtil.format(new Date()));
 		//先查询最大的sortId
-		Long maxSortId = Optional.ofNullable(consumptionItemDao.selectMaxSortIdByType(consumptionType)).orElse(0L);
+		Long maxSortId = Optional.ofNullable(consumptionDao.selectMaxSortIdByType(consumptionType)).orElse(0L);
 		consumption.setSortId(maxSortId);
-		consumptionItemDao.insert(consumption);
+		consumptionDao.insert(consumption);
 	}
 
 	private void registerHeaderText(TextView headerText) {
 		if (itemTypeEnum == ItemTypeEnum.CONSUMPTION) {
 			headerText.setText("添加类别");
-		} else if (itemTypeEnum == ItemTypeEnum.ASSOCIATE) {
+		} else if (itemTypeEnum == ItemTypeEnum.MEMBER) {
 			headerText.setText("添加人员");
 		}
 

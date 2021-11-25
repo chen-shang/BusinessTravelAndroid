@@ -2,10 +2,10 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "12187386544e648aee8bdf2191a6088e",
+    "identityHash": "1c0d302397d6180adfe832a3aec03181",
     "entities": [
       {
-        "tableName": "AssociateItem",
+        "tableName": "Member",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `gender` INTEGER, `iconDownloadUrl` TEXT, `iconName` TEXT, `sortId` INTEGER, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
         "fields": [
           {
@@ -161,7 +161,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "ConsumptionItem",
+        "tableName": "Consumption",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `iconDownloadUrl` TEXT, `iconName` TEXT, `consumptionType` TEXT, `sortId` INTEGER, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
         "fields": [
           {
@@ -305,7 +305,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '12187386544e648aee8bdf2191a6088e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1c0d302397d6180adfe832a3aec03181')"
     ]
   }
 }

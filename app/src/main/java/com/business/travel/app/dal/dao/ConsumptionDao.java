@@ -11,7 +11,7 @@ import com.business.travel.app.dal.entity.Consumption;
  * @author chenshang
  */
 @Dao
-public interface ConsumptionItemDao extends BaseDao<Consumption> {
+public interface ConsumptionDao extends BaseDao<Consumption> {
 	/**
 	 * 查询全部
 	 */
@@ -38,4 +38,7 @@ public interface ConsumptionItemDao extends BaseDao<Consumption> {
 
 	@Query("SELECT count(*) FROM Consumption")
 	Long count();
+
+	@Query("update consumption set sortId=:sortId where id=:id")
+	void updateSort(Long id, Long sortId);
 }
