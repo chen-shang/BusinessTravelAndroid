@@ -6,7 +6,6 @@ import java.util.List;
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -78,8 +77,14 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 		holder.amountTextView.setText(amountText);
 
 		holder.cardView.setOnClickListener(v -> {
-			//// TODO: 2021/11/26  
+			//// TODO: 2021/11/26
 			LogToast.infoShow(JacksonUtil.toPrettyString(bill));
+		});
+
+		holder.cardView.setOnLongClickListener(v -> {
+			//// TODO: 2021/11/26
+			LogToast.infoShow(JacksonUtil.toPrettyString(bill));
+			return true;
 		});
 	}
 
