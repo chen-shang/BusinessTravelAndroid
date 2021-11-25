@@ -16,6 +16,7 @@ import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.FragmentProjectBinding;
 import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.base.BaseFragment;
+import com.business.travel.app.ui.base.BaseSwipeMenuCreator;
 import com.business.travel.app.ui.base.ShareData;
 
 /**
@@ -32,12 +33,16 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding, ShareD
 
 		viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
 		projectListRecyclerViewAdapter = new ProjectRecyclerViewAdapter(projects, (MasterActivity)requireActivity());
+
+		viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList.setSwipeMenuCreator(new BaseSwipeMenuCreator(this.getContext()));
+
 		viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList.setAdapter(projectListRecyclerViewAdapter);
 		viewBinding.UIProjectFragmentSwipeRefreshLayout.setOnRefreshListener(() -> {
 			//下滑刷新项目列表
 			refreshProjectList();
 			viewBinding.UIProjectFragmentSwipeRefreshLayout.setRefreshing(false);
 		});
+
 		return view;
 	}
 
