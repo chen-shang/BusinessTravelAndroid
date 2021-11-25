@@ -41,4 +41,7 @@ public interface ConsumptionDao extends BaseDao<Consumption> {
 
 	@Query("update consumption set sortId=:sortId where id=:id")
 	void updateSort(Long id, Long sortId);
+
+	@Query("update consumption set isDeleted=0 where id=:id")
+	void softDelete(Long id);
 }

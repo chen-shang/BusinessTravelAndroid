@@ -84,11 +84,7 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 			ImageIconInfo imageIconInfo = memberIconList.get(adapterPosition);
 
 			//先删除该元素
-			Member member = new Member();
-			member.setId(imageIconInfo.getId());
-			member.setIsDeleted(DeleteEnum.DELETE.getCode());
-			memberDao.softDelete(member);
-
+			memberService.softDeleteMember(imageIconInfo.getId());
 			//移除元素
 			memberIconList.remove(adapterPosition);
 			editConsumptionRecyclerViewAdapter.notifyDataSetChanged();

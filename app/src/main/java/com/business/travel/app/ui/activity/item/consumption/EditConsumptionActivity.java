@@ -14,12 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import com.blankj.utilcode.util.ColorUtils;
 import com.business.travel.app.R;
-import com.business.travel.app.dal.dao.ConsumptionDao;
-import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Consumption;
 import com.business.travel.app.databinding.ActivityEditConsumptionBinding;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
-import com.business.travel.app.enums.DeleteEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.model.converter.ConsumptionConverter;
@@ -90,7 +87,6 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 	}
 
 	private void registerSwipeRecyclerView() {
-		ConsumptionDao consumptionDao = AppDatabase.getInstance(this).consumptionDao();
 		editConsumptionRecyclerViewAdapter = new EditItemRecyclerViewAdapter(consumptionImageIconList, this);
 
 		//设置布局
@@ -129,29 +125,14 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 			ImageIconInfo imageIconInfo = consumptionImageIconList.get(adapterPosition);
 
 			//先删除该元素
-			Consumption consumption = new Consumption();
-			consumption.setId(imageIconInfo.getId());
-			consumption.setIsDeleted(DeleteEnum.DELETE.getCode());
-			consumptionDao.softDelete(consumption);
+			consumptionService.softDeleteConsumption(imageIconInfo.getId());
 
 			//移除元素
 			consumptionImageIconList.remove(adapterPosition);
 			editConsumptionRecyclerViewAdapter.notifyDataSetChanged();
-			//然后改元素后面的排序需要更新
-			for (int i = adapterPosition; i < consumptionImageIconList.size(); i++) {
-				extracted(imageIconInfo, i);
-			}
 		});
 
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setAdapter(editConsumptionRecyclerViewAdapter);
-	}
-
-	private void extracted(ImageIconInfo imageIconInfo, int i) {
-		ConsumptionDao consumptionDao = AppDatabase.getInstance(this).consumptionDao();
-		Consumption consumption = new Consumption();
-		consumption.setId(imageIconInfo.getId());
-		consumption.setSortId((long)i);
-		consumptionDao.update(consumption);
 	}
 
 	/**

@@ -51,6 +51,10 @@ public class MemberService {
 		memberDao.updateSort(id, sortId);
 	}
 
+	public void softDeleteMember(Long id) {
+		memberDao.softDelete(id);
+	}
+
 	public void initMember() {
 		if (memberDao.count() > 0) {
 			return;

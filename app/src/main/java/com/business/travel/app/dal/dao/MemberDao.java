@@ -42,4 +42,7 @@ public interface MemberDao extends BaseDao<Member> {
 
 	@Query("update member set sortId=:sortId where id=:id")
 	void updateSort(Long id, Long sortId);
+
+	@Query("update member set isDeleted=0 where id=:id")
+	void softDelete(Long id);
 }
