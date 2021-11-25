@@ -32,7 +32,7 @@ public class EditConsumptionItemRecyclerViewAdapter extends BaseRecyclerViewAdap
 	@NotNull
 	@Override
 	public EditConsumptionItemRecyclerViewAdapterViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_consumer_item, parent, false);
+		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.edit_item, parent, false);
 		return new EditConsumptionItemRecyclerViewAdapterViewHolder(view);
 	}
 

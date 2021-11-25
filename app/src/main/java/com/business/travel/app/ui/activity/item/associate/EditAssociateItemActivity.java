@@ -2,23 +2,29 @@ package com.business.travel.app.ui.activity.item.associate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
+import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.dal.dao.AssociateItemDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.AssociateItem;
 import com.business.travel.app.databinding.ActivityEditAssociateItemBinding;
+import com.business.travel.app.enums.DeleteEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
+import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.activity.item.AddItemActivity;
+import com.business.travel.app.ui.activity.item.EditItemRecyclerViewAdapter;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
 
 public class EditAssociateItemActivity extends BaseActivity<ActivityEditAssociateItemBinding> {
 
-	List<AssociateItem> associateItems = new ArrayList<>();
+	private final List<ImageIconInfo> associateImageIconList = new ArrayList<>();
+	private EditItemRecyclerViewAdapter editConsumptionItemRecyclerViewAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,20 +32,23 @@ public class EditAssociateItemActivity extends BaseActivity<ActivityEditAssociat
 
 		LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.setLayoutManager(layoutManager);
-		EditAssociatetemRecyclerViewAdapter editConsumptionItemRecyclerViewAdapter = new EditAssociatetemRecyclerViewAdapter(associateItems, this);
+		editConsumptionItemRecyclerViewAdapter = new EditItemRecyclerViewAdapter(associateImageIconList, this);
 		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.setAdapter(editConsumptionItemRecyclerViewAdapter);
+		final AssociateItemDao associateItemDao = AppDatabase.getInstance(this).associateItemDao();
 
 		//长按移动排序
 		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.setLongPressDragEnabled(true);
 		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.setOnItemMoveListener(
-				new BaseRecyclerViewOnItemMoveListener<>(associateItems, editConsumptionItemRecyclerViewAdapter)
+				new BaseRecyclerViewOnItemMoveListener<>(associateImageIconList, editConsumptionItemRecyclerViewAdapter)
 						.onItemMove((consumptionItems, fromPosition, toPosition) -> {
 							//更新排序 todo 优化
 							for (int i = 0; i < consumptionItems.size(); i++) {
-								AssociateItem consumptionItem = consumptionItems.get(i);
-								consumptionItem.setSortId((long)i);
-								final AssociateItemDao associateItemDao = AppDatabase.getInstance(this).associateItemDao();
-								associateItemDao.update(consumptionItem);
+								ImageIconInfo imageIconInfo = consumptionItems.get(i);
+
+								AssociateItem associateItem = new AssociateItem();
+								associateItem.setId(imageIconInfo.getId());
+								associateItem.setSortId((long)i);
+								associateItemDao.update(associateItem);
 							}
 						})
 		);
@@ -59,7 +68,29 @@ public class EditAssociateItemActivity extends BaseActivity<ActivityEditAssociat
 	@Override
 	protected void onResume() {
 		super.onResume();
+		refresh();
+	}
 
+	private void refresh() {
+		final AssociateItemDao associateItemDao = AppDatabase.getInstance(this).associateItemDao();
+		final List<AssociateItem> associateItems = associateItemDao.selectAll(DeleteEnum.NOT_DELETE.getCode());
+		if (CollectionUtils.isEmpty(associateItems)) {
+			return;
+		}
+		final List<ImageIconInfo> newImages = associateItems.stream().map(associateItem -> {
+			ImageIconInfo imageIconInfo = new ImageIconInfo();
+			imageIconInfo.setId(associateItem.getId());
+			imageIconInfo.setName(associateItem.getName());
+			imageIconInfo.setIconDownloadUrl(associateItem.getIconDownloadUrl());
+			imageIconInfo.setIconName(associateItem.getIconName());
+			imageIconInfo.setItemType(ItemTypeEnum.ASSOCIATE.name());
+			imageIconInfo.setSortId(associateItem.getSortId());
+			imageIconInfo.setSelected(false);
+			return imageIconInfo;
+		}).collect(Collectors.toList());
+		associateImageIconList.clear();
+		associateImageIconList.addAll(newImages);
+		editConsumptionItemRecyclerViewAdapter.notifyDataSetChanged();
 	}
 
 	/**

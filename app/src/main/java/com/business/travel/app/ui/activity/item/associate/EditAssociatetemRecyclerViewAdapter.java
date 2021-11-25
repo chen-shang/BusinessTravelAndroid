@@ -32,7 +32,7 @@ public class EditAssociatetemRecyclerViewAdapter extends BaseRecyclerViewAdapter
 	@NotNull
 	@Override
 	public EditAssociatetemRecyclerViewAdapterViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_consumer_item, parent, false);
+		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.edit_item, parent, false);
 		return new EditAssociatetemRecyclerViewAdapterViewHolder(view);
 	}
 

@@ -20,6 +20,7 @@ import com.business.travel.app.databinding.ActivityEditConsumptionItemBinding;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.enums.DeleteEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
+import com.business.travel.app.service.ItemService;
 import com.business.travel.app.ui.activity.item.AddItemActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
@@ -30,6 +31,7 @@ import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
  * @author chenshang
  */
 public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsumptionItemBinding> {
+	private final ItemService itemService = new ItemService(this);
 	/**
 	 * 消费项图标信息列表
 	 */
@@ -38,7 +40,6 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 	 * 消费项图标列表适配器
 	 */
 	private EditConsumptionItemRecyclerViewAdapter editConsumptionItemRecyclerViewAdapter;
-
 	/**
 	 * 当前被选中的是支出还是收入
 	 */
@@ -111,10 +112,7 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.addItemDecoration(new DefaultItemDecoration(Color.GRAY));
 		//添加删除按钮
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setSwipeMenuCreator((leftMenu, rightMenu, position) -> {
-			SwipeMenuItem deleteItem = new SwipeMenuItem(this)
-					.setImage(R.drawable.icon_error)
-					.setHeight(LayoutParams.WRAP_CONTENT)//设置高，这里使用match_parent，就是与item的高相同
-					.setWidth(LayoutParams.WRAP_CONTENT);//设置宽
+			SwipeMenuItem deleteItem = new SwipeMenuItem(this).setImage(R.drawable.ic_base_delete).setHeight(LayoutParams.WRAP_CONTENT).setWidth(LayoutParams.WRAP_CONTENT);
 			rightMenu.addMenuItem(deleteItem);//设置右边的侧滑
 		});
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setOnItemMenuClickListener((menuBridge, adapterPosition) -> {
@@ -169,12 +167,6 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 	}
 
 	@Override
-	protected void onStart() {
-		super.onStart();
-		refreshConsumptionItem(ConsumptionTypeEnum.SPENDING);
-	}
-
-	@Override
 	protected void onResume() {
 		super.onResume();
 		refreshConsumptionItem(consumptionType);
@@ -184,8 +176,8 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 		if (consumptionTypeEnum == null) {
 			return;
 		}
-		ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
-		List<ConsumptionItem> newConsumptionItemList = consumptionItemDao.selectByType(consumptionTypeEnum.name());
+
+		List<ConsumptionItem> newConsumptionItemList = itemService.queryConsumptionItemByType(consumptionTypeEnum);
 		consumptionItemList.clear();
 		consumptionItemList.addAll(newConsumptionItemList);
 		editConsumptionItemRecyclerViewAdapter.notifyDataSetChanged();

@@ -30,4 +30,13 @@ public interface AssociateItemDao extends BaseDao<AssociateItem> {
 	 */
 	@Query("SELECT max(sortId) FROM associateItem where isDeleted=1")
 	Long selectMaxSort();
+
+	/**
+	 * 查询全部
+	 */
+	@Query("SELECT * FROM associateItem where isDeleted=:isDeleted")
+	List<AssociateItem> selectAll(Integer isDeleted);
+
+	@Query("SELECT count(*) FROM associateItem")
+	Long count();
 }

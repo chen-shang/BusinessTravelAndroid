@@ -15,6 +15,7 @@ import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.business.travel.app.R;
+import com.business.travel.app.dal.dao.AssociateItemDao;
 import com.business.travel.app.dal.dao.ConsumptionItemDao;
 import com.business.travel.app.dal.dao.ProjectDao;
 import com.business.travel.app.dal.db.AppDatabase;
@@ -23,10 +24,12 @@ import com.business.travel.app.dal.entity.ConsumptionItem;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityAddBillBinding;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
+import com.business.travel.app.enums.DeleteEnum;
 import com.business.travel.app.enums.ItemIconEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.model.ImageIconInfo;
+import com.business.travel.app.service.ItemService;
 import com.business.travel.app.ui.activity.master.fragment.BillFragment;
 import com.business.travel.app.ui.activity.master.fragment.BillFragmentShareData;
 import com.business.travel.app.ui.base.BaseActivity;
@@ -43,6 +46,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 
+	private final ItemService itemService = new ItemService(this);
 	/**
 	 * 消费项图标信息
 	 */
@@ -51,7 +55,6 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	 * 人员图标信息
 	 */
 	private final List<ImageIconInfo> associateIconList = new ArrayList<>();
-
 	private ItemIconRecyclerViewAdapter consumptionItemRecyclerViewAdapter;
 	private ItemIconRecyclerViewAdapter associateRecyclerViewAdapter;
 	/**
@@ -231,11 +234,16 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		AppDatabase.getInstance(this).billDao().insert(bill);
 	}
 
+	@Override
+	protected void onStart() {
+		super.onStart();
+		itemService.initItemWhenFirstIn();
+	}
+
 	@NotNull
 	private String mockDate() {
 		int i = RandomUtils.nextInt(0, 10);
-		final String format = DateTimeUtil.format(DateTimeUtil.toLocalDateTime(new Date()).plusDays(i), "yyyy-MM-dd");
-		return format;
+		return DateTimeUtil.format(DateTimeUtil.toLocalDateTime(new Date()).plusDays(i), "yyyy-MM-dd");
 	}
 
 	private void createProject(String projectName) {
@@ -272,6 +280,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	}
 
 	private void refreshAssociateIcon() {
+		final AssociateItemDao associateItemDao = AppDatabase.getInstance(this).associateItemDao();
+		associateItemDao.selectAll(DeleteEnum.NOT_DELETE.getCode());
 		associateIconList.clear();
 
 		ImageIconInfo imageAddIconInfo2 = new ImageIconInfo();
@@ -290,7 +300,6 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 
 	public void refreshConsumptionIcon(ConsumptionTypeEnum consumptionType) {
 		final ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
-		//如果数据库中一个数据都没有,就初始化数据,因为删除是逻辑删除,所以只要数据库里面没有数据就代表是用户第一次使用 todo
 		//根据是支出还是收入获取消费项列表
 		List<ConsumptionItem> consumptionItems = consumptionItemDao.selectByType(consumptionType.name());
 		if (CollectionUtils.isEmpty(consumptionItems)) {

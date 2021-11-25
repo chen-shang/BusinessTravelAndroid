@@ -153,6 +153,9 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 	}
 
 	public void select(View view) {
+
+		final long count = projectDao.count();
+
 		mDataList.clear();
 		mDataList.addAll(projectDao.selectAll());
 		adapter.notifyDataSetChanged();

@@ -25,6 +25,7 @@ import com.business.travel.app.dal.entity.Project;
 public abstract class AppDatabase extends RoomDatabase {
 	private static AppDatabase INSTANCE;
 
+	//todo DCL
 	public static synchronized AppDatabase getInstance(Context context) {
 		if (INSTANCE == null) {
 			INSTANCE =

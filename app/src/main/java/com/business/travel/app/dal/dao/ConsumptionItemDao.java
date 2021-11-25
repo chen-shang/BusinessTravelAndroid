@@ -35,4 +35,7 @@ public interface ConsumptionItemDao extends BaseDao<ConsumptionItem> {
 	 */
 	@Query("SELECT max(sortId) FROM consumptionItem where consumptionType=:consumptionType and isDeleted=1")
 	Long selectMaxSortIdByType(String consumptionType);
+
+	@Query("SELECT count(*) FROM consumptionItem")
+	Long count();
 }
