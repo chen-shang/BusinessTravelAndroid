@@ -43,7 +43,7 @@ public class ConsumptionService {
 		}
 		//先获取远程的默认消费项列表,然后插入数据库,注意sortId todo
 		List<Consumption> consumptions = new ArrayList<>();
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 50; i++) {
 			Consumption consumption = new Consumption();
 			consumption.setName("name" + i);
 			consumption.setIconDownloadUrl("url" + i);

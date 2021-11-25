@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import butterknife.ButterKnife;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.business.travel.app.R;
+import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.enums.ItemIconEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.ImageIconInfo;
@@ -90,7 +92,10 @@ public class ItemIconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRec
 			}
 
 			if (isEditImageButton && CONSUMPTION == itemTypeEnum) {
-				activity.startActivity(new Intent(activity, EditConsumptionActivity.class));
+				Intent intent = new Intent(activity, EditConsumptionActivity.class);
+				ConsumptionTypeEnum selectedConsumptionType = getSelectedConsumptionType();
+				intent.putExtra("consumptionType", selectedConsumptionType.name());
+				activity.startActivity(intent);
 				return;
 			}
 
@@ -104,6 +109,17 @@ public class ItemIconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRec
 				uiTextViewDescription.setTextColor(unSelectColor);
 			}
 		});
+	}
+
+	private ConsumptionTypeEnum getSelectedConsumptionType() {
+		String consumptionType = ((TextView)(activity.findViewById(R.id.UI_AddBillActivity_TextView_PayType))).getText().toString();
+		if (ConsumptionTypeEnum.INCOME.getMsg().equals(consumptionType)) {
+			return ConsumptionTypeEnum.INCOME;
+		} else if (ConsumptionTypeEnum.SPENDING.getMsg().equals(consumptionType)) {
+			return ConsumptionTypeEnum.SPENDING;
+		} else {
+			throw new IllegalArgumentException("未知的消费项类型标识:" + consumptionType);
+		}
 	}
 
 	@SuppressLint("NonConstantResourceId")

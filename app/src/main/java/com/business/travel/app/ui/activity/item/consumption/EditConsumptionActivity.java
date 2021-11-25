@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -27,6 +28,9 @@ import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
+import org.apache.commons.lang3.StringUtils;
+
+import static com.yanzhenjie.recyclerview.SwipeRecyclerView.RIGHT_DIRECTION;
 
 /**
  * @author chenshang
@@ -50,6 +54,8 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Objects.requireNonNull(getSupportActionBar()).hide();
+		//获取当前是什么类型
+		registerConsumptionType();
 		//注册下拉列表事件
 		registerSwipeRecyclerView();
 		//注册收入支出按钮事件
@@ -57,33 +63,63 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 		//注册返回按钮操作事件
 		registerEditConsumptionActivityImageButtonBack();
 		//注册添加按钮操作事件
-		registerConsumerItemButtonAddItem();
+		registerConsumptionButtonAddItem();
+
+	}
+
+	private void registerConsumptionType() {
+		String consumptionType = getIntent().getStringExtra("consumptionType");
+		if (StringUtils.isBlank(consumptionType)) {
+			return;
+		}
+		this.consumptionType = ConsumptionTypeEnum.valueOf(consumptionType);
 	}
 
 	private void registerButton() {
-		//支出按钮的背景
-		GradientDrawable gradientDrawableExpense = (GradientDrawable)viewBinding.UIConsumerItemTextViewExpense.getBackground();
-		//收入按钮的背景
-		GradientDrawable gradientDrawableIncome = (GradientDrawable)viewBinding.UIConsumerItemTextViewIncome.getBackground();
-		viewBinding.UIConsumerItemTextViewExpense.setOnClickListener(v -> {
-			viewBinding.UIConsumerItemTextViewExpense.setTextColor(ColorUtils.getColor(R.color.teal_800));
-			gradientDrawableExpense.setColor(ColorUtils.getColor(R.color.white));
 
-			viewBinding.UIConsumerItemTextViewIncome.setTextColor(ColorUtils.getColor(R.color.white));
-			gradientDrawableIncome.setColor(ColorUtils.getColor(R.color.teal_800));
+		if (ConsumptionTypeEnum.INCOME == consumptionType) {
+			highlightIncome();
+		} else {
+			highlightSpending();
+		}
+
+		viewBinding.UIConsumerItemTextViewExpense.setOnClickListener(v -> {
+			highlightSpending();
 			this.consumptionType = ConsumptionTypeEnum.SPENDING;
 			refreshConsumptionItem(ConsumptionTypeEnum.SPENDING);
 		});
 
 		viewBinding.UIConsumerItemTextViewIncome.setOnClickListener(v -> {
-			viewBinding.UIConsumerItemTextViewIncome.setTextColor(ColorUtils.getColor(R.color.teal_800));
-			gradientDrawableIncome.setColor(ColorUtils.getColor(R.color.white));
-
-			viewBinding.UIConsumerItemTextViewExpense.setTextColor(ColorUtils.getColor(R.color.white));
-			gradientDrawableExpense.setColor(ColorUtils.getColor(R.color.teal_800));
+			highlightIncome();
 			this.consumptionType = ConsumptionTypeEnum.INCOME;
 			refreshConsumptionItem(ConsumptionTypeEnum.INCOME);
 		});
+	}
+
+	/**
+	 * 高亮收入
+	 */
+	private void highlightIncome() {
+		GradientDrawable gradientDrawableExpense = (GradientDrawable)viewBinding.UIConsumerItemTextViewExpense.getBackground();
+		GradientDrawable gradientDrawableIncome = (GradientDrawable)viewBinding.UIConsumerItemTextViewIncome.getBackground();
+		viewBinding.UIConsumerItemTextViewIncome.setTextColor(ColorUtils.getColor(R.color.teal_800));
+		gradientDrawableIncome.setColor(ColorUtils.getColor(R.color.white));
+
+		viewBinding.UIConsumerItemTextViewExpense.setTextColor(ColorUtils.getColor(R.color.white));
+		gradientDrawableExpense.setColor(ColorUtils.getColor(R.color.teal_800));
+	}
+
+	/**
+	 * 高亮支出
+	 */
+	private void highlightSpending() {
+		GradientDrawable gradientDrawableExpense = (GradientDrawable)viewBinding.UIConsumerItemTextViewExpense.getBackground();
+		GradientDrawable gradientDrawableIncome = (GradientDrawable)viewBinding.UIConsumerItemTextViewIncome.getBackground();
+		viewBinding.UIConsumerItemTextViewExpense.setTextColor(ColorUtils.getColor(R.color.teal_800));
+		gradientDrawableExpense.setColor(ColorUtils.getColor(R.color.white));
+
+		viewBinding.UIConsumerItemTextViewIncome.setTextColor(ColorUtils.getColor(R.color.white));
+		gradientDrawableIncome.setColor(ColorUtils.getColor(R.color.teal_800));
 	}
 
 	private void registerSwipeRecyclerView() {
@@ -95,16 +131,11 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 
 		//长按移动排序
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setLongPressDragEnabled(true);
+		//当移动之后
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setOnItemMoveListener(
-				new BaseRecyclerViewOnItemMoveListener<>(consumptionImageIconList, editConsumptionRecyclerViewAdapter)
-						//当移动之后
-						.onItemMove((consumptionItems, fromPosition, toPosition) -> {
-							for (int i = fromPosition; i <= toPosition; i++) {
-								ImageIconInfo imageIconInfo = consumptionImageIconList.get(i);
-								System.out.println("我执行了 fromPosition:" + fromPosition + ",toPosition:" + toPosition + "imageIconInfo:" + imageIconInfo.getId() + "->" + i);
-								consumptionService.updateMemberSort(imageIconInfo.getId(), (long)i);
-							}
-						})
+				new BaseRecyclerViewOnItemMoveListener<>(consumptionImageIconList, editConsumptionRecyclerViewAdapter).onItemMove(
+						(consumptionItems, fromPosition, toPosition) -> IntStream.rangeClosed(fromPosition, toPosition).forEachOrdered(i -> consumptionService.updateMemberSort(consumptionImageIconList.get(i).getId(), (long)i))
+				)
 		);
 
 		//添加分隔线
@@ -112,7 +143,7 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 		//添加删除按钮
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setSwipeMenuCreator((leftMenu, rightMenu, position) -> {
 			SwipeMenuItem deleteItem = new SwipeMenuItem(this).setImage(R.drawable.ic_base_delete).setHeight(LayoutParams.WRAP_CONTENT).setWidth(LayoutParams.WRAP_CONTENT);
-			rightMenu.addMenuItem(deleteItem);//设置右边的侧滑
+			rightMenu.addMenuItem(deleteItem);
 		});
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setOnItemMenuClickListener((menuBridge, adapterPosition) -> {
 			// 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
@@ -123,25 +154,23 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 			int menuPosition = menuBridge.getPosition();
 			//被删除的item
 			ImageIconInfo imageIconInfo = consumptionImageIconList.get(adapterPosition);
-
-			//先删除该元素
-			consumptionService.softDeleteConsumption(imageIconInfo.getId());
-
-			//移除元素
-			consumptionImageIconList.remove(adapterPosition);
-			editConsumptionRecyclerViewAdapter.notifyDataSetChanged();
+			if (direction == RIGHT_DIRECTION && menuPosition == 0) {
+				//移除元素
+				consumptionImageIconList.remove(adapterPosition);
+				editConsumptionRecyclerViewAdapter.notifyDataSetChanged();
+				//先删除该元素
+				consumptionService.softDeleteConsumption(imageIconInfo.getId());
+			}
 		});
-
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setAdapter(editConsumptionRecyclerViewAdapter);
 	}
 
 	/**
 	 * 注册添加按钮操作事件
 	 */
-	private void registerConsumerItemButtonAddItem() {
+	private void registerConsumptionButtonAddItem() {
 		viewBinding.UIConsumerItemButtonAddItem.setOnClickListener(v -> {
 			Intent intent = new Intent(this, AddItemActivity.class);
-			intent.putExtra("consumptionType", consumptionType.name());
 			intent.putExtra("itemType", ItemTypeEnum.CONSUMPTION.name());
 			startActivity(intent);
 		});

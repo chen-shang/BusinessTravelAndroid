@@ -2,6 +2,7 @@ package com.business.travel.app.ui.activity.item.member;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,11 +11,7 @@ import android.view.ViewGroup.LayoutParams;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import com.business.travel.app.R;
-import com.business.travel.app.dal.dao.MemberDao;
-import com.business.travel.app.dal.db.AppDatabase;
-import com.business.travel.app.dal.entity.Member;
 import com.business.travel.app.databinding.ActivityEditMemberBinding;
-import com.business.travel.app.enums.DeleteEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.service.MemberService;
@@ -25,11 +22,12 @@ import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
 
+import static com.yanzhenjie.recyclerview.SwipeRecyclerView.RIGHT_DIRECTION;
+
 public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> {
 
 	private final MemberService memberService = new MemberService(this);
 	private final List<ImageIconInfo> memberIconList = new ArrayList<>();
-	private MemberDao memberDao;
 	private EditItemRecyclerViewAdapter editConsumptionRecyclerViewAdapter;
 
 	@Override
@@ -45,8 +43,6 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 		registerEditConsumptionActivityImageButtonBack();
 		//注册添加按钮操作事件
 		registerConsumerItemButtonAddItem();
-
-		memberDao = AppDatabase.getInstance(this).memberDao();
 	}
 
 	private void registerSwipeRecyclerView() {
@@ -57,13 +53,9 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 		//长按移动排序
 		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.setLongPressDragEnabled(true);
 		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.setOnItemMoveListener(
-				new BaseRecyclerViewOnItemMoveListener<>(memberIconList, editConsumptionRecyclerViewAdapter)
-						.onItemMove((consumptionItems, fromPosition, toPosition) -> {
-							for (int i = fromPosition; i < toPosition; i++) {
-								ImageIconInfo imageIconInfo = consumptionItems.get(i);
-								memberService.updateMemberSort(imageIconInfo.getId(), (long)i);
-							}
-						})
+				new BaseRecyclerViewOnItemMoveListener<>(memberIconList, editConsumptionRecyclerViewAdapter).onItemMove(
+						(consumptionItems, fromPosition, toPosition) -> IntStream.range(fromPosition, toPosition).forEachOrdered(sortId -> memberService.updateMemberSort(consumptionItems.get(sortId).getId(), (long)sortId))
+				)
 		);
 
 		//添加分隔线
@@ -82,15 +74,12 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 			int menuPosition = menuBridge.getPosition();
 			//被删除的item
 			ImageIconInfo imageIconInfo = memberIconList.get(adapterPosition);
-
-			//先删除该元素
-			memberService.softDeleteMember(imageIconInfo.getId());
-			//移除元素
-			memberIconList.remove(adapterPosition);
-			editConsumptionRecyclerViewAdapter.notifyDataSetChanged();
-			//然后改元素后面的排序需要更新
-			for (int i = adapterPosition; i < memberIconList.size(); i++) {
-				memberService.updateMemberSort(imageIconInfo.getId(), (long)i);
+			if (direction == RIGHT_DIRECTION && menuPosition == 0) {
+				//移除元素
+				memberIconList.remove(adapterPosition);
+				editConsumptionRecyclerViewAdapter.notifyDataSetChanged();
+				//先删除该元素
+				memberService.softDeleteMember(imageIconInfo.getId());
 			}
 		});
 

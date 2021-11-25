@@ -291,7 +291,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		editImageIcon.setName(ItemIconEnum.ItemIconEdit.getName());
 		editImageIcon.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
 		memberIconList.add(editImageIcon);
-		consumptionRecyclerViewAdapter.notifyDataSetChanged();
+		memberRecyclerViewAdapter.notifyDataSetChanged();
 	}
 
 	@Override
