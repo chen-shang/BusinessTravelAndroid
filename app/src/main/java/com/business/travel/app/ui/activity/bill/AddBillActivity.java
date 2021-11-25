@@ -20,7 +20,7 @@ import com.business.travel.app.dal.dao.ConsumptionItemDao;
 import com.business.travel.app.dal.dao.ProjectDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Bill;
-import com.business.travel.app.dal.entity.ConsumptionItem;
+import com.business.travel.app.dal.entity.Consumption;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityAddBillBinding;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
@@ -301,12 +301,12 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	public void refreshConsumptionIcon(ConsumptionTypeEnum consumptionType) {
 		final ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
 		//根据是支出还是收入获取消费项列表
-		List<ConsumptionItem> consumptionItems = consumptionItemDao.selectByType(consumptionType.name());
-		if (CollectionUtils.isEmpty(consumptionItems)) {
-			consumptionItems = new ArrayList<>();
+		List<Consumption> consumptions = consumptionItemDao.selectByType(consumptionType.name());
+		if (CollectionUtils.isEmpty(consumptions)) {
+			consumptions = new ArrayList<>();
 		}
 
-		final List<ImageIconInfo> imageIconInfos = consumptionItems.stream().map(consumptionItem -> {
+		final List<ImageIconInfo> imageIconInfos = consumptions.stream().map(consumptionItem -> {
 			ImageIconInfo imageIconInfo = new ImageIconInfo();
 			imageIconInfo.setId(consumptionItem.getId());
 			imageIconInfo.setIconName(consumptionItem.getIconName());

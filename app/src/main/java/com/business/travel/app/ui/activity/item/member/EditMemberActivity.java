@@ -1,4 +1,4 @@
-package com.business.travel.app.ui.activity.item.associate;
+package com.business.travel.app.ui.activity.item.member;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.dal.dao.AssociateItemDao;
 import com.business.travel.app.dal.db.AppDatabase;
-import com.business.travel.app.dal.entity.AssociateItem;
-import com.business.travel.app.databinding.ActivityEditAssociateItemBinding;
+import com.business.travel.app.dal.entity.Member;
+import com.business.travel.app.databinding.ActivityEditMemberBinding;
 import com.business.travel.app.enums.DeleteEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.ImageIconInfo;
@@ -21,7 +21,7 @@ import com.business.travel.app.ui.activity.item.EditItemRecyclerViewAdapter;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
 
-public class EditAssociateItemActivity extends BaseActivity<ActivityEditAssociateItemBinding> {
+public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> {
 
 	private final List<ImageIconInfo> associateImageIconList = new ArrayList<>();
 	private EditItemRecyclerViewAdapter editConsumptionItemRecyclerViewAdapter;
@@ -45,10 +45,10 @@ public class EditAssociateItemActivity extends BaseActivity<ActivityEditAssociat
 							for (int i = 0; i < consumptionItems.size(); i++) {
 								ImageIconInfo imageIconInfo = consumptionItems.get(i);
 
-								AssociateItem associateItem = new AssociateItem();
-								associateItem.setId(imageIconInfo.getId());
-								associateItem.setSortId((long)i);
-								associateItemDao.update(associateItem);
+								Member member = new Member();
+								member.setId(imageIconInfo.getId());
+								member.setSortId((long)i);
+								associateItemDao.update(member);
 							}
 						})
 		);
@@ -73,11 +73,11 @@ public class EditAssociateItemActivity extends BaseActivity<ActivityEditAssociat
 
 	private void refresh() {
 		final AssociateItemDao associateItemDao = AppDatabase.getInstance(this).associateItemDao();
-		final List<AssociateItem> associateItems = associateItemDao.selectAll(DeleteEnum.NOT_DELETE.getCode());
-		if (CollectionUtils.isEmpty(associateItems)) {
+		final List<Member> members = associateItemDao.selectAll(DeleteEnum.NOT_DELETE.getCode());
+		if (CollectionUtils.isEmpty(members)) {
 			return;
 		}
-		final List<ImageIconInfo> newImages = associateItems.stream().map(associateItem -> {
+		final List<ImageIconInfo> newImages = members.stream().map(associateItem -> {
 			ImageIconInfo imageIconInfo = new ImageIconInfo();
 			imageIconInfo.setId(associateItem.getId());
 			imageIconInfo.setName(associateItem.getName());

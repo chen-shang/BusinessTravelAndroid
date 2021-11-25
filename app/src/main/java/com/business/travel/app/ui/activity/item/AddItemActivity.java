@@ -19,8 +19,8 @@ import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.dal.dao.AssociateItemDao;
 import com.business.travel.app.dal.dao.ConsumptionItemDao;
 import com.business.travel.app.dal.db.AppDatabase;
-import com.business.travel.app.dal.entity.AssociateItem;
-import com.business.travel.app.dal.entity.ConsumptionItem;
+import com.business.travel.app.dal.entity.Member;
+import com.business.travel.app.dal.entity.Consumption;
 import com.business.travel.app.databinding.ActivityAddItemBinding;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
@@ -117,18 +117,18 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 
 	private void saveMemberItem() {
 		AssociateItemDao associateItemDao = AppDatabase.getInstance(this).associateItemDao();
-		AssociateItem associateItem = new AssociateItem();
+		Member member = new Member();
 
 		String name = viewBinding.UIAddItemActivityEditTextName.getText().toString();
-		associateItem.setName(name);
-		associateItem.setGender(0);
-		associateItem.setIconDownloadUrl(lastSelectedImageIcon.getIconDownloadUrl());
-		associateItem.setIconName(lastSelectedImageIcon.getName());
+		member.setName(name);
+		member.setGender(0);
+		member.setIconDownloadUrl(lastSelectedImageIcon.getIconDownloadUrl());
+		member.setIconName(lastSelectedImageIcon.getName());
 		//先查询最大的sortId
 		Long maxSortId = Optional.ofNullable(associateItemDao.selectMaxSort()).orElse(0L);
-		associateItem.setSortId(maxSortId);
-		associateItem.setCreateTime(DateTimeUtil.format(new Date()));
-		associateItemDao.insert(associateItem);
+		member.setSortId(maxSortId);
+		member.setCreateTime(DateTimeUtil.format(new Date()));
+		associateItemDao.insert(member);
 	}
 
 	private void saveConsumptionItem() {
@@ -141,17 +141,17 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 		ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
 
 		String name = viewBinding.UIAddItemActivityEditTextName.getText().toString();
-		ConsumptionItem consumptionItem = new ConsumptionItem();
-		consumptionItem.setName(name);
-		consumptionItem.setIconDownloadUrl(lastSelectedImageIcon.getIconDownloadUrl());
-		consumptionItem.setIconName(lastSelectedImageIcon.getName());
-		consumptionItem.setConsumptionType(consumptionTypeEnum.name());
-		consumptionItem.setCreateTime(DateTimeUtil.format(new Date()));
-		consumptionItem.setModifyTime(DateTimeUtil.format(new Date()));
+		Consumption consumption = new Consumption();
+		consumption.setName(name);
+		consumption.setIconDownloadUrl(lastSelectedImageIcon.getIconDownloadUrl());
+		consumption.setIconName(lastSelectedImageIcon.getName());
+		consumption.setConsumptionType(consumptionTypeEnum.name());
+		consumption.setCreateTime(DateTimeUtil.format(new Date()));
+		consumption.setModifyTime(DateTimeUtil.format(new Date()));
 		//先查询最大的sortId
 		Long maxSortId = Optional.ofNullable(consumptionItemDao.selectMaxSortIdByType(consumptionType)).orElse(0L);
-		consumptionItem.setSortId(maxSortId);
-		consumptionItemDao.insert(consumptionItem);
+		consumption.setSortId(maxSortId);
+		consumptionItemDao.insert(consumption);
 	}
 
 	private void registerHeaderText(TextView headerText) {

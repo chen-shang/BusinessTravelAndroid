@@ -22,8 +22,8 @@ import com.business.travel.app.enums.ItemIconEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.activity.bill.ItemIconRecyclerViewAdapter.IconRecyclerViewAdapterViewHolder;
-import com.business.travel.app.ui.activity.item.associate.EditAssociateItemActivity;
-import com.business.travel.app.ui.activity.item.consumption.EditConsumptionItemActivity;
+import com.business.travel.app.ui.activity.item.member.EditMemberActivity;
+import com.business.travel.app.ui.activity.item.consumption.EditConsumptionActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.FutureUtil;
@@ -85,12 +85,12 @@ public class ItemIconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRec
 		//当图片按钮被点击的时候
 		uiImageViewIcon.setOnClickListener(v -> {
 			if (isEditImageButton && ASSOCIATE == itemTypeEnum) {
-				activity.startActivity(new Intent(activity, EditAssociateItemActivity.class));
+				activity.startActivity(new Intent(activity, EditMemberActivity.class));
 				return;
 			}
 
 			if (isEditImageButton && CONSUMPTION == itemTypeEnum) {
-				activity.startActivity(new Intent(activity, EditConsumptionItemActivity.class));
+				activity.startActivity(new Intent(activity, EditConsumptionActivity.class));
 				return;
 			}
 

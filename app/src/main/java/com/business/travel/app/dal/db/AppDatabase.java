@@ -8,18 +8,18 @@ import com.business.travel.app.dal.dao.AssociateItemDao;
 import com.business.travel.app.dal.dao.BillDao;
 import com.business.travel.app.dal.dao.ConsumptionItemDao;
 import com.business.travel.app.dal.dao.ProjectDao;
-import com.business.travel.app.dal.entity.AssociateItem;
+import com.business.travel.app.dal.entity.Consumption;
+import com.business.travel.app.dal.entity.Member;
 import com.business.travel.app.dal.entity.Bill;
-import com.business.travel.app.dal.entity.ConsumptionItem;
 import com.business.travel.app.dal.entity.Project;
 
 /**
  * @author chenshang
  */
 @Database(entities = {
-		AssociateItem.class,
+		Member.class,
 		Bill.class,
-		ConsumptionItem.class,
+		Consumption.class,
 		Project.class
 }, version = 1)
 public abstract class AppDatabase extends RoomDatabase {

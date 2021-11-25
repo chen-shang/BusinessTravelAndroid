@@ -16,26 +16,26 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.BusinessTravelAndroid">
-        <activity android:name=".ui.activity.item.associate.EditAssociateItemActivity">
+        <activity android:name=".ui.activity.item.member.EditMemberActivity">
         </activity>
         <activity android:name=".ui.activity.item.AddItemActivity">
         </activity>
-        <activity android:name=".ui.activity.item.consumption.EditConsumptionItemActivity">
+        <activity android:name=".ui.activity.item.consumption.EditConsumptionActivity">
         </activity>
         <activity android:name=".ui.activity.master.MasterActivity">
         </activity>
         <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
         <activity
                 android:name=".ui.activity.bill.AddBillActivity"
                 android:windowSoftInputMode="stateHidden|adjustPan">
         </activity>
         <activity android:name=".ui.TestActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
     </application>
 

@@ -7,8 +7,8 @@ import android.content.Context;
 import com.business.travel.app.dal.dao.AssociateItemDao;
 import com.business.travel.app.dal.dao.ConsumptionItemDao;
 import com.business.travel.app.dal.db.AppDatabase;
-import com.business.travel.app.dal.entity.AssociateItem;
-import com.business.travel.app.dal.entity.ConsumptionItem;
+import com.business.travel.app.dal.entity.Member;
+import com.business.travel.app.dal.entity.Consumption;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.enums.ItemIconEnum;
 import com.business.travel.utils.DateTimeUtil;
@@ -29,7 +29,7 @@ public class ItemService {
 	 * @param consumptionTypeEnum
 	 * @return
 	 */
-	public List<ConsumptionItem> queryConsumptionItemByType(ConsumptionTypeEnum consumptionTypeEnum) {
+	public List<Consumption> queryConsumptionItemByType(ConsumptionTypeEnum consumptionTypeEnum) {
 		return consumptionItemDao.selectByType(consumptionTypeEnum.name());
 	}
 
@@ -43,14 +43,14 @@ public class ItemService {
 			return;
 		}
 
-		AssociateItem associateItem = new AssociateItem();
-		associateItem.setName("我");
-		associateItem.setIconDownloadUrl(ItemIconEnum.ItemIconMe.getIconDownloadUrl());
-		associateItem.setIconName("我");
-		associateItem.setSortId(0L);
-		associateItem.setCreateTime(DateTimeUtil.format(new Date()));
-		associateItem.setModifyTime(DateTimeUtil.format(new Date()));
-		associateItemDao.insert(associateItem);
+		Member member = new Member();
+		member.setName("我");
+		member.setIconDownloadUrl(ItemIconEnum.ItemIconMe.getIconDownloadUrl());
+		member.setIconName("我");
+		member.setSortId(0L);
+		member.setCreateTime(DateTimeUtil.format(new Date()));
+		member.setModifyTime(DateTimeUtil.format(new Date()));
+		associateItemDao.insert(member);
 
 	}
 

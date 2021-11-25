@@ -16,7 +16,8 @@ import com.blankj.utilcode.util.ColorUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.dao.ConsumptionItemDao;
 import com.business.travel.app.dal.db.AppDatabase;
-import com.business.travel.app.dal.entity.ConsumptionItem;
+import com.business.travel.app.dal.entity.Consumption;
+import com.business.travel.app.databinding.ActivityEditConsumptionBinding;
 import com.business.travel.app.databinding.ActivityEditConsumptionItemBinding;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.enums.DeleteEnum;
@@ -33,7 +34,7 @@ import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
 /**
  * @author chenshang
  */
-public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsumptionItemBinding> {
+public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptionBinding> {
 	private final ItemService itemService = new ItemService(this);
 	/**
 	 * 消费项图标信息列表
@@ -105,10 +106,10 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 							for (int i = fromPosition; i < toPosition; i++) {
 								//更新排序
 								ImageIconInfo imageIconInfo = consumptionItemList.get(i);
-								ConsumptionItem consumptionItem = new ConsumptionItem();
-								consumptionItem.setId(imageIconInfo.getId());
-								consumptionItem.setSortId((long)i);
-								consumptionItemDao.update(consumptionItem);
+								Consumption consumption = new Consumption();
+								consumption.setId(imageIconInfo.getId());
+								consumption.setSortId((long)i);
+								consumptionItemDao.update(consumption);
 							}
 						})
 		);
@@ -131,10 +132,10 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 			ImageIconInfo imageIconInfo = consumptionItemList.get(adapterPosition);
 
 			//先删除该元素
-			ConsumptionItem consumptionItem = new ConsumptionItem();
-			consumptionItem.setId(imageIconInfo.getId());
-			consumptionItem.setIsDeleted(DeleteEnum.DELETE.getCode());
-			consumptionItemDao.softDelete(consumptionItem);
+			Consumption consumption = new Consumption();
+			consumption.setId(imageIconInfo.getId());
+			consumption.setIsDeleted(DeleteEnum.DELETE.getCode());
+			consumptionItemDao.softDelete(consumption);
 
 			//移除元素
 			consumptionItemList.remove(adapterPosition);
@@ -150,10 +151,10 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 
 	private void extracted(ImageIconInfo imageIconInfo, int i) {
 		ConsumptionItemDao consumptionItemDao = AppDatabase.getInstance(this).consumptionItemDao();
-		ConsumptionItem consumptionItem = new ConsumptionItem();
-		consumptionItem.setId(imageIconInfo.getId());
-		consumptionItem.setSortId((long)i);
-		consumptionItemDao.update(consumptionItem);
+		Consumption consumption = new Consumption();
+		consumption.setId(imageIconInfo.getId());
+		consumption.setSortId((long)i);
+		consumptionItemDao.update(consumption);
 	}
 
 	/**
@@ -190,8 +191,8 @@ public class EditConsumptionItemActivity extends BaseActivity<ActivityEditConsum
 			return;
 		}
 
-		List<ConsumptionItem> consumptionItemList = itemService.queryConsumptionItemByType(consumptionTypeEnum);
-		final List<ImageIconInfo> newImage = consumptionItemList.stream().map(consumptionItem -> {
+		List<Consumption> consumptionList = itemService.queryConsumptionItemByType(consumptionTypeEnum);
+		final List<ImageIconInfo> newImage = consumptionList.stream().map(consumptionItem -> {
 			ImageIconInfo imageIconInfo = new ImageIconInfo();
 			imageIconInfo.setName(consumptionItem.getName());
 			imageIconInfo.setIconDownloadUrl(consumptionItem.getIconDownloadUrl());
