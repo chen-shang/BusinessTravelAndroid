@@ -11,6 +11,4 @@ public interface ConsumptionConverter {
 	ConsumptionConverter INSTANCE = Mappers.getMapper(ConsumptionConverter.class);
 
 	ImageIconInfo convertImageIconInfo(Consumption consumption);
-
-	ImageIconInfo convertImageIconInfo(Member member);
 }

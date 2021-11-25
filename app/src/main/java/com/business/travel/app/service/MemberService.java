@@ -14,6 +14,7 @@ import com.business.travel.app.enums.DeleteEnum;
 import com.business.travel.app.enums.ItemIconEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.ImageIconInfo;
+import com.business.travel.app.model.converter.MemberConverter;
 import com.business.travel.utils.DateTimeUtil;
 
 public class MemberService {
@@ -35,14 +36,8 @@ public class MemberService {
 		}
 
 		return members.stream().map(member -> {
-			ImageIconInfo imageIconInfo = new ImageIconInfo();
-			imageIconInfo.setId(member.getId());
-			imageIconInfo.setName(member.getName());
-			imageIconInfo.setIconDownloadUrl(member.getIconDownloadUrl());
-			imageIconInfo.setIconName(member.getIconName());
+			ImageIconInfo imageIconInfo = MemberConverter.INSTANCE.convertImageIconInfo(member);
 			imageIconInfo.setItemType(ItemTypeEnum.MEMBER.name());
-			imageIconInfo.setSortId(member.getSortId());
-			imageIconInfo.setSelected(false);
 			return imageIconInfo;
 		}).collect(Collectors.toList());
 	}

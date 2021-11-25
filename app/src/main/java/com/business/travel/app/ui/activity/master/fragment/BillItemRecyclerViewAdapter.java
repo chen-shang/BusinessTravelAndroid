@@ -6,10 +6,12 @@ import java.util.List;
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import androidx.viewbinding.ViewBinding;
 import butterknife.BindView;
@@ -23,6 +25,8 @@ import com.business.travel.app.ui.activity.master.fragment.BillItemRecyclerViewA
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.FutureUtil;
+import com.business.travel.app.utils.LogToast;
+import com.business.travel.utils.JacksonUtil;
 import com.pixplicity.sharp.Sharp;
 import org.jetbrains.annotations.NotNull;
 
@@ -72,6 +76,11 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 			amountText = "-" + amount;
 		}
 		holder.amountTextView.setText(amountText);
+
+		holder.cardView.setOnClickListener(v -> {
+			//// TODO: 2021/11/26  
+			LogToast.infoShow(JacksonUtil.toPrettyString(bill));
+		});
 	}
 
 	@SuppressLint("NonConstantResourceId")
@@ -85,6 +94,8 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 		public TextView associateTextView;
 		@BindView(R.id.UI_BillFragment_BillItemAdapter_ConsumptionItem)
 		public TextView consumptionItemTextView;
+		@BindView(R.id.card)
+		public CardView cardView;
 
 		public BillItemRecyclerViewAdapterViewHolder(@NonNull @NotNull View itemView) {
 			super(itemView);
