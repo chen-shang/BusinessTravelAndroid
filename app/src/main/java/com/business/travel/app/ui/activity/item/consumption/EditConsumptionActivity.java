@@ -172,6 +172,7 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 		viewBinding.UIConsumerItemButtonAddItem.setOnClickListener(v -> {
 			Intent intent = new Intent(this, AddItemActivity.class);
 			intent.putExtra("itemType", ItemTypeEnum.CONSUMPTION.name());
+			intent.putExtra("consumptionType", consumptionType.name());
 			startActivity(intent);
 		});
 	}

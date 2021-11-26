@@ -67,9 +67,9 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		super.onCreate(savedInstanceState);
 		Objects.requireNonNull(getSupportActionBar()).hide();
 		//消费项目列表 todo 横向滑动
-		registerConsumptionItem();
+		registerConsumptionList();
 		//同行人列表 todo 横向滑动
-		registerAssociate();
+		registerMemberList();
 		//注册键盘点击事件
 		registerKeyboard();
 		//注册支出/收入按钮点击事件
@@ -105,7 +105,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		}
 	}
 
-	private void registerAssociate() {
+	private void registerMemberList() {
 		LayoutManager layoutManager2 = new GridLayoutManager(this, 5);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setLayoutManager(layoutManager2);
 		memberRecyclerViewAdapter = new ItemIconRecyclerViewAdapter(ItemTypeEnum.MEMBER, memberIconList, this);
@@ -115,7 +115,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(memberIconList, memberRecyclerViewAdapter));
 	}
 
-	private void registerConsumptionItem() {
+	private void registerConsumptionList() {
 		LayoutManager layoutManager = new GridLayoutManager(this, 5);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setLayoutManager(layoutManager);
 		consumptionRecyclerViewAdapter = new ItemIconRecyclerViewAdapter(ItemTypeEnum.CONSUMPTION, consumptionImageIconList, this);

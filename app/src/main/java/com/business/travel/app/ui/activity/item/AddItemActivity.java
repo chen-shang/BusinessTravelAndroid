@@ -16,11 +16,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.business.travel.app.api.BusinessTravelResourceApi;
-import com.business.travel.app.dal.dao.MemberDao;
 import com.business.travel.app.dal.dao.ConsumptionDao;
+import com.business.travel.app.dal.dao.MemberDao;
 import com.business.travel.app.dal.db.AppDatabase;
-import com.business.travel.app.dal.entity.Member;
 import com.business.travel.app.dal.entity.Consumption;
+import com.business.travel.app.dal.entity.Member;
 import com.business.travel.app.databinding.ActivityAddItemBinding;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
@@ -107,15 +107,15 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 	private void registerSaveButton(TextView saveButton) {
 		saveButton.setOnClickListener(v -> {
 			if (itemTypeEnum == ItemTypeEnum.CONSUMPTION) {
-				saveConsumptionItem();
+				saveConsumption();
 			} else if (itemTypeEnum == ItemTypeEnum.MEMBER) {
-				saveMemberItem();
+				saveMember();
 			}
 			finish();
 		});
 	}
 
-	private void saveMemberItem() {
+	private void saveMember() {
 		MemberDao memberDao = AppDatabase.getInstance(this).memberDao();
 		Member member = new Member();
 
@@ -131,7 +131,7 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 		memberDao.insert(member);
 	}
 
-	private void saveConsumptionItem() {
+	private void saveConsumption() {
 		String consumptionType = getIntent().getStringExtra("consumptionType");
 		if (StringUtils.isBlank(consumptionType)) {
 			throw new IllegalArgumentException("未知消费项类型");
