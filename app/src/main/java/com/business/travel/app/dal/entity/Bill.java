@@ -40,9 +40,9 @@ public class Bill extends BaseEntity {
 	 */
 	private String consumeDate;
 	/**
-	 * 差旅同行人id,逗号分割
+	 * 消费人员id,逗号分割
 	 */
-	private String associateId;
+	private String memberIds;
 	/**
 	 * 备注
 	 */

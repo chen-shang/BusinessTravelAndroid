@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "1c0d302397d6180adfe832a3aec03181",
+    "identityHash": "bfaf81fc58455c73eb4dcbf5e50ac4d7",
     "entities": [
       {
         "tableName": "Member",
@@ -75,7 +75,7 @@
       },
       {
         "tableName": "Bill",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `iconDownloadUrl` TEXT, `name` TEXT, `amount` INTEGER, `consumptionType` TEXT, `consumeDate` TEXT, `associateId` TEXT, `remark` TEXT, `projectId` INTEGER, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `iconDownloadUrl` TEXT, `name` TEXT, `amount` INTEGER, `consumptionType` TEXT, `consumeDate` TEXT, `memberIds` TEXT, `remark` TEXT, `projectId` INTEGER, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -114,8 +114,8 @@
             "notNull": false
           },
           {
-            "fieldPath": "associateId",
-            "columnName": "associateId",
+            "fieldPath": "memberIds",
+            "columnName": "memberIds",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -305,7 +305,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1c0d302397d6180adfe832a3aec03181')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bfaf81fc58455c73eb4dcbf5e50ac4d7')"
     ]
   }
 }

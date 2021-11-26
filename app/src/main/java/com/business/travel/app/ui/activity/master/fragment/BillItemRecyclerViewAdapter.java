@@ -21,7 +21,7 @@ import com.business.travel.app.R;
 import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
-import com.business.travel.app.ui.activity.item.consumption.DetailConsumptionActivity;
+import com.business.travel.app.ui.activity.bill.DetailBillActivity;
 import com.business.travel.app.ui.activity.master.fragment.BillItemRecyclerViewAdapter.BillItemRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
@@ -78,7 +78,7 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 		holder.amountTextView.setText(amountText);
 
 		holder.cardView.setOnClickListener(v -> {
-			Intent intent = new Intent(activity, DetailConsumptionActivity.class);
+			Intent intent = new Intent(activity, DetailBillActivity.class);
 			intent.putExtra("selectBillId", bill.getId());
 			activity.startActivity(intent);
 		});

@@ -183,7 +183,6 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 	private void registerEditConsumptionActivityImageButtonBack() {
 		//返回按钮点击后
 		viewBinding.UIEditConsumptionActivityImageButtonBack.setOnClickListener(v -> {
-			//记得保存一下顺序
 			this.finish();
 		});
 	}

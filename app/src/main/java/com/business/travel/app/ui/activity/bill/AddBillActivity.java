@@ -3,7 +3,6 @@ package com.business.travel.app.ui.activity.bill;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -65,7 +64,6 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Objects.requireNonNull(getSupportActionBar()).hide();
 		//消费项目列表 todo 横向滑动
 		registerConsumptionList();
 		//同行人列表 todo 横向滑动
@@ -106,8 +104,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	}
 
 	private void registerMemberList() {
-		LayoutManager layoutManager2 = new GridLayoutManager(this, 5);
-		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setLayoutManager(layoutManager2);
+		LayoutManager layoutManager = new GridLayoutManager(this, 5);
+		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setLayoutManager(layoutManager);
 		memberRecyclerViewAdapter = new ItemIconRecyclerViewAdapter(ItemTypeEnum.MEMBER, memberIconList, this);
 		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setAdapter(memberRecyclerViewAdapter);
 		//长按移动排序
@@ -213,8 +211,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		//2. 选中的同行人
 		String associateItemList = memberIconList.stream()
 				.filter(ImageIconInfo::isSelected)
-				.map(ImageIconInfo::getName)
-				.filter(StringUtils::isNotBlank)
+				.map(ImageIconInfo::getId)
+				.map(String::valueOf)
 				.collect(Collectors.joining(","));
 
 		Bill bill = new Bill();
@@ -224,7 +222,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		// TODO: 2021/11/6
 		final String format = mockDate();
 		bill.setConsumeDate(format);
-		bill.setAssociateId(associateItemList);
+		bill.setMemberIds(associateItemList);
 		bill.setCreateTime(DateTimeUtil.format(new Date()));
 		bill.setModifyTime(DateTimeUtil.format(new Date()));
 		bill.setConsumptionType(consumptionType.name());

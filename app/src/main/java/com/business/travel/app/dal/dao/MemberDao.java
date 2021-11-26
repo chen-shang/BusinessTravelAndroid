@@ -39,4 +39,10 @@ public interface MemberDao extends BaseDao<Member> {
 
 	@Query("update member set isDeleted=0 where id=:id")
 	void softDelete(Long id);
+
+	/**
+	 * 查询全部
+	 */
+	@Query("SELECT * FROM member where id in (:idList)")
+	List<Member> selectAll(List<Long> idList);
 }

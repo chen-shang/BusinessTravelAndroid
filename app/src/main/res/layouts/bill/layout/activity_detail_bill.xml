@@ -11,12 +11,12 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/teal_800"
-            >
+            android:layout_height="80dp"
+            android:background="@color/teal_800">
+
 
         <ImageButton
-                android:id="@+id/UI_EditAssociateActivity_ImageButton_Back"
+                android:id="@+id/UI_DetailBill_ImageButton_Back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
@@ -26,42 +26,35 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_edit_member"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+        <include layout="@layout/recyclerview_bill_icon_item"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:orientation="vertical">
 
-        <com.yanzhenjie.recyclerview.SwipeRecyclerView
-                android:id="@+id/UI_Associate_SwipeRecyclerView_ConsumerItem"
+        <TextView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
+                android:text="类型 支出"
+                android:textSize="20sp"
+                />
+
+        <include layout="@layout/base_line"/>
+
+        <!--消费人员 头像 + 列表 -->
+        <com.yanzhenjie.recyclerview.SwipeRecyclerView
+                android:id="@+id/UI_SwipeRecyclerView_ConsumerItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toTopOf="@+id/UI_AssociateItem_Button_AddItem"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
+    </LinearLayout>
 
-        <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:backgroundTint="@color/white"
-                android:textColor="@color/teal_800"
-                android:text="添加人员+"
-                android:textSize="15sp"
-                android:padding="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:id="@+id/UI_AssociateItem_Button_AddItem">
-        </Button>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </LinearLayout>

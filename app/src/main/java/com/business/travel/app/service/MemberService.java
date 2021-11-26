@@ -64,4 +64,17 @@ public class MemberService {
 		member.setModifyTime(DateTimeUtil.format(new Date()));
 		memberDao.insert(member);
 	}
+
+	public List<ImageIconInfo> queryAll(List<Long> ids) {
+		List<Member> members = memberDao.selectAll(ids);
+		if (CollectionUtils.isEmpty(members)) {
+			return Collections.emptyList();
+		}
+
+		return members.stream().map(member -> {
+			ImageIconInfo imageIconInfo = MemberConverter.INSTANCE.convertImageIconInfo(member);
+			imageIconInfo.setItemType(ItemTypeEnum.MEMBER.name());
+			return imageIconInfo;
+		}).collect(Collectors.toList());
+	}
 }
