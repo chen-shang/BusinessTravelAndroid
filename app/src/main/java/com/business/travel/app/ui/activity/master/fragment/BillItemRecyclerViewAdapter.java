@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +21,12 @@ import com.business.travel.app.R;
 import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
+import com.business.travel.app.ui.activity.item.consumption.DetailConsumptionActivity;
 import com.business.travel.app.ui.activity.master.fragment.BillItemRecyclerViewAdapter.BillItemRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.FutureUtil;
-import com.business.travel.app.utils.LogToast;
-import com.business.travel.utils.JacksonUtil;
+import com.lxj.xpopup.XPopup;
 import com.pixplicity.sharp.Sharp;
 import org.jetbrains.annotations.NotNull;
 
@@ -77,13 +78,25 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 		holder.amountTextView.setText(amountText);
 
 		holder.cardView.setOnClickListener(v -> {
-			//// TODO: 2021/11/26
-			LogToast.infoShow(JacksonUtil.toPrettyString(bill));
+			Intent intent = new Intent(activity, DetailConsumptionActivity.class);
+			intent.putExtra("selectBillId", bill.getId());
+			activity.startActivity(intent);
 		});
 
 		holder.cardView.setOnLongClickListener(v -> {
-			//// TODO: 2021/11/26
-			LogToast.infoShow(JacksonUtil.toPrettyString(bill));
+			new XPopup.Builder(activity)
+					.atView(holder.iconImageView)  // 依附于所点击的View，内部会自动判断在上方或者下方显示
+					.asAttachList(
+							new String[] {"删除", "编辑"},
+							new int[] {R.drawable.ic_base_delete, R.drawable.ic_base_green_edit},
+							(pos, text) -> {
+								if (pos == 0) {
+									//todo
+								} else if (pos == 1) {
+									//编辑
+								}
+							})
+					.show();
 			return true;
 		});
 	}

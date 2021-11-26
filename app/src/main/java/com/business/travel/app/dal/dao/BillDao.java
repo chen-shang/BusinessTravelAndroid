@@ -45,4 +45,7 @@ public interface BillDao extends BaseDao<Bill> {
 
 	@Query("update bill set isDeleted=0 where projectId=:id and isDeleted!=0")
 	void softDeleteByProjectId(Long id);
+
+	@Query("SELECT * FROM bill where id=:id limit 1")
+	Bill selectByPrimaryKey(Long id);
 }

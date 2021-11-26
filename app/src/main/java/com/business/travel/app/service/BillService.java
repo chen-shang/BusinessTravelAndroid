@@ -3,15 +3,18 @@ package com.business.travel.app.service;
 import android.content.Context;
 import com.business.travel.app.dal.dao.BillDao;
 import com.business.travel.app.dal.db.AppDatabase;
+import com.business.travel.app.dal.entity.Bill;
 
 public class BillService {
 
-	private final Context context;
-	private BillDao billDao;
+	private final BillDao billDao;
 
 	public BillService(Context context) {
-		this.context = context;
 		billDao = AppDatabase.getInstance(context).billDao();
+	}
+
+	public Bill queryBillById(Long id) {
+		return billDao.selectByPrimaryKey(id);
 	}
 
 }
