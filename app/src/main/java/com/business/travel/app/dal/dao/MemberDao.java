@@ -16,14 +16,8 @@ public interface MemberDao extends BaseDao<Member> {
 	/**
 	 * 查询全部
 	 */
-	@Query("SELECT * FROM Member")
+	@Query("SELECT * FROM Member where isDeleted=1")
 	List<Member> selectAll();
-
-	/**
-	 * 查询单条
-	 */
-	@Query("SELECT * FROM Member limit 1")
-	Member selectOne();
 
 	/**
 	 * 查询全部

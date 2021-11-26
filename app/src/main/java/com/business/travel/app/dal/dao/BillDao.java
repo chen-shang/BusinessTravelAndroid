@@ -17,14 +17,8 @@ public interface BillDao extends BaseDao<Bill> {
 	/**
 	 * 查询全部
 	 */
-	@Query("SELECT * FROM bill")
+	@Query("SELECT * FROM bill where isDeleted=1")
 	List<Bill> selectAll();
-
-	/**
-	 * 查询单条
-	 */
-	@Query("SELECT * FROM bill limit 1")
-	Bill selectOne();
 
 	/**
 	 * 统计项目的总支出

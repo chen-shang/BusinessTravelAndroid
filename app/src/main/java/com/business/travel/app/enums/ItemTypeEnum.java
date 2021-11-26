@@ -5,7 +5,8 @@ package com.business.travel.app.enums;
  */
 public enum ItemTypeEnum {
 	CONSUMPTION("消费项"),
-	MEMBER("人员");
+	MEMBER("人员"),
+	;
 	/**
 	 * 枚举描述
 	 */

@@ -15,14 +15,8 @@ public interface ConsumptionDao extends BaseDao<Consumption> {
 	/**
 	 * 查询全部
 	 */
-	@Query("SELECT * FROM Consumption")
+	@Query("SELECT * FROM Consumption where isDeleted=1")
 	List<Consumption> selectAll();
-
-	/**
-	 * 查询单条
-	 */
-	@Query("SELECT * FROM Consumption limit 1")
-	Consumption selectOne();
 
 	/**
 	 * 查询全部 按照类型并排序
