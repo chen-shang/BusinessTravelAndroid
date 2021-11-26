@@ -155,9 +155,12 @@ dependencies {
     //查看最新版本请前往github，仅支持androidx
     implementation 'com.github.loperSeven:DateTimePicker:0.1.0'
 
+    //mapstruct 拷贝对象
     implementation 'org.mapstruct:mapstruct:1.4.2.Final'
     implementation 'org.mapstruct:mapstruct-jdk8:1.4.2.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+
+    implementation 'com.github.li-xiaojun:XPopup:2.6.7'
 }
 
 //编译的时候织入代码

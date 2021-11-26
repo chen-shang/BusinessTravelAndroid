@@ -32,4 +32,7 @@ public interface ProjectDao extends BaseDao<Project> {
 
 	@Query("SELECT * FROM project where isDeleted=1 order by modifyTime asc limit 1")
 	Project selectLatestModify();
+
+	@Query("update project set isDeleted=0 where id=:id")
+	void softDelete(Long id);
 }

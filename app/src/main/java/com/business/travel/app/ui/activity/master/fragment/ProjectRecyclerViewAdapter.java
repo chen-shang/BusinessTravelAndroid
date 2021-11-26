@@ -20,17 +20,19 @@ import com.business.travel.app.dal.dao.BillDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
+import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.activity.master.fragment.ProjectRecyclerViewAdapter.ProjectAdapterHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
-import com.business.travel.app.utils.LogToast;
-import com.business.travel.utils.JacksonUtil;
+import com.lxj.xpopup.XPopup;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author chenshang
  */
 public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectAdapterHolder, Project> {
+
+	public final ProjectService projectService = new ProjectService(activity.getApplicationContext());
 
 	public ProjectRecyclerViewAdapter(List<Project> dataList, BaseActivity<? extends ViewBinding> baseActivity) {
 		super(dataList, baseActivity);
@@ -84,8 +86,28 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 		});
 
 		holder.cardView.setOnLongClickListener(v -> {
-			LogToast.infoShow(JacksonUtil.toPrettyString(project));
-			//// TODO: 2021/11/7 弹出对话框
+			new XPopup.Builder(activity)
+					.atView(holder.projectNameTextView)  // 依附于所点击的View，内部会自动判断在上方或者下方显示
+					.asAttachList(
+							new String[] {"删除", "编辑"},
+							new int[] {R.drawable.ic_base_delete, R.drawable.ic_base_green_edit},
+							(pos, text) -> {
+								if (pos == 0) {
+									//删除
+									BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
+									BillFragmentShareData billFragmentShareData = billFragment.getDataBinding();
+									if (billFragmentShareData.getProject().equals(project)) {
+										billFragmentShareData.setProject(null);
+									}
+
+									projectService.softDeleteProjectWithBill(project.getId());
+									dataList.remove(position);
+									this.notifyItemRemoved(position);
+								} else if (pos == 1) {
+									//编辑
+								}
+							})
+					.show();
 			return true;
 		});
 

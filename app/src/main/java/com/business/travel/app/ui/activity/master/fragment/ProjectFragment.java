@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+import android.widget.Toolbar;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.blankj.utilcode.util.CollectionUtils;
@@ -18,6 +20,7 @@ import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.ui.base.BaseSwipeMenuCreator;
 import com.business.travel.app.ui.base.ShareData;
+import com.business.travel.app.utils.LogToast;
 
 /**
  * @author chenshang
@@ -33,8 +36,6 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding, ShareD
 
 		viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
 		projectListRecyclerViewAdapter = new ProjectRecyclerViewAdapter(projects, (MasterActivity)requireActivity());
-
-		viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList.setSwipeMenuCreator(new BaseSwipeMenuCreator(this.getContext()));
 
 		viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList.setAdapter(projectListRecyclerViewAdapter);
 		viewBinding.UIProjectFragmentSwipeRefreshLayout.setOnRefreshListener(() -> {
