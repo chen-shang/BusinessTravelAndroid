@@ -16,7 +16,7 @@ public class BaseSwipeMenuCreator implements SwipeMenuCreator {
 	@Override
 	public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int position) {
 		SwipeMenuItem deleteItem = new SwipeMenuItem(context)
-				.setImage(R.drawable.icon_error)
+				.setImage(R.drawable.ic_base_delete)
 				.setHeight(LayoutParams.WRAP_CONTENT)//设置高，这里使用match_parent，就是与item的高相同
 				.setWidth(LayoutParams.WRAP_CONTENT);//设置宽
 		rightMenu.addMenuItem(deleteItem);//设置右边的侧滑

@@ -11,7 +11,7 @@ import com.business.travel.app.aop.Async;
 public class LogToast {
 	@Async
 	public static void errorShow(String msg) {
-		ToastUtils.make().setLeftIcon(R.drawable.icon_error).setGravity(Gravity.CENTER, 0, 0).show(msg);
+		ToastUtils.make().setLeftIcon(R.drawable.ic_base_error).setGravity(Gravity.CENTER, 0, 0).show(msg);
 	}
 
 	@Async

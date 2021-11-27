@@ -7,13 +7,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import android.os.Bundle;
-import android.view.Gravity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.CollectionUtils;
-import com.blankj.utilcode.util.ToastUtils;
-import com.business.travel.app.R;
 import com.business.travel.app.dal.dao.ConsumptionDao;
 import com.business.travel.app.dal.dao.ProjectDao;
 import com.business.travel.app.dal.db.AppDatabase;
@@ -149,7 +146,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 				//当键盘保存按钮点击之后
 				saveBill(consumptionRecyclerViewAdapter, memberRecyclerViewAdapter);
 			} catch (Exception e) {
-				ToastUtils.make().setLeftIcon(R.drawable.icon_error).setGravity(Gravity.CENTER, 0, 0).setDurationIsLong(true).show(e.getMessage());
+				LogToast.errorShow(e.getMessage());
 			}
 		});
 		viewBinding.UIAddBillActivitySwipeRecyclerViewKeyboard.setAdapter(keyboardRecyclerViewAdapter);
