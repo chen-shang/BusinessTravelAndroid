@@ -57,7 +57,7 @@ public class AddItemRecyclerViewInnerAdapter extends BaseRecyclerViewAdapter<Add
 		}
 
 		ImageView uiImageViewIcon = holder.uiImageViewIcon;
-		FutureUtil.runAsync(() -> ImageLoadUtil.loadImageToView(iconDownloadUrl, uiImageViewIcon));
+		ImageLoadUtil.loadImageToView(iconDownloadUrl, uiImageViewIcon);
 
 		//最后一个被选中的按钮
 		//当图片按钮被点击的时候

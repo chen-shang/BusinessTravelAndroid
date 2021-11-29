@@ -25,12 +25,6 @@ public interface MemberDao extends BaseDao<Member> {
 	@Query("SELECT max(sortId) FROM Member where isDeleted=1")
 	Long selectMaxSort();
 
-	/**
-	 * 查询全部
-	 */
-	@Query("SELECT * FROM Member where isDeleted=:isDeleted")
-	List<Member> selectAll(Integer isDeleted);
-
 	@Query("SELECT count(*) FROM Member")
 	Long count();
 

@@ -20,7 +20,7 @@ public class Member extends BaseEntity {
 	@PrimaryKey(autoGenerate = true)
 	private Long id;
 	/**
-	 * 同行人姓名
+	 * 人员姓名
 	 */
 	private String name;
 	/**

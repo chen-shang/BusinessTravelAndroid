@@ -1,18 +1,21 @@
 package com.business.travel.app.ui.activity.bill;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView.LayoutManager;
-import com.blankj.utilcode.util.ActivityUtils;
+import cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager;
 import com.blankj.utilcode.util.CollectionUtils;
+import com.business.travel.app.R;
 import com.business.travel.app.dal.dao.ConsumptionDao;
-import com.business.travel.app.dal.dao.ProjectDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.dal.entity.Consumption;
@@ -23,17 +26,19 @@ import com.business.travel.app.enums.ItemIconEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.model.ImageIconInfo;
+import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.service.MemberService;
+import com.business.travel.app.service.ProjectService;
+import com.business.travel.app.ui.activity.item.consumption.EditConsumptionActivity;
+import com.business.travel.app.ui.activity.item.member.EditMemberActivity;
 import com.business.travel.app.ui.activity.master.fragment.BillFragment;
 import com.business.travel.app.ui.activity.master.fragment.BillFragmentShareData;
 import com.business.travel.app.ui.base.BaseActivity;
-import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
+import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.app.utils.LogToast;
 import com.business.travel.utils.DateTimeUtil;
-import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author chenshang
@@ -43,6 +48,10 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 
 	private final MemberService memberService = new MemberService(this);
 	private final ConsumptionService consumptionService = new ConsumptionService(this);
+
+	private final BillService billService = new BillService(this);
+	private final ProjectService projectService = new ProjectService(this);
+
 	/**
 	 * 消费项图标信息
 	 */
@@ -51,24 +60,159 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	 * 人员图标信息
 	 */
 	private final List<ImageIconInfo> memberIconList = new ArrayList<>();
-	private ItemIconRecyclerViewAdapter consumptionRecyclerViewAdapter;
-	private ItemIconRecyclerViewAdapter memberRecyclerViewAdapter;
 	/**
 	 * 当前被选中的是支出还是收入
 	 */
 	private ConsumptionTypeEnum consumptionType = ConsumptionTypeEnum.SPENDING;
 
+	/**
+	 * 选中的日期
+	 */
+	private String selectedDate = DateTimeUtil.format(new Date());
+
+	public void refreshSelectedDate(String selectedDate) {
+		this.selectedDate = selectedDate;
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//消费项目列表 todo 横向滑动
-		registerConsumptionList();
-		//同行人列表 todo 横向滑动
-		registerMemberList();
+		//注册消费项列表分页、点击事件
+		registerConsumptionPageView();
+		//注册人员列表分页、点击事件
+		registerMemberPageView();
 		//注册键盘点击事件
 		registerKeyboard();
 		//注册支出/收入按钮点击事件
 		registerConsumptionType();
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		//初次使用app的时候,数据库中是没有消费项图标数据的,因此需要初始化一些默认的图标
+		consumptionService.initConsumption();
+		//初次使用app的时候,数据库中是没有人员图标数据的,因此需要初始化一些默认的图标
+		memberService.initMember();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		//每次进来该页面的时候都需要刷新一下数据
+		refreshData();
+	}
+
+	private void registerConsumptionPageView() {
+		registerPageViewCommonProperty(viewBinding.UIAddBillActivityGridViewPagerBillIcon)
+				// 设置数据总数量
+				.setDataAllCount(consumptionImageIconList.size())
+				// 设置每页行数 // 设置每页列数
+				.setRowCount(3).setColumnCount(5)
+				// 设置是否显示指示器
+				.setPointIsShow(true)
+				// 设置背景图片(此时设置的背景色无效，以背景图片为主)
+				.setBackgroundImageLoader(bgImageView -> {})
+				// 数据绑定
+				.setImageTextLoaderInterface((imageView, textView, position) -> {
+					// 自己进行数据的绑定，灵活度更高，不受任何限制
+					bind(imageView, textView, consumptionImageIconList.get(position), EditConsumptionActivity.class);
+				});
+	}
+
+	private void registerMemberPageView() {
+		registerPageViewCommonProperty(viewBinding.UIAddBillActivityGridViewPagerMemberIcon)
+				// 设置数据总数量
+				.setDataAllCount(memberIconList.size())
+				// 设置每页行数 // 设置每页列数
+				.setRowCount(2).setColumnCount(5)
+				// 数据绑定
+				.setImageTextLoaderInterface((imageView, textView, position) -> {
+					// 自己进行数据的绑定，灵活度更高，不受任何限制
+					bind(imageView, textView, memberIconList.get(position), EditMemberActivity.class);
+				});
+	}
+
+	private void bind(ImageView imageView, TextView textView, ImageIconInfo imageIconInfo, Class<?> cls) {
+		boolean isEditImageButton = ItemIconEnum.ItemIconEdit.getIconDownloadUrl().equals(imageIconInfo.getIconDownloadUrl());
+		//默认未选中状态
+		imageView.setBackgroundResource(R.drawable.corners_shape_unselect);
+		imageView.setImageResource(R.drawable.ic_base_placeholder);
+		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView);
+
+		textView.setText(imageIconInfo.getName());
+
+		int unSelectColor = ContextCompat.getColor(getApplicationContext(), R.color.black_100);
+		int selectColor = ContextCompat.getColor(getApplicationContext(), R.color.teal_800);
+
+		imageView.setOnClickListener(v -> {
+			//如果是编辑按钮
+			if (isEditImageButton) {
+				Intent intent = new Intent(this, cls);
+				intent.putExtra("consumptionType", consumptionType.name());
+				this.startActivity(intent);
+				return;
+			}
+
+			if (imageIconInfo.isSelected()) {
+				imageIconInfo.setSelected(false);
+				//否则,改变选中颜色
+				v.setBackgroundResource(R.drawable.corners_shape_unselect);
+				textView.setTextColor(unSelectColor);
+				return;
+			}
+
+			if (!imageIconInfo.isSelected()) {
+				imageIconInfo.setSelected(true);
+				//否则,改变选中颜色
+				v.setBackgroundResource(R.drawable.corners_shape_select);
+				textView.setTextColor(selectColor);
+				return;
+			}
+		});
+	}
+
+	/**
+	 * 初始化PageView公共属性
+	 */
+	private GridViewPager registerPageViewCommonProperty(GridViewPager gridViewPager) {
+		return gridViewPager
+				// 设置背景色，默认白色
+				.setGridViewPagerBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.white))
+				// 设置item的纵向间距 // 设置上边距 // 设置下边距
+				.setVerticalSpacing(10).setPagerMarginTop(10).setPagerMarginBottom(10)
+				// 设置图片宽度 // 设置图片高度
+				.setImageWidth(35).setImageHeight(35)
+				// 设置文字与图片的间距
+				.setTextImgMargin(0)
+				// 设置文字大小
+				.setTextSize(15)
+				// 设置无限循环
+				.setPageLoop(false)
+				// 设置指示器与page的间距 // 设置指示器与底部的间距
+				.setPointMarginPage(5).setPointMarginBottom(5)
+				// 设置指示器的item宽度 // 设置指示器的item高度
+				.setPointChildWidth(5).setPointChildHeight(5)
+				// 设置指示器的item的间距
+				.setPointChildMargin(5)
+				// 指示器的item是否为圆形，默认圆形直径取宽高的最小值
+				.setPointIsCircle(true)
+				// 设置文字颜色
+				.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.black_100))
+				// 指示器item未选中的颜色
+				.setPointNormalColor(ContextCompat.getColor(getBaseContext(), R.color.black_100))
+				// 指示器item选中的颜色
+				.setPointSelectColor(ContextCompat.getColor(getBaseContext(), R.color.teal_800))
+				// 设置背景图片(此时设置的背景色无效，以背景图片为主)
+				.setBackgroundImageLoader(bgImageView -> {})
+				// Item点击
+				.setGridItemClickListener(position -> {
+
+				})
+				// 设置Item长按
+				.setGridItemLongClickListener(position -> {
+
+				});
 	}
 
 	private void registerConsumptionType() {
@@ -100,51 +244,29 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		}
 	}
 
-	private void registerMemberList() {
-		LayoutManager layoutManager = new GridLayoutManager(this, 5);
-		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setLayoutManager(layoutManager);
-		memberRecyclerViewAdapter = new ItemIconRecyclerViewAdapter(ItemTypeEnum.MEMBER, memberIconList, this);
-		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setAdapter(memberRecyclerViewAdapter);
-		//长按移动排序
-		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setLongPressDragEnabled(true);
-		viewBinding.UIAddBillActivitySwipeRecyclerViewAssociate.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(memberIconList, memberRecyclerViewAdapter));
-	}
-
-	private void registerConsumptionList() {
-		LayoutManager layoutManager = new GridLayoutManager(this, 5);
-		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setLayoutManager(layoutManager);
-		consumptionRecyclerViewAdapter = new ItemIconRecyclerViewAdapter(ItemTypeEnum.CONSUMPTION, consumptionImageIconList, this);
-		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setAdapter(consumptionRecyclerViewAdapter);
-		//长按移动排序
-		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setLongPressDragEnabled(true);
-		viewBinding.UIAddBillActivitySwipeRecyclerViewConsumptionItem.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(consumptionImageIconList, consumptionRecyclerViewAdapter));
-	}
-
 	private void registerKeyboard() {
-		GridLayoutManager layoutManager3 = new GridLayoutManager(this, 4) {
+		GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4) {
 			@Override
 			public boolean canScrollVertically() {
 				return false;
 			}
 		};
-		viewBinding.UIAddBillActivitySwipeRecyclerViewKeyboard.setLayoutManager(layoutManager3);
+		viewBinding.UIAddBillActivitySwipeRecyclerViewKeyboard.setLayoutManager(gridLayoutManager);
 		KeyboardRecyclerViewAdapter keyboardRecyclerViewAdapter = new KeyboardRecyclerViewAdapter(new ArrayList<>(), this).onSaveClick(v -> {
 			try {
 				//当键盘保存按钮点击之后
-				saveBill(consumptionRecyclerViewAdapter, memberRecyclerViewAdapter);
+				saveBill();
 				//6.账单创建完成后跳转到 DashboardFragment
-				ActivityUtils.finishActivity(AddBillActivity.this, true);
+				this.finish();
 			} catch (Exception e) {
 				LogToast.errorShow(e.getMessage());
 			}
-		}).onDeleteClick(v -> {
-			//当键盘删除键点击之后
-			//控制金额文本框的金额删除
-
 		}).onReRecordClick(v -> {
 			try {
 				//当键盘保存按钮点击之后
-				saveBill(consumptionRecyclerViewAdapter, memberRecyclerViewAdapter);
+				saveBill();
+				//初始化数据
+				this.clear();
 			} catch (Exception e) {
 				LogToast.errorShow(e.getMessage());
 			}
@@ -152,105 +274,70 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		viewBinding.UIAddBillActivitySwipeRecyclerViewKeyboard.setAdapter(keyboardRecyclerViewAdapter);
 	}
 
-	private void saveBill(ItemIconRecyclerViewAdapter billRecyclerViewAdapter, ItemIconRecyclerViewAdapter itemIconRecyclerViewAdapter) {
-		//参数校验
-		String projectName = viewBinding.UIAddBillActivityTextViewProjectName.getText().toString();
-		if (StringUtils.isBlank(projectName)) {
-			throw new IllegalArgumentException("请输入项目名称");
-		}
-		ProjectDao projectDao = AppDatabase.getInstance(this).projectDao();
-		//根据项目名称查询是否存在该项目
-		Project project = projectDao.selectByName(projectName);
-		//3.如果不存在则新增项目
-		project = Optional.ofNullable(project).orElseGet(() -> {
-			//新增
-			createProject(projectName);
-			//并获取新增的项目
-			return projectDao.selectByName(projectName);
-		});
-		//如果项目不存在并且创建失败的话抛出异常
-		Optional.ofNullable(project).orElseThrow(() -> new IllegalArgumentException("请输入项目名称"));
-		//如果存在则在当前项目下创建账单
-		createBill(project);
-		//更新项目的修改时间
-		updateProjectModifyTime(project);
-		//初始化数据
+	private void clear() {
 		consumptionImageIconList.forEach(item -> item.setSelected(false));
 		memberIconList.forEach(item -> item.setSelected(false));
-		billRecyclerViewAdapter.notifyDataSetChanged();
-		itemIconRecyclerViewAdapter.notifyDataSetChanged();
-
+		viewBinding.UIAddBillActivityGridViewPagerBillIcon.setDataAllCount(consumptionImageIconList.size()).show();
+		viewBinding.UIAddBillActivityGridViewPagerMemberIcon.setDataAllCount(memberIconList.size()).show();
 		viewBinding.UIAddBillActivityTextViewAmount.setText(null);
+		viewBinding.UIAddBillActivityEditTextRemark.setText(null);
+	}
+
+	private void saveBill() {
+		//参数校验
+		String projectName = viewBinding.UIAddBillActivityTextViewProjectName.getText().toString();
+		//如果不存在则新增项目
+		Project project = projectService.createIfNotExist(projectName);
+		if (project == null) {
+			throw new IllegalArgumentException("请输入合法的项目名称");
+		}
+		//如果存在则在当前项目下创建账单
+		createBillWithProject(project);
 		//更新返回页的数据
 		BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
 		BillFragmentShareData sharedData = billFragment.getDataBinding();
 		sharedData.setProject(project);
+
+		LogToast.infoShow("记账成功");
 	}
 
-	private void updateProjectModifyTime(Project project) {
-		project.setModifyTime(DateTimeUtil.format(new Date()));
-		AppDatabase.getInstance(this).projectDao().update(project);
-	}
-
-	private void createBill(Project project) {
+	private void createBillWithProject(Project project) {
 		//3. 日期、备注、金额
 		String remark = viewBinding.UIAddBillActivityEditTextRemark.getText().toString().trim();
 		String amount = viewBinding.UIAddBillActivityTextViewAmount.getText().toString().trim();
 		if (StringUtils.isBlank(amount)) {
 			throw new IllegalArgumentException("请输入消费金额");
 		}
-		//1. 选中的消费项目
+		//1. 选中的消费项 id 的列表
 		String consumerItemList = consumptionImageIconList.stream()
 				.filter(ImageIconInfo::isSelected)
-				.map(ImageIconInfo::getName)
+				.map(ImageIconInfo::getId)
+				.map(String::valueOf)
 				.filter(StringUtils::isNotBlank)
 				.collect(Collectors.joining(","));
-		//2. 选中的同行人
+		//2. 选中的人员 的列表
 		String associateItemList = memberIconList.stream()
 				.filter(ImageIconInfo::isSelected)
 				.map(ImageIconInfo::getId)
 				.map(String::valueOf)
+				.filter(StringUtils::isNotBlank)
 				.collect(Collectors.joining(","));
 
 		Bill bill = new Bill();
 		bill.setName(consumerItemList);
 		bill.setProjectId(project.getId());
-		bill.setAmount(Long.valueOf(amount));
-		// TODO: 2021/11/6
-		final String format = mockDate();
-		bill.setConsumeDate(format);
+		//消费金额
+		bill.setAmount(new BigDecimal(amount).multiply(new BigDecimal(100)).longValue());
+		//消费日期
+		bill.setConsumeDate(selectedDate);
 		bill.setMemberIds(associateItemList);
 		bill.setCreateTime(DateTimeUtil.format(new Date()));
 		bill.setModifyTime(DateTimeUtil.format(new Date()));
 		bill.setConsumptionType(consumptionType.name());
 		bill.setRemark(remark);
-		final String iconDownloadUrl = consumptionImageIconList.stream().filter(ImageIconInfo::isSelected).findFirst().map(ImageIconInfo::getIconDownloadUrl).orElse("");
+		String iconDownloadUrl = consumptionImageIconList.stream().filter(ImageIconInfo::isSelected).findFirst().map(ImageIconInfo::getIconDownloadUrl).orElse("");
 		bill.setIconDownloadUrl(iconDownloadUrl);
-		AppDatabase.getInstance(this).billDao().insert(bill);
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-		consumptionService.initConsumption();
-		memberService.initMember();
-	}
-
-	@NotNull
-	private String mockDate() {
-		int i = RandomUtils.nextInt(0, 10);
-		return DateTimeUtil.format(DateTimeUtil.toLocalDateTime(new Date()).plusDays(i), "yyyy-MM-dd");
-	}
-
-	private void createProject(String projectName) {
-		Project project = new Project();
-		project.setName(projectName);
-		project.setStartTime(DateTimeUtil.format(new Date()));
-		project.setEndTime(null);
-		project.setCreateTime(DateTimeUtil.format(new Date()));
-		project.setModifyTime(DateTimeUtil.format(new Date()));
-		project.setRemark(null);
-		AppDatabase.getInstance(this).projectDao().insert(project);
+		billService.creatBill(bill);
 	}
 
 	private void refreshData() {
@@ -260,8 +347,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		consumptionType = refreshConsumptionType();
 		//刷新消费项列表
 		refreshConsumptionIcon(consumptionType);
-		//刷新同行人列表
-		refreshAssociateIcon();
+		//刷新人员列表
+		refreshMemberIcon();
 	}
 
 	private void refreshProjectName() {
@@ -275,8 +362,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		}
 	}
 
-	private void refreshAssociateIcon() {
-
+	private void refreshMemberIcon() {
 		List<ImageIconInfo> newLeastMemberIconList = memberService.queryAllMembersImageIconInfo();
 		memberIconList.clear();
 		memberIconList.addAll(newLeastMemberIconList);
@@ -286,13 +372,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		editImageIcon.setName(ItemIconEnum.ItemIconEdit.getName());
 		editImageIcon.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
 		memberIconList.add(editImageIcon);
-		memberRecyclerViewAdapter.notifyDataSetChanged();
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		refreshData();
+		viewBinding.UIAddBillActivityGridViewPagerMemberIcon.setDataAllCount(memberIconList.size()).show();
 	}
 
 	public void refreshConsumptionIcon(ConsumptionTypeEnum consumptionType) {
@@ -323,6 +403,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 
 		consumptionImageIconList.clear();
 		consumptionImageIconList.addAll(imageIconInfos);
-		consumptionRecyclerViewAdapter.notifyDataSetChanged();
+
+		viewBinding.UIAddBillActivityGridViewPagerBillIcon.setDataAllCount(consumptionImageIconList.size()).show();
 	}
 }

@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 
-import com.business.travel.app.enums.ItemIconEnum;
+import androidx.annotation.Nullable;
 import com.business.travel.app.exceptions.ApiException;
 import com.business.travel.app.model.GiteeContent;
 import com.business.travel.app.utils.HttpWrapper;
@@ -31,8 +31,16 @@ public class BusinessTravelResourceApi {
 	private static final String ACCESS_TOKEN = "a1b50339ccf80a7c96f6a96fa97fcdaf";
 	private static final String URL_ = BASE_URL + "/" + OWNER + "/" + REPOSITORY;
 
+	/**
+	 * @param iconFullName
+	 * @return
+	 */
+	@Nullable
 	public static InputStream getIcon(String iconFullName) {
 		try {
+			if (StringUtils.isBlank(iconFullName)) {
+				return null;
+			}
 			//TODO 缓存
 			Request request = new Builder().url(iconFullName).build();
 			Response response = new OkHttpClient().newCall(request).execute();

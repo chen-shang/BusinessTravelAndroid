@@ -1,6 +1,5 @@
 package com.business.travel.app.ui.activity.bill;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Stack;
 
@@ -19,9 +18,12 @@ import com.business.travel.app.R;
 import com.business.travel.app.ui.activity.bill.KeyboardRecyclerViewAdapter.KeyboardRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
-import com.business.travel.app.utils.LogToast;
+import com.business.travel.utils.DateTimeUtil;
+import com.loper7.date_time_picker.dialog.CardDatePickerDialog;
+import com.loper7.date_time_picker.dialog.CardDatePickerDialog.Builder;
+import com.loper7.date_time_picker.dialog.CardDatePickerDialog.OnCancelListener;
+import com.loper7.date_time_picker.dialog.CardDatePickerDialog.OnChooseListener;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tomcat.util.digester.ArrayStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -30,7 +32,6 @@ import org.jetbrains.annotations.NotNull;
 public class KeyboardRecyclerViewAdapter extends BaseRecyclerViewAdapter<KeyboardRecyclerViewAdapterViewHolder, Integer> {
 
 	private OnClickListener onSaveClick;
-	private OnClickListener onDeleteClick;
 	private OnClickListener onReRecordClick;
 	private Stack<Long> stack = new Stack<>();
 
@@ -40,11 +41,6 @@ public class KeyboardRecyclerViewAdapter extends BaseRecyclerViewAdapter<Keyboar
 
 	public KeyboardRecyclerViewAdapter onSaveClick(OnClickListener onSaveClick) {
 		this.onSaveClick = onSaveClick;
-		return this;
-	}
-
-	public KeyboardRecyclerViewAdapter onDeleteClick(OnClickListener onDeleteClick) {
-		this.onDeleteClick = onDeleteClick;
 		return this;
 	}
 
@@ -76,7 +72,30 @@ public class KeyboardRecyclerViewAdapter extends BaseRecyclerViewAdapter<Keyboar
 			case 3:
 				//date 日期按钮样式
 				holder.dateTextView.setOnClickListener(v -> {
-					LogToast.infoShow("弹出日历选框");
+					final CardDatePickerDialog cardDatePickerDialog = new Builder(activity)
+							.setTitle("选择日期")
+							.setDisplayType(new int[] {0, 1, 2,})
+							.showBackNow(false)
+							.showFocusDateInfo(true)
+							.setOnChoose("选择", new OnChooseListener() {
+								@Override
+								public void onChoose(long l) {
+									if (DateTimeUtil.toLocalDateTime(l).toLocalDate().isEqual(DateTimeUtil.now().toLocalDate())) {
+										holder.dateTextView.setText("今天");
+										return;
+									}
+									holder.dateTextView.setText(DateTimeUtil.format(l, "MM.dd"));
+									((AddBillActivity)activity).refreshSelectedDate(DateTimeUtil.format(l));
+								}
+							})
+							.setOnCancel("取消", new OnCancelListener() {
+								@Override
+								public void onCancel() {
+
+								}
+							})
+							.build();
+					cardDatePickerDialog.show();
 				});
 				break;
 			case 14:
@@ -118,6 +137,10 @@ public class KeyboardRecyclerViewAdapter extends BaseRecyclerViewAdapter<Keyboar
 				holder.itemView.setBackgroundColor(ColorUtils.getColor(R.color.teal_800));
 				holder.numButton.setText("保存");
 				holder.numButton.setOnClickListener(onSaveClick);
+				holder.numButton.setOnLongClickListener(v -> {
+					onReRecordClick.onClick(v);
+					return true;
+				});
 				break;
 			case 0:
 				holder.numButton.setText("1");

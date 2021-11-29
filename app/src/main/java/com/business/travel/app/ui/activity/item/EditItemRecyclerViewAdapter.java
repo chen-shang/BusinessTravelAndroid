@@ -1,7 +1,6 @@
 package com.business.travel.app.ui.activity.item;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -43,7 +42,7 @@ public class EditItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<EditIte
 			return;
 		}
 		final ImageIconInfo imageIconInfo = dataList.get(position);
-		CompletableFuture.runAsync(() -> ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), holder.iconImageView));
+		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), holder.iconImageView);
 		holder.nameTextView.setText(imageIconInfo.getName());
 	}
 

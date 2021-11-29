@@ -30,7 +30,7 @@ public class MemberService {
 	 * @return
 	 */
 	public List<ImageIconInfo> queryAllMembersImageIconInfo() {
-		List<Member> members = memberDao.selectAll(DeleteEnum.NOT_DELETE.getCode());
+		List<Member> members = memberDao.selectAll();
 		if (CollectionUtils.isEmpty(members)) {
 			return Collections.emptyList();
 		}
@@ -50,6 +50,9 @@ public class MemberService {
 		memberDao.softDelete(id);
 	}
 
+	/**
+	 * 初次使用app的时候,数据库中是没有人员图标数据的,因此需要初始化一些默认的图标
+	 */
 	public void initMember() {
 		if (memberDao.count() > 0) {
 			return;

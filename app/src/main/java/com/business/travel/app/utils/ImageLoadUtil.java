@@ -1,8 +1,7 @@
 package com.business.travel.app.utils;
 
-import java.io.InputStream;
-
 import android.widget.ImageView;
+import com.business.travel.app.R;
 import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.enums.ItemIconEnum;
 import com.pixplicity.sharp.Sharp;
@@ -18,9 +17,15 @@ public class ImageLoadUtil {
 		final ItemIconEnum itemIconEnum = ItemIconEnum.ofUrl(iconDownloadUrl);
 		if (itemIconEnum != null) {
 			uiImageViewIcon.setImageResource(itemIconEnum.getResourceId());
-		} else {
-			InputStream iconInputStream = BusinessTravelResourceApi.getIcon(iconDownloadUrl);
-			Sharp.loadInputStream(iconInputStream).into(uiImageViewIcon);
+			return;
 		}
+
+		FutureUtil.supplyAsync(() -> BusinessTravelResourceApi.getIcon(iconDownloadUrl)).whenComplete((inputStream, throwable) -> {
+			if (inputStream != null) {
+				Sharp.loadInputStream(inputStream).into(uiImageViewIcon);
+				return;
+			}
+			uiImageViewIcon.setImageResource(R.drawable.ic_base_placeholder);
+		});
 	}
 }

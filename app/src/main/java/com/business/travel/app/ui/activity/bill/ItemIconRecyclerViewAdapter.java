@@ -72,7 +72,7 @@ public class ItemIconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRec
 
 		ImageView uiImageViewIcon = holder.uiImageViewIcon;
 		//发起网络请求
-		FutureUtil.runAsync(() -> ImageLoadUtil.loadImageToView(iconDownloadUrl, uiImageViewIcon));
+		ImageLoadUtil.loadImageToView(iconDownloadUrl, uiImageViewIcon);
 
 		int unSelectColor = ContextCompat.getColor(uiImageViewIcon.getContext(), R.color.black_100);
 		int selectColor = ContextCompat.getColor(uiImageViewIcon.getContext(), R.color.teal_800);

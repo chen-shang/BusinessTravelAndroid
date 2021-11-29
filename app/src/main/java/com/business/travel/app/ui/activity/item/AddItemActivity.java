@@ -61,7 +61,7 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 	private static final List<GiteeContent> iconTypeList = new ArrayList<>();
 	private AddItemRecyclerViewAdapter addItemRecyclerViewAdapter;
 	/**
-	 * 当前显示的是消费项的图标还是同行人的图标
+	 * 当前显示的是消费项的图标还是人员的图标
 	 */
 	private ItemTypeEnum itemTypeEnum = ItemTypeEnum.CONSUMPTION;
 	/**

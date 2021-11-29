@@ -37,11 +37,15 @@ public class ConsumptionService {
 		consumptionDao.softDelete(id);
 	}
 
+	/**
+	 * 初次使用app的时候,数据库中是没有消费项图标数据的,因此需要初始化一些默认的图标
+	 */
 	public void initConsumption() {
 		if (consumptionDao.count() > 0) {
 			return;
 		}
 		//先获取远程的默认消费项列表,然后插入数据库,注意sortId todo
+		//收入和支出都需要默认图标 todo
 		List<Consumption> consumptions = new ArrayList<>();
 		for (int i = 0; i < 3; i++) {
 			Consumption consumption = new Consumption();

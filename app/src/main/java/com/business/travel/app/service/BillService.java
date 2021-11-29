@@ -17,4 +17,12 @@ public class BillService {
 		return billDao.selectByPrimaryKey(id);
 	}
 
+	/**
+	 * 创建账单
+	 *
+	 * @param bill
+	 */
+	public void creatBill(Bill bill) {
+		billDao.insert(bill);
+	}
 }
