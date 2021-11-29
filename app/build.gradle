@@ -161,7 +161,12 @@ dependencies {
     implementation 'org.mapstruct:mapstruct-jdk8:1.4.2.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 
+    //弹框组件
     implementation 'com.github.li-xiaojun:XPopup:2.6.7'
+
+    //分页图标组件
+    implementation 'com.github.mtjsoft:GridPager:v3.7.0'
+
 }
 
 //编译的时候织入代码
