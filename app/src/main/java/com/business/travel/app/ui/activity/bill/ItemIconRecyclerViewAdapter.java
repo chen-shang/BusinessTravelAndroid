@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -29,7 +28,7 @@ import com.business.travel.app.ui.activity.item.member.EditMemberActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.FutureUtil;
-import com.business.travel.app.utils.LoadImageUtil;
+import com.business.travel.app.utils.ImageLoadUtil;
 import org.jetbrains.annotations.NotNull;
 
 import static com.business.travel.app.enums.ItemTypeEnum.CONSUMPTION;
@@ -73,7 +72,7 @@ public class ItemIconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRec
 
 		ImageView uiImageViewIcon = holder.uiImageViewIcon;
 		//发起网络请求
-		FutureUtil.runAsync(() -> LoadImageUtil.loadImageToView(iconDownloadUrl, uiImageViewIcon));
+		FutureUtil.runAsync(() -> ImageLoadUtil.loadImageToView(iconDownloadUrl, uiImageViewIcon));
 
 		int unSelectColor = ContextCompat.getColor(uiImageViewIcon.getContext(), R.color.black_100);
 		int selectColor = ContextCompat.getColor(uiImageViewIcon.getContext(), R.color.teal_800);

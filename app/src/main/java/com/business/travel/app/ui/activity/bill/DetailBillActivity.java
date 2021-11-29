@@ -17,7 +17,7 @@ import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.MemberService;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.FutureUtil;
-import com.business.travel.app.utils.LoadImageUtil;
+import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.utils.SplitUtil;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
@@ -53,7 +53,7 @@ public class DetailBillActivity extends BaseActivity<ActivityDetailBillBinding> 
 
 	private void showBill(Bill selectedBill) {
 		ImageView imageView = findViewById(R.id.UI_ImageView_Icon);
-		FutureUtil.runAsync(() -> LoadImageUtil.loadImageToView(selectedBill.getIconDownloadUrl(), imageView));
+		FutureUtil.runAsync(() -> ImageLoadUtil.loadImageToView(selectedBill.getIconDownloadUrl(), imageView));
 		TextView textView = findViewById(R.id.UI_TextView_Description);
 		textView.setText(selectedBill.getName());
 

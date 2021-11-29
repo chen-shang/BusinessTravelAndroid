@@ -7,7 +7,7 @@ import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.enums.ItemIconEnum;
 import com.pixplicity.sharp.Sharp;
 
-public class LoadImageUtil {
+public class ImageLoadUtil {
 	/**
 	 * 加载图片到指定的ImageView
 	 *

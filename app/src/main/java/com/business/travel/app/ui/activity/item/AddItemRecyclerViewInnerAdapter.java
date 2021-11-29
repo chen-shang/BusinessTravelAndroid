@@ -22,7 +22,7 @@ import com.business.travel.app.ui.activity.item.AddItemRecyclerViewInnerAdapter.
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.FutureUtil;
-import com.business.travel.app.utils.LoadImageUtil;
+import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.utils.SplitUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -57,7 +57,7 @@ public class AddItemRecyclerViewInnerAdapter extends BaseRecyclerViewAdapter<Add
 		}
 
 		ImageView uiImageViewIcon = holder.uiImageViewIcon;
-		FutureUtil.runAsync(() -> LoadImageUtil.loadImageToView(iconDownloadUrl, uiImageViewIcon));
+		FutureUtil.runAsync(() -> ImageLoadUtil.loadImageToView(iconDownloadUrl, uiImageViewIcon));
 
 		//最后一个被选中的按钮
 		//当图片按钮被点击的时候

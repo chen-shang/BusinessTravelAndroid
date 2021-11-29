@@ -20,7 +20,7 @@ import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.activity.item.EditItemRecyclerViewAdapter.EditItemRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
-import com.business.travel.app.utils.LoadImageUtil;
+import com.business.travel.app.utils.ImageLoadUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class EditItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<EditItemRecyclerViewAdapterViewHolder, ImageIconInfo> {
@@ -43,7 +43,7 @@ public class EditItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<EditIte
 			return;
 		}
 		final ImageIconInfo imageIconInfo = dataList.get(position);
-		CompletableFuture.runAsync(() -> LoadImageUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), holder.iconImageView));
+		CompletableFuture.runAsync(() -> ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), holder.iconImageView));
 		holder.nameTextView.setText(imageIconInfo.getName());
 	}
 
