@@ -94,15 +94,6 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	}
 
 	@Override
-	protected void onStart() {
-		super.onStart();
-		//初次使用app的时候,数据库中是没有消费项图标数据的,因此需要初始化一些默认的图标
-		consumptionService.initConsumption();
-		//初次使用app的时候,数据库中是没有人员图标数据的,因此需要初始化一些默认的图标
-		memberService.initMember();
-	}
-
-	@Override
 	protected void onResume() {
 		super.onResume();
 		//每次进来该页面的时候都需要刷新一下数据
