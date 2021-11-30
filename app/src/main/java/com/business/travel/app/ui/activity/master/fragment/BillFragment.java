@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,12 +34,17 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class BillFragment extends BaseFragment<FragmentBillBinding, BillFragmentShareData> {
 
 	private final List<DateBillInfo> dateBillInfoList = new ArrayList<>();
+	/**
+	 * 列表为空时候显示的内容,用headView实现该效果
+	 */
+	private View headView;
 	private BillRecyclerViewAdapter billRecyclerViewAdapter;
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = super.onCreateView(inflater, container, savedInstanceState);
-
+		headView = getLayoutInflater().inflate(R.layout.base_empty_list, null);
+		headView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		//初始化
 		LayoutManager layoutManager = new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false);
 		viewBinding.UIBillFragmentSwipeRecyclerViewBillList.setLayoutManager(layoutManager);
@@ -71,33 +77,31 @@ public class BillFragment extends BaseFragment<FragmentBillBinding, BillFragment
 	@SuppressLint("SetTextI18n")
 	private void refreshBillList(Project project) {
 		if (project == null) {
+			checkEmpty();
 			return;
 		}
 		//先刷新头部
 		viewBinding.UIBillFragmentTextViewProjectName.setText(project.getName().trim());
 		viewBinding.UIBillFragmentTextViewDate.setText(project.getProductTime());
 
-		final BillDao billDao = AppDatabase.getInstance(requireActivity()).billDao();
-		final Long sumTotalIncomeMoney = billDao.sumTotalIncomeMoney(project.getId());
+		BillDao billDao = AppDatabase.getInstance(requireActivity()).billDao();
+		Long sumTotalIncomeMoney = billDao.sumTotalIncomeMoney(project.getId());
 		if (sumTotalIncomeMoney == null || sumTotalIncomeMoney == 0) {
 			viewBinding.UIBillFragmentTextViewIncome.setVisibility(View.INVISIBLE);
 		} else {
 			viewBinding.UIBillFragmentTextViewIncome.setVisibility(View.VISIBLE);
 			viewBinding.UIBillFragmentTextViewIncome.setText("收入:" + sumTotalIncomeMoney);
 		}
-		final Long sumTotalSpendingMoney = billDao.sumTotalSpendingMoney(project.getId());
+		Long sumTotalSpendingMoney = billDao.sumTotalSpendingMoney(project.getId());
 		if (sumTotalSpendingMoney == null || sumTotalSpendingMoney == 0) {
 			viewBinding.UIBillFragmentTextViewPay.setVisibility(View.INVISIBLE);
 		} else {
 			viewBinding.UIBillFragmentTextViewPay.setVisibility(View.VISIBLE);
 			viewBinding.UIBillFragmentTextViewPay.setText("支出:" + sumTotalSpendingMoney);
 		}
-		final List<Bill> billList = billDao.selectByProjectId(project.getId());
-		if (CollectionUtils.isEmpty(billList)) {
-			return;
-		}
-
+		List<Bill> billList = billDao.selectByProjectId(project.getId());
 		dateBillInfoList.clear();
+
 		billList.stream().collect(Collectors.groupingBy(Bill::getConsumeDate)).forEach((consumeDate, bills) -> {
 			DateBillInfo dateBillInfo = new DateBillInfo();
 			dateBillInfo.setDate(consumeDate);
@@ -105,7 +109,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding, BillFragment
 			dateBillInfoList.add(dateBillInfo);
 		});
 
-		billRecyclerViewAdapter.notifyDataSetChanged();
+		checkEmpty();
 	}
 
 	@Override
@@ -113,5 +117,18 @@ public class BillFragment extends BaseFragment<FragmentBillBinding, BillFragment
 		super.onPause();
 		FloatingActionButton floatingActionButton = requireActivity().findViewById(R.id.UI_MasterActivity_FloatingActionButton);
 		AnimalUtil.reset(floatingActionButton);
+	}
+
+	/**
+	 * 检查数据是否为空
+	 */
+	private void checkEmpty() {
+		if (CollectionUtils.isNotEmpty(dateBillInfoList)) {
+			viewBinding.UIBillFragmentSwipeRecyclerViewBillList.removeHeaderView(headView);
+		}
+
+		if (CollectionUtils.isEmpty(dateBillInfoList) && viewBinding.UIBillFragmentSwipeRecyclerViewBillList.getHeaderCount() == 0) {
+			viewBinding.UIBillFragmentSwipeRecyclerViewBillList.addHeaderView(headView);
+		}
 	}
 }

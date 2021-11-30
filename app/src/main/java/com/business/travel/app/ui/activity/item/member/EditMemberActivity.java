@@ -7,9 +7,11 @@ import java.util.stream.IntStream;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
+import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.databinding.ActivityEditMemberBinding;
 import com.business.travel.app.enums.ItemTypeEnum;
@@ -39,6 +41,10 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 	private EditItemRecyclerViewAdapter editConsumptionRecyclerViewAdapter;
 	//注入service
 	private MemberService memberService;
+	/**
+	 * 列表为空时候显示的内容,用headView实现该效果
+	 */
+	private View headView;
 
 	@Override
 	protected void inject() {
@@ -48,6 +54,8 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		headView = getLayoutInflater().inflate(R.layout.base_empty_list, null);
+		headView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		/**
 		 * 注册列表
 		 */
@@ -92,9 +100,10 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 			if (direction == RIGHT_DIRECTION && menuPosition == 0) {
 				//移除元素
 				memberIconList.remove(adapterPosition);
-				editConsumptionRecyclerViewAdapter.notifyDataSetChanged();
 				//先删除该元素
 				memberService.softDeleteMember(imageIconInfo.getId());
+				editConsumptionRecyclerViewAdapter.notifyDataSetChanged();
+				checkEmpty();
 			}
 		});
 
@@ -120,6 +129,7 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 		memberIconList.clear();
 		memberIconList.addAll(newLeastMemberIconList);
 		editConsumptionRecyclerViewAdapter.notifyDataSetChanged();
+		checkEmpty();
 	}
 
 	/**
@@ -128,5 +138,18 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 	private void registerEditConsumptionActivityImageButtonBack() {
 		//返回按钮点击后
 		viewBinding.UIEditAssociateActivityImageButtonBack.setOnClickListener(v -> this.finish());
+	}
+
+	/**
+	 * 检查数据是否为空
+	 */
+	private void checkEmpty() {
+		if (CollectionUtils.isNotEmpty(memberIconList)) {
+			viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.removeHeaderView(headView);
+		}
+
+		if (CollectionUtils.isEmpty(memberIconList) && viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.getHeaderCount() == 0) {
+			viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.addHeaderView(headView);
+		}
 	}
 }

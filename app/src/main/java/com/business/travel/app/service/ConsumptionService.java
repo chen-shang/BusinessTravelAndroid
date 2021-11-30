@@ -17,6 +17,7 @@ import com.business.travel.app.enums.DeleteEnum;
 import com.business.travel.app.model.GiteeContent;
 import com.business.travel.app.utils.FutureUtil;
 import com.business.travel.utils.DateTimeUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class ConsumptionService {
@@ -83,7 +84,16 @@ public class ConsumptionService {
 	private Consumption convert(GiteeContent v5ReposOwnerRepoContent, ConsumptionTypeEnum spending) {
 		Consumption consumption = new Consumption();
 		String originalName = v5ReposOwnerRepoContent.getName();
+		//如果按照规则,直接取中文名字即可
 		String name = originalName.replaceAll("\\s*", "").replaceAll("[^(\\u4e00-\\u9fa5)]", "");
+		if (StringUtils.isBlank(name)) {
+			//如果不是中文名字,就取去掉后缀后的名字
+			name = originalName.trim().substring(0, originalName.lastIndexOf("."));
+			if (name.contains("-")) {
+				name = name.substring(name.indexOf("-"));
+			}
+		}
+
 		consumption.setName(name);
 		consumption.setIconDownloadUrl(v5ReposOwnerRepoContent.getDownloadUrl());
 		consumption.setIconName(v5ReposOwnerRepoContent.getPath());

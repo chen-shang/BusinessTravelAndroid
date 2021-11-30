@@ -10,9 +10,11 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
+import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.ColorUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Consumption;
@@ -48,7 +50,10 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 	 * 当前被选中的是支出还是收入
 	 */
 	private ConsumptionTypeEnum consumptionType = ConsumptionTypeEnum.SPENDING;
-
+	/**
+	 * 列表为空时候显示的内容,用headView实现该效果
+	 */
+	private View headView;
 	//注入service
 	private ConsumptionService consumptionService;
 
@@ -60,6 +65,8 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		headView = getLayoutInflater().inflate(R.layout.base_empty_list, null);
+		headView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		Objects.requireNonNull(getSupportActionBar()).hide();
 		//获取当前是什么类型
 		registerConsumptionType();
@@ -164,9 +171,10 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 			if (direction == RIGHT_DIRECTION && menuPosition == 0) {
 				//移除元素
 				consumptionImageIconList.remove(adapterPosition);
-				editConsumptionRecyclerViewAdapter.notifyDataSetChanged();
 				//先删除该元素
 				consumptionService.softDeleteConsumption(imageIconInfo.getId());
+				editConsumptionRecyclerViewAdapter.notifyDataSetChanged();
+				checkEmpty();
 			}
 		});
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setAdapter(editConsumptionRecyclerViewAdapter);
@@ -204,8 +212,8 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 		}
 
 		List<Consumption> consumptionList = consumptionService.queryConsumptionItemByType(consumptionTypeEnum);
-		final List<ImageIconInfo> newImage = consumptionList.stream().map(consumptionItem -> {
-			final ImageIconInfo imageIconInfo = ConsumptionConverter.INSTANCE.convertImageIconInfo(consumptionItem);
+		List<ImageIconInfo> newImage = consumptionList.stream().map(consumptionItem -> {
+			ImageIconInfo imageIconInfo = ConsumptionConverter.INSTANCE.convertImageIconInfo(consumptionItem);
 			imageIconInfo.setItemType(ItemTypeEnum.CONSUMPTION.name());
 			return imageIconInfo;
 		}).collect(Collectors.toList());
@@ -213,5 +221,20 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 		this.consumptionImageIconList.clear();
 		this.consumptionImageIconList.addAll(newImage);
 		editConsumptionRecyclerViewAdapter.notifyDataSetChanged();
+
+		checkEmpty();
+	}
+
+	/**
+	 * 检查数据是否为空
+	 */
+	private void checkEmpty() {
+		if (CollectionUtils.isNotEmpty(consumptionImageIconList)) {
+			viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.removeHeaderView(headView);
+		}
+
+		if (CollectionUtils.isEmpty(consumptionImageIconList) && viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.getHeaderCount() == 0) {
+			viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.addHeaderView(headView);
+		}
 	}
 }

@@ -28,7 +28,6 @@ import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.model.converter.ConsumptionConverter;
 import com.business.travel.app.service.BillService;
-import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.service.MemberService;
 import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.activity.item.consumption.EditConsumptionActivity;
@@ -65,9 +64,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	 * 选中的日期
 	 */
 	@Setter
-	private String selectedDate = DateTimeUtil.format(new Date());
+	private String selectedDate = DateTimeUtil.format(new Date(), "yyyy-MM-dd");
 
-	private ConsumptionService consumptionService;
 	private BillService billService;
 	private ProjectService projectService;
 	private MemberService memberService;
@@ -75,7 +73,6 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	@Override
 	protected void inject() {
 		memberService = new MemberService(this);
-		consumptionService = new ConsumptionService(this);
 		billService = new BillService(this);
 		projectService = new ProjectService(this);
 	}
