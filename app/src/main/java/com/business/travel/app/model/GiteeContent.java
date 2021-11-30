@@ -69,18 +69,18 @@ public class GiteeContent {
 			return showName;
 		}
 		//想办法去掉后缀
-		if (showName.contains(".")) {
+		if (this.name.contains(".")) {
 			showName = this.name.trim().substring(0, this.name.lastIndexOf("."));
 		}
 
 		//想办法去掉数字
-		if (showName.contains("-")) {
-			showName = showName.substring(showName.indexOf("-"));
+		if (this.name.contains("-")) {
+			showName = showName.substring(showName.indexOf("-")).replace("-", "");
 		}
 
 		if (StringUtils.isNotBlank(showName)) {
-			return name;
+			return showName;
 		}
-		return showName;
+		return name;
 	}
 }
