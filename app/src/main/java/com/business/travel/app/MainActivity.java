@@ -1,6 +1,7 @@
 package com.business.travel.app;
 
-import java.util.concurrent.TimeUnit;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +14,6 @@ import com.business.travel.app.ui.TestActivity;
 import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.FutureUtil;
-import lombok.SneakyThrows;
 
 /**
  * @author chenshang
@@ -38,7 +38,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 		});
 	}
 
-	@SneakyThrows
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -47,12 +46,15 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 		FutureUtil.runAsync(() -> {
 			consumptionService.initConsumption();
 			memberService.initMember();
-		}).;
+		});
 
-		//休眠5秒后跳转到首页
-		TimeUnit.SECONDS.sleep(5);
-
+		Timer timer = new Timer();
 		Intent goMasterActivityIntent = new Intent(this, MasterActivity.class);
-		startActivity(goMasterActivityIntent);
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				startActivity(goMasterActivityIntent);
+			}
+		}, 5000);
 	}
 }
