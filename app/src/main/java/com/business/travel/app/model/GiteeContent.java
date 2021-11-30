@@ -19,7 +19,7 @@ public class GiteeContent {
 	@JsonProperty("download_url")
 	private String downloadUrl;
 	/**
-	 * 文件名字
+	 * 文件名字 文件名的命名规则是 1-xxx.svg
 	 */
 	private String name;
 	/**
@@ -55,5 +55,32 @@ public class GiteeContent {
 			return 1;
 		}
 		return list.stream().findFirst().map(Integer::valueOf).orElse(1);
+	}
+
+	/**
+	 * 文件名的命名规则是 1-xxx.svg
+	 *
+	 * @return
+	 */
+	public String showName() {
+		//如果按照规则,直接取中文名字即可
+		String showName = this.name.replaceAll("\\s*", "").replaceAll("[^(\\u4e00-\\u9fa5)]", "");
+		if (StringUtils.isNotBlank(showName)) {
+			return showName;
+		}
+		//想办法去掉后缀
+		if (showName.contains(".")) {
+			showName = this.name.trim().substring(0, this.name.lastIndexOf("."));
+		}
+
+		//想办法去掉数字
+		if (showName.contains("-")) {
+			showName = showName.substring(showName.indexOf("-"));
+		}
+
+		if (StringUtils.isNotBlank(showName)) {
+			return name;
+		}
+		return showName;
 	}
 }
