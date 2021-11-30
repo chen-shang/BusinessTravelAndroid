@@ -21,8 +21,8 @@ import org.jetbrains.annotations.NotNull;
 public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 
 	@Override
-	protected void inject() {
-
+	public void onBackPressed() {
+		//从广告页面跳转过来后不在支持跳转回去
 	}
 
 	@Override
