@@ -1,7 +1,6 @@
 package com.business.travel.app.ui.activity.bill;
 
 import java.util.List;
-import java.util.Stack;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,8 +20,6 @@ import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.utils.DateTimeUtil;
 import com.loper7.date_time_picker.dialog.CardDatePickerDialog;
 import com.loper7.date_time_picker.dialog.CardDatePickerDialog.Builder;
-import com.loper7.date_time_picker.dialog.CardDatePickerDialog.OnCancelListener;
-import com.loper7.date_time_picker.dialog.CardDatePickerDialog.OnChooseListener;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +30,6 @@ public class KeyboardRecyclerViewAdapter extends BaseRecyclerViewAdapter<Keyboar
 
 	private OnClickListener onSaveClick;
 	private OnClickListener onReRecordClick;
-	private Stack<Long> stack = new Stack<>();
 
 	public KeyboardRecyclerViewAdapter(List<Integer> integers, BaseActivity<? extends ViewBinding> baseActivity) {
 		super(integers, baseActivity);
@@ -74,25 +70,19 @@ public class KeyboardRecyclerViewAdapter extends BaseRecyclerViewAdapter<Keyboar
 				holder.dateTextView.setOnClickListener(v -> {
 					final CardDatePickerDialog cardDatePickerDialog = new Builder(activity)
 							.setTitle("选择日期")
-							.setDisplayType(new int[] {0, 1, 2,})
+							.setDisplayType(0, 1, 2)
 							.showBackNow(false)
 							.showFocusDateInfo(true)
-							.setOnChoose("选择", new OnChooseListener() {
-								@Override
-								public void onChoose(long l) {
-									if (DateTimeUtil.toLocalDateTime(l).toLocalDate().isEqual(DateTimeUtil.now().toLocalDate())) {
-										holder.dateTextView.setText("今天");
-										return;
-									}
-									holder.dateTextView.setText(DateTimeUtil.format(l, "MM.dd"));
-									((AddBillActivity)activity).refreshSelectedDate(DateTimeUtil.format(l));
+							.setOnChoose("选择", l -> {
+								if (DateTimeUtil.toLocalDateTime(l).toLocalDate().isEqual(DateTimeUtil.now().toLocalDate())) {
+									holder.dateTextView.setText("今天");
+									return;
 								}
+								holder.dateTextView.setText(DateTimeUtil.format(l, "MM.dd"));
+								((AddBillActivity)activity).setSelectedDate(DateTimeUtil.format(l));
 							})
-							.setOnCancel("取消", new OnCancelListener() {
-								@Override
-								public void onCancel() {
+							.setOnCancel("取消", () -> {
 
-								}
 							})
 							.build();
 					cardDatePickerDialog.show();
@@ -113,13 +103,7 @@ public class KeyboardRecyclerViewAdapter extends BaseRecyclerViewAdapter<Keyboar
 				//正号
 				holder.numButton.setText("+");
 				holder.numButton.setOnClickListener(v -> {
-					String amount = holder.amountTextView.getText().toString();
-					if (StringUtils.isBlank(amount)) {
-						return;
-					}
-					if (stack.isEmpty()) {
-						//new BigDecimal(amount).multiply();
-					}
+					// TODO: 2021/11/30
 				});
 				break;
 			case 11:

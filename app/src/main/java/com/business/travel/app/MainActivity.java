@@ -1,43 +1,58 @@
 package com.business.travel.app;
 
-import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.ColorUtils;
 import com.business.travel.app.databinding.ActivityMainBinding;
-import com.business.travel.app.ui.activity.master.MasterActivity;
+import com.business.travel.app.service.ConsumptionService;
+import com.business.travel.app.service.MemberService;
 import com.business.travel.app.ui.TestActivity;
+import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.base.BaseActivity;
+import com.business.travel.app.utils.FutureUtil;
+import lombok.SneakyThrows;
 
 /**
  * @author chenshang
  */
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
+	private ConsumptionService consumptionService;
+	private MemberService memberService;
+
+	@Override
+	protected void inject() {
+		memberService = new MemberService(this);
+		consumptionService = new ConsumptionService(this);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		BarUtils.setStatusBarColor(this, ColorUtils.getColor(R.color.white));
-		Objects.requireNonNull(getSupportActionBar()).hide();
-
 		viewBinding.UIMainActivityImageViewIcon.setOnClickListener(v -> {
 			Intent intent = new Intent(this, TestActivity.class);
 			startActivity(intent);
 		});
 	}
 
-	public void goMasterActivity(View view) {
-		Intent intent = new Intent(this, MasterActivity.class);
-		startActivity(intent);
-	}
+	@SneakyThrows
+	@Override
+	protected void onStart() {
+		super.onStart();
+		//要充分利用启动页面的停顿时间,尽量做一些后台工作,比如检查网络,同步数据之类的,初始化数据之类
+		//因为这个类只在启动的时候启动一次,不会重复做一些事情,可以提升其他页面的访问速度
+		FutureUtil.runAsync(() -> {
+			consumptionService.initConsumption();
+			memberService.initMember();
+		}).;
 
-	public void goAccountLongActivity(View view) {
-	}
+		//休眠5秒后跳转到首页
+		TimeUnit.SECONDS.sleep(5);
 
-	public void goSingUpActivity(View view) {
-
+		Intent goMasterActivityIntent = new Intent(this, MasterActivity.class);
+		startActivity(goMasterActivityIntent);
 	}
 }

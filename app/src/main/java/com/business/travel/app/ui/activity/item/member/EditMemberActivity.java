@@ -24,11 +24,26 @@ import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
 
 import static com.yanzhenjie.recyclerview.SwipeRecyclerView.RIGHT_DIRECTION;
 
+/**
+ * 编辑人员页面
+ */
 public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> {
 
-	private final MemberService memberService = new MemberService(this);
+	/**
+	 * 人员图标列表
+	 */
 	private final List<ImageIconInfo> memberIconList = new ArrayList<>();
+	/**
+	 * 人员图标列表适配器
+	 */
 	private EditItemRecyclerViewAdapter editConsumptionRecyclerViewAdapter;
+	//注入service
+	private MemberService memberService;
+
+	@Override
+	protected void inject() {
+		memberService = new MemberService(this);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -112,10 +127,6 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 	 */
 	private void registerEditConsumptionActivityImageButtonBack() {
 		//返回按钮点击后
-		viewBinding.UIEditAssociateActivityImageButtonBack.setOnClickListener(v -> {
-			//记得保存一下顺序
-			this.finish();
-		});
+		viewBinding.UIEditAssociateActivityImageButtonBack.setOnClickListener(v -> this.finish());
 	}
-
 }

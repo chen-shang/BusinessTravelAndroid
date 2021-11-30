@@ -21,6 +21,11 @@ import org.jetbrains.annotations.NotNull;
 public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 
 	@Override
+	protected void inject() {
+
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Objects.requireNonNull(getSupportActionBar()).hide();

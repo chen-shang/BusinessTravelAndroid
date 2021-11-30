@@ -38,6 +38,7 @@ import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.app.utils.LogToast;
 import com.business.travel.utils.DateTimeUtil;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -45,12 +46,6 @@ import org.apache.commons.lang3.StringUtils;
  * 添加账单
  */
 public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
-
-	private final MemberService memberService = new MemberService(this);
-	private final ConsumptionService consumptionService = new ConsumptionService(this);
-
-	private final BillService billService = new BillService(this);
-	private final ProjectService projectService = new ProjectService(this);
 
 	/**
 	 * 消费项图标信息
@@ -60,18 +55,28 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	 * 人员图标信息
 	 */
 	private final List<ImageIconInfo> memberIconList = new ArrayList<>();
+
 	/**
 	 * 当前被选中的是支出还是收入
 	 */
 	private ConsumptionTypeEnum consumptionType = ConsumptionTypeEnum.SPENDING;
-
 	/**
 	 * 选中的日期
 	 */
+	@Setter
 	private String selectedDate = DateTimeUtil.format(new Date());
 
-	public void refreshSelectedDate(String selectedDate) {
-		this.selectedDate = selectedDate;
+	private ConsumptionService consumptionService;
+	private BillService billService;
+	private ProjectService projectService;
+	private MemberService memberService;
+
+	@Override
+	protected void inject() {
+		memberService = new MemberService(this);
+		consumptionService = new ConsumptionService(this);
+		billService = new BillService(this);
+		projectService = new ProjectService(this);
 	}
 
 	@Override

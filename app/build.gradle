@@ -167,6 +167,8 @@ dependencies {
     //分页图标组件
     implementation 'com.github.mtjsoft:GridPager:v3.7.0'
 
+    //动画
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 }
 
 //编译的时候织入代码

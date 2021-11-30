@@ -20,19 +20,38 @@ import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.utils.SplitUtil;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
+/**
+ * 账单详情页面
+ */
 public class DetailBillActivity extends BaseActivity<ActivityDetailBillBinding> {
 
-	private final BillService billService = new BillService(this);
-	private final MemberService memberService = new MemberService(this);
-
-	ItemIconRecyclerViewAdapter memberRecyclerViewAdapter;
-	private List<ImageIconInfo> memberIconList = new ArrayList<>();
+	/**
+	 * 成员图标
+	 */
+	private final List<ImageIconInfo> memberIconList = new ArrayList<>();
+	/**
+	 * 成员列表适配器
+	 */
+	private ItemIconRecyclerViewAdapter memberRecyclerViewAdapter;
+	/**
+	 * 当前被选中的账单信息
+	 */
 	private Bill selectedBill;
+	//注入service
+	private BillService billService;
+	private MemberService memberService;
+
+	@Override
+	protected void inject() {
+		billService = new BillService(this);
+		memberService = new MemberService(this);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		long selectBillId = getIntent().getExtras().getLong("selectBillId");
+
 		initSelectedBill(selectBillId);
 		//注册返回按钮操作事件
 		registerImageButtonBack();

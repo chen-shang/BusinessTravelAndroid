@@ -78,6 +78,11 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 	private ImageIconInfo lastSelectedImageIcon;
 
 	@Override
+	protected void inject() {
+
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 

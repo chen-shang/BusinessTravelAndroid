@@ -36,11 +36,10 @@ import static com.yanzhenjie.recyclerview.SwipeRecyclerView.RIGHT_DIRECTION;
  * @author chenshang
  */
 public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptionBinding> {
-	private final ConsumptionService consumptionService = new ConsumptionService(this);
 	/**
 	 * 消费项图标信息列表
 	 */
-	List<ImageIconInfo> consumptionImageIconList = new ArrayList<>();
+	private final List<ImageIconInfo> consumptionImageIconList = new ArrayList<>();
 	/**
 	 * 消费项图标列表适配器
 	 */
@@ -49,6 +48,14 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 	 * 当前被选中的是支出还是收入
 	 */
 	private ConsumptionTypeEnum consumptionType = ConsumptionTypeEnum.SPENDING;
+
+	//注入service
+	private ConsumptionService consumptionService;
+
+	@Override
+	protected void inject() {
+		consumptionService = new ConsumptionService(this);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -182,9 +189,7 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 	 */
 	private void registerEditConsumptionActivityImageButtonBack() {
 		//返回按钮点击后
-		viewBinding.UIEditConsumptionActivityImageButtonBack.setOnClickListener(v -> {
-			this.finish();
-		});
+		viewBinding.UIEditConsumptionActivityImageButtonBack.setOnClickListener(v -> this.finish());
 	}
 
 	@Override

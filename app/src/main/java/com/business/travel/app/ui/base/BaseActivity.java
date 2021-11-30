@@ -29,6 +29,11 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
 	@Getter
 	protected VB viewBinding;
 
+	/**
+	 * 初始化注册一些变量
+	 */
+	protected void inject() {}
+
 	@Override
 	protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -45,6 +50,8 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
 		} catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
 			Log.e("BaseActivity", "banding error", e);
 		}
+
+		inject();
 	}
 
 	@Override
