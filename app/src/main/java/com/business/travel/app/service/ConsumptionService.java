@@ -1,15 +1,23 @@
 package com.business.travel.app.service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import android.content.Context;
+import com.blankj.utilcode.util.CollectionUtils;
+import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.dal.dao.ConsumptionDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Consumption;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
+import com.business.travel.app.enums.DeleteEnum;
+import com.business.travel.app.model.GiteeContent;
+import com.business.travel.app.utils.FutureUtil;
 import com.business.travel.utils.DateTimeUtil;
+import org.jetbrains.annotations.NotNull;
 
 public class ConsumptionService {
 
@@ -45,19 +53,45 @@ public class ConsumptionService {
 			return;
 		}
 		//先获取远程的默认消费项列表,然后插入数据库,注意sortId todo
-		//收入和支出都需要默认图标 todo
-		List<Consumption> consumptions = new ArrayList<>();
-		for (int i = 0; i < 3; i++) {
-			Consumption consumption = new Consumption();
-			consumption.setName("name" + i);
-			consumption.setIconDownloadUrl("url" + i);
-			consumption.setIconName("iconName" + i);
-			consumption.setConsumptionType(ConsumptionTypeEnum.SPENDING.name());
-			consumption.setSortId((long)i);
-			consumption.setCreateTime(DateTimeUtil.format(new Date()));
-			consumption.setModifyTime(DateTimeUtil.format(new Date()));
-			consumptions.add(consumption);
-		}
-		consumptionDao.batchInsert(consumptions);
+		FutureUtil.supplyAsync(() -> {
+			List<Consumption> consumptions = new ArrayList<>();
+
+			List<GiteeContent> v5ReposOwnerRepoContentsIncome = BusinessTravelResourceApi.getV5ReposOwnerRepoContents("icon/DEFAULT/CONSUMPTION/INCOME");
+			if (CollectionUtils.isNotEmpty(v5ReposOwnerRepoContentsIncome)) {
+				List<Consumption> IncomeConsumptionList = getConsumptions(v5ReposOwnerRepoContentsIncome, ConsumptionTypeEnum.INCOME);
+				consumptions.addAll(IncomeConsumptionList);
+			}
+
+			List<GiteeContent> v5ReposOwnerRepoContentsSpending = BusinessTravelResourceApi.getV5ReposOwnerRepoContents("icon/DEFAULT/CONSUMPTION/SPENDING");
+			if (CollectionUtils.isNotEmpty(v5ReposOwnerRepoContentsSpending)) {
+				List<Consumption> IncomeConsumptionList = getConsumptions(v5ReposOwnerRepoContentsSpending, ConsumptionTypeEnum.SPENDING);
+				consumptions.addAll(IncomeConsumptionList);
+			}
+			return consumptions;
+		}).thenAccept(consumptionDao::batchInsert);
+	}
+
+	@NotNull
+	private List<Consumption> getConsumptions(List<GiteeContent> v5ReposOwnerRepoContentsSpending, ConsumptionTypeEnum consumptionTypeEnum) {
+		return v5ReposOwnerRepoContentsSpending.stream()
+				.filter(v5ReposOwnerRepoContent -> v5ReposOwnerRepoContent.getName().endsWith(".svg"))
+				.sorted(Comparator.comparingInt(GiteeContent::getItemSort))
+				.map(v5ReposOwnerRepoContent -> convert(v5ReposOwnerRepoContent, consumptionTypeEnum)).collect(Collectors.toList());
+	}
+
+	@NotNull
+	private Consumption convert(GiteeContent v5ReposOwnerRepoContent, ConsumptionTypeEnum spending) {
+		Consumption consumption = new Consumption();
+		String originalName = v5ReposOwnerRepoContent.getName();
+		String name = originalName.replaceAll("\\s*", "").replaceAll("[^(\\u4e00-\\u9fa5)]", "");
+		consumption.setName(name);
+		consumption.setIconDownloadUrl(v5ReposOwnerRepoContent.getDownloadUrl());
+		consumption.setIconName(v5ReposOwnerRepoContent.getPath());
+		consumption.setConsumptionType(spending.name());
+		consumption.setSortId((long)v5ReposOwnerRepoContent.getItemSort());
+		consumption.setCreateTime(DateTimeUtil.format(new Date()));
+		consumption.setModifyTime(DateTimeUtil.format(new Date()));
+		consumption.setIsDeleted(DeleteEnum.NOT_DELETE.getCode());
+		return consumption;
 	}
 }

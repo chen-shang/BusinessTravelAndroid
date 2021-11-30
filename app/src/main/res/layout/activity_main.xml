@@ -9,15 +9,14 @@
 
 
     <ImageView
+            android:id="@+id/UI_MainActivity_ImageView_Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_launcher_foreground"
             android:background="@drawable/corners_shape"
-            android:id="@+id/UI_MainActivity_ImageView_Icon"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.508"
             android:layout_marginTop="150dp"/>
 
     <TextView
@@ -26,14 +25,12 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black_100"
             android:textStyle="bold"
-            android:textSize="25sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/UI_MainActivity_ImageView_Icon"
             android:layout_marginTop="28dp"/>
 
     <com.github.ybq.android.spinkit.SpinKitView
-            android:id="@+id/spin_kit"
             style="@style/SpinKitView.Large.ThreeBounce"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

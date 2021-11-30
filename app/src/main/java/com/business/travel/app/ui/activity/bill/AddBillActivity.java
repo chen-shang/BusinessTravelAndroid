@@ -26,6 +26,7 @@ import com.business.travel.app.enums.ItemIconEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.model.ImageIconInfo;
+import com.business.travel.app.model.converter.ConsumptionConverter;
 import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.service.MemberService;
@@ -389,14 +390,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		}
 
 		final List<ImageIconInfo> imageIconInfos = consumptions.stream().map(consumptionItem -> {
-			ImageIconInfo imageIconInfo = new ImageIconInfo();
-			imageIconInfo.setId(consumptionItem.getId());
-			imageIconInfo.setIconName(consumptionItem.getIconName());
+			ImageIconInfo imageIconInfo = ConsumptionConverter.INSTANCE.convertImageIconInfo(consumptionItem);
 			imageIconInfo.setItemType(ItemTypeEnum.CONSUMPTION.name());
-			imageIconInfo.setName(consumptionItem.getName());
-			imageIconInfo.setSortId(consumptionItem.getSortId());
-			imageIconInfo.setIconDownloadUrl(consumptionItem.getIconDownloadUrl());
-			imageIconInfo.setSelected(false);
 			return imageIconInfo;
 		}).collect(Collectors.toList());
 		//添加编辑按钮编辑按钮永远在最后

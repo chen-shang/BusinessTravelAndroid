@@ -10,7 +10,6 @@ import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.dal.dao.MemberDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Member;
-import com.business.travel.app.enums.DeleteEnum;
 import com.business.travel.app.enums.ItemIconEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.ImageIconInfo;
@@ -31,21 +30,24 @@ public class MemberService {
 	 */
 	public List<ImageIconInfo> queryAllMembersImageIconInfo() {
 		List<Member> members = memberDao.selectAll();
-		if (CollectionUtils.isEmpty(members)) {
-			return Collections.emptyList();
-		}
-
-		return members.stream().map(member -> {
-			ImageIconInfo imageIconInfo = MemberConverter.INSTANCE.convertImageIconInfo(member);
-			imageIconInfo.setItemType(ItemTypeEnum.MEMBER.name());
-			return imageIconInfo;
-		}).collect(Collectors.toList());
+		return convert(members);
 	}
 
+	/**
+	 * 更新人员排序
+	 *
+	 * @param id
+	 * @param sortId
+	 */
 	public void updateMemberSort(Long id, Long sortId) {
 		memberDao.updateSort(id, sortId);
 	}
 
+	/**
+	 * 删除人员
+	 *
+	 * @param id
+	 */
 	public void softDeleteMember(Long id) {
 		memberDao.softDelete(id);
 	}
@@ -70,6 +72,10 @@ public class MemberService {
 
 	public List<ImageIconInfo> queryAll(List<Long> ids) {
 		List<Member> members = memberDao.selectAll(ids);
+		return convert(members);
+	}
+
+	private List<ImageIconInfo> convert(List<Member> members) {
 		if (CollectionUtils.isEmpty(members)) {
 			return Collections.emptyList();
 		}
