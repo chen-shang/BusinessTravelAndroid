@@ -134,8 +134,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 
 		textView.setText(imageIconInfo.getName());
 
-		int unSelectColor = ContextCompat.getColor(getApplicationContext(), R.color.black_100);
-		int selectColor = ContextCompat.getColor(getApplicationContext(), R.color.teal_800);
+		//int unSelectColor = ContextCompat.getColor(getApplicationContext(), R.color.black_100);
+		//int selectColor = ContextCompat.getColor(getApplicationContext(), R.color.teal_800);
 
 		imageView.setOnClickListener(v -> {
 			//如果是编辑按钮
@@ -150,7 +150,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 				imageIconInfo.setSelected(false);
 				//否则,改变选中颜色
 				v.setBackgroundResource(R.drawable.corners_shape_unselect);
-				textView.setTextColor(unSelectColor);
+				//textView.setTextColor(unSelectColor);
 				return;
 			}
 
@@ -158,7 +158,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 				imageIconInfo.setSelected(true);
 				//否则,改变选中颜色
 				v.setBackgroundResource(R.drawable.corners_shape_select);
-				textView.setTextColor(selectColor);
+				//textView.setTextColor(selectColor);
 				return;
 			}
 		});
