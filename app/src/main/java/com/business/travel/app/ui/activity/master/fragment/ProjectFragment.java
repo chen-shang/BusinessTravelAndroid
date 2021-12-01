@@ -21,6 +21,7 @@ import com.business.travel.app.ui.base.ShareData;
 import com.lxj.xpopup.XPopup.Builder;
 import com.lxj.xpopup.impl.AttachListPopupView;
 import com.lxj.xpopup.impl.InputConfirmPopupView;
+import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 /**
  * @author chenshang
@@ -30,7 +31,7 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding, ShareD
 	/**
 	 * 项目列表
 	 */
-	private final List<Project> projects = new ArrayList<>();
+	private final List<Project> projectList = new ArrayList<>();
 	/**
 	 * 项目列表适配器
 	 */
@@ -51,22 +52,12 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding, ShareD
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = super.onCreateView(inflater, container, savedInstanceState);
-		headView = getLayoutInflater().inflate(R.layout.base_empty_list, null);
-		headView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-
-		viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
-		projectListRecyclerViewAdapter = new ProjectRecyclerViewAdapter(projects, (MasterActivity)requireActivity());
-		viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList.setAdapter(projectListRecyclerViewAdapter);
-
-		//这个是添加新项目时候弹出的
-		final InputConfirmPopupView projectNameInputPopupView = new Builder(getContext()).asInputConfirm(null, "请输入新项目名称", text -> {
-			projectService.createIfNotExist(text);
-			refreshProjectList();
-		});
-		//这个是点击右上角三个小圆点弹出的
-		final AttachListPopupView attachListPopupView = new Builder(getContext()).atView(viewBinding.UIProjectFragmentImageViewOther).asAttachList(new String[] {"添加项目"}, new int[] {R.drawable.ic_base_sort}, (position, text) -> projectNameInputPopupView.show());
-		viewBinding.UIProjectFragmentImageViewOther.setOnClickListener(v -> attachListPopupView.show());
-
+		// 初始化  列表为空时候显示的内容,用headView实现该效果
+		initHeadView();
+		//注册项目列表页
+		registerSwipeRecyclerView();
+		//注册右上角点击事件
+		registerPopupView();
 		return view;
 	}
 
@@ -78,29 +69,79 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding, ShareD
 	}
 
 	/**
+	 * 注册右上角点击事件
+	 */
+	private void registerPopupView() {
+		//这个是添加新项目时候弹出的
+		final InputConfirmPopupView projectNameInputPopupView = new Builder(getContext()).asInputConfirm(null, "请输入新项目名称", text -> {
+			projectService.createIfNotExist(text);
+			refreshProjectList();
+		});
+		//这个是点击右上角三个小圆点弹出的
+		final AttachListPopupView attachListPopupView = new Builder(getContext()).atView(viewBinding.UIProjectFragmentImageViewOther).asAttachList(new String[] {"添加项目"}, new int[] {R.drawable.ic_base_sort}, (position, text) -> projectNameInputPopupView.show());
+		viewBinding.UIProjectFragmentImageViewOther.setOnClickListener(v -> attachListPopupView.show());
+	}
+
+	/**
+	 * 注册项目列表页
+	 */
+	private void registerSwipeRecyclerView() {
+		//采用线性布局
+		viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
+		//项目列表适配器,这里面有项目卡片的布局
+		projectListRecyclerViewAdapter = new ProjectRecyclerViewAdapter(projectList, (MasterActivity)requireActivity());
+		viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList.setAdapter(projectListRecyclerViewAdapter);
+	}
+
+	/**
+	 * 列表为空时候显示的内容,用headView实现该效果
+	 */
+	private void initHeadView() {
+		headView = getLayoutInflater().inflate(R.layout.base_empty_list, null);
+		headView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+	}
+
+	/**
 	 * 刷新项目列表
 	 * TODO: 后续改成分页
 	 */
 	public void refreshProjectList() {
-		//在查询全量
-		final List<Project> allProjects = projectService.queryAll();
-		if (CollectionUtils.isEmpty(allProjects)) {
-			showEmptyHeader();
+		SwipeRecyclerView swipeRecyclerView = viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList;
+		//先查询全量
+		final List<Project> projectList = projectService.queryAll();
+		if (CollectionUtils.isEmpty(projectList)) {
+			//如果没有数据就展示空Header
+			notifyProjectDataClear();
+			//显示空的Header
+			addEmptyHeaderTo(swipeRecyclerView);
 			return;
 		}
 
-		viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList.removeHeaderView(headView);
-		projects.clear();
-		projects.addAll(allProjects);
+		//移除空的Header
+		removeEmptyHeaderOf(swipeRecyclerView);
 		//通知adapter更新列表
+		notifyProjectListDataChange(projectList);
+	}
+
+	private void notifyProjectDataClear() {
+		//清空原来的数据
+		projectList.clear();
 		projectListRecyclerViewAdapter.notifyDataSetChanged();
 	}
 
-	private void showEmptyHeader() {
-		projects.clear();
+	private void notifyProjectListDataChange(List<Project> allProjects) {
+		projectList.clear();
+		projectList.addAll(allProjects);
 		projectListRecyclerViewAdapter.notifyDataSetChanged();
-		if (viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList.getHeaderCount() == 0) {
-			viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList.addHeaderView(headView);
+	}
+
+	private void addEmptyHeaderTo(SwipeRecyclerView swipeRecyclerView) {
+		if (swipeRecyclerView.getHeaderCount() == 0) {
+			swipeRecyclerView.addHeaderView(headView);
 		}
+	}
+
+	private void removeEmptyHeaderOf(SwipeRecyclerView swipeRecyclerView) {
+		swipeRecyclerView.removeHeaderView(headView);
 	}
 }
