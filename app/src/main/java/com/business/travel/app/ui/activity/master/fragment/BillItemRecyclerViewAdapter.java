@@ -69,7 +69,7 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 
 		ImageLoadUtil.loadImageToView(bill.getIconDownloadUrl(), holder.iconImageView);
 
-		String name = bill.getName();
+		String name = bill.getConsumptionIds();
 		if (StringUtils.isNotBlank(name)) {
 			List<Long> ids = SplitUtil.trimToLongList(name);
 			List<Consumption> consumptions = consumptionService.queryByIds(ids);

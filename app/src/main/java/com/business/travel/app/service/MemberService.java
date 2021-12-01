@@ -28,9 +28,8 @@ public class MemberService {
 	 *
 	 * @return
 	 */
-	public List<ImageIconInfo> queryAllMembersImageIconInfo() {
-		List<Member> members = memberDao.selectAll();
-		return convert(members);
+	public List<ImageIconInfo> queryAllMembersIconInfo() {
+		return convert(memberDao.selectAll());
 	}
 
 	/**
@@ -83,6 +82,7 @@ public class MemberService {
 		return members.stream().map(member -> {
 			ImageIconInfo imageIconInfo = MemberConverter.INSTANCE.convertImageIconInfo(member);
 			imageIconInfo.setItemType(ItemTypeEnum.MEMBER.name());
+			imageIconInfo.setSelected("我".equals(member.getName()));
 			return imageIconInfo;
 		}).collect(Collectors.toList());
 	}

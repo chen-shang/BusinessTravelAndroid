@@ -29,4 +29,12 @@ public class BillService {
 	public void creatBill(Bill bill) {
 		billDao.insert(bill);
 	}
+
+	public Long sumTotalSpendingMoney(Long id) {
+		return billDao.sumTotalSpendingMoney(id);
+	}
+
+	public Long sumTotalIncomeMoney(Long id) {
+		return billDao.sumTotalIncomeMoney(id);
+	}
 }

@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "bfaf81fc58455c73eb4dcbf5e50ac4d7",
+    "identityHash": "e88d67d4b60aaacefba22772ddc8cac0",
     "entities": [
       {
         "tableName": "Member",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `gender` INTEGER, `iconDownloadUrl` TEXT, `iconName` TEXT, `sortId` INTEGER, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `iconDownloadUrl` TEXT, `iconName` TEXT, `sortId` INTEGER, `gender` INTEGER, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -18,12 +18,6 @@
             "fieldPath": "name",
             "columnName": "name",
             "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "gender",
-            "columnName": "gender",
-            "affinity": "INTEGER",
             "notNull": false
           },
           {
@@ -41,6 +35,12 @@
           {
             "fieldPath": "sortId",
             "columnName": "sortId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "gender",
+            "columnName": "gender",
             "affinity": "INTEGER",
             "notNull": false
           },
@@ -75,7 +75,7 @@
       },
       {
         "tableName": "Bill",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `iconDownloadUrl` TEXT, `name` TEXT, `amount` INTEGER, `consumptionType` TEXT, `consumeDate` TEXT, `memberIds` TEXT, `remark` TEXT, `projectId` INTEGER, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `iconDownloadUrl` TEXT, `consumptionIds` TEXT, `amount` INTEGER, `consumptionType` TEXT, `consumeDate` TEXT, `memberIds` TEXT, `remark` TEXT, `projectId` INTEGER, `name` TEXT, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -90,8 +90,8 @@
             "notNull": false
           },
           {
-            "fieldPath": "name",
-            "columnName": "name",
+            "fieldPath": "consumptionIds",
+            "columnName": "consumptionIds",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -129,6 +129,12 @@
             "fieldPath": "projectId",
             "columnName": "projectId",
             "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
             "notNull": false
           },
           {
@@ -231,7 +237,7 @@
       },
       {
         "tableName": "Project",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `startTime` TEXT, `endTime` TEXT, `remark` TEXT, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `startTime` TEXT, `endTime` TEXT, `remark` TEXT, `status` INTEGER, `sortId` INTEGER, `createTime` TEXT, `modifyTime` TEXT DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -261,6 +267,18 @@
             "fieldPath": "remark",
             "columnName": "remark",
             "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sortId",
+            "columnName": "sortId",
+            "affinity": "INTEGER",
             "notNull": false
           },
           {
@@ -305,7 +323,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bfaf81fc58455c73eb4dcbf5e50ac4d7')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e88d67d4b60aaacefba22772ddc8cac0')"
     ]
   }
 }

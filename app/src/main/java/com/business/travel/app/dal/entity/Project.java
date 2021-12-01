@@ -2,6 +2,8 @@ package com.business.travel.app.dal.entity;
 
 import java.util.Optional;
 
+import javax.validation.constraints.NotNull;
+
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
@@ -27,7 +29,9 @@ public class Project extends BaseEntity {
 	private String name;
 	/**
 	 * 项目开始时间,yyyy-MM-dd HH:mm:ss
+	 * 默认是创建时间
 	 */
+	@NotNull
 	private String startTime;
 	/**
 	 * 项目结束时间,yyyy-MM-dd HH:mm:ss
@@ -37,23 +41,40 @@ public class Project extends BaseEntity {
 	 * 备注
 	 */
 	private String remark;
+	//下面为冗余字段,留待以后使用
+	/**
+	 * 状态
+	 */
+	private Integer status;
+	/**
+	 * 顺序id
+	 */
+	private Long sortId;
 
+	/**
+	 * 项目开始时间-结束时间
+	 *
+	 * @return
+	 */
 	public String getProductTime() {
+		//开始时间
 		String startTime = Optional.ofNullable(this.getStartTime())
 				.filter(StringUtils::isNotBlank)
 				.map(DateTimeUtil::parseDate)
 				.map(datetime -> DateTimeUtil.format(datetime, "MM月dd日"))
 				.orElse("");
 
+		//结束时间
 		String endTime = Optional.ofNullable(this.getEndTime())
 				.filter(StringUtils::isNotBlank)
 				.map(DateTimeUtil::parseDate)
 				.map(datetime -> DateTimeUtil.format(datetime, "MM月dd日"))
 				.orElse("");
-		String productTime = startTime;
-		if (StringUtils.isNotBlank(endTime)) {
-			productTime = productTime + " - " + endTime;
+
+		//拼接
+		if (StringUtils.isBlank(endTime)) {
+			return startTime;
 		}
-		return productTime;
+		return startTime + " - " + endTime;
 	}
 }

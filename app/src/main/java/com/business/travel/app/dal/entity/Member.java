@@ -24,10 +24,6 @@ public class Member extends BaseEntity {
 	 */
 	private String name;
 	/**
-	 * 性别: 0=男 1=女
-	 */
-	private Integer gender;
-	/**
 	 * 图标地址
 	 */
 	private String iconDownloadUrl;
@@ -39,4 +35,9 @@ public class Member extends BaseEntity {
 	 * 顺序id
 	 */
 	private Long sortId;
+	//下面为冗余字段,留待以后使用
+	/**
+	 * 性别: 0=男 1=女
+	 */
+	private Integer gender;
 }

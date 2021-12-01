@@ -14,7 +14,10 @@ import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Consumption;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.enums.DeleteEnum;
+import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.GiteeContent;
+import com.business.travel.app.model.ImageIconInfo;
+import com.business.travel.app.model.converter.ConsumptionConverter;
 import com.business.travel.app.utils.FutureUtil;
 import com.business.travel.utils.DateTimeUtil;
 import org.jetbrains.annotations.NotNull;
@@ -95,5 +98,23 @@ public class ConsumptionService {
 
 	public List<Consumption> queryByIds(List<Long> ids) {
 		return consumptionDao.selectByIds(ids);
+	}
+
+	public List<ImageIconInfo> queryAllConsumptionIconInfo(ConsumptionTypeEnum consumptionType) {
+		//根据是支出还是收入获取消费项列表
+		return convert(consumptionDao.selectByType(consumptionType.name()));
+	}
+
+	private List<ImageIconInfo> convert(List<Consumption> consumptions) {
+		if (CollectionUtils.isEmpty(consumptions)) {
+			consumptions = new ArrayList<>();
+		}
+
+		final List<ImageIconInfo> imageIconInfos = consumptions.stream().map(consumptionItem -> {
+			ImageIconInfo imageIconInfo = ConsumptionConverter.INSTANCE.convertImageIconInfo(consumptionItem);
+			imageIconInfo.setItemType(ItemTypeEnum.CONSUMPTION.name());
+			return imageIconInfo;
+		}).collect(Collectors.toList());
+		return imageIconInfos;
 	}
 }

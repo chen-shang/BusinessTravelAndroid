@@ -22,7 +22,10 @@ public abstract class BaseRecyclerViewAdapter<VH extends ViewHolder, DATA> exten
 	public BaseRecyclerViewAdapter(List<DATA> dataList, BaseActivity<? extends ViewBinding> baseActivity) {
 		this.dataList = dataList;
 		this.activity = baseActivity;
+		inject();
 	}
+
+	protected void inject() {}
 
 	@Override
 	public int getItemCount() {

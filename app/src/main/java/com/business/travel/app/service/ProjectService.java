@@ -57,12 +57,12 @@ public class ProjectService {
 			return project;
 		}
 
-		//如果不存在的项目则直接新建 todo
+		//如果不存在的项目则直接新建
 		project = new Project();
 		project.setName(projectName);
 		project.setStartTime(DateTimeUtil.format(new Date()));
-		project.setEndTime(DateTimeUtil.format(new Date()));
-		project.setRemark(DateTimeUtil.format(new Date()));
+		project.setEndTime(null);
+		project.setRemark("");
 		project.setCreateTime(DateTimeUtil.format(new Date()));
 		project.setModifyTime(DateTimeUtil.format(new Date()));
 		project.setIsDeleted(DeleteEnum.NOT_DELETE.getCode());

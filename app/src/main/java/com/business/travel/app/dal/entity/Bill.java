@@ -18,13 +18,13 @@ public class Bill extends BaseEntity {
 	@PrimaryKey(autoGenerate = true)
 	private Long id;
 	/**
-	 * 账单图标
+	 * 账单图标 默认展示第一个消费项的图标 这里先冗余一个字段,防止以后需求要求自定义
 	 */
 	private String iconDownloadUrl;
 	/**
-	 * 账单名字,逗号分隔
+	 * 消费项id
 	 */
-	private String name;
+	private String consumptionIds;
 	/**
 	 * 账单金额,单位分
 	 */
@@ -51,4 +51,9 @@ public class Bill extends BaseEntity {
 	 * 所属的项目名称
 	 */
 	private Long projectId;
+	//下面为冗余字段,留待以后使用
+	/**
+	 * 账单名字,逗号分隔
+	 */
+	private String name;
 }

@@ -125,7 +125,7 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 	}
 
 	private void refresh() {
-		List<ImageIconInfo> newLeastMemberIconList = memberService.queryAllMembersImageIconInfo();
+		List<ImageIconInfo> newLeastMemberIconList = memberService.queryAllMembersIconInfo();
 		memberIconList.clear();
 		memberIconList.addAll(newLeastMemberIconList);
 		editConsumptionRecyclerViewAdapter.notifyDataSetChanged();

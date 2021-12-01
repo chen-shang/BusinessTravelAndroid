@@ -4,13 +4,13 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import com.business.travel.app.dal.dao.BillDao;
 import com.business.travel.app.dal.dao.ConsumptionDao;
 import com.business.travel.app.dal.dao.MemberDao;
-import com.business.travel.app.dal.dao.BillDao;
 import com.business.travel.app.dal.dao.ProjectDao;
+import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.dal.entity.Consumption;
 import com.business.travel.app.dal.entity.Member;
-import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.dal.entity.Project;
 
 /**
@@ -39,29 +39,21 @@ public abstract class AppDatabase extends RoomDatabase {
 
 	/**
 	 * 人员表
-	 *
-	 * @return AssociateItemDao
 	 */
 	public abstract MemberDao memberDao();
 
 	/**
 	 * 账单表
-	 *
-	 * @return
 	 */
 	public abstract BillDao billDao();
 
 	/**
 	 * 消费项
-	 *
-	 * @return
 	 */
 	public abstract ConsumptionDao consumptionDao();
 
 	/**
 	 * 项目表
-	 *
-	 * @return
 	 */
 	public abstract ProjectDao projectDao();
 }

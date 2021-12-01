@@ -73,7 +73,7 @@ public class DetailBillActivity extends BaseActivity<ActivityDetailBillBinding> 
 		ImageView imageView = findViewById(R.id.UI_ImageView_Icon);
 		ImageLoadUtil.loadImageToView(selectedBill.getIconDownloadUrl(), imageView);
 		TextView textView = findViewById(R.id.UI_TextView_Description);
-		textView.setText(selectedBill.getName());
+		textView.setText(selectedBill.getConsumptionIds());
 
 		String memberIds = selectedBill.getMemberIds();
 		List<Long> longs = SplitUtil.trimToLongList(memberIds);

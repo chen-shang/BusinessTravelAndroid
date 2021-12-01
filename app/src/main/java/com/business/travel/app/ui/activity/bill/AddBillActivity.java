@@ -13,21 +13,17 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager;
-import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
-import com.business.travel.app.dal.dao.ConsumptionDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Bill;
-import com.business.travel.app.dal.entity.Consumption;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityAddBillBinding;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.enums.ItemIconEnum;
-import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.model.ImageIconInfo;
-import com.business.travel.app.model.converter.ConsumptionConverter;
 import com.business.travel.app.service.BillService;
+import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.service.MemberService;
 import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.activity.item.consumption.EditConsumptionActivity;
@@ -37,6 +33,7 @@ import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.app.utils.LogToast;
 import com.business.travel.utils.DateTimeUtil;
+import com.google.common.base.Preconditions;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -68,12 +65,14 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	private BillService billService;
 	private ProjectService projectService;
 	private MemberService memberService;
+	private ConsumptionService consumptionService;
 
 	@Override
 	protected void inject() {
 		memberService = new MemberService(this);
 		billService = new BillService(this);
 		projectService = new ProjectService(this);
+		consumptionService = new ConsumptionService(this);
 	}
 
 	@Override
@@ -129,7 +128,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	private void bind(ImageView imageView, TextView textView, ImageIconInfo imageIconInfo, Class<?> cls) {
 		boolean isEditImageButton = ItemIconEnum.ItemIconEdit.getIconDownloadUrl().equals(imageIconInfo.getIconDownloadUrl());
 		//默认未选中状态
-		imageView.setBackgroundResource(R.drawable.corners_shape_unselect);
+		imageView.setBackgroundResource(imageIconInfo.isSelected() ? R.drawable.corners_shape_select : R.drawable.corners_shape_unselect);
 		imageView.setImageResource(R.drawable.ic_base_placeholder);
 		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView);
 
@@ -177,7 +176,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 				// 设置图片宽度 // 设置图片高度
 				.setImageWidth(35).setImageHeight(35)
 				// 设置文字与图片的间距
-				.setTextImgMargin(0)
+				.setTextImgMargin(5)
 				// 设置文字大小
 				.setTextSize(15)
 				// 设置无限循环
@@ -276,30 +275,28 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		viewBinding.UIAddBillActivityEditTextRemark.setText(null);
 	}
 
-	private void saveBill() {
-		//参数校验
-		String projectName = viewBinding.UIAddBillActivityTextViewProjectName.getText().toString();
-		//如果不存在则新增项目
-		Project project = projectService.createIfNotExist(projectName);
-		if (project == null) {
-			throw new IllegalArgumentException("请输入合法的项目名称");
-		}
-		//如果存在则在当前项目下创建账单
-		createBillWithProject(project);
-		//更新返回页的数据
-		BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
-		billFragment.setSelectedProjectId(project.getId());
-
-		LogToast.infoShow("记账成功");
+	public void saveBill() {
+		AppDatabase.getInstance(this).runInTransaction(() -> {
+			//参数校验
+			String projectName = viewBinding.UIAddBillActivityTextViewProjectName.getText().toString();
+			//如果不存在则新增项目
+			Project project = projectService.createIfNotExist(projectName);
+			if (project == null) {
+				throw new IllegalArgumentException("请输入合法的项目名称");
+			}
+			//如果存在则在当前项目下创建账单
+			createBillWithProject(project);
+			//更新返回页的数据
+			BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
+			billFragment.setSelectedProjectId(project.getId());
+			LogToast.infoShow("记账成功");
+		});
 	}
 
 	private void createBillWithProject(Project project) {
 		//3. 日期、备注、金额
-		String remark = viewBinding.UIAddBillActivityEditTextRemark.getText().toString().trim();
 		String amount = viewBinding.UIAddBillActivityTextViewAmount.getText().toString().trim();
-		if (StringUtils.isBlank(amount)) {
-			throw new IllegalArgumentException("请输入消费金额");
-		}
+		Preconditions.checkArgument(StringUtils.isNotBlank(amount), "请输入消费金额");
 		//1. 选中的消费项 id 的列表
 		String consumerItemList = consumptionImageIconList.stream()
 				.filter(ImageIconInfo::isSelected)
@@ -307,22 +304,25 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 				.map(String::valueOf)
 				.filter(StringUtils::isNotBlank)
 				.collect(Collectors.joining(","));
+		Preconditions.checkArgument(StringUtils.isNotBlank(consumerItemList), "请选择消费项");
 		//2. 选中的人员 的列表
-		String associateItemList = memberIconList.stream()
+		String memberItemList = memberIconList.stream()
 				.filter(ImageIconInfo::isSelected)
 				.map(ImageIconInfo::getId)
 				.map(String::valueOf)
 				.filter(StringUtils::isNotBlank)
 				.collect(Collectors.joining(","));
+		Preconditions.checkArgument(StringUtils.isNotBlank(memberItemList), "请选择消费人员");
 
+		String remark = viewBinding.UIAddBillActivityEditTextRemark.getText().toString().trim();
 		Bill bill = new Bill();
-		bill.setName(consumerItemList);
+		bill.setConsumptionIds(consumerItemList);
 		bill.setProjectId(project.getId());
 		//消费金额
 		bill.setAmount(new BigDecimal(amount).multiply(new BigDecimal(100)).longValue());
 		//消费日期
 		bill.setConsumeDate(selectedDate);
-		bill.setMemberIds(associateItemList);
+		bill.setMemberIds(memberItemList);
 		bill.setCreateTime(DateTimeUtil.format(new Date()));
 		bill.setModifyTime(DateTimeUtil.format(new Date()));
 		bill.setConsumptionType(consumptionType.name());
@@ -355,32 +355,9 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		viewBinding.UIAddBillActivityTextViewProjectName.setText(project.getName());
 	}
 
-	private void refreshMemberIcon() {
-		List<ImageIconInfo> newLeastMemberIconList = memberService.queryAllMembersImageIconInfo();
-		memberIconList.clear();
-		memberIconList.addAll(newLeastMemberIconList);
-
-		//最后在添加一个编辑按钮
-		ImageIconInfo editImageIcon = new ImageIconInfo();
-		editImageIcon.setName(ItemIconEnum.ItemIconEdit.getName());
-		editImageIcon.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
-		memberIconList.add(editImageIcon);
-		viewBinding.UIAddBillActivityGridViewPagerMemberIcon.setDataAllCount(memberIconList.size()).show();
-	}
-
 	public void refreshConsumptionIcon(ConsumptionTypeEnum consumptionType) {
-		final ConsumptionDao consumptionDao = AppDatabase.getInstance(this).consumptionDao();
-		//根据是支出还是收入获取消费项列表
-		List<Consumption> consumptions = consumptionDao.selectByType(consumptionType.name());
-		if (CollectionUtils.isEmpty(consumptions)) {
-			consumptions = new ArrayList<>();
-		}
+		List<ImageIconInfo> imageIconInfos = consumptionService.queryAllConsumptionIconInfo(consumptionType);
 
-		final List<ImageIconInfo> imageIconInfos = consumptions.stream().map(consumptionItem -> {
-			ImageIconInfo imageIconInfo = ConsumptionConverter.INSTANCE.convertImageIconInfo(consumptionItem);
-			imageIconInfo.setItemType(ItemTypeEnum.CONSUMPTION.name());
-			return imageIconInfo;
-		}).collect(Collectors.toList());
 		//添加编辑按钮编辑按钮永远在最后
 		ImageIconInfo imageIconInfo = new ImageIconInfo();
 		imageIconInfo.setName(ItemIconEnum.ItemIconEdit.getName());
@@ -390,7 +367,19 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 
 		consumptionImageIconList.clear();
 		consumptionImageIconList.addAll(imageIconInfos);
-
 		viewBinding.UIAddBillActivityGridViewPagerBillIcon.setDataAllCount(consumptionImageIconList.size()).show();
+	}
+
+	private void refreshMemberIcon() {
+		List<ImageIconInfo> newLeastMemberIconList = memberService.queryAllMembersIconInfo();
+		memberIconList.clear();
+		memberIconList.addAll(newLeastMemberIconList);
+
+		//最后在添加一个编辑按钮
+		ImageIconInfo editImageIcon = new ImageIconInfo();
+		editImageIcon.setName(ItemIconEnum.ItemIconEdit.getName());
+		editImageIcon.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
+		memberIconList.add(editImageIcon);
+		viewBinding.UIAddBillActivityGridViewPagerMemberIcon.setDataAllCount(memberIconList.size()).show();
 	}
 }
