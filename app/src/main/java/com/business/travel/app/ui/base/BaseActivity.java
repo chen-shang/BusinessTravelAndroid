@@ -47,11 +47,10 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
 			viewBinding = (VB)clazzViewBinding.getDeclaredMethod("inflate", LayoutInflater.class).invoke(null, getLayoutInflater());
 			//初始化加载页面
 			setContentView(Objects.requireNonNull(viewBinding).getRoot());
+			inject();
 		} catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
 			Log.e("BaseActivity", "banding error", e);
 		}
-
-		inject();
 	}
 
 	@Override

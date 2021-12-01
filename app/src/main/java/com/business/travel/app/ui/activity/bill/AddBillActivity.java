@@ -33,7 +33,6 @@ import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.activity.item.consumption.EditConsumptionActivity;
 import com.business.travel.app.ui.activity.item.member.EditMemberActivity;
 import com.business.travel.app.ui.activity.master.fragment.BillFragment;
-import com.business.travel.app.ui.activity.master.fragment.BillFragmentShareData;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.app.utils.LogToast;
@@ -289,8 +288,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		createBillWithProject(project);
 		//更新返回页的数据
 		BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
-		BillFragmentShareData sharedData = billFragment.getDataBinding();
-		sharedData.setProject(project);
+		billFragment.setSelectedProjectId(project.getId());
 
 		LogToast.infoShow("记账成功");
 	}
@@ -346,14 +344,15 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	}
 
 	private void refreshProjectName() {
-		BillFragmentShareData dataBinding = ((BillFragment)MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment()).getDataBinding();
-		if (dataBinding == null) {
+		Long selectedProjectId = ((BillFragment)MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment()).getSelectedProjectId();
+		if (selectedProjectId == null) {
 			return;
 		}
-		Project project = dataBinding.getProject();
-		if (project != null) {
-			viewBinding.UIAddBillActivityTextViewProjectName.setText(project.getName());
+		Project project = projectService.queryById(selectedProjectId);
+		if (project == null) {
+			return;
 		}
+		viewBinding.UIAddBillActivityTextViewProjectName.setText(project.getName());
 	}
 
 	private void refreshMemberIcon() {

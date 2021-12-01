@@ -39,16 +39,8 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <!--  下面的项目列表数据   -->
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/UI_ProjectFragment_SwipeRefreshLayout"
+    <com.yanzhenjie.recyclerview.SwipeRecyclerView
+            android:id="@+id/UI_ProjectFragment_SwipeRecyclerView_ProjectList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintTop_toBottomOf="@id/UI_ProjectFragment_ConstraintLayout">
-
-        <com.yanzhenjie.recyclerview.SwipeRecyclerView
-                android:id="@+id/UI_ProjectFragment_SwipeRecyclerView_ProjectList"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            android:layout_height="match_parent"/>
 </LinearLayout>

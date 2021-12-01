@@ -1,6 +1,5 @@
 package com.business.travel.app.ui.activity.master.fragment;
 
-import java.io.InputStream;
 import java.util.List;
 
 import android.annotation.SuppressLint;
@@ -18,16 +17,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
-import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
+import com.business.travel.app.service.BillService;
 import com.business.travel.app.ui.activity.bill.DetailBillActivity;
 import com.business.travel.app.ui.activity.master.fragment.BillItemRecyclerViewAdapter.BillItemRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
-import com.business.travel.app.utils.FutureUtil;
+import com.business.travel.app.utils.ImageLoadUtil;
 import com.lxj.xpopup.XPopup;
-import com.pixplicity.sharp.Sharp;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -35,8 +33,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillItemRecyclerViewAdapterViewHolder, Bill> {
 
+	private final BillService billService;
+
 	public BillItemRecyclerViewAdapter(List<Bill> bills, BaseActivity<? extends ViewBinding> baseActivity) {
 		super(bills, baseActivity);
+		billService = new BillService(activity.getApplicationContext());
 	}
 
 	@NonNull
@@ -58,11 +59,7 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 			return;
 		}
 
-		String iconDownloadUrl = bill.getIconDownloadUrl();
-		FutureUtil.runAsync(() -> {
-			final InputStream iconInputStream = BusinessTravelResourceApi.getIcon(iconDownloadUrl);
-			Sharp.loadInputStream(iconInputStream).into(holder.iconImageView);
-		});
+		ImageLoadUtil.loadImageToView(bill.getIconDownloadUrl(), holder.iconImageView);
 
 		String name = bill.getName();
 		holder.consumptionItemTextView.setText(name);
@@ -71,9 +68,9 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 		String type = bill.getConsumptionType();
 		String amountText = "";
 		if (ConsumptionTypeEnum.INCOME.name().equals(type)) {
-			amountText = "" + amount;
+			amountText = "" + (double)amount / 100;
 		} else if (ConsumptionTypeEnum.SPENDING.name().equals(type)) {
-			amountText = "-" + amount;
+			amountText = "-" + (double)amount / 100;
 		}
 		holder.amountTextView.setText(amountText);
 
@@ -85,20 +82,30 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 
 		holder.cardView.setOnLongClickListener(v -> {
 			new XPopup.Builder(activity)
-					.atView(holder.iconImageView)  // 依附于所点击的View，内部会自动判断在上方或者下方显示
-					.asAttachList(
-							new String[] {"删除", "编辑"},
-							new int[] {R.drawable.ic_base_delete, R.drawable.ic_base_green_edit},
-							(pos, text) -> {
-								if (pos == 0) {
-									//todo
-								} else if (pos == 1) {
-									//编辑
-								}
-							})
+					// 依附于所点击的View，内部会自动判断在上方或者下方显示
+					.atView(holder.iconImageView)
+					.asAttachList(new String[] {"删除", "编辑"}, new int[] {R.drawable.ic_base_delete, R.drawable.ic_base_green_edit}, (pos, text) -> {
+						if (pos == 0) {
+							onDelete(position, bill);
+						} else if (pos == 1) {
+							//编辑
+							onEdit(bill);
+						}
+					})
 					.show();
 			return true;
 		});
+	}
+
+	private void onEdit(Bill bill) {
+	}
+
+	private void onDelete(int position, Bill bill) {
+		new XPopup.Builder(activity).asConfirm("", "是否要删除该账目", () -> {
+			billService.deleteBillById(bill.getId());
+			dataList.remove(position);
+			this.notifyDataSetChanged();
+		}).show();
 	}
 
 	@SuppressLint("NonConstantResourceId")

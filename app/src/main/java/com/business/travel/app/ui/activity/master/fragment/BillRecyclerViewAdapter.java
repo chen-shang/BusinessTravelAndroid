@@ -17,9 +17,7 @@ import butterknife.ButterKnife;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Bill;
-import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
-import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.model.DateBillInfo;
 import com.business.travel.app.ui.activity.master.fragment.BillRecyclerViewAdapter.BillRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
@@ -51,11 +49,6 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 		if (CollectionUtils.isEmpty(dataList)) {
 			return;
 		}
-		BillFragmentShareData dataBinding = ((BillFragment)MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment()).getDataBinding();
-		Project project = dataBinding.getProject();
-		if (project == null) {
-			return;
-		}
 
 		DateBillInfo dateBillInfo = dataList.get(position);
 		String date = dateBillInfo.getDate();
@@ -71,7 +64,7 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 					holder.incomeTextView.setVisibility(View.GONE);
 				} else {
 					holder.incomeTextView.setVisibility(View.VISIBLE);
-					holder.incomeTextView.setText("收入:" + sumTotalMoney);
+					holder.incomeTextView.setText("收入:" + (double)sumTotalMoney / 100);
 				}
 
 			}
@@ -80,7 +73,7 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 					holder.payTextView.setVisibility(View.GONE);
 				} else {
 					holder.incomeTextView.setVisibility(View.VISIBLE);
-					holder.payTextView.setText("支出:" + sumTotalMoney);
+					holder.payTextView.setText("支出:" + (double)sumTotalMoney / 100);
 				}
 			}
 		});

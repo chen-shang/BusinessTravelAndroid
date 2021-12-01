@@ -64,14 +64,14 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 		if (sumTotalSpendingMoney == null || sumTotalSpendingMoney == 0) {
 			holder.payTextView.setVisibility(View.GONE);
 		} else {
-			holder.payTextView.setText("支出:" + sumTotalSpendingMoney);
+			holder.payTextView.setText("支出:" + (double)sumTotalSpendingMoney / 100);
 		}
 
 		final Long sumTotalIncomeMoney = billDao.sumTotalIncomeMoney(project.getId());
 		if (sumTotalIncomeMoney == null || sumTotalIncomeMoney == 0) {
 			holder.incomeTextView.setVisibility(View.GONE);
 		} else {
-			holder.incomeTextView.setText("收入:" + sumTotalIncomeMoney);
+			holder.incomeTextView.setText("收入:" + (double)sumTotalIncomeMoney / 100);
 		}
 
 		holder.projectNameTextView.setText(project.getName());
@@ -81,36 +81,32 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 
 			//把选中的数据传递给 BillFragment 页面
 			BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
-			BillFragmentShareData billFragmentShareData = billFragment.getDataBinding();
-			billFragmentShareData.setProject(project);
+			billFragment.setSelectedProjectId(project.getId());
 		});
 
 		holder.cardView.setOnLongClickListener(v -> {
-			new XPopup.Builder(activity)
-					.atView(holder.projectNameTextView)  // 依附于所点击的View，内部会自动判断在上方或者下方显示
-					.asAttachList(
-							new String[] {"删除", "编辑"},
-							new int[] {R.drawable.ic_base_delete, R.drawable.ic_base_green_edit},
-							(pos, text) -> {
-								if (pos == 0) {
-									//删除
-									BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
-									BillFragmentShareData billFragmentShareData = billFragment.getDataBinding();
-									if (billFragmentShareData.getProject().equals(project)) {
-										billFragmentShareData.setProject(null);
-									}
-
-									projectService.softDeleteProjectWithBill(project.getId());
-									dataList.remove(position);
-									this.notifyItemRemoved(position);
-								} else if (pos == 1) {
-									//编辑
-								}
-							})
+			// 依附于所点击的View，内部会自动判断在上方或者下方显示
+			new XPopup.Builder(activity).atView(holder.projectNameTextView).asAttachList(new String[] {"删除", "编辑"}, new int[] {R.drawable.ic_base_delete, R.drawable.ic_base_green_edit}, (pos, text) -> {
+						if (pos == 0) {
+							onDelete(position, project);
+						} else if (pos == 1) {
+							//编辑 todo
+						}
+					})
 					.show();
 			return true;
 		});
 
+	}
+
+	private void onDelete(int position, Project project) {
+
+		String content = "是否要删除" + project.getName();
+		new XPopup.Builder(activity).asConfirm("", content, () -> {
+			projectService.softDeleteProjectWithBill(project.getId());
+			dataList.remove(position);
+			this.notifyDataSetChanged();
+		}).show();
 	}
 
 	@SuppressLint("NonConstantResourceId")

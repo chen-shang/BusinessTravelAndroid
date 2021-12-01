@@ -174,7 +174,10 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 				//先删除该元素
 				consumptionService.softDeleteConsumption(imageIconInfo.getId());
 				editConsumptionRecyclerViewAdapter.notifyDataSetChanged();
-				checkEmpty();
+
+				if (CollectionUtils.isEmpty(consumptionImageIconList)) {
+					showEmptyHeader();
+				}
 			}
 		});
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setAdapter(editConsumptionRecyclerViewAdapter);
@@ -212,6 +215,13 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 		}
 
 		List<Consumption> consumptionList = consumptionService.queryConsumptionItemByType(consumptionTypeEnum);
+		if (CollectionUtils.isEmpty(consumptionList)) {
+			showEmptyHeader();
+			return;
+		}
+
+		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.removeHeaderView(headView);
+
 		List<ImageIconInfo> newImage = consumptionList.stream().map(consumptionItem -> {
 			ImageIconInfo imageIconInfo = ConsumptionConverter.INSTANCE.convertImageIconInfo(consumptionItem);
 			imageIconInfo.setItemType(ItemTypeEnum.CONSUMPTION.name());
@@ -221,19 +231,12 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 		this.consumptionImageIconList.clear();
 		this.consumptionImageIconList.addAll(newImage);
 		editConsumptionRecyclerViewAdapter.notifyDataSetChanged();
-
-		checkEmpty();
 	}
 
-	/**
-	 * 检查数据是否为空
-	 */
-	private void checkEmpty() {
-		if (CollectionUtils.isNotEmpty(consumptionImageIconList)) {
-			viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.removeHeaderView(headView);
-		}
-
-		if (CollectionUtils.isEmpty(consumptionImageIconList) && viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.getHeaderCount() == 0) {
+	private void showEmptyHeader() {
+		consumptionImageIconList.clear();
+		editConsumptionRecyclerViewAdapter.notifyDataSetChanged();
+		if (viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.getHeaderCount() == 0) {
 			viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.addHeaderView(headView);
 		}
 	}

@@ -21,17 +21,21 @@
 
             <TextView
                     android:id="@+id/UI_BillFragment_TextView_ProjectName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:hint="请输入项目名称"
+                    android:drawableTintMode="src_over"
+                    android:background="@null"
                     android:textSize="30sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintHorizontal_bias="0.056"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.504">
+                    >
             </TextView>
 
             <TextView
@@ -79,18 +83,11 @@
                 android:background="@color/white"
                 >
 
-            <!--  下面的项目列表数据   -->
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                    android:id="@+id/UI_BillFragment_SwipeRefreshLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintTop_toBottomOf="@id/UI_ProjectFragment_ConstraintLayout">
 
-                <com.yanzhenjie.recyclerview.SwipeRecyclerView
-                        android:id="@+id/UI_BillFragment_SwipeRecyclerView_BillList"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            <com.yanzhenjie.recyclerview.SwipeRecyclerView
+                    android:id="@+id/UI_BillFragment_SwipeRecyclerView_BillList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

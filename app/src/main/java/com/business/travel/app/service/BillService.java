@@ -17,6 +17,10 @@ public class BillService {
 		return billDao.selectByPrimaryKey(id);
 	}
 
+	public void deleteBillById(Long id) {
+		billDao.softDeleteById(id);
+	}
+
 	/**
 	 * 创建账单
 	 *

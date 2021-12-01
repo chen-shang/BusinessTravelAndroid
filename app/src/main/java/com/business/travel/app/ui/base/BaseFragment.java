@@ -33,6 +33,10 @@ public abstract class BaseFragment<VB extends ViewBinding, DATA extends ShareDat
 	@Getter
 	protected DATA dataBinding;
 
+	protected void inject() {
+
+	}
+
 	@Nullable
 	@org.jetbrains.annotations.Nullable
 	@Override
@@ -43,12 +47,12 @@ public abstract class BaseFragment<VB extends ViewBinding, DATA extends ShareDat
 		Class<?> clazz = (Class<?>)((ParameterizedType)Objects.requireNonNull(superclass)).getActualTypeArguments()[0];
 		//第二个参数是 DATA
 		Class<?> clazz2 = (Class<?>)((ParameterizedType)Objects.requireNonNull(superclass)).getActualTypeArguments()[1];
-
 		try {
 			//初始化viewBinding
 			viewBinding = (VB)clazz.getDeclaredMethod("inflate", LayoutInflater.class, ViewGroup.class, boolean.class).invoke(null, getLayoutInflater(), container, false);
 			//初始化dataBinding
 			dataBinding = (DATA)clazz2.newInstance();
+			inject();
 		} catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException | java.lang.InstantiationException e) {
 			Log.e("BaseFragment", "banding error", e);
 		}
