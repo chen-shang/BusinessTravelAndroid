@@ -21,6 +21,7 @@ import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.dal.entity.Consumption;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
+import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.ui.activity.bill.DetailBillActivity;
@@ -117,6 +118,9 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 			billService.deleteBillById(bill.getId());
 			dataList.remove(position);
 			this.notifyDataSetChanged();
+			if (CollectionUtils.isEmpty(dataList)) {
+				((BillFragment)MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment()).refresh(bill.getProjectId());
+			}
 		}).show();
 	}
 

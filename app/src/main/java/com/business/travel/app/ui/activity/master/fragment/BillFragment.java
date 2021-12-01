@@ -77,6 +77,10 @@ public class BillFragment extends BaseFragment<FragmentBillBinding, BillFragment
 		super.onResume();
 		FloatingActionButton floatingActionButton = requireActivity().findViewById(R.id.UI_MasterActivity_FloatingActionButton);
 		AnimalUtil.show(floatingActionButton);
+		refresh(selectedProjectId);
+	}
+
+	public void refresh(Long selectedProjectId) {
 		Project project = Optional.ofNullable(selectedProjectId).map(projectService::queryById).orElseGet(() -> projectService.queryLatestModify());
 		refreshBillList(project);
 	}
@@ -85,6 +89,10 @@ public class BillFragment extends BaseFragment<FragmentBillBinding, BillFragment
 	private void refreshBillList(Project project) {
 		if (project == null) {
 			//展示空的头部即可
+			viewBinding.UIBillFragmentTextViewProjectName.setText(null);
+			viewBinding.UIBillFragmentTextViewDate.setText(null);
+			viewBinding.UIBillFragmentTextViewIncome.setVisibility(View.INVISIBLE);
+			viewBinding.UIBillFragmentTextViewPay.setVisibility(View.INVISIBLE);
 			showEmptyHeader();
 			return;
 		}

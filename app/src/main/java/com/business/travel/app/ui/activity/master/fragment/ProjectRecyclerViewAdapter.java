@@ -112,6 +112,9 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 			projectService.softDeleteProjectWithBill(project.getId());
 			dataList.remove(position);
 			this.notifyDataSetChanged();
+			if (CollectionUtils.isEmpty(dataList)) {
+				((ProjectFragment)MasterFragmentPositionEnum.PROJECT_FRAGMENT.getFragment()).refreshProjectList();
+			}
 		}).show();
 	}
 
