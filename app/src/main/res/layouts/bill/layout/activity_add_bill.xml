@@ -19,7 +19,7 @@
 
         <EditText
                 android:id="@+id/UI_AddBillActivity_TextView_Project_Name"
-                android:hint="项目01"
+                android:hint="项目名称"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/ic_base_edit"

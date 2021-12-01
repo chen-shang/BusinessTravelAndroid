@@ -61,17 +61,23 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 
 		BillDao billDao = AppDatabase.getInstance(holder.itemView.getContext()).billDao();
 		final Long sumTotalSpendingMoney = billDao.sumTotalSpendingMoney(project.getId());
-		if (sumTotalSpendingMoney == null || sumTotalSpendingMoney == 0) {
-			holder.payTextView.setVisibility(View.GONE);
-		} else {
-			holder.payTextView.setText("支出:" + (double)sumTotalSpendingMoney / 100);
-		}
-
 		final Long sumTotalIncomeMoney = billDao.sumTotalIncomeMoney(project.getId());
-		if (sumTotalIncomeMoney == null || sumTotalIncomeMoney == 0) {
-			holder.incomeTextView.setVisibility(View.GONE);
+
+		if ((sumTotalSpendingMoney == null || sumTotalSpendingMoney == 0) && (sumTotalIncomeMoney == null || sumTotalIncomeMoney == 0)) {
+			holder.payTextView.setText("支出: 0");
+			holder.incomeTextView.setText("收入: 0");
 		} else {
-			holder.incomeTextView.setText("收入:" + (double)sumTotalIncomeMoney / 100);
+			if (sumTotalSpendingMoney == null || sumTotalSpendingMoney == 0) {
+				holder.payTextView.setVisibility(View.GONE);
+			} else {
+				holder.payTextView.setText("支出: " + (double)sumTotalSpendingMoney / 100);
+			}
+
+			if (sumTotalIncomeMoney == null || sumTotalIncomeMoney == 0) {
+				holder.incomeTextView.setVisibility(View.GONE);
+			} else {
+				holder.incomeTextView.setText("收入: " + (double)sumTotalIncomeMoney / 100);
+			}
 		}
 
 		holder.projectNameTextView.setText(project.getName());

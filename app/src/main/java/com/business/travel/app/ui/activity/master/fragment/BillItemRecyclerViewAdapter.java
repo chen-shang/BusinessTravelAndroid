@@ -1,6 +1,7 @@
 package com.business.travel.app.ui.activity.master.fragment;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -18,14 +19,18 @@ import butterknife.ButterKnife;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Bill;
+import com.business.travel.app.dal.entity.Consumption;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.service.BillService;
+import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.ui.activity.bill.DetailBillActivity;
 import com.business.travel.app.ui.activity.master.fragment.BillItemRecyclerViewAdapter.BillItemRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.ImageLoadUtil;
+import com.business.travel.utils.SplitUtil;
 import com.lxj.xpopup.XPopup;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -34,10 +39,12 @@ import org.jetbrains.annotations.NotNull;
 public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillItemRecyclerViewAdapterViewHolder, Bill> {
 
 	private final BillService billService;
+	private final ConsumptionService consumptionService;
 
 	public BillItemRecyclerViewAdapter(List<Bill> bills, BaseActivity<? extends ViewBinding> baseActivity) {
 		super(bills, baseActivity);
 		billService = new BillService(activity.getApplicationContext());
+		consumptionService = new ConsumptionService(activity.getApplicationContext());
 	}
 
 	@NonNull
@@ -62,7 +69,12 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 		ImageLoadUtil.loadImageToView(bill.getIconDownloadUrl(), holder.iconImageView);
 
 		String name = bill.getName();
-		holder.consumptionItemTextView.setText(name);
+		if (StringUtils.isNotBlank(name)) {
+			List<Long> ids = SplitUtil.trimToLongList(name);
+			List<Consumption> consumptions = consumptionService.queryByIds(ids);
+			String names = consumptions.stream().map(Consumption::getName).collect(Collectors.joining(","));
+			holder.consumptionItemTextView.setText(names);
+		}
 
 		Long amount = bill.getAmount();
 		String type = bill.getConsumptionType();

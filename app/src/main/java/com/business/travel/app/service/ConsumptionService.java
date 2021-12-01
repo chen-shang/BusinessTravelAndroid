@@ -92,4 +92,8 @@ public class ConsumptionService {
 		consumption.setIsDeleted(DeleteEnum.NOT_DELETE.getCode());
 		return consumption;
 	}
+
+	public List<Consumption> queryByIds(List<Long> ids) {
+		return consumptionDao.selectByIds(ids);
+	}
 }

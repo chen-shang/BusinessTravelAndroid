@@ -38,4 +38,7 @@ public interface ConsumptionDao extends BaseDao<Consumption> {
 
 	@Query("update consumption set isDeleted=0 where id=:id")
 	void softDelete(Long id);
+
+	@Query("SELECT * from consumption where id in (:ids)")
+	List<Consumption> selectByIds(List<Long> ids);
 }
