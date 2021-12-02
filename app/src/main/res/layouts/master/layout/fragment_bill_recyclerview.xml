@@ -19,7 +19,9 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="20dp"
+                android:paddingTop="20dp"
+                android:paddingLeft="20dp"
+                android:paddingBottom="20dp"
                 android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,6 +43,7 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginEnd="20dp"
                         app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
@@ -50,7 +53,8 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="0.0"
-                        app:layout_constraintEnd_toStartOf="@+id/UI_BillFragment_BillAdapter_TextView_Pay"/>
+                        app:layout_constraintEnd_toStartOf="@+id/UI_BillFragment_BillAdapter_TextView_Pay"
+                        android:layout_marginEnd="20dp"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
             <!--横线-->
             <View
@@ -58,11 +62,13 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="20dp"
                     android:background="@color/gray"/>
 
             <com.yanzhenjie.recyclerview.SwipeRecyclerView
                     android:id="@+id/UI_BillFragment_BillAdapter_SwipeRecyclerView_BillItem"
                     android:layout_width="match_parent"
+                    android:layout_marginEnd="20dp"
                     android:layout_height="match_parent"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

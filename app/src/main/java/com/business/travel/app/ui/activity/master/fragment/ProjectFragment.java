@@ -18,6 +18,7 @@ import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.ui.base.ShareData;
+import com.business.travel.app.utils.HeaderView;
 import com.lxj.xpopup.XPopup.Builder;
 import com.lxj.xpopup.impl.AttachListPopupView;
 import com.lxj.xpopup.impl.InputConfirmPopupView;
@@ -113,12 +114,12 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding, ShareD
 			//如果没有数据就展示空Header
 			notifyProjectDataClear();
 			//显示空的Header
-			addEmptyHeaderTo(swipeRecyclerView);
+			HeaderView.of(headView).addTo(swipeRecyclerView);
 			return;
 		}
 
 		//移除空的Header
-		removeEmptyHeaderOf(swipeRecyclerView);
+		HeaderView.of(headView).removeFrom(swipeRecyclerView);
 		//通知adapter更新列表
 		notifyProjectListDataChange(projectList);
 	}
@@ -133,15 +134,5 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding, ShareD
 		projectList.clear();
 		projectList.addAll(allProjects);
 		projectListRecyclerViewAdapter.notifyDataSetChanged();
-	}
-
-	private void addEmptyHeaderTo(SwipeRecyclerView swipeRecyclerView) {
-		if (swipeRecyclerView.getHeaderCount() == 0) {
-			swipeRecyclerView.addHeaderView(headView);
-		}
-	}
-
-	private void removeEmptyHeaderOf(SwipeRecyclerView swipeRecyclerView) {
-		swipeRecyclerView.removeHeaderView(headView);
 	}
 }

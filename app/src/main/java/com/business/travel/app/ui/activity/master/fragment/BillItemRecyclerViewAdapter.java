@@ -19,7 +19,6 @@ import butterknife.ButterKnife;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Bill;
-import com.business.travel.app.dal.entity.Consumption;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.model.ImageIconInfo;
@@ -42,6 +41,7 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 
 	private final BillService billService;
 	private final ConsumptionService consumptionService;
+	private final BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
 
 	public BillItemRecyclerViewAdapter(List<Bill> bills, BaseActivity<? extends ViewBinding> baseActivity) {
 		super(bills, baseActivity);
@@ -54,8 +54,7 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 	@Override
 	public BillItemRecyclerViewAdapterViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
 		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bill_item, parent, false);
-		return new BillItemRecyclerViewAdapterViewHolder(view) {
-		};
+		return new BillItemRecyclerViewAdapterViewHolder(view) {};
 	}
 
 	@Override
@@ -97,16 +96,14 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 		holder.cardView.setOnLongClickListener(v -> {
 			new XPopup.Builder(activity)
 					// 依附于所点击的View，内部会自动判断在上方或者下方显示
-					.atView(holder.iconImageView)
-					.asAttachList(new String[] {"删除", "编辑"}, new int[] {R.drawable.ic_base_delete, R.drawable.ic_base_green_edit}, (pos, text) -> {
+					.atView(holder.iconImageView).asAttachList(new String[] {"删除", "编辑"}, new int[] {R.drawable.ic_base_delete, R.drawable.ic_base_green_edit}, (pos, text) -> {
 						if (pos == 0) {
-							onDelete(position, bill);
+							onDelete(position, bill, holder);
 						} else if (pos == 1) {
 							//编辑
 							onEdit(bill);
 						}
-					})
-					.show();
+					}).show();
 			return true;
 		});
 	}
@@ -114,19 +111,22 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 	private void onEdit(Bill bill) {
 	}
 
-	private void onDelete(int position, Bill bill) {
+	private void onDelete(int position, Bill bill, BillItemRecyclerViewAdapterViewHolder holder) {
 		new XPopup.Builder(activity).asConfirm("", "是否要删除该账目", () -> {
 			billService.deleteBillById(bill.getId());
 			dataList.remove(position);
 			this.notifyDataSetChanged();
+			//刷新右上角金额
+			billFragment.refreshMoneyShow(bill.getProjectId());
 			if (CollectionUtils.isEmpty(dataList)) {
-				((BillFragment)MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment()).refresh(bill.getProjectId());
+				billFragment.refreshBillList(bill.getProjectId());
 			}
+			billFragment.getBillRecyclerViewAdapter().refreshMoneyShow(bill.getProjectId(), bill.getConsumeDate());
 		}).show();
 	}
 
 	@SuppressLint("NonConstantResourceId")
-	static class BillItemRecyclerViewAdapterViewHolder extends ViewHolder {
+	class BillItemRecyclerViewAdapterViewHolder extends ViewHolder {
 
 		@BindView(R.id.UI_BillFragment_BillItemAdapter_Icon)
 		public ImageView iconImageView;

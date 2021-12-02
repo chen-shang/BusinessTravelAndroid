@@ -15,4 +15,12 @@ public class DateBillInfo {
 	 * 该日期下的账单
 	 */
 	private List<Bill> billList;
+
+	public DateBillInfo() {
+	}
+
+	public DateBillInfo(String date, List<Bill> billList) {
+		this.date = date;
+		this.billList = billList;
+	}
 }

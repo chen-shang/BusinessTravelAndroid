@@ -1,5 +1,7 @@
 package com.business.travel.app.service;
 
+import java.util.List;
+
 import android.content.Context;
 import com.business.travel.app.dal.dao.BillDao;
 import com.business.travel.app.dal.db.AppDatabase;
@@ -13,10 +15,21 @@ public class BillService {
 		billDao = AppDatabase.getInstance(context).billDao();
 	}
 
+	/**
+	 * 根据账单id查询账单信息
+	 *
+	 * @param id
+	 * @return
+	 */
 	public Bill queryBillById(Long id) {
 		return billDao.selectByPrimaryKey(id);
 	}
 
+	/**
+	 * 删除账单
+	 *
+	 * @param id
+	 */
 	public void deleteBillById(Long id) {
 		billDao.softDeleteById(id);
 	}
@@ -30,11 +43,23 @@ public class BillService {
 		billDao.insert(bill);
 	}
 
-	public Long sumTotalSpendingMoney(Long id) {
-		return billDao.sumTotalSpendingMoney(id);
+	public Long sumTotalSpendingMoney(Long projectId) {
+		return billDao.sumTotalSpendingMoney(projectId);
 	}
 
-	public Long sumTotalIncomeMoney(Long id) {
-		return billDao.sumTotalIncomeMoney(id);
+	public Long sumTotalIncomeMoney(Long projectId) {
+		return billDao.sumTotalIncomeMoney(projectId);
+	}
+
+	public Long sumTotalSpendingMoney(Long projectId, String consumeDate) {
+		return billDao.sumTotalSpendingMoney(projectId, consumeDate);
+	}
+
+	public Long sumTotalIncomeMoney(Long projectId, String consumeDate) {
+		return billDao.sumTotalIncomeMoney(projectId, consumeDate);
+	}
+
+	public List<Bill> selectByProjectId(Long projectId) {
+		return billDao.selectByProjectId(projectId);
 	}
 }

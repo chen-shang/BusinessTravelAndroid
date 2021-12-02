@@ -1,6 +1,7 @@
 package com.business.travel.app.ui.activity.master.fragment;
 
 import java.util.List;
+import java.util.Optional;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -42,8 +43,8 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 
 	@Override
 	protected void inject() {
-		projectService = new ProjectService(activity.getApplicationContext());
-		billService = new BillService(activity.getApplicationContext());
+		projectService = new ProjectService(activity);
+		billService = new BillService(activity);
 	}
 
 	@NonNull
@@ -58,13 +59,10 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 	@Override
 	public void onBindViewHolder(@NonNull @NotNull ProjectAdapterHolder holder, int position) {
 		if (CollectionUtils.isEmpty(dataList)) {
-			this.notifyDataSetChanged();
 			return;
 		}
 		Project project = dataList.get(position);
 		if (project == null) {
-			dataList.remove(position);
-			this.notifyDataSetChanged();
 			return;
 		}
 		//项目的起止时间
@@ -72,12 +70,17 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 		holder.dateTextView.setText(productTime);
 
 		//项目总支出
-		final Long sumTotalSpendingMoney = billService.sumTotalSpendingMoney(project.getId());
 		//项目总收入
-		final Long sumTotalIncomeMoney = billService.sumTotalIncomeMoney(project.getId());
 
-		//显示收入和支出的金额
-		showSpendingIncomeTag(holder, sumTotalSpendingMoney, sumTotalIncomeMoney);
+		//统计一下总收入
+		final Long sumTotalIncomeMoney = billService.sumTotalIncomeMoney(project.getId());
+		holder.incomeTextView.setVisibility(sumTotalIncomeMoney == null ? View.GONE : View.VISIBLE);
+		Optional.ofNullable(sumTotalIncomeMoney).ifPresent(money -> holder.incomeTextView.setText("收入:" + (double)money / 100));
+
+		//统计一下总支出
+		final Long sumTotalSpendingMoney = billService.sumTotalSpendingMoney(project.getId());
+		holder.payTextView.setVisibility(sumTotalSpendingMoney == null ? View.GONE : View.VISIBLE);
+		Optional.ofNullable(sumTotalSpendingMoney).ifPresent(money -> holder.payTextView.setText("支出:" + (double)money / 100));
 
 		holder.projectNameTextView.setText(project.getName());
 
@@ -137,28 +140,6 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 		//把选中的数据传递给 BillFragment 页面
 		BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
 		billFragment.setSelectedProjectId(project.getId());
-	}
-
-	@SuppressLint("SetTextI18n")
-	private void showSpendingIncomeTag(@NotNull ProjectAdapterHolder holder, Long sumTotalSpendingMoney, Long sumTotalIncomeMoney) {
-		final boolean noSumTotalSpendingMoney = sumTotalSpendingMoney == null || sumTotalSpendingMoney == 0;
-		final boolean noSumTotalIncomeMoney = sumTotalIncomeMoney == null || sumTotalIncomeMoney == 0;
-		if (noSumTotalSpendingMoney && noSumTotalIncomeMoney) {
-			holder.payTextView.setText("支出: 0");
-			holder.incomeTextView.setText("收入: 0");
-			return;
-		}
-		if (noSumTotalSpendingMoney) {
-			holder.payTextView.setVisibility(View.GONE);
-		} else {
-			holder.payTextView.setText("支出: " + (double)sumTotalSpendingMoney / 100);
-		}
-
-		if (noSumTotalIncomeMoney) {
-			holder.incomeTextView.setVisibility(View.GONE);
-		} else {
-			holder.incomeTextView.setText("收入: " + (double)sumTotalIncomeMoney / 100);
-		}
 	}
 
 	@SuppressLint("NonConstantResourceId")

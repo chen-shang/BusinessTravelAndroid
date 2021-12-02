@@ -36,7 +36,6 @@
                     android:id="@+id/UI_BillFragment_BillItemAdapter_ConsumptionItem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="消费项"
                     app:layout_constraintStart_toEndOf="@+id/UI_BillFragment_BillItemAdapter_Icon"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
