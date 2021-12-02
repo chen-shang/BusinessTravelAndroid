@@ -22,6 +22,7 @@ import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.dal.entity.Consumption;
 import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
+import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.ui.activity.bill.DetailBillActivity;
@@ -72,8 +73,8 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 		String name = bill.getConsumptionIds();
 		if (StringUtils.isNotBlank(name)) {
 			List<Long> ids = SplitUtil.trimToLongList(name);
-			List<Consumption> consumptions = consumptionService.queryByIds(ids);
-			String names = consumptions.stream().map(Consumption::getName).collect(Collectors.joining(","));
+			List<ImageIconInfo> consumptions = consumptionService.queryByIds(ids);
+			String names = consumptions.stream().map(ImageIconInfo::getName).collect(Collectors.joining(","));
 			holder.consumptionItemTextView.setText(names);
 		}
 

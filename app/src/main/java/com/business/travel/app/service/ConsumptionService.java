@@ -96,8 +96,8 @@ public class ConsumptionService {
 		return consumption;
 	}
 
-	public List<Consumption> queryByIds(List<Long> ids) {
-		return consumptionDao.selectByIds(ids);
+	public List<ImageIconInfo> queryByIds(List<Long> ids) {
+		return convert(consumptionDao.selectByIds(ids));
 	}
 
 	public List<ImageIconInfo> queryAllConsumptionIconInfo(ConsumptionTypeEnum consumptionType) {

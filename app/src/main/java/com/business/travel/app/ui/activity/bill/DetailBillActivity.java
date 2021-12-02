@@ -5,7 +5,6 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.widget.ImageView;
-import android.widget.TextView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import com.business.travel.app.R;
@@ -14,6 +13,7 @@ import com.business.travel.app.databinding.ActivityDetailBillBinding;
 import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.service.BillService;
+import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.service.MemberService;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.ImageLoadUtil;
@@ -29,10 +29,14 @@ public class DetailBillActivity extends BaseActivity<ActivityDetailBillBinding> 
 	 * 成员图标
 	 */
 	private final List<ImageIconInfo> memberIconList = new ArrayList<>();
+	private final List<ImageIconInfo> consumptionIconList = new ArrayList<>();
+
 	/**
 	 * 成员列表适配器
 	 */
 	private ItemIconRecyclerViewAdapter memberRecyclerViewAdapter;
+	private ItemIconRecyclerViewAdapter memberRecyclerViewAdapter2;
+
 	/**
 	 * 当前被选中的账单信息
 	 */
@@ -40,11 +44,13 @@ public class DetailBillActivity extends BaseActivity<ActivityDetailBillBinding> 
 	//注入service
 	private BillService billService;
 	private MemberService memberService;
+	private ConsumptionService consumptionService;
 
 	@Override
 	protected void inject() {
 		billService = new BillService(this);
 		memberService = new MemberService(this);
+		consumptionService = new ConsumptionService(this);
 	}
 
 	@Override
@@ -56,11 +62,17 @@ public class DetailBillActivity extends BaseActivity<ActivityDetailBillBinding> 
 		//注册返回按钮操作事件
 		registerImageButtonBack();
 
-		SwipeRecyclerView swipeRecyclerView = findViewById(R.id.UI_SwipeRecyclerView_ConsumerItem);
+		SwipeRecyclerView swipeRecyclerView = findViewById(R.id.UI_SwipeRecyclerView_Member);
 		LayoutManager layoutManager = new GridLayoutManager(this, 5);
 		swipeRecyclerView.setLayoutManager(layoutManager);
 		memberRecyclerViewAdapter = new ItemIconRecyclerViewAdapter(ItemTypeEnum.MEMBER, memberIconList, this);
 		swipeRecyclerView.setAdapter(memberRecyclerViewAdapter);
+
+		SwipeRecyclerView swipeRecyclerView2 = findViewById(R.id.UI_SwipeRecyclerView_Consuption);
+		LayoutManager layoutManager2 = new GridLayoutManager(this, 5);
+		swipeRecyclerView2.setLayoutManager(layoutManager2);
+		memberRecyclerViewAdapter2 = new ItemIconRecyclerViewAdapter(ItemTypeEnum.CONSUMPTION, consumptionIconList, this);
+		swipeRecyclerView2.setAdapter(memberRecyclerViewAdapter2);
 	}
 
 	@Override
@@ -69,13 +81,18 @@ public class DetailBillActivity extends BaseActivity<ActivityDetailBillBinding> 
 		showBill(selectedBill);
 	}
 
-	private void showBill(Bill selectedBill) {
+	private void showBill(Bill bill) {
 		ImageView imageView = findViewById(R.id.UI_ImageView_Icon);
-		ImageLoadUtil.loadImageToView(selectedBill.getIconDownloadUrl(), imageView);
-		TextView textView = findViewById(R.id.UI_TextView_Description);
-		textView.setText(selectedBill.getConsumptionIds());
+		ImageLoadUtil.loadImageToView(bill.getIconDownloadUrl(), imageView);
 
-		String memberIds = selectedBill.getMemberIds();
+		String consumptionIds = bill.getConsumptionIds();
+		final List<Long> ids = SplitUtil.trimToLongList(consumptionIds);
+		List<ImageIconInfo> consumptions = consumptionService.queryByIds(ids);
+		consumptionIconList.clear();
+		consumptionIconList.addAll(consumptions);
+		memberRecyclerViewAdapter2.notifyDataSetChanged();
+
+		String memberIds = bill.getMemberIds();
 		List<Long> longs = SplitUtil.trimToLongList(memberIds);
 		final List<ImageIconInfo> imageIconInfos = memberService.queryAll(longs);
 		memberIconList.clear();

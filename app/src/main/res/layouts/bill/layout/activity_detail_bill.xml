@@ -26,7 +26,16 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
-        <include layout="@layout/recyclerview_bill_icon_item"/>
+        <ImageView
+                android:id="@+id/UI_ImageView_Icon"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_base_placeholder"
+                android:background="@drawable/corners_shape_unselect"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -37,24 +46,77 @@
             android:orientation="vertical">
 
         <TextView
+                android:id="@+id/consuptionType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="类型 支出"
+                android:text="消费类型 支出"
                 android:textSize="20sp"
                 />
 
         <include layout="@layout/base_line"/>
 
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="消费项"
+                android:textSize="20sp"
+                />
         <!--消费人员 头像 + 列表 -->
         <com.yanzhenjie.recyclerview.SwipeRecyclerView
-                android:id="@+id/UI_SwipeRecyclerView_ConsumerItem"
+                android:id="@+id/UI_SwipeRecyclerView_Consuption"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toTopOf="@+id/UI_AssociateItem_Button_AddItem"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
+
+        <include layout="@layout/base_line"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="消费人"
+                android:textSize="20sp"
+                />
+        <!--消费人员 头像 + 列表 -->
+        <com.yanzhenjie.recyclerview.SwipeRecyclerView
+                android:id="@+id/UI_SwipeRecyclerView_Member"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/UI_AssociateItem_Button_AddItem"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        <include layout="@layout/base_line"/>
+
+        <TextView
+                android:id="@+id/ammount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="金额"
+                android:textSize="20sp"
+                />
+
+        <include layout="@layout/base_line"/>
+
+        <TextView
+                android:id="@+id/time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="日期"
+                android:textSize="20sp"
+                />
+
+        <include layout="@layout/base_line"/>
+
+        <TextView
+                android:id="@+id/remark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="备注"
+                android:textSize="20sp"
+                />
     </LinearLayout>
-
-
 </LinearLayout>
