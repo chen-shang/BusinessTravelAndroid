@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import androidx.annotation.Nullable;
 import com.business.travel.app.exceptions.ApiException;
@@ -11,6 +12,7 @@ import com.business.travel.app.model.GiteeContent;
 import com.business.travel.app.utils.HttpWrapper;
 import com.business.travel.utils.JacksonUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.google.common.collect.Sets;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -18,6 +20,7 @@ import okhttp3.Request.Builder;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.DigestUtils;
 
 /**
  * @author chenshang
@@ -31,17 +34,32 @@ public class BusinessTravelResourceApi {
 	private static final String ACCESS_TOKEN = "a1b50339ccf80a7c96f6a96fa97fcdaf";
 	private static final String URL_ = BASE_URL + "/" + OWNER + "/" + REPOSITORY;
 
+	private static final Set<String> set = Sets.newConcurrentHashSet();
+
 	/**
 	 * @param iconFullName
 	 * @return
 	 */
 	@Nullable
 	public static InputStream getIcon(String iconFullName) {
+		if (StringUtils.isBlank(iconFullName)) {
+			return null;
+		}
+
+		//TODO 查询缓存,缓存不存在,从服务端查询
+		InputStream inputStream = getIconFromServer(iconFullName);
+		if (inputStream != null) {
+			//todo 保存并添加缓存
+		}
+		return inputStream;
+	}
+
+	private static InputStream getIconFromServer(String iconFullName) {
+		String md5 = DigestUtils.md5DigestAsHex(iconFullName.getBytes());
+		if (!set.add(md5)) {
+			return null;
+		}
 		try {
-			if (StringUtils.isBlank(iconFullName)) {
-				return null;
-			}
-			//TODO 缓存
 			Request request = new Builder().url(iconFullName).build();
 			Response response = new OkHttpClient().newCall(request).execute();
 			if (!response.isSuccessful()) {
@@ -54,6 +72,8 @@ public class BusinessTravelResourceApi {
 			return body.byteStream();
 		} catch (IOException e) {
 			throw new IllegalArgumentException("获取图标失败");
+		} finally {
+			set.remove(md5);
 		}
 	}
 
