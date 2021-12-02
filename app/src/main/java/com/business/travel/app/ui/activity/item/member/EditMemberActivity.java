@@ -21,6 +21,7 @@ import com.business.travel.app.ui.activity.item.AddItemActivity;
 import com.business.travel.app.ui.activity.item.EditItemRecyclerViewAdapter;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
+import com.business.travel.app.utils.ImageIconUtil;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
 
@@ -75,11 +76,7 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 
 		//长按移动排序
 		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.setLongPressDragEnabled(true);
-		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.setOnItemMoveListener(
-				new BaseRecyclerViewOnItemMoveListener<>(memberIconList, editConsumptionRecyclerViewAdapter).onItemMove(
-						(consumptionItems, fromPosition, toPosition) -> IntStream.range(fromPosition, toPosition).forEachOrdered(sortId -> memberService.updateMemberSort(consumptionItems.get(sortId).getId(), (long)sortId))
-				)
-		);
+		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(memberIconList, editConsumptionRecyclerViewAdapter).onItemMove((consumptionItems, fromPosition, toPosition) -> IntStream.range(fromPosition, toPosition).forEachOrdered(sortId -> memberService.updateMemberSort(consumptionItems.get(sortId).getId(), (long)sortId))));
 
 		//添加分隔线
 		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.addItemDecoration(new DefaultItemDecoration(Color.GRAY));
@@ -100,9 +97,11 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 			if (direction == RIGHT_DIRECTION && menuPosition == 0) {
 				//移除元素
 				memberIconList.remove(adapterPosition);
+				editConsumptionRecyclerViewAdapter.notifyItemRemoved(adapterPosition);
+				editConsumptionRecyclerViewAdapter.notifyItemRangeChanged(adapterPosition, memberIconList.size() - adapterPosition);
+
 				//先删除该元素
 				memberService.softDeleteMember(imageIconInfo.getId());
-				editConsumptionRecyclerViewAdapter.notifyDataSetChanged();
 				checkEmpty();
 			}
 		});
@@ -126,6 +125,11 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 
 	private void refresh() {
 		List<ImageIconInfo> newLeastMemberIconList = memberService.queryAllMembersIconInfo();
+		//先尝试比较一下list 是否改变
+		if (!ImageIconUtil.dataChange(newLeastMemberIconList, memberIconList)) {
+			return;
+		}
+
 		memberIconList.clear();
 		memberIconList.addAll(newLeastMemberIconList);
 		editConsumptionRecyclerViewAdapter.notifyDataSetChanged();

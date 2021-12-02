@@ -52,6 +52,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 			public void run() {
 				startActivity(goMasterActivityIntent);
 			}
-		}, 5000);
+		}, 1000);
 	}
 }

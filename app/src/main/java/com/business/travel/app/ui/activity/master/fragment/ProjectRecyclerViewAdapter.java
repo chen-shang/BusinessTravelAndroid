@@ -26,7 +26,6 @@ import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.lxj.xpopup.XPopup.Builder;
 import com.lxj.xpopup.impl.AttachListPopupView;
-import com.lxj.xpopup.impl.ConfirmPopupView;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -34,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectAdapterHolder, Project> {
 
+	private final ProjectFragment projectFragment = MasterFragmentPositionEnum.PROJECT_FRAGMENT.getFragment();
 	public ProjectService projectService;
 	public BillService billService;
 
@@ -97,22 +97,28 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 	}
 
 	private AttachListPopupView initAttachListPopView(@NotNull ProjectAdapterHolder holder, int position, Project project) {
-		//确认删除弹框
-		ConfirmPopupView confirmPopupView = new Builder(activity).asConfirm("是否要删除", project.getName(), () -> confirmDeleteProject(position, project));
 		//删除、编辑弹框
 		return new Builder(activity).atView(holder.projectNameTextView).asAttachList(new String[] {"删除", "编辑"}, new int[] {R.drawable.ic_base_delete, R.drawable.ic_base_green_edit}, (pos, text) -> {
-			//当点击删除的时候
-			if (pos == 0) {
-				//弹出删除确认框
-				confirmPopupView.show();
-				return;
-			}
-			//当点击编辑的时候
-			if (pos == 1) {
-				//编辑 todo
-				return;
+			switch (pos) {
+				case 0:
+					delete(position, project);
+					break;
+				case 1:
+					edit(position, project);
+					break;
+				default:
+					//do nothing
 			}
 		});
+	}
+
+	private void edit(int position, Project project) {
+
+	}
+
+	private void delete(int position, Project project) {
+		//确认删除弹框
+		new Builder(activity).asConfirm("是否要删除", project.getName(), () -> confirmDelete(position, project)).show();
 	}
 
 	/**
@@ -121,15 +127,16 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 	 * @param position
 	 * @param project
 	 */
-	private void confirmDeleteProject(int position, Project project) {
+	private void confirmDelete(int position, Project project) {
 		//先软删除项目和项目下面的账单
 		projectService.softDeleteProjectWithBill(project.getId());
 		//移除元素并通知UI更新
 		dataList.remove(position);
-		this.notifyDataSetChanged();
+		notifyItemRemoved(position);
+		notifyItemRangeChanged(position, dataList.size() - position);
 		//如果移除完了,没有列表数据了,此时需要刷新viewHead了
 		if (CollectionUtils.isEmpty(dataList)) {
-			((ProjectFragment)MasterFragmentPositionEnum.PROJECT_FRAGMENT.getFragment()).refreshProjectList();
+			projectFragment.refreshProjectList();
 		}
 	}
 

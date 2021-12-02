@@ -31,6 +31,8 @@ import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.utils.SplitUtil;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.XPopup.Builder;
+import com.lxj.xpopup.impl.AttachListPopupView;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -93,36 +95,57 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 			activity.startActivity(intent);
 		});
 
+		//长按弹出删除、编辑按钮
+		AttachListPopupView attachListPopupView = newAttachListPopupView(holder, position, bill);
+		//长按弹出删除、编辑按钮
 		holder.cardView.setOnLongClickListener(v -> {
-			new XPopup.Builder(activity)
-					// 依附于所点击的View，内部会自动判断在上方或者下方显示
-					.atView(holder.iconImageView).asAttachList(new String[] {"删除", "编辑"}, new int[] {R.drawable.ic_base_delete, R.drawable.ic_base_green_edit}, (pos, text) -> {
-						if (pos == 0) {
-							onDelete(position, bill, holder);
-						} else if (pos == 1) {
-							//编辑
-							onEdit(bill);
-						}
-					}).show();
+			attachListPopupView.show();
 			return true;
 		});
 	}
 
-	private void onEdit(Bill bill) {
+	private AttachListPopupView newAttachListPopupView(@NotNull BillItemRecyclerViewAdapterViewHolder holder, int position, Bill bill) {
+		return new Builder(activity).atView(holder.iconImageView).asAttachList(new String[] {"删除", "编辑"}, new int[] {R.drawable.ic_base_delete, R.drawable.ic_base_green_edit}, (pos, text) -> {
+			switch (pos) {
+				case 0:
+					delete(position, bill);
+					break;
+				case 1:
+					edit(position, bill);
+					break;
+				default:
+					//do nothing
+			}
+		});
 	}
 
-	private void onDelete(int position, Bill bill, BillItemRecyclerViewAdapterViewHolder holder) {
-		new XPopup.Builder(activity).asConfirm("", "是否要删除该账目", () -> {
-			billService.deleteBillById(bill.getId());
-			dataList.remove(position);
-			this.notifyDataSetChanged();
-			//刷新右上角金额
-			billFragment.refreshMoneyShow(bill.getProjectId());
-			if (CollectionUtils.isEmpty(dataList)) {
-				billFragment.refreshBillList(bill.getProjectId());
-			}
-			billFragment.getBillRecyclerViewAdapter().refreshMoneyShow(bill.getProjectId(), bill.getConsumeDate());
-		}).show();
+	private void edit(int position, Bill bill) {
+
+	}
+
+	private void delete(int position, Bill bill) {
+		//弹出确认删除对话框
+		new XPopup.Builder(activity).asConfirm("", "是否要删除该账目", () -> confirmDelete(position, bill)).show();
+	}
+
+	//确认删除
+	private void confirmDelete(int position, Bill bill) {
+		//1. 数据库删除
+		billService.deleteBillById(bill.getId());
+		//2. 列表移除
+		dataList.remove(bill);
+		this.notifyItemRemoved(position);
+		notifyItemRangeChanged(position, dataList.size() - position);
+		//刷新右上角金额
+		billFragment.refreshMoneyShow(bill.getProjectId());
+		//如果当前数据list没有了
+		if (CollectionUtils.isEmpty(dataList)) {
+			billFragment.refreshBillList(bill.getProjectId());
+		}
+		billFragment.getBillRecyclerViewAdapter().refreshMoneyShow(bill.getProjectId(), bill.getConsumeDate());
+	}
+
+	private void onEdit(Bill bill) {
 	}
 
 	@SuppressLint("NonConstantResourceId")

@@ -15,7 +15,7 @@ public interface ProjectDao extends BaseDao<Project> {
 	/**
 	 * 查询全部
 	 */
-	@Query("SELECT * FROM project where isDeleted=1")
+	@Query("SELECT * FROM project where isDeleted=1 order by startTime desc")
 	List<Project> selectAll();
 
 	/**

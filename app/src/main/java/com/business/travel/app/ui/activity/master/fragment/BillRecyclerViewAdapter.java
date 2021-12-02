@@ -76,7 +76,7 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 		//刷新金额显示
 		refreshMoneyShow(selectedProjectId, date);
 
-		//接下来是列表显示
+		//接下来是当天的账单列表显示
 		holder.billItemSwipeRecyclerView.setLayoutManager(new LinearLayoutManager(activity.getApplicationContext()));
 		holder.billItemSwipeRecyclerView.setAdapter(new BillItemRecyclerViewAdapter(billList, activity));
 	}

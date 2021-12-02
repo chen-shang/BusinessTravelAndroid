@@ -28,6 +28,7 @@ import com.business.travel.app.ui.activity.item.AddItemActivity;
 import com.business.travel.app.ui.activity.item.EditItemRecyclerViewAdapter;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
+import com.business.travel.app.utils.ImageIconUtil;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
 import org.apache.commons.lang3.StringUtils;
@@ -146,11 +147,7 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 		//长按移动排序
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setLongPressDragEnabled(true);
 		//当移动之后
-		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setOnItemMoveListener(
-				new BaseRecyclerViewOnItemMoveListener<>(consumptionImageIconList, editConsumptionRecyclerViewAdapter).onItemMove(
-						(consumptionItems, fromPosition, toPosition) -> IntStream.rangeClosed(fromPosition, toPosition).forEachOrdered(i -> consumptionService.updateMemberSort(consumptionImageIconList.get(i).getId(), (long)i))
-				)
-		);
+		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(consumptionImageIconList, editConsumptionRecyclerViewAdapter).onItemMove((consumptionItems, fromPosition, toPosition) -> IntStream.rangeClosed(fromPosition, toPosition).forEachOrdered(i -> consumptionService.updateMemberSort(consumptionImageIconList.get(i).getId(), (long)i))));
 
 		//添加分隔线
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.addItemDecoration(new DefaultItemDecoration(Color.GRAY));
@@ -171,10 +168,11 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 			if (direction == RIGHT_DIRECTION && menuPosition == 0) {
 				//移除元素
 				consumptionImageIconList.remove(adapterPosition);
+				editConsumptionRecyclerViewAdapter.notifyItemRemoved(adapterPosition);
+				editConsumptionRecyclerViewAdapter.notifyItemRangeChanged(adapterPosition, consumptionImageIconList.size() - adapterPosition);
+
 				//先删除该元素
 				consumptionService.softDeleteConsumption(imageIconInfo.getId());
-				editConsumptionRecyclerViewAdapter.notifyDataSetChanged();
-
 				if (CollectionUtils.isEmpty(consumptionImageIconList)) {
 					showEmptyHeader();
 				}
@@ -228,6 +226,11 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 			return imageIconInfo;
 		}).collect(Collectors.toList());
 
+		//先尝试比较一下list 是否改变
+		if (!ImageIconUtil.dataChange(newImage, consumptionImageIconList)) {
+			return;
+		}
+
 		this.consumptionImageIconList.clear();
 		this.consumptionImageIconList.addAll(newImage);
 		editConsumptionRecyclerViewAdapter.notifyDataSetChanged();
@@ -235,7 +238,7 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 
 	private void showEmptyHeader() {
 		consumptionImageIconList.clear();
-		editConsumptionRecyclerViewAdapter.notifyDataSetChanged();
+		editConsumptionRecyclerViewAdapter.notifyItemRangeChanged(0, consumptionImageIconList.size());
 		if (viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.getHeaderCount() == 0) {
 			viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.addHeaderView(headView);
 		}
