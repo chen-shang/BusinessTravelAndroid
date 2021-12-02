@@ -10,7 +10,6 @@ import com.blankj.utilcode.util.ColorUtils;
 import com.business.travel.app.databinding.ActivityMainBinding;
 import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.service.MemberService;
-import com.business.travel.app.ui.TestActivity;
 import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.FutureUtil;
@@ -32,10 +31,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		BarUtils.setStatusBarColor(this, ColorUtils.getColor(R.color.white));
-		viewBinding.UIMainActivityImageViewIcon.setOnClickListener(v -> {
-			Intent intent = new Intent(this, TestActivity.class);
-			startActivity(intent);
-		});
 	}
 
 	@Override

@@ -128,14 +128,14 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	private void bind(ImageView imageView, TextView textView, ImageIconInfo imageIconInfo, Class<?> cls) {
 		boolean isEditImageButton = ItemIconEnum.ItemIconEdit.getIconDownloadUrl().equals(imageIconInfo.getIconDownloadUrl());
 		//默认未选中状态
-		imageView.setBackgroundResource(imageIconInfo.isSelected() ? R.drawable.corners_shape_select : R.drawable.corners_shape_unselect);
+		imageView.setBackgroundResource(R.drawable.corners_shape_unselect);
 		imageView.setImageResource(R.drawable.ic_base_placeholder);
-		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView);
 
 		textView.setText(imageIconInfo.getName());
 
-		//int unSelectColor = ContextCompat.getColor(getApplicationContext(), R.color.black_100);
-		//int selectColor = ContextCompat.getColor(getApplicationContext(), R.color.teal_800);
+		int unSelectColor = ContextCompat.getColor(getApplicationContext(), R.color.black_100);
+		int selectColor = ContextCompat.getColor(getApplicationContext(), R.color.teal_800);
+		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView, imageIconInfo.isSelected() ? selectColor : unSelectColor);
 
 		imageView.setOnClickListener(v -> {
 			//如果是编辑按钮
@@ -145,22 +145,9 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 				this.startActivity(intent);
 				return;
 			}
-
-			if (imageIconInfo.isSelected()) {
-				imageIconInfo.setSelected(false);
-				//否则,改变选中颜色
-				v.setBackgroundResource(R.drawable.corners_shape_unselect);
-				//textView.setTextColor(unSelectColor);
-				return;
-			}
-
-			if (!imageIconInfo.isSelected()) {
-				imageIconInfo.setSelected(true);
-				//否则,改变选中颜色
-				v.setBackgroundResource(R.drawable.corners_shape_select);
-				//textView.setTextColor(selectColor);
-				return;
-			}
+			//否则,改变选中颜色
+			imageIconInfo.setSelected(!imageIconInfo.isSelected());
+			ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView, imageIconInfo.isSelected() ? selectColor : unSelectColor);
 		});
 	}
 
@@ -298,20 +285,10 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		String amount = viewBinding.UIAddBillActivityTextViewAmount.getText().toString().trim();
 		Preconditions.checkArgument(StringUtils.isNotBlank(amount), "请输入消费金额");
 		//1. 选中的消费项 id 的列表
-		String consumerItemList = consumptionImageIconList.stream()
-				.filter(ImageIconInfo::isSelected)
-				.map(ImageIconInfo::getId)
-				.map(String::valueOf)
-				.filter(StringUtils::isNotBlank)
-				.collect(Collectors.joining(","));
+		String consumerItemList = consumptionImageIconList.stream().filter(ImageIconInfo::isSelected).map(ImageIconInfo::getId).map(String::valueOf).filter(StringUtils::isNotBlank).collect(Collectors.joining(","));
 		Preconditions.checkArgument(StringUtils.isNotBlank(consumerItemList), "请选择消费项");
 		//2. 选中的人员 的列表
-		String memberItemList = memberIconList.stream()
-				.filter(ImageIconInfo::isSelected)
-				.map(ImageIconInfo::getId)
-				.map(String::valueOf)
-				.filter(StringUtils::isNotBlank)
-				.collect(Collectors.joining(","));
+		String memberItemList = memberIconList.stream().filter(ImageIconInfo::isSelected).map(ImageIconInfo::getId).map(String::valueOf).filter(StringUtils::isNotBlank).collect(Collectors.joining(","));
 		Preconditions.checkArgument(StringUtils.isNotBlank(memberItemList), "请选择消费人员");
 
 		String remark = viewBinding.UIAddBillActivityEditTextRemark.getText().toString().trim();
