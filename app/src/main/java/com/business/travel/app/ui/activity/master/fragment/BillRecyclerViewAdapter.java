@@ -33,7 +33,6 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 
 	private final BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
 	private BillService billService;
-	private BillRecyclerViewAdapterViewHolder viewHolder;
 
 	public BillRecyclerViewAdapter(List<DateBillInfo> dateBillInfos, BaseActivity<? extends ViewBinding> baseActivity) {
 		super(dateBillInfos, baseActivity);
@@ -49,8 +48,7 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 	@Override
 	public BillRecyclerViewAdapterViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
 		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_bill_recyclerview, parent, false);
-		viewHolder = new BillRecyclerViewAdapterViewHolder(view) {};
-		return viewHolder;
+		return new BillRecyclerViewAdapterViewHolder(view) {};
 	}
 
 	@SuppressLint("SetTextI18n")
@@ -74,14 +72,15 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 		}
 
 		//刷新金额显示
-		refreshMoneyShow(selectedProjectId, date);
+		refreshMoneyShow(holder, selectedProjectId, date);
 
 		//接下来是当天的账单列表显示
 		holder.billItemSwipeRecyclerView.setLayoutManager(new LinearLayoutManager(activity.getApplicationContext()));
-		holder.billItemSwipeRecyclerView.setAdapter(new BillItemRecyclerViewAdapter(billList, activity));
+		final BillItemRecyclerViewAdapter adapter = new BillItemRecyclerViewAdapter(billList, activity, holder);
+		holder.billItemSwipeRecyclerView.setAdapter(adapter);
 	}
 
-	public void refreshMoneyShow(Long projectId, String date) {
+	public void refreshMoneyShow(BillRecyclerViewAdapterViewHolder viewHolder, Long projectId, String date) {
 		//统计一下总收入
 		Long sumTotalIncomeMoney = billService.sumTotalIncomeMoney(projectId, date);
 		viewHolder.incomeTextView.setVisibility(sumTotalIncomeMoney == null ? View.GONE : View.VISIBLE);

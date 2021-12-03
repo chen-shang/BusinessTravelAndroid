@@ -90,4 +90,8 @@ public class ProjectService {
 		project.setModifyTime(DateTimeUtil.format(new Date()));
 		projectDao.update(project);
 	}
+
+	public List<Project> queryByName(String name) {
+		return projectDao.selectByNameLike(name);
+	}
 }

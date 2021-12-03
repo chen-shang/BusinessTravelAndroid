@@ -134,8 +134,8 @@ public class BillFragment extends BaseFragment<FragmentBillBinding, ShareData> {
 		}
 
 		HeaderView.of(headView).removeFrom(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
-		this.dateBillInfoList.clear();
 		List<DateBillInfo> newDateBillInfoList = billList.stream().collect(Collectors.groupingBy(Bill::getConsumeDate)).entrySet().stream().map(entry -> new DateBillInfo(entry.getKey(), entry.getValue())).sorted(Comparator.comparing(DateBillInfo::getDate).reversed()).collect(Collectors.toList());
+		this.dateBillInfoList.clear();
 		dateBillInfoList.addAll(newDateBillInfoList);
 		billRecyclerViewAdapter.notifyDataSetChanged();
 	}
@@ -144,12 +144,16 @@ public class BillFragment extends BaseFragment<FragmentBillBinding, ShareData> {
 		//统计一下总收入
 		Long sumTotalIncomeMoney = billService.sumTotalIncomeMoney(id);
 		viewBinding.UIBillFragmentTextViewIncome.setVisibility(sumTotalIncomeMoney == null ? View.GONE : View.VISIBLE);
-		Optional.ofNullable(sumTotalIncomeMoney).ifPresent(money -> viewBinding.UIBillFragmentTextViewIncome.setText("收入:" + (double)money / 100));
+		Optional.ofNullable(sumTotalIncomeMoney).ifPresent(
+				money -> viewBinding.UIBillFragmentTextViewIncome.setText("收入:" + (double)money / 100)
+		);
 
 		//统计一下总支出
 		Long sumTotalSpendingMoney = billService.sumTotalSpendingMoney(id);
 		viewBinding.UIBillFragmentTextViewPay.setVisibility(sumTotalSpendingMoney == null ? View.GONE : View.VISIBLE);
-		Optional.ofNullable(sumTotalSpendingMoney).ifPresent(money -> viewBinding.UIBillFragmentTextViewPay.setText("支出:" + (double)money / 100));
+		Optional.ofNullable(sumTotalSpendingMoney).ifPresent(
+				money -> viewBinding.UIBillFragmentTextViewPay.setText("支出:" + (double)money / 100)
+		);
 	}
 
 	@Override

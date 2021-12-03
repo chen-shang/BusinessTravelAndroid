@@ -6,7 +6,6 @@ import java.util.List;
 import android.os.Bundle;
 import android.widget.ImageView;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.databinding.ActivityDetailBillBinding;
@@ -63,14 +62,12 @@ public class DetailBillActivity extends BaseActivity<ActivityDetailBillBinding> 
 		registerImageButtonBack();
 
 		SwipeRecyclerView swipeRecyclerView = findViewById(R.id.UI_SwipeRecyclerView_Member);
-		LayoutManager layoutManager = new GridLayoutManager(this, 5);
-		swipeRecyclerView.setLayoutManager(layoutManager);
+		swipeRecyclerView.setLayoutManager(new GridLayoutManager(this, 5));
 		memberRecyclerViewAdapter = new ItemIconRecyclerViewAdapter(ItemTypeEnum.MEMBER, memberIconList, this);
 		swipeRecyclerView.setAdapter(memberRecyclerViewAdapter);
 
 		SwipeRecyclerView swipeRecyclerView2 = findViewById(R.id.UI_SwipeRecyclerView_Consuption);
-		LayoutManager layoutManager2 = new GridLayoutManager(this, 5);
-		swipeRecyclerView2.setLayoutManager(layoutManager2);
+		swipeRecyclerView2.setLayoutManager(new GridLayoutManager(this, 5));
 		memberRecyclerViewAdapter2 = new ItemIconRecyclerViewAdapter(ItemTypeEnum.CONSUMPTION, consumptionIconList, this);
 		swipeRecyclerView2.setAdapter(memberRecyclerViewAdapter2);
 	}

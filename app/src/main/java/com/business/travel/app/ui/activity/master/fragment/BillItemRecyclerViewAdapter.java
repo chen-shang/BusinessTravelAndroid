@@ -26,6 +26,7 @@ import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.ui.activity.bill.DetailBillActivity;
 import com.business.travel.app.ui.activity.master.fragment.BillItemRecyclerViewAdapter.BillItemRecyclerViewAdapterViewHolder;
+import com.business.travel.app.ui.activity.master.fragment.BillRecyclerViewAdapter.BillRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.ImageLoadUtil;
@@ -41,12 +42,21 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillItemRecyclerViewAdapterViewHolder, Bill> {
 
-	private final BillService billService;
-	private final ConsumptionService consumptionService;
 	private final BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
+	//这个是父类 viewHolder
+	private final BillRecyclerViewAdapterViewHolder viewHolder;
+	//注入service
+	private BillService billService;
+	private ConsumptionService consumptionService;
 
-	public BillItemRecyclerViewAdapter(List<Bill> bills, BaseActivity<? extends ViewBinding> baseActivity) {
+	public BillItemRecyclerViewAdapter(List<Bill> bills, BaseActivity<? extends ViewBinding> baseActivity, BillRecyclerViewAdapterViewHolder holder) {
 		super(bills, baseActivity);
+		this.viewHolder = holder;
+
+	}
+
+	@Override
+	protected void inject() {
 		billService = new BillService(activity.getApplicationContext());
 		consumptionService = new ConsumptionService(activity.getApplicationContext());
 	}
@@ -140,9 +150,11 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 		billFragment.refreshMoneyShow(bill.getProjectId());
 		//如果当前数据list没有了
 		if (CollectionUtils.isEmpty(dataList)) {
+			//刷新整个列表
 			billFragment.refreshBillList(bill.getProjectId());
 		}
-		billFragment.getBillRecyclerViewAdapter().refreshMoneyShow(bill.getProjectId(), bill.getConsumeDate());
+		//刷新对应的天的金额
+		billFragment.getBillRecyclerViewAdapter().refreshMoneyShow(viewHolder, bill.getProjectId(), bill.getConsumeDate());
 	}
 
 	private void onEdit(Bill bill) {
