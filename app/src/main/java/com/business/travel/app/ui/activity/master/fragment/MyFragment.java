@@ -1,11 +1,13 @@
 package com.business.travel.app.ui.activity.master.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import com.business.travel.app.databinding.FragmentMyBinding;
+import com.business.travel.app.ui.TestActivity;
 import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.ui.base.ShareData;
 
@@ -16,6 +18,8 @@ public class MyFragment extends BaseFragment<FragmentMyBinding, ShareData> {
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return super.onCreateView(inflater, container, savedInstanceState);
+		final View view = super.onCreateView(inflater, container, savedInstanceState);
+		viewBinding.goTest.setOnClickListener(v -> startActivity(new Intent(this.getActivity(), TestActivity.class)));
+		return view;
 	}
 }
