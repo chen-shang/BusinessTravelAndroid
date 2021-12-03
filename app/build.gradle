@@ -66,29 +66,26 @@ android {
     }
     sourceSets {
         main {
-            res.srcDirs =
-                    [
-                            'src/main/res/layouts/project',
-                            'src/main/res/layouts/my',
-                            'src/main/res/layouts/bill',
-                            'src/main/res/layouts/item',
-                            'src/main/res/layouts/master',
-                            'src/main/res/layouts/base',
-                            'src/main/res/layouts/keyboard',
-                            'src/main/res/layouts/popup',
-                            'src/main/res/layouts',
-                            'src/main/res',
-                            'src/main/res/drawables',
-                            'src/main/res/drawables/icon',
-                            'src/main/res/drawables/icon/keyboard',
-                            'src/main/res/drawables/icon/common',
-                            'src/main/res/drawables/icon/consumption',
-                            'src/main/res/drawables/icon/consumption/income',
-                            'src/main/res/drawables/icon/consumption/spending',
-                            'src/main/res/drawables/icon/member',
-                            'src/main/res/drawables/corner',
-                            'src/main/res/drawables/shape',
-                    ]
+            res.srcDirs = ['src/main/res/layouts/project',
+                           'src/main/res/layouts/my',
+                           'src/main/res/layouts/bill',
+                           'src/main/res/layouts/item',
+                           'src/main/res/layouts/master',
+                           'src/main/res/layouts/base',
+                           'src/main/res/layouts/keyboard',
+                           'src/main/res/layouts/popup',
+                           'src/main/res/layouts',
+                           'src/main/res',
+                           'src/main/res/drawables',
+                           'src/main/res/drawables/icon',
+                           'src/main/res/drawables/icon/keyboard',
+                           'src/main/res/drawables/icon/common',
+                           'src/main/res/drawables/icon/consumption',
+                           'src/main/res/drawables/icon/consumption/income',
+                           'src/main/res/drawables/icon/consumption/spending',
+                           'src/main/res/drawables/icon/member',
+                           'src/main/res/drawables/corner',
+                           'src/main/res/drawables/shape',]
         }
     }
 }
@@ -171,7 +168,8 @@ dependencies {
     //动画
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 
-    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    //搜索列表
+    implementation 'com.github.mancj:MaterialSearchBar:0.8.5'
 }
 
 //编译的时候织入代码
