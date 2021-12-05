@@ -16,22 +16,22 @@
             android:padding="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
-
-        <EditText
-                android:id="@+id/UI_AddBillActivity_TextView_Project_Name"
-                android:hint="项目名称"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/ic_base_edit"
-                android:drawableTintMode="src_over"
-                android:singleLine="true"
-                android:background="@null"
-                android:textSize="25sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:textColor="@color/white"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--  编辑搜索框  -->
+    <com.mancj.materialsearchbar.MaterialSearchBar
+            android:id="@+id/UI_AddBillActivity_SearchBar"
+            style="@style/MaterialSearchBarLight"
+            app:mt_maxSuggestionsCount="10"
+            app:mt_searchIconDrawable="@drawable/ic_base_sort"
+            app:mt_backIconDrawable="@drawable/ic_base_right"
+            app:mt_searchBarColor="@color/teal_800"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:elevation="8dp"
+            android:animateLayoutChanges="false"
+            app:layout_constraintTop_toTopOf="@+id/UI_AddBillActivity_ConstraintLayout"/>
 
     <!--  账单图标   -->
     <androidx.cardview.widget.CardView

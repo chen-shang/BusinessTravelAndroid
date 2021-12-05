@@ -32,5 +32,6 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 		ImageLoadUtil.loadImageToView(iconDownloadUrl, viewBinding.icon);
 		Drawable drawable = viewBinding.icon.getDrawable();
 		drawable.setColorFilter(getResources().getColor(R.color.gray), PorterDuff.Mode.SRC_ATOP);
+
 	}
 }

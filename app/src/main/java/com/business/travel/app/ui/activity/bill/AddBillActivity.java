@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
@@ -34,6 +37,9 @@ import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.app.utils.LogToast;
 import com.business.travel.utils.DateTimeUtil;
 import com.google.common.base.Preconditions;
+import com.mancj.materialsearchbar.MaterialSearchBar;
+import com.mancj.materialsearchbar.SimpleOnSearchActionListener;
+import com.mancj.materialsearchbar.adapter.SuggestionsAdapter.OnItemViewClickListener;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -51,7 +57,11 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	 * 人员图标信息
 	 */
 	private final List<ImageIconInfo> memberIconList = new ArrayList<>();
-
+	private final BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
+	/**
+	 * 可选项目列表
+	 */
+	private List<String> projectNames = new ArrayList<>();
 	/**
 	 * 当前被选中的是支出还是收入
 	 */
@@ -61,7 +71,6 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	 */
 	@Setter
 	private String selectedDate = DateTimeUtil.format(new Date(), "yyyy-MM-dd");
-
 	private BillService billService;
 	private ProjectService projectService;
 	private MemberService memberService;
@@ -79,6 +88,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//注册消费项列表分页、点击事件
+		registerMaterialSearchBar();
+		//注册消费项列表分页、点击事件
 		registerConsumptionPageView();
 		//注册人员列表分页、点击事件
 		registerMemberPageView();
@@ -86,6 +97,78 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		registerKeyboard();
 		//注册支出/收入按钮点击事件
 		registerConsumptionType();
+	}
+
+	private void registerMaterialSearchBar() {
+		MaterialSearchBar searchBar = viewBinding.UIAddBillActivitySearchBar;
+		searchBar.setOnSearchActionListener(new SimpleOnSearchActionListener() {
+			@Override
+			public void onSearchStateChanged(boolean enabled) {
+				if (enabled) {
+					searchBar.setText(searchBar.getPlaceHolderText().toString());
+					List<Project> projects = projectService.queryAll();
+					projectNames = projects.stream().map(Project::getName).collect(Collectors.toList());
+					searchBar.setLastSuggestions(projectNames);
+					searchBar.showSuggestionsList();
+				} else {
+					searchBar.setPlaceHolder(searchBar.getText());
+					searchBar.setText(searchBar.getPlaceHolderText().toString());
+					searchBar.setHint(searchBar.getPlaceHolderText().toString());
+					searchBar.clearSuggestions();
+					searchBar.hideSuggestionsList();
+				}
+			}
+
+			@Override
+			public void onSearchConfirmed(CharSequence text) {
+			}
+
+			@Override
+			public void onButtonClicked(int buttonCode) {
+				LogToast.infoShow("buttonCode:" + buttonCode);
+			}
+		});
+		searchBar.addTextChangeListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				//if (StringUtils.isBlank(s)) {
+				//	final List<Project> projects = projectService.queryAll();
+				//	final List<String> collect = projects.stream().map(Project::getName).collect(Collectors.toList());
+				//	searchBar.setLastSuggestions(collect);
+				//	searchBar.showSuggestionsList();
+				//} else {
+				//	final List<Project> projects = projectService.queryByName(s.toString());
+				//	final List<String> collect = projects.stream().map(Project::getName).collect(Collectors.toList());
+				//	searchBar.setLastSuggestions(collect);
+				//	searchBar.showSuggestionsList();
+				//}
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
+
+		searchBar.setSuggestionsClickListener(new OnItemViewClickListener() {
+			@Override
+			public void OnItemClickListener(int position, View v) {
+				final String s = projectNames.get(position);
+				searchBar.setText(s);
+				searchBar.setPlaceHolder(s);
+				searchBar.clearSuggestions();
+				searchBar.hideSuggestionsList();
+			}
+
+			@Override
+			public void OnItemDeleteListener(int position, View v) {
+
+			}
+		});
 	}
 
 	@Override
@@ -265,7 +348,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	public void saveBill() {
 		AppDatabase.getInstance(this).runInTransaction(() -> {
 			//参数校验
-			String projectName = viewBinding.UIAddBillActivityTextViewProjectName.getText().toString();
+			String projectName = viewBinding.UIAddBillActivitySearchBar.getPlaceHolderText().toString();
 			//如果不存在则新增项目
 			Project project = projectService.createIfNotExist(projectName);
 			if (project == null) {
@@ -321,7 +404,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	}
 
 	private void refreshProjectName() {
-		Long selectedProjectId = ((BillFragment)MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment()).getSelectedProjectId();
+		Long selectedProjectId = billFragment.getSelectedProjectId();
 		if (selectedProjectId == null) {
 			return;
 		}
@@ -329,7 +412,9 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		if (project == null) {
 			return;
 		}
-		viewBinding.UIAddBillActivityTextViewProjectName.setText(project.getName());
+		viewBinding.UIAddBillActivitySearchBar.setText(project.getName());
+		viewBinding.UIAddBillActivitySearchBar.setHint(project.getName());
+		viewBinding.UIAddBillActivitySearchBar.setPlaceHolder(project.getName());
 	}
 
 	public void refreshConsumptionIcon(ConsumptionTypeEnum consumptionType) {
