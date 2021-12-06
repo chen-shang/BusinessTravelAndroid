@@ -13,11 +13,25 @@
             app:layout_constraintTop_toTopOf="parent"
             android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:background="@color/teal_800">
-        </LinearLayout>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:background="@null"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:text="@string/title_my"
+                    android:layout_marginStart="24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:drawableTintMode="src_over"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -25,27 +39,166 @@
                 android:background="@color/white"
                 >
 
-            <Button
-                    android:id="@+id/goTest"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="测试"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
+            <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:clickable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardCornerRadius="5dp"
+                    app:cardElevation="5dp"
+                    android:layout_margin="10dp"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintHorizontal_bias="0.498"
-                    app:layout_constraintVertical_bias="0.636"/>
+                    tools:layout_editor_absoluteX="10dp">
 
-            <Button
-                    android:id="@+id/goHistory"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="版本"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        >
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            >
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_base_placeholder"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                android:layout_marginStart="28dp"
+                                android:id="@+id/circleImageView"/>
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="奔驰的心"
+                                android:textSize="20dp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/circleImageView"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintHorizontal_bias="0.09"
+                                app:layout_constraintVertical_bias="0.307"/>
+
+                        <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_base_right_arrow"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                android:layout_marginEnd="36dp"
+                                />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_weight="2"
+                            android:layout_height="match_parent">
+
+                        <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                >
+
+                            <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAlignment="center"
+                                    android:textSize="30dp"
+                                    android:text="21"
+                                    />
+
+                            <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAlignment="center"
+                                    android:text="记账天数"
+                                    />
+                        </LinearLayout>
+
+                        <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                >
+
+                            <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAlignment="center"
+                                    android:textSize="30dp"
+                                    android:text="89"
+                                    />
+
+                            <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAlignment="center"
+                                    android:text="记账笔数"
+                                    />
+                        </LinearLayout>
+
+                        <LinearLayout
+                                android:layout_weight="1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                >
+
+                            <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAlignment="center"
+                                    android:textSize="30dp"
+                                    android:text="6867.11"
+                                    />
+
+                            <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAlignment="center"
+                                    android:text="总支出"
+                                    />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <!--            <Button-->
+            <!--                    android:id="@+id/goTest"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:text="测试"-->
+            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                    app:layout_constraintStart_toStartOf="parent"-->
+            <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent"-->
+            <!--                    app:layout_constraintHorizontal_bias="0.498"-->
+            <!--                    app:layout_constraintVertical_bias="0.636"/>-->
+
+            <!--            <Button-->
+            <!--                    android:id="@+id/goHistory"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:text="版本"-->
+            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                    app:layout_constraintStart_toStartOf="parent"-->
+            <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent"/>-->
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

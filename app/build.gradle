@@ -86,7 +86,8 @@ android {
                            'src/main/res/drawables/icon/consumption/spending',
                            'src/main/res/drawables/icon/member',
                            'src/main/res/drawables/corner',
-                           'src/main/res/drawables/shape',]
+                           'src/main/res/drawables/shape',
+                           'src/main/res/drawables/icon/me']
         }
     }
 }
