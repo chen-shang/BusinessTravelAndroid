@@ -14,6 +14,7 @@ import com.business.travel.app.service.MemberService;
 import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.FutureUtil;
+import com.business.travel.app.utils.Log;
 
 /**
  * @author chenshang
@@ -42,16 +43,19 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 		super.onStart();
 		//要充分利用启动页面的停顿时间,尽量做一些后台工作,比如检查网络,同步数据之类的,初始化数据之类
 		//因为这个类只在启动的时候启动一次,不会重复做一些事情,可以提升其他页面的访问速度
+		Log.info("1秒后启动主界面");
 		Timer timer = new Timer();
 		Intent goMasterActivityIntent = new Intent(this, MasterActivity.class);
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
+				Log.info("开始启动主界面");
 				startActivity(goMasterActivityIntent);
 			}
 		}, 1000);
 
 		FutureUtil.runAsync(() -> {
+			Log.info("应用启动的时候,异步初始化消费项和人员图标数据");
 			//初次使用app的时候,数据库中是没有消费项图标数据的,因此需要初始化一些默认的图标
 			consumptionService.initConsumption();
 			//初次使用app的时候,数据库中是没有人员图标数据的,因此需要初始化一些默认的图标

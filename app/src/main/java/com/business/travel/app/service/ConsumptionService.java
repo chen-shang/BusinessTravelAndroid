@@ -19,6 +19,7 @@ import com.business.travel.app.model.GiteeContent;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.model.converter.ConsumptionConverter;
 import com.business.travel.app.utils.FutureUtil;
+import com.business.travel.app.utils.Log;
 import com.business.travel.utils.DateTimeUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -52,6 +53,7 @@ public class ConsumptionService {
 	 * 初次使用app的时候,数据库中是没有消费项图标数据的,因此需要初始化一些默认的图标
 	 */
 	public void initConsumption() {
+		Log.info("开始初始化默认图标");
 		if (consumptionDao.count() > 0) {
 			return;
 		}
@@ -60,12 +62,13 @@ public class ConsumptionService {
 			List<Consumption> consumptions = new ArrayList<>();
 
 			List<GiteeContent> v5ReposOwnerRepoContentsIncome = BusinessTravelResourceApi.getV5ReposOwnerRepoContents("icon/DEFAULT/CONSUMPTION/INCOME");
+			Log.info("开始初始化默认图标: 收入图标共计:" + v5ReposOwnerRepoContentsIncome.size());
 			if (CollectionUtils.isNotEmpty(v5ReposOwnerRepoContentsIncome)) {
 				List<Consumption> IncomeConsumptionList = getConsumptions(v5ReposOwnerRepoContentsIncome, ConsumptionTypeEnum.INCOME);
 				consumptions.addAll(IncomeConsumptionList);
 			}
-
 			List<GiteeContent> v5ReposOwnerRepoContentsSpending = BusinessTravelResourceApi.getV5ReposOwnerRepoContents("icon/DEFAULT/CONSUMPTION/SPENDING");
+			Log.info("开始初始化默认图标: 支出图标" + v5ReposOwnerRepoContentsSpending.size());
 			if (CollectionUtils.isNotEmpty(v5ReposOwnerRepoContentsSpending)) {
 				List<Consumption> IncomeConsumptionList = getConsumptions(v5ReposOwnerRepoContentsSpending, ConsumptionTypeEnum.SPENDING);
 				consumptions.addAll(IncomeConsumptionList);
@@ -76,10 +79,7 @@ public class ConsumptionService {
 
 	@NotNull
 	private List<Consumption> getConsumptions(List<GiteeContent> v5ReposOwnerRepoContentsSpending, ConsumptionTypeEnum consumptionTypeEnum) {
-		return v5ReposOwnerRepoContentsSpending.stream()
-				.filter(v5ReposOwnerRepoContent -> v5ReposOwnerRepoContent.getName().endsWith(".svg"))
-				.sorted(Comparator.comparingInt(GiteeContent::getItemSort))
-				.map(v5ReposOwnerRepoContent -> convert(v5ReposOwnerRepoContent, consumptionTypeEnum)).collect(Collectors.toList());
+		return v5ReposOwnerRepoContentsSpending.stream().filter(v5ReposOwnerRepoContent -> v5ReposOwnerRepoContent.getName().endsWith(".svg")).sorted(Comparator.comparingInt(GiteeContent::getItemSort)).map(v5ReposOwnerRepoContent -> convert(v5ReposOwnerRepoContent, consumptionTypeEnum)).collect(Collectors.toList());
 	}
 
 	@NotNull

@@ -18,7 +18,7 @@
             android:theme="@style/Theme.BusinessTravelAndroid"
             android:fullBackupContent="true">
 
-        <activity android:name=".ui.activity.version.VersionHistoryActivity"/>
+        <activity android:name=".ui.activity.log.ChangeLogActivity"/>
         <activity android:name=".ui.activity.login.LoginActivity"/>
         <activity android:name=".ui.activity.bill.DetailBillActivity"/>
         <activity android:name=".ui.activity.item.member.EditMemberActivity"/>

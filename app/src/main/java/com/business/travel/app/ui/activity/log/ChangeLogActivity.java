@@ -1,4 +1,4 @@
-package com.business.travel.app.ui.activity.version;
+package com.business.travel.app.ui.activity.log;
 
 import java.io.File;
 import java.util.List;
@@ -8,10 +8,10 @@ import android.os.Bundle;
 import com.blankj.utilcode.util.FileIOUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.business.travel.app.R;
-import com.business.travel.app.databinding.ActivityVersionHistoryBinding;
+import com.business.travel.app.databinding.ActivityChangeLogBinding;
 import com.business.travel.app.ui.base.BaseActivity;
 
-public class VersionHistoryActivity extends BaseActivity<ActivityVersionHistoryBinding> {
+public class ChangeLogActivity extends BaseActivity<ActivityChangeLogBinding> {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
