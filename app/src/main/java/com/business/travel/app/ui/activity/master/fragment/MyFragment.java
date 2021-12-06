@@ -20,8 +20,8 @@ public class MyFragment extends BaseFragment<FragmentMyBinding, ShareData> {
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		final View view = super.onCreateView(inflater, container, savedInstanceState);
-		viewBinding.goTest.setOnClickListener(v -> startActivity(new Intent(this.getActivity(), TestActivity.class)));
-		viewBinding.goHistory.setOnClickListener(v -> startActivity(new Intent(this.getActivity(), VersionHistoryActivity.class)));
+		viewBinding.circleImageView.setOnClickListener(v -> startActivity(new Intent(this.getActivity(), TestActivity.class)));
+		viewBinding.imageView7.setOnClickListener(v -> startActivity(new Intent(this.getActivity(), VersionHistoryActivity.class)));
 		return view;
 	}
 }

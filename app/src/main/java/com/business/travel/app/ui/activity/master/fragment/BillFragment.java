@@ -1,8 +1,5 @@
 package com.business.travel.app.ui.activity.master.fragment;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -32,11 +29,9 @@ import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.ui.base.ShareData;
 import com.business.travel.app.utils.AnimalUtil;
 import com.business.travel.app.utils.HeaderView;
-import com.business.travel.utils.DateTimeUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author chenshang
@@ -124,29 +119,6 @@ public class BillFragment extends BaseFragment<FragmentBillBinding, ShareData> {
 		//先刷新头部
 		viewBinding.UIBillFragmentTextViewProjectName.setText(project.getName().trim());
 		//viewBinding.UIBillFragmentTextViewDate.setText(project.getProductTime());
-		String startTime = project.getStartTime();
-		if (StringUtils.isBlank(startTime)) {
-			startTime = "--";
-		} else {
-			startTime = DateTimeUtil.format(startTime, "yyyy.MM.dd");
-		}
-		viewBinding.textViewTime.setText(startTime);
-		String endTime = project.getEndTime();
-		if (StringUtils.isBlank(endTime)) {
-			endTime = "--";
-		} else {
-			endTime = DateTimeUtil.format(endTime, "yyyy.MM.dd");
-		}
-		viewBinding.textView2Time.setText(endTime);
-		String duration = "--";
-		if (StringUtils.isBlank(project.getStartTime()) && StringUtils.isBlank(project.getEndTime())) {
-			final LocalDateTime localDateTime1 = DateTimeUtil.parseLocalDateTime(project.getStartTime());
-			final LocalDateTime localDateTime2 = DateTimeUtil.parseLocalDateTime(project.getEndTime());
-			duration = String.valueOf(Duration.between(localDateTime1, localDateTime2).get(ChronoUnit.DAYS));
-		}
-
-		viewBinding.textView3Time.setText(duration);
-
 		//刷新项目信息
 
 		//刷新右上角金额

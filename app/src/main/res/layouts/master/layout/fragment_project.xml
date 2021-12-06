@@ -14,6 +14,14 @@
             android:layout_height="150dp"
             android:background="@color/teal_800">
 
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_project_backgroud"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/UI_ProjectFragment_ImageView_Other"
+                app:layout_constraintStart_toEndOf="@+id/UI_ProjectFragment_TextView_Title"/>
         <TextView
                 android:id="@+id/UI_ProjectFragment_TextView_Title"
                 android:text="@string/app_name"

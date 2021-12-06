@@ -18,11 +18,13 @@ import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
+import com.business.travel.app.enums.WeekEnum;
 import com.business.travel.app.model.DateBillInfo;
 import com.business.travel.app.service.BillService;
 import com.business.travel.app.ui.activity.master.fragment.BillRecyclerViewAdapter.BillRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
+import com.business.travel.utils.DateTimeUtil;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import org.jetbrains.annotations.NotNull;
 
@@ -61,6 +63,9 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 		DateBillInfo dateBillInfo = dataList.get(position);
 		String date = dateBillInfo.getDate();
 		holder.consumerDateTextView.setText(date);
+		int code = DateTimeUtil.parseLocalDateTime(date, "yyyy-MM-dd").getDayOfWeek().getValue();
+		WeekEnum weekEnum = WeekEnum.ofCode(code);
+		holder.consumerWeekTextView.setText(weekEnum.getMsg());
 
 		//后面可以改成查询数据库
 		Long selectedProjectId = billFragment.getSelectedProjectId();
@@ -97,6 +102,8 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 
 		@BindView(R.id.UI_BillFragment_BillAdapter_ConsumeDate)
 		public TextView consumerDateTextView;
+		@BindView(R.id.UI_BillFragment_BillAdapter_ConsumeWeek)
+		public TextView consumerWeekTextView;
 		@BindView(R.id.UI_BillFragment_BillAdapter_TextView_Pay)
 		public TextView payTextView;
 		@BindView(R.id.UI_BillFragment_BillAdapter_TextView_Income)
