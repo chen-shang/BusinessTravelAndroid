@@ -33,8 +33,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 		super.onCreate(savedInstanceState);
 		BarUtils.setStatusBarColor(this, ColorUtils.getColor(R.color.white));
 
-		//开启日志记录写入文件,最大栈深度为5,最多保留一天
-		LogUtils.getConfig().setLog2FileSwitch(true).setStackDeep(5).setSaveDays(1);
+		//开启日志记录写入文件,最大栈深度为5,最多保留一天 todo 生产环境关闭日志提高程序速度
+		LogUtils.getConfig().setLog2FileSwitch(true).setStackDeep(5).setSaveDays(1).setLogSwitch(true);
 	}
 
 	@Override

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--  记录版本之间的功能变更,不宜太多,测试专用  -->
+    <string-array name="change_log">
+        <item>日志记录到文件中</item>
+        <item>日志记录到文件中2</item>
+    </string-array>
+</resources>
