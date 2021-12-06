@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import com.business.travel.app.databinding.FragmentMyBinding;
 import com.business.travel.app.ui.TestActivity;
+import com.business.travel.app.ui.activity.version.VersionHistoryActivity;
 import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.ui.base.ShareData;
 
@@ -20,6 +21,7 @@ public class MyFragment extends BaseFragment<FragmentMyBinding, ShareData> {
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		final View view = super.onCreateView(inflater, container, savedInstanceState);
 		viewBinding.goTest.setOnClickListener(v -> startActivity(new Intent(this.getActivity(), TestActivity.class)));
+		viewBinding.goHistory.setOnClickListener(v -> startActivity(new Intent(this.getActivity(), VersionHistoryActivity.class)));
 		return view;
 	}
 }

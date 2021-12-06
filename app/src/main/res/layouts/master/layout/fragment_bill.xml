@@ -81,7 +81,7 @@
 
             <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     app:cardCornerRadius="5dp"
@@ -106,7 +106,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="差旅开始时间:"
                                 android:id="@+id/textView"
-                                android:layout_weight="3"
+                                android:layout_weight="2.5"
                                 />
 
                         <TextView
@@ -130,7 +130,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="差旅结束时间:"
                                 android:id="@+id/textView2"
-                                android:layout_weight="3"
+                                android:layout_weight="2.5"
                                 />
 
                         <TextView
@@ -154,7 +154,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="差旅天数:"
                                 android:id="@+id/textView3"
-                                android:layout_weight="3"
+                                android:layout_weight="2.5"
                                 />
 
                         <TextView

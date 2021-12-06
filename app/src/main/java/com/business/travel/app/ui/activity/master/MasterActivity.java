@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback;
+import com.blankj.utilcode.util.ActivityUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.databinding.ActivityMasterBinding;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
@@ -26,8 +27,10 @@ public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 	@Override
 	public void onBackPressed() {
 		//从广告页面跳转过来后不在支持跳转回去
-		if (System.currentTimeMillis() - lastBackPressedTime < 2000) {
-			super.onBackPressed();
+		if (System.currentTimeMillis() - lastBackPressedTime < 1200) {
+			this.finish();
+			ActivityUtils.startHomeActivity();
+			//ActivityUtils.finishAllActivities();
 		} else {
 			lastBackPressedTime = System.currentTimeMillis();
 			LogToast.infoShow("再按一次退出");

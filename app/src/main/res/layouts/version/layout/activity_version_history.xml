@@ -4,16 +4,10 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.TestActivity"
-        android:orientation="vertical">
-
-    <ImageView
-            android:id="@+id/icon"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:src="@drawable/ic_base_placeholder"/>
+        tools:context=".ui.activity.version.VersionHistoryActivity">
 
     <TextView
+            android:id="@+id/versionHistory"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"/>
 </LinearLayout>
