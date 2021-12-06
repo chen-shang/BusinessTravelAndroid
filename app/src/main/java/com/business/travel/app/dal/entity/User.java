@@ -1,10 +1,17 @@
 package com.business.travel.app.dal.entity;
 
+import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import com.business.travel.app.dal.entity.base.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+/**
+ * 用户信息表扩展表
+ */
+@Entity
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class User extends BaseEntity {
 	@PrimaryKey(autoGenerate = true)
 	private Long id;

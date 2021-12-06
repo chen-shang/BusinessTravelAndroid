@@ -10,12 +10,11 @@ import com.business.travel.app.databinding.FragmentMyBinding;
 import com.business.travel.app.ui.TestActivity;
 import com.business.travel.app.ui.activity.version.VersionHistoryActivity;
 import com.business.travel.app.ui.base.BaseFragment;
-import com.business.travel.app.ui.base.ShareData;
 
 /**
  * @author chenshang
  */
-public class MyFragment extends BaseFragment<FragmentMyBinding, ShareData> {
+public class MyFragment extends BaseFragment<FragmentMyBinding> {
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

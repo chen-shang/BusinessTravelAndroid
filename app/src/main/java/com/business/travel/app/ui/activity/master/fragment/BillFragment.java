@@ -26,7 +26,6 @@ import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.base.BaseFragment;
-import com.business.travel.app.ui.base.ShareData;
 import com.business.travel.app.utils.AnimalUtil;
 import com.business.travel.app.utils.HeaderView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -36,7 +35,7 @@ import lombok.Setter;
 /**
  * @author chenshang
  */
-public class BillFragment extends BaseFragment<FragmentBillBinding, ShareData> {
+public class BillFragment extends BaseFragment<FragmentBillBinding> {
 
 	private final List<DateBillInfo> dateBillInfoList = new ArrayList<>();
 	/**

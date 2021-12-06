@@ -17,7 +17,6 @@ import com.business.travel.app.databinding.FragmentProjectBinding;
 import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.base.BaseFragment;
-import com.business.travel.app.ui.base.ShareData;
 import com.business.travel.app.utils.HeaderView;
 import com.lxj.xpopup.XPopup.Builder;
 import com.lxj.xpopup.impl.AttachListPopupView;
@@ -27,7 +26,7 @@ import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 /**
  * @author chenshang
  */
-public class ProjectFragment extends BaseFragment<FragmentProjectBinding, ShareData> {
+public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 
 	/**
 	 * 项目列表
