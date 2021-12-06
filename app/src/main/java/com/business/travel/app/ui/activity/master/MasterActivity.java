@@ -13,6 +13,7 @@ import com.business.travel.app.databinding.ActivityMasterBinding;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.ui.activity.bill.AddBillActivity;
 import com.business.travel.app.ui.base.BaseActivity;
+import com.business.travel.app.utils.LogToast;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -20,9 +21,17 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 
+	private long lastBackPressedTime;
+
 	@Override
 	public void onBackPressed() {
 		//从广告页面跳转过来后不在支持跳转回去
+		if (System.currentTimeMillis() - lastBackPressedTime < 2000) {
+			super.onBackPressed();
+		} else {
+			lastBackPressedTime = System.currentTimeMillis();
+			LogToast.infoShow("再按一次退出");
+		}
 	}
 
 	@Override

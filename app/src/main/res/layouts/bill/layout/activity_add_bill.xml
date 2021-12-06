@@ -26,6 +26,8 @@
             app:mt_searchIconDrawable="@drawable/ic_base_sort"
             app:mt_backIconDrawable="@drawable/ic_base_right"
             app:mt_searchBarColor="@color/teal_800"
+            app:mt_textCursorTint="@color/white"
+            app:mt_textColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"

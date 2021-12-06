@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
@@ -105,16 +107,13 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 			@Override
 			public void onSearchStateChanged(boolean enabled) {
 				if (enabled) {
-					searchBar.setText(searchBar.getPlaceHolderText().toString());
 					List<Project> projects = projectService.queryAll();
 					projectNames = projects.stream().map(Project::getName).collect(Collectors.toList());
-					searchBar.setLastSuggestions(projectNames);
+
+					searchBar.setText(searchBar.getPlaceHolderText().toString());
 					searchBar.showSuggestionsList();
 				} else {
 					searchBar.setPlaceHolder(searchBar.getText());
-					searchBar.setText(searchBar.getPlaceHolderText().toString());
-					searchBar.setHint(searchBar.getPlaceHolderText().toString());
-					searchBar.clearSuggestions();
 					searchBar.hideSuggestionsList();
 				}
 			}
@@ -136,17 +135,16 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				//if (StringUtils.isBlank(s)) {
-				//	final List<Project> projects = projectService.queryAll();
-				//	final List<String> collect = projects.stream().map(Project::getName).collect(Collectors.toList());
-				//	searchBar.setLastSuggestions(collect);
-				//	searchBar.showSuggestionsList();
-				//} else {
-				//	final List<Project> projects = projectService.queryByName(s.toString());
-				//	final List<String> collect = projects.stream().map(Project::getName).collect(Collectors.toList());
-				//	searchBar.setLastSuggestions(collect);
-				//	searchBar.showSuggestionsList();
-				//}
+				if (StringUtils.isBlank(s)) {
+					searchBar.setLastSuggestions(projectNames);
+					return;
+				}
+				
+				final List<String> head = projectNames.stream().filter(item -> item.toLowerCase().contains(s.toString().toLowerCase())).collect(Collectors.toList());
+				projectNames.removeAll(head);
+				head.addAll(projectNames);
+				projectNames = head;
+				searchBar.setLastSuggestions(projectNames);
 			}
 
 			@Override
@@ -160,13 +158,43 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 				final String s = projectNames.get(position);
 				searchBar.setText(s);
 				searchBar.setPlaceHolder(s);
-				searchBar.clearSuggestions();
 				searchBar.hideSuggestionsList();
 			}
 
 			@Override
 			public void OnItemDeleteListener(int position, View v) {
 
+			}
+		});
+
+		searchBar.getSearchEditText().setOnFocusChangeListener(new OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				LogToast.infoShow("OnFocusChangeListener:" + hasFocus);
+				if (!hasFocus) {
+					searchBar.closeSearch();
+				}
+			}
+		});
+		ImageView clearIcon = findViewById(R.id.mt_clear);
+		clearIcon.setVisibility(View.GONE);
+		ImageView arrowIcon = findViewById(R.id.mt_arrow);
+		arrowIcon.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				final Editable text = searchBar.getSearchEditText().getText();
+				if (StringUtils.isBlank(text.toString())) {
+					LogToast.errorShow("请输入项目名称");
+					searchBar.openSearch();
+				}
+			}
+		});
+
+		searchBar.getPlaceHolderView().setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				LogToast.infoShow("getPlaceHolderView");
+				searchBar.openSearch();
 			}
 		});
 	}
@@ -412,8 +440,6 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		if (project == null) {
 			return;
 		}
-		viewBinding.UIAddBillActivitySearchBar.setText(project.getName());
-		viewBinding.UIAddBillActivitySearchBar.setHint(project.getName());
 		viewBinding.UIAddBillActivitySearchBar.setPlaceHolder(project.getName());
 	}
 
