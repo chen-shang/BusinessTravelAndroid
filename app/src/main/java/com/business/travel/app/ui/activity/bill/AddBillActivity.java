@@ -36,6 +36,7 @@ import com.business.travel.app.ui.activity.item.member.EditMemberActivity;
 import com.business.travel.app.ui.activity.master.fragment.BillFragment;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.ImageLoadUtil;
+import com.business.travel.app.utils.Log;
 import com.business.travel.app.utils.LogToast;
 import com.business.travel.utils.DateTimeUtil;
 import com.google.common.base.Preconditions;
@@ -70,6 +71,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	private ConsumptionTypeEnum consumptionType = ConsumptionTypeEnum.SPENDING;
 	/**
 	 * 选中的日期
+	 * 格式 yyyy-MM-dd
 	 */
 	@Setter
 	private String selectedDate = DateTimeUtil.format(new Date(), "yyyy-MM-dd");
@@ -139,7 +141,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 					searchBar.setLastSuggestions(projectNames);
 					return;
 				}
-				
+
 				final List<String> head = projectNames.stream().filter(item -> item.toLowerCase().contains(s.toString().toLowerCase())).collect(Collectors.toList());
 				projectNames.removeAll(head);
 				head.addAll(projectNames);
@@ -375,6 +377,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 
 	public void saveBill() {
 		AppDatabase.getInstance(this).runInTransaction(() -> {
+			Log.info("开启数据库事务");
 			//参数校验
 			String projectName = viewBinding.UIAddBillActivitySearchBar.getPlaceHolderText().toString();
 			//如果不存在则新增项目
@@ -408,6 +411,15 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		bill.setProjectId(project.getId());
 		//消费金额
 		bill.setAmount(new BigDecimal(amount).multiply(new BigDecimal(100)).longValue());
+		String startTime = project.getStartTime();
+		if (StringUtils.isNotBlank(startTime)) {
+			Preconditions.checkArgument(!DateTimeUtil.parseLocalDateTime(startTime).toLocalDate().isAfter(DateTimeUtil.parseLocalDateTime(selectedDate, "yyyy-MM-dd").toLocalDate()), "消费时间必须在项目起止时间段内");
+		}
+		final String endTime = project.getEndTime();
+		if (StringUtils.isNotBlank(endTime)) {
+			Preconditions.checkArgument(!DateTimeUtil.parseLocalDateTime(endTime).toLocalDate().isBefore(DateTimeUtil.parseLocalDateTime(selectedDate, "yyyy-MM-dd").toLocalDate()), "消费时间必须在项目起止时间段内");
+		}
+
 		//消费日期
 		bill.setConsumeDate(selectedDate);
 		bill.setMemberIds(memberItemList);

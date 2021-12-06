@@ -14,6 +14,7 @@ import com.business.travel.app.enums.ItemIconEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.model.converter.MemberConverter;
+import com.business.travel.app.utils.Log;
 import com.business.travel.utils.DateTimeUtil;
 
 public class MemberService {
@@ -55,6 +56,7 @@ public class MemberService {
 	 * 初次使用app的时候,数据库中是没有人员图标数据的,因此需要初始化一些默认的图标
 	 */
 	public void initMember() {
+		Log.info("开始初始化人员默认图标");
 		if (memberDao.count() > 0) {
 			return;
 		}

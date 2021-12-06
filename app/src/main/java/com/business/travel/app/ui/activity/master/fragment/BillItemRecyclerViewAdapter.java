@@ -52,7 +52,6 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 	public BillItemRecyclerViewAdapter(List<Bill> bills, BaseActivity<? extends ViewBinding> baseActivity, BillRecyclerViewAdapterViewHolder holder) {
 		super(bills, baseActivity);
 		this.viewHolder = holder;
-
 	}
 
 	@Override

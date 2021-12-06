@@ -78,6 +78,13 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		refreshBillList(selectedProjectId);
 	}
 
+	@Override
+	public void onPause() {
+		super.onPause();
+		FloatingActionButton floatingActionButton = requireActivity().findViewById(R.id.UI_MasterActivity_FloatingActionButton);
+		AnimalUtil.reset(floatingActionButton);
+	}
+
 	/**
 	 * 注册账单列表页
 	 */
@@ -141,10 +148,4 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		Optional.ofNullable(sumTotalSpendingMoney).ifPresent(money -> viewBinding.UIBillFragmentTextViewPay.setText("支出:" + (double)money / 100));
 	}
 
-	@Override
-	public void onPause() {
-		super.onPause();
-		FloatingActionButton floatingActionButton = requireActivity().findViewById(R.id.UI_MasterActivity_FloatingActionButton);
-		AnimalUtil.reset(floatingActionButton);
-	}
 }
