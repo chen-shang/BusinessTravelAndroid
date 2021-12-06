@@ -1,7 +1,6 @@
 package com.business.travel.app.ui.activity.master;
 
-import java.util.Objects;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -22,15 +21,18 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 
+	/**
+	 * 上一次有返回动作的时间
+	 */
 	private long lastBackPressedTime;
 
 	@Override
 	public void onBackPressed() {
 		//从广告页面跳转过来后不在支持跳转回去
+		//连续两次返回直接退出应用回到主界面
 		if (System.currentTimeMillis() - lastBackPressedTime < 1200) {
 			this.finish();
 			ActivityUtils.startHomeActivity();
-			//ActivityUtils.finishAllActivities();
 		} else {
 			lastBackPressedTime = System.currentTimeMillis();
 			LogToast.infoShow("再按一次退出");
@@ -40,7 +42,6 @@ public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Objects.requireNonNull(getSupportActionBar()).hide();
 		//初始化viewPage控件
 		initViewPager();
 		//初始化navView控件
@@ -88,6 +89,7 @@ public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 	 * @param item
 	 * @return
 	 */
+	@SuppressLint("NonConstantResourceId")
 	private boolean buildBottomNavigationViewOnItemSelectedListener(MenuItem item) {
 		int itemId = item.getItemId();
 		switch (itemId) {

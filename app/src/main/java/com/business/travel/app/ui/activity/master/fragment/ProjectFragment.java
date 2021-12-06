@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.blankj.utilcode.util.CollectionUtils;
@@ -47,13 +46,12 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 	protected void inject() {
 		super.inject();
 		projectService = new ProjectService(requireActivity());
+		headView = HeaderView.newEmptyHeaderView(getLayoutInflater());
 	}
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = super.onCreateView(inflater, container, savedInstanceState);
-		// 初始化  列表为空时候显示的内容,用headView实现该效果
-		initHeadView();
 		//注册项目列表页
 		registerSwipeRecyclerView();
 		//注册右上角点击事件
@@ -91,14 +89,6 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 		//项目列表适配器,这里面有项目卡片的布局
 		projectListRecyclerViewAdapter = new ProjectRecyclerViewAdapter(projectList, (MasterActivity)requireActivity());
 		viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList.setAdapter(projectListRecyclerViewAdapter);
-	}
-
-	/**
-	 * 列表为空时候显示的内容,用headView实现该效果
-	 */
-	private void initHeadView() {
-		headView = getLayoutInflater().inflate(R.layout.base_empty_list, null);
-		headView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 	}
 
 	/**

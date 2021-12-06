@@ -14,6 +14,7 @@ import com.business.travel.app.ui.base.BaseFragment;
 
 /**
  * @author chenshang
+ * 提前初始化好主界面的三个fragment,提高加载速度
  */
 @RequiresApi(api = VERSION_CODES.N)
 public enum MasterFragmentPositionEnum {

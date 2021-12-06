@@ -21,6 +21,7 @@ import com.business.travel.app.ui.activity.item.AddItemActivity;
 import com.business.travel.app.ui.activity.item.EditItemRecyclerViewAdapter;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
+import com.business.travel.app.utils.HeaderView;
 import com.business.travel.app.utils.ImageIconUtil;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
@@ -50,13 +51,12 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 	@Override
 	protected void inject() {
 		memberService = new MemberService(this);
+		headView = HeaderView.newEmptyHeaderView(getLayoutInflater());
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		headView = getLayoutInflater().inflate(R.layout.base_empty_list, null);
-		headView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		/**
 		 * 注册列表
 		 */

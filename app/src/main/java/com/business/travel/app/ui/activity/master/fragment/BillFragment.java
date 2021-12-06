@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -59,13 +58,12 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		super.inject();
 		projectService = new ProjectService(requireActivity());
 		billService = new BillService(requireActivity());
+		headView = HeaderView.newEmptyHeaderView(getLayoutInflater());
 	}
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = super.onCreateView(inflater, container, savedInstanceState);
-		// 初始化  列表为空时候显示的内容,用headView实现该效果
-		initHeadView();
 		//注册账单列表页
 		registerSwipeRecyclerView();
 		return view;
@@ -88,15 +86,6 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		viewBinding.UIBillFragmentSwipeRecyclerViewBillList.setLayoutManager(layoutManager);
 		billRecyclerViewAdapter = new BillRecyclerViewAdapter(dateBillInfoList, (MasterActivity)requireActivity());
 		viewBinding.UIBillFragmentSwipeRecyclerViewBillList.setAdapter(billRecyclerViewAdapter);
-	}
-
-	/**
-	 * 列表为空时候显示的内容,用headView实现该效果
-	 */
-	private void initHeadView() {
-		headView = getLayoutInflater().inflate(R.layout.base_empty_list, null);
-		headView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-
 	}
 
 	@SuppressLint({"SetTextI18n", "NotifyDataSetChanged"})

@@ -13,6 +13,6 @@ public class LogToast {
 	}
 
 	public static void infoShow(String msg) {
-		ToastUtils.make().setLeftIcon(R.drawable.ic_base_info).setGravity(Gravity.BOTTOM, 0, 0).show(msg);
+		ToastUtils.make().setLeftIcon(R.drawable.ic_base_info).setGravity(Gravity.TOP, 0, 0).show(msg);
 	}
 }

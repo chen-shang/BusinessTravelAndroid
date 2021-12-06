@@ -2,7 +2,6 @@ package com.business.travel.app.ui.activity.item.consumption;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -28,6 +27,7 @@ import com.business.travel.app.ui.activity.item.AddItemActivity;
 import com.business.travel.app.ui.activity.item.EditItemRecyclerViewAdapter;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
+import com.business.travel.app.utils.HeaderView;
 import com.business.travel.app.utils.ImageIconUtil;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
@@ -61,14 +61,12 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 	@Override
 	protected void inject() {
 		consumptionService = new ConsumptionService(this);
+		headView = HeaderView.newEmptyHeaderView(getLayoutInflater());
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		headView = getLayoutInflater().inflate(R.layout.base_empty_list, null);
-		headView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		Objects.requireNonNull(getSupportActionBar()).hide();
 		//获取当前是什么类型
 		registerConsumptionType();
 		//注册下拉列表事件
