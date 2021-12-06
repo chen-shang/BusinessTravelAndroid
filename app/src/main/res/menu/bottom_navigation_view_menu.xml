@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
             android:id="@+id/navigation_project"
-            android:icon="@drawable/vector_drawable_project"
+            android:icon="@drawable/ic_base_project"
             android:title="@string/title_project"/>
 
     <item
@@ -11,6 +11,6 @@
 
     <item
             android:id="@+id/navigation_my"
-            android:icon="@drawable/vector_drawable_my"
+            android:icon="@drawable/ic_base_my"
             android:title="@string/title_my"/>
 </menu>
