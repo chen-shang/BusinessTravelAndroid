@@ -3,7 +3,6 @@ package com.business.travel.app.ui.activity.item;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -132,7 +131,7 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 		//先查询最大的sortId
 		Long maxSortId = Optional.ofNullable(memberDao.selectMaxSort()).orElse(0L);
 		member.setSortId(maxSortId);
-		member.setCreateTime(DateTimeUtil.format(new Date()));
+		member.setCreateTime(DateTimeUtil.timestamp());
 		memberDao.insert(member);
 	}
 
@@ -151,8 +150,8 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 		consumption.setIconDownloadUrl(lastSelectedImageIcon.getIconDownloadUrl());
 		consumption.setIconName(lastSelectedImageIcon.getName());
 		consumption.setConsumptionType(consumptionTypeEnum.name());
-		consumption.setCreateTime(DateTimeUtil.format(new Date()));
-		consumption.setModifyTime(DateTimeUtil.format(new Date()));
+		consumption.setCreateTime(DateTimeUtil.timestamp());
+		consumption.setModifyTime(DateTimeUtil.timestamp());
 		//先查询最大的sortId
 		Long maxSortId = Optional.ofNullable(consumptionDao.selectMaxSortIdByType(consumptionType)).orElse(0L);
 		consumption.setSortId(maxSortId);
@@ -188,12 +187,10 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 		try {
 			//如果5秒钟,拿不回数据,说明网络不好
 			String path = "/icon/" + itemTypeEnum.name();
-			FutureUtil.supplyAsync(() -> getIconTypeListFromCache(path))
-					.thenApply(list -> list.stream().sorted(Comparator.comparing(GiteeContent::getItemSort)).collect(Collectors.toList()))
-					.thenAccept(list -> {
-						iconTypeList.clear();
-						iconTypeList.addAll(list);
-					}).get(5, TimeUnit.SECONDS);
+			FutureUtil.supplyAsync(() -> getIconTypeListFromCache(path)).thenApply(list -> list.stream().sorted(Comparator.comparing(GiteeContent::getItemSort)).collect(Collectors.toList())).thenAccept(list -> {
+				iconTypeList.clear();
+				iconTypeList.addAll(list);
+			}).get(5, TimeUnit.SECONDS);
 		} catch (Exception e) {
 			LogToast.errorShow("网络环境较差,请稍后重试");
 		}

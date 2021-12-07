@@ -130,7 +130,8 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		}
 
 		HeaderView.of(headView).removeFrom(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
-		List<DateBillInfo> newDateBillInfoList = billList.stream().collect(Collectors.groupingBy(Bill::getConsumeDate)).entrySet().stream().map(entry -> new DateBillInfo(entry.getKey(), entry.getValue())).sorted(Comparator.comparing(DateBillInfo::getDate).reversed()).collect(Collectors.toList());
+		List<DateBillInfo> newDateBillInfoList = billList.stream().collect(Collectors.groupingBy(Bill::getConsumeDate)).entrySet().stream().map(entry -> new DateBillInfo(entry.getKey(), entry.getValue())).sorted(
+				Comparator.comparing(DateBillInfo::getDate).reversed()).collect(Collectors.toList());
 		this.dateBillInfoList.clear();
 		dateBillInfoList.addAll(newDateBillInfoList);
 		billRecyclerViewAdapter.notifyDataSetChanged();

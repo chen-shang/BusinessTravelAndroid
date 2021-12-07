@@ -74,7 +74,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	 * 格式 yyyy-MM-dd
 	 */
 	@Setter
-	private String selectedDate = DateTimeUtil.format(new Date(), "yyyy-MM-dd");
+	private Long selectedDate = DateTimeUtil.timestamp();
 	private BillService billService;
 	private ProjectService projectService;
 	private MemberService memberService;
@@ -411,20 +411,11 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		bill.setProjectId(project.getId());
 		//消费金额
 		bill.setAmount(new BigDecimal(amount).multiply(new BigDecimal(100)).longValue());
-		String startTime = project.getStartTime();
-		if (StringUtils.isNotBlank(startTime)) {
-			Preconditions.checkArgument(!DateTimeUtil.parseLocalDateTime(startTime).toLocalDate().isAfter(DateTimeUtil.parseLocalDateTime(selectedDate, "yyyy-MM-dd").toLocalDate()), "消费时间必须在项目起止时间段内");
-		}
-		final String endTime = project.getEndTime();
-		if (StringUtils.isNotBlank(endTime)) {
-			Preconditions.checkArgument(!DateTimeUtil.parseLocalDateTime(endTime).toLocalDate().isBefore(DateTimeUtil.parseLocalDateTime(selectedDate, "yyyy-MM-dd").toLocalDate()), "消费时间必须在项目起止时间段内");
-		}
-
 		//消费日期
 		bill.setConsumeDate(selectedDate);
 		bill.setMemberIds(memberItemList);
-		bill.setCreateTime(DateTimeUtil.format(new Date()));
-		bill.setModifyTime(DateTimeUtil.format(new Date()));
+		bill.setCreateTime(DateTimeUtil.timestamp());
+		bill.setModifyTime(DateTimeUtil.timestamp());
 		bill.setConsumptionType(consumptionType.name());
 		bill.setRemark(remark);
 		String iconDownloadUrl = consumptionImageIconList.stream().filter(ImageIconInfo::isSelected).findFirst().map(ImageIconInfo::getIconDownloadUrl).orElse("");

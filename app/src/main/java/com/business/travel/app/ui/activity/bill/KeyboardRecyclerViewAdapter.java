@@ -68,23 +68,16 @@ public class KeyboardRecyclerViewAdapter extends BaseRecyclerViewAdapter<Keyboar
 			case 3:
 				//date 日期按钮样式
 				holder.dateTextView.setOnClickListener(v -> {
-					final CardDatePickerDialog cardDatePickerDialog = new Builder(activity)
-							.setTitle("选择日期")
-							.setDisplayType(0, 1, 2)
-							.showBackNow(false)
-							.showFocusDateInfo(true)
-							.setOnChoose("选择", timestamp -> {
-								if (DateTimeUtil.toLocalDateTime(timestamp).toLocalDate().isEqual(DateTimeUtil.now().toLocalDate())) {
-									holder.dateTextView.setText("今天");
-									return;
-								}
-								holder.dateTextView.setText(DateTimeUtil.format(timestamp, "MM.dd"));
-								((AddBillActivity)activity).setSelectedDate(DateTimeUtil.format(timestamp, "yyyy-MM-dd"));
-							})
-							.setOnCancel("取消", () -> {
+					final CardDatePickerDialog cardDatePickerDialog = new Builder(activity).setTitle("选择日期").setDisplayType(0, 1, 2).showBackNow(false).showFocusDateInfo(true).setOnChoose("选择", timestamp -> {
+						if (DateTimeUtil.toLocalDateTime(timestamp).toLocalDate().isEqual(DateTimeUtil.now().toLocalDate())) {
+							holder.dateTextView.setText("今天");
+							return;
+						}
+						holder.dateTextView.setText(DateTimeUtil.format(timestamp, "MM.dd"));
+						((AddBillActivity)activity).setSelectedDate(timestamp);
+					}).setOnCancel("取消", () -> {
 
-							})
-							.build();
+					}).build();
 					cardDatePickerDialog.show();
 				});
 				break;

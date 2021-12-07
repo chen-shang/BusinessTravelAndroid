@@ -61,9 +61,9 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 		}
 
 		DateBillInfo dateBillInfo = dataList.get(position);
-		String date = dateBillInfo.getDate();
-		holder.consumerDateTextView.setText(date);
-		int code = DateTimeUtil.parseLocalDateTime(date, "yyyy-MM-dd").getDayOfWeek().getValue();
+		Long date = dateBillInfo.getDate();
+		holder.consumerDateTextView.setText(DateTimeUtil.format(date, "yyyy-MM-dd"));
+		int code = DateTimeUtil.toLocalDateTime(date).getDayOfWeek().getValue();
 		WeekEnum weekEnum = WeekEnum.ofCode(code);
 		holder.consumerWeekTextView.setText(weekEnum.getMsg());
 
@@ -85,7 +85,7 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 		holder.billItemSwipeRecyclerView.setAdapter(adapter);
 	}
 
-	public void refreshMoneyShow(BillRecyclerViewAdapterViewHolder viewHolder, Long projectId, String date) {
+	public void refreshMoneyShow(BillRecyclerViewAdapterViewHolder viewHolder, Long projectId, Long date) {
 		//统计一下总收入
 		Long sumTotalIncomeMoney = billService.sumTotalIncomeMoney(projectId, date);
 		viewHolder.incomeTextView.setVisibility(sumTotalIncomeMoney == null ? View.GONE : View.VISIBLE);

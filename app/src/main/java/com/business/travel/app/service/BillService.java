@@ -51,11 +51,11 @@ public class BillService {
 		return billDao.sumTotalIncomeMoney(projectId);
 	}
 
-	public Long sumTotalSpendingMoney(Long projectId, String consumeDate) {
+	public Long sumTotalSpendingMoney(Long projectId, Long consumeDate) {
 		return billDao.sumTotalSpendingMoney(projectId, consumeDate);
 	}
 
-	public Long sumTotalIncomeMoney(Long projectId, String consumeDate) {
+	public Long sumTotalIncomeMoney(Long projectId, Long consumeDate) {
 		return billDao.sumTotalIncomeMoney(projectId, consumeDate);
 	}
 

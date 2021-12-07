@@ -1,6 +1,5 @@
 package com.business.travel.app.service;
 
-import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -32,7 +31,7 @@ public class ProjectService {
 		Project project = projectDao.selectByPrimaryKey(projectId);
 		project.setName(project.getName() + "_" + projectId);
 		project.setIsDeleted(DeleteEnum.DELETE.getCode());
-		project.setModifyTime(DateTimeUtil.format(new Date()));
+		project.setModifyTime(DateTimeUtil.timestamp());
 		projectDao.update(project);
 		billDao.softDeleteByProjectId(projectId);
 	}
@@ -53,7 +52,7 @@ public class ProjectService {
 		//如果已经存在的项目,则直接返回
 		if (project != null) {
 			//注意这里更新了一下最后的访问时间
-			project.setModifyTime((DateTimeUtil.format(new Date())));
+			project.setModifyTime((DateTimeUtil.timestamp()));
 			projectDao.update(project);
 			return project;
 		}
@@ -61,11 +60,11 @@ public class ProjectService {
 		//如果不存在的项目则直接新建
 		project = new Project();
 		project.setName(projectName);
-		project.setStartTime(DateTimeUtil.format(new Date()));
+		project.setStartTime(DateTimeUtil.timestamp());
 		project.setEndTime(null);
 		project.setRemark("");
-		project.setCreateTime(DateTimeUtil.format(new Date()));
-		project.setModifyTime(DateTimeUtil.format(new Date()));
+		project.setCreateTime(DateTimeUtil.timestamp());
+		project.setModifyTime(DateTimeUtil.timestamp());
 		project.setIsDeleted(DeleteEnum.NOT_DELETE.getCode());
 		projectDao.insert(project);
 
@@ -94,10 +93,10 @@ public class ProjectService {
 		if (StringUtils.isNotBlank(project.getName())) {
 			record.setName(project.getName());
 		}
-		if (StringUtils.isNotBlank(project.getStartTime())) {
+		if (project.getStartTime() != null) {
 			record.setStartTime(project.getStartTime());
 		}
-		if (StringUtils.isNotBlank(project.getEndTime())) {
+		if (project.getEndTime() != null) {
 			record.setEndTime(project.getEndTime());
 		}
 		if (StringUtils.isNotBlank(project.getRemark())) {
@@ -109,8 +108,8 @@ public class ProjectService {
 		if (project.getSortId() != null) {
 			record.setSortId(project.getSortId());
 		}
-		final String modifyTime = project.getModifyTime();
-		if (StringUtils.isNotBlank(modifyTime)) {
+		final Long modifyTime = project.getModifyTime();
+		if (modifyTime != null) {
 			record.setModifyTime(modifyTime);
 		}
 		projectDao.update(record);

@@ -36,9 +36,9 @@ public class Bill extends BaseEntity {
 	 */
 	private String consumptionType;
 	/**
-	 * 消费时间,yyyy-MM-dd
+	 * 消费时间
 	 */
-	private String consumeDate;
+	private Long consumeDate;
 	/**
 	 * 消费人员id,逗号分割
 	 */

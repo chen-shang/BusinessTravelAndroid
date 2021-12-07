@@ -10,16 +10,13 @@ public class DateBillInfo {
 	/**
 	 * 账单日期
 	 */
-	private String date;
+	private Long date;
 	/**
 	 * 该日期下的账单
 	 */
 	private List<Bill> billList;
 
-	public DateBillInfo() {
-	}
-
-	public DateBillInfo(String date, List<Bill> billList) {
+	public DateBillInfo(Long date, List<Bill> billList) {
 		this.date = date;
 		this.billList = billList;
 	}

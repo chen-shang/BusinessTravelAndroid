@@ -48,7 +48,7 @@ public interface BillDao extends BaseDao<Bill> {
 	 * @see ConsumptionTypeEnum
 	 */
 	@Query("SELECT sum(amount) FROM bill where projectId=:projectId and consumptionType='SPENDING' and isDeleted=1 and consumeDate=:consumeDate")
-	Long sumTotalSpendingMoney(Long projectId, String consumeDate);
+	Long sumTotalSpendingMoney(Long projectId, Long consumeDate);
 
 	/**
 	 * 统计项目的总收入
@@ -58,7 +58,7 @@ public interface BillDao extends BaseDao<Bill> {
 	 * @see ConsumptionTypeEnum
 	 */
 	@Query("SELECT sum(amount) FROM bill where projectId=:projectId and consumptionType='INCOME' and isDeleted=1 and consumeDate=:consumeDate")
-	Long sumTotalIncomeMoney(Long projectId, String consumeDate);
+	Long sumTotalIncomeMoney(Long projectId, Long consumeDate);
 
 	@Query("SELECT * FROM bill where projectId=:projectId and isDeleted=1")
 	List<Bill> selectByProjectId(Long projectId);

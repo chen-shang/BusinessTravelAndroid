@@ -79,7 +79,8 @@ public class ConsumptionService {
 
 	@NotNull
 	private List<Consumption> getConsumptions(List<GiteeContent> v5ReposOwnerRepoContentsSpending, ConsumptionTypeEnum consumptionTypeEnum) {
-		return v5ReposOwnerRepoContentsSpending.stream().filter(v5ReposOwnerRepoContent -> v5ReposOwnerRepoContent.getName().endsWith(".svg")).sorted(Comparator.comparingInt(GiteeContent::getItemSort)).map(v5ReposOwnerRepoContent -> convert(v5ReposOwnerRepoContent, consumptionTypeEnum)).collect(Collectors.toList());
+		return v5ReposOwnerRepoContentsSpending.stream().filter(v5ReposOwnerRepoContent -> v5ReposOwnerRepoContent.getName().endsWith(".svg")).sorted(Comparator.comparingInt(GiteeContent::getItemSort)).map(
+				v5ReposOwnerRepoContent -> convert(v5ReposOwnerRepoContent, consumptionTypeEnum)).collect(Collectors.toList());
 	}
 
 	@NotNull
@@ -90,8 +91,8 @@ public class ConsumptionService {
 		consumption.setIconName(v5ReposOwnerRepoContent.getPath());
 		consumption.setConsumptionType(spending.name());
 		consumption.setSortId((long)v5ReposOwnerRepoContent.getItemSort());
-		consumption.setCreateTime(DateTimeUtil.format(new Date()));
-		consumption.setModifyTime(DateTimeUtil.format(new Date()));
+		consumption.setCreateTime(DateTimeUtil.timestamp());
+		consumption.setModifyTime(DateTimeUtil.timestamp());
 		consumption.setIsDeleted(DeleteEnum.NOT_DELETE.getCode());
 		return consumption;
 	}

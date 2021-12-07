@@ -66,8 +66,8 @@ public class MemberService {
 		member.setIconDownloadUrl(ItemIconEnum.ItemIconMe.getIconDownloadUrl());
 		member.setIconName("我");
 		member.setSortId(0L);
-		member.setCreateTime(DateTimeUtil.format(new Date()));
-		member.setModifyTime(DateTimeUtil.format(new Date()));
+		member.setCreateTime(DateTimeUtil.timestamp());
+		member.setModifyTime(DateTimeUtil.timestamp());
 		memberDao.insert(member);
 	}
 

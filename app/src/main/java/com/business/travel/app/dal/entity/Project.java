@@ -28,15 +28,14 @@ public class Project extends BaseEntity {
 	 */
 	private String name;
 	/**
-	 * 项目开始时间,yyyy-MM-dd HH:mm:ss
-	 * 默认是创建时间
+	 * 项目开始时间
 	 */
 	@NotNull
-	private String startTime;
+	private Long startTime;
 	/**
-	 * 项目结束时间,yyyy-MM-dd HH:mm:ss
+	 * 项目结束时间
 	 */
-	private String endTime;
+	private Long endTime;
 	/**
 	 * 备注
 	 */
@@ -58,18 +57,10 @@ public class Project extends BaseEntity {
 	 */
 	public String getProductTime() {
 		//开始时间
-		String startTime = Optional.ofNullable(this.getStartTime())
-				.filter(StringUtils::isNotBlank)
-				.map(DateTimeUtil::parseDate)
-				.map(datetime -> DateTimeUtil.format(datetime, "MM月dd日"))
-				.orElse("");
+		String startTime = Optional.ofNullable(this.getStartTime()).map(DateTimeUtil::toDate).map(datetime -> DateTimeUtil.format(datetime, "MM月dd日")).orElse("");
 
 		//结束时间
-		String endTime = Optional.ofNullable(this.getEndTime())
-				.filter(StringUtils::isNotBlank)
-				.map(DateTimeUtil::parseDate)
-				.map(datetime -> DateTimeUtil.format(datetime, "MM月dd日"))
-				.orElse("");
+		String endTime = Optional.ofNullable(this.getEndTime()).map(DateTimeUtil::toDate).map(datetime -> DateTimeUtil.format(datetime, "MM月dd日")).orElse("");
 
 		//拼接
 		if (StringUtils.isBlank(endTime)) {

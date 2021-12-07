@@ -1,14 +1,11 @@
 package com.business.travel.app.ui.activity.project;
 
-import java.util.Date;
-
 import android.os.Bundle;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityEditProjectBinding;
 import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.utils.DateTimeUtil;
-import org.apache.commons.lang3.StringUtils;
 
 public class EditProjectActivity extends BaseActivity<ActivityEditProjectBinding> {
 
@@ -36,15 +33,13 @@ public class EditProjectActivity extends BaseActivity<ActivityEditProjectBinding
 			project.setName(viewBinding.projectName.getText().toString());
 			String startTime = viewBinding.UITextViewStartTime.getText().toString();
 			if ("今天".equals(startTime)) {
-				startTime = DateTimeUtil.format(new Date());
+				project.setStartTime(DateTimeUtil.timestamp());
 			}
-			project.setStartTime(startTime);
 
 			String endTime = viewBinding.UIKeyboardItemTextViewEndTime.getText().toString();
 			if ("待定".equals(endTime)) {
-				endTime = "";
+				project.setEndTime(-1L);
 			}
-			project.setEndTime(endTime);
 			projectService.updateProjectById(selectProjectId, project);
 		});
 	}
@@ -77,16 +72,13 @@ public class EditProjectActivity extends BaseActivity<ActivityEditProjectBinding
 		}
 		viewBinding.projectName.setText(project.getName());
 		viewBinding.UITextViewStartTime.setText(DateTimeUtil.format(project.getStartTime(), "yyyy.MM.dd"));
-		String endTime = project.getEndTime();
-		if (StringUtils.isNotBlank(endTime)) {
+		if (project.getEndTime() != null) {
 			viewBinding.UIKeyboardItemTextViewEndTime.setText(DateTimeUtil.format(project.getEndTime(), "yyyy.MM.dd"));
 		}
 	}
 
 	private void registerImageButtonBack() {
 		//返回按钮点击后
-		viewBinding.UIEditProjectActivityImageButtonBack.setOnClickListener(v -> {
-			this.finish();
-		});
+		viewBinding.UIEditProjectActivityImageButtonBack.setOnClickListener(v -> this.finish());
 	}
 }
