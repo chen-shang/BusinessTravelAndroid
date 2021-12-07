@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import com.blankj.utilcode.util.FileIOUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.business.travel.app.R;
@@ -16,6 +17,7 @@ public class ChangeLogActivity extends BaseActivity<ActivityChangeLogBinding> {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		viewBinding.log.setMovementMethod(ScrollingMovementMethod.getInstance());
 		viewBinding.showLog.setOnClickListener(v -> {
 			final List<File> logFiles = LogUtils.getLogFiles();
 			final String log = logFiles.stream().map(FileIOUtils::readFile2String).collect(Collectors.joining("\n"));
