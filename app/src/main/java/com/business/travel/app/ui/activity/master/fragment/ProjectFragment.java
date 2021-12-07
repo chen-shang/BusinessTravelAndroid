@@ -76,7 +76,9 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 			refreshProjectList();
 		});
 		//这个是点击右上角三个小圆点弹出的
-		final AttachListPopupView attachListPopupView = new Builder(getContext()).atView(viewBinding.UIProjectFragmentImageViewOther).asAttachList(new String[] {"添加项目"}, new int[] {R.drawable.ic_base_sort}, (position, text) -> projectNameInputPopupView.show());
+		final AttachListPopupView attachListPopupView = new Builder(getContext()).atView(viewBinding.UIProjectFragmentImageViewOther).asAttachList(new String[] {"添加项目"}, new int[] {R.drawable.ic_base_sort}, (position, text) -> {
+
+		});
 		viewBinding.UIProjectFragmentImageViewOther.setOnClickListener(v -> attachListPopupView.show());
 	}
 
