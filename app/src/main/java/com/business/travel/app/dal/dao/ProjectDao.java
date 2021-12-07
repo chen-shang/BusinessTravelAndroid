@@ -30,7 +30,7 @@ public interface ProjectDao extends BaseDao<Project> {
 	/**
 	 * 查询单条
 	 */
-	@Query("SELECT * FROM project where id=:id and isDeleted=1")
+	@Query("SELECT * FROM project where id=:id")
 	Project selectByPrimaryKey(Long id);
 
 	/**

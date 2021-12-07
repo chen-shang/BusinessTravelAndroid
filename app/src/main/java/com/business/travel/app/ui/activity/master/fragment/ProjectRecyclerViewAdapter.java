@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.activity.master.fragment.ProjectRecyclerViewAdapter.ProjectAdapterHolder;
+import com.business.travel.app.ui.activity.project.EditProjectActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.lxj.xpopup.XPopup.Builder;
@@ -113,6 +115,9 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 	}
 
 	private void edit(int position, Project project) {
+		final Intent intent = new Intent(activity, EditProjectActivity.class);
+		intent.putExtra("projectId", project.getId());
+		activity.startActivity(intent);
 
 	}
 

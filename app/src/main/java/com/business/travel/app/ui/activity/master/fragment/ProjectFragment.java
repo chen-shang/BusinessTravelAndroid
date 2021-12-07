@@ -3,6 +3,7 @@ package com.business.travel.app.ui.activity.master.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,11 +16,11 @@ import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.FragmentProjectBinding;
 import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.activity.master.MasterActivity;
+import com.business.travel.app.ui.activity.project.EditProjectActivity;
 import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.utils.HeaderView;
 import com.lxj.xpopup.XPopup.Builder;
 import com.lxj.xpopup.impl.AttachListPopupView;
-import com.lxj.xpopup.impl.InputConfirmPopupView;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 /**
@@ -71,13 +72,9 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 	 */
 	private void registerPopupView() {
 		//这个是添加新项目时候弹出的
-		final InputConfirmPopupView projectNameInputPopupView = new Builder(getContext()).asInputConfirm(null, "请输入新项目名称", text -> {
-			projectService.createIfNotExist(text);
-			refreshProjectList();
-		});
 		//这个是点击右上角三个小圆点弹出的
 		final AttachListPopupView attachListPopupView = new Builder(getContext()).atView(viewBinding.UIProjectFragmentImageViewOther).asAttachList(new String[] {"添加项目"}, new int[] {R.drawable.ic_base_sort}, (position, text) -> {
-
+			startActivity(new Intent(this.requireActivity(), EditProjectActivity.class));
 		});
 		viewBinding.UIProjectFragmentImageViewOther.setOnClickListener(v -> attachListPopupView.show());
 	}

@@ -12,6 +12,7 @@ import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.enums.DeleteEnum;
 import com.business.travel.utils.DateTimeUtil;
+import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -84,14 +85,34 @@ public class ProjectService {
 		return projectDao.selectAll();
 	}
 
-	public void updateProjectName(Long selectedProjectId, String name) {
-		Project project = projectDao.selectByPrimaryKey(selectedProjectId);
-		project.setName(name);
-		project.setModifyTime(DateTimeUtil.format(new Date()));
-		projectDao.update(project);
-	}
+	public void updateProjectById(Long projectId, Project project) {
+		Preconditions.checkArgument(projectId != null, "请选择对应的差旅项目");
+		Project record = projectDao.selectByPrimaryKey(projectId);
+		Preconditions.checkArgument(record != null, "差旅项目不存在");
+		Preconditions.checkArgument(DeleteEnum.DELETE.getCode() != record.getIsDeleted(), "差旅项目已经被删除,请不要重复操作");
 
-	public List<Project> queryByName(String name) {
-		return projectDao.selectByNameLike(name);
+		if (StringUtils.isNotBlank(project.getName())) {
+			record.setName(project.getName());
+		}
+		if (StringUtils.isNotBlank(project.getStartTime())) {
+			record.setStartTime(project.getStartTime());
+		}
+		if (StringUtils.isNotBlank(project.getEndTime())) {
+			record.setEndTime(project.getEndTime());
+		}
+		if (StringUtils.isNotBlank(project.getRemark())) {
+			record.setRemark(project.getRemark());
+		}
+		if (project.getStatus() != null) {
+			record.setStatus(project.getStatus());
+		}
+		if (project.getSortId() != null) {
+			record.setSortId(project.getSortId());
+		}
+		final String modifyTime = project.getModifyTime();
+		if (StringUtils.isNotBlank(modifyTime)) {
+			record.setModifyTime(modifyTime);
+		}
+		projectDao.update(record);
 	}
 }
