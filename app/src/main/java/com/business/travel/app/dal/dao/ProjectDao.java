@@ -30,12 +30,6 @@ public interface ProjectDao extends BaseDao<Project> {
 	/**
 	 * 查询单条
 	 */
-	@Query("SELECT * FROM project where id=:id")
+	@Query("SELECT * FROM project where id=:id and isDeleted=1")
 	Project selectByPrimaryKey(Long id);
-
-	/**
-	 * 查询单条
-	 */
-	@Query("SELECT * FROM project where name like '%'||:projectName||'%' and isDeleted=1")
-	List<Project> selectByNameLike(String projectName);
 }

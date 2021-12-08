@@ -5,12 +5,14 @@ import java.util.List;
 import android.content.Context;
 import androidx.annotation.Nullable;
 import androidx.room.Transaction;
+import com.blankj.utilcode.util.LogUtils;
 import com.business.travel.app.dal.dao.BillDao;
 import com.business.travel.app.dal.dao.ProjectDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.enums.DeleteEnum;
 import com.business.travel.utils.DateTimeUtil;
+import com.business.travel.utils.JacksonUtil;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 
@@ -84,7 +86,8 @@ public class ProjectService {
 		return projectDao.selectAll();
 	}
 
-	public void updateProjectById(Long projectId, Project project) {
+	public void updateProject(Long projectId, Project project) {
+		LogUtils.i("更新项目 projectId:" + projectId + " -> project:" + JacksonUtil.toPrettyString(project));
 		Preconditions.checkArgument(projectId != null, "请选择对应的差旅项目");
 		Project record = projectDao.selectByPrimaryKey(projectId);
 		Preconditions.checkArgument(record != null, "差旅项目不存在");
@@ -113,5 +116,21 @@ public class ProjectService {
 			record.setModifyTime(modifyTime);
 		}
 		projectDao.update(record);
+	}
+
+	public Long createProject(Project project) {
+		Preconditions.checkArgument(project != null, "param can not be null");
+		String name = project.getName();
+		Preconditions.checkArgument(StringUtils.isNotBlank(name), "project name can not be null");
+		Project record = projectDao.selectByName(name);
+		if (record != null) {
+			throw new IllegalArgumentException("项目已存在");
+		}
+
+		project.setCreateTime(DateTimeUtil.timestamp());
+		project.setModifyTime(DateTimeUtil.timestamp());
+		projectDao.insert(project);
+		record = projectDao.selectByName(name);
+		return record.getId();
 	}
 }

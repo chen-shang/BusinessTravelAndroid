@@ -1,6 +1,8 @@
 package com.business.travel.app.ui;
 
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 import com.business.travel.app.databinding.ActivityTestBinding;
 import com.business.travel.app.ui.base.BaseActivity;
 import lombok.SneakyThrows;
@@ -24,6 +26,12 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 	@Override
 	protected void onStart() {
 		super.onStart();
+		viewBinding.ceshi.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				throw new IllegalArgumentException("我错了！！！！呜呜呜");
+			}
+		});
 
 	}
 }
