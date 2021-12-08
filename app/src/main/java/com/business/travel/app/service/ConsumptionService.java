@@ -40,6 +40,12 @@ public class ConsumptionService {
 		return consumptionDao.selectByType(consumptionTypeEnum.name());
 	}
 
+	/**
+	 * 更新顺序
+	 *
+	 * @param id
+	 * @param sortId
+	 */
 	public void updateMemberSort(Long id, Long sortId) {
 		consumptionDao.updateSort(id, sortId);
 	}
@@ -58,9 +64,9 @@ public class ConsumptionService {
 			return;
 		}
 		//先获取远程的默认消费项列表,然后插入数据库,注意sortId
-		FutureUtil.supplyAsync(() -> {
-			List<Consumption> consumptions = new ArrayList<>();
+		List<Consumption> consumptions = new ArrayList<>();
 
+		FutureUtil.supplyAsync(() -> {
 			List<GiteeContent> v5ReposOwnerRepoContentsIncome = BusinessTravelResourceApi.getV5ReposOwnerRepoContents("icon/DEFAULT/CONSUMPTION/INCOME");
 			LogUtils.i("开始初始化默认图标: 收入图标共计:" + v5ReposOwnerRepoContentsIncome.size());
 			if (CollectionUtils.isNotEmpty(v5ReposOwnerRepoContentsIncome)) {
@@ -68,7 +74,7 @@ public class ConsumptionService {
 				consumptions.addAll(IncomeConsumptionList);
 			}
 			List<GiteeContent> v5ReposOwnerRepoContentsSpending = BusinessTravelResourceApi.getV5ReposOwnerRepoContents("icon/DEFAULT/CONSUMPTION/SPENDING");
-			LogUtils.i("开始初始化默认图标: 支出图标" + v5ReposOwnerRepoContentsSpending.size());
+			LogUtils.i("开始初始化默认图标: 支出图标共计:" + v5ReposOwnerRepoContentsSpending.size());
 			if (CollectionUtils.isNotEmpty(v5ReposOwnerRepoContentsSpending)) {
 				List<Consumption> IncomeConsumptionList = getConsumptions(v5ReposOwnerRepoContentsSpending, ConsumptionTypeEnum.SPENDING);
 				consumptions.addAll(IncomeConsumptionList);
@@ -79,10 +85,17 @@ public class ConsumptionService {
 
 	@NotNull
 	private List<Consumption> getConsumptions(List<GiteeContent> v5ReposOwnerRepoContentsSpending, ConsumptionTypeEnum consumptionTypeEnum) {
-		return v5ReposOwnerRepoContentsSpending.stream().filter(v5ReposOwnerRepoContent -> v5ReposOwnerRepoContent.getName().endsWith(".svg")).sorted(Comparator.comparingInt(GiteeContent::getItemSort)).map(v5ReposOwnerRepoContent -> convert(v5ReposOwnerRepoContent, consumptionTypeEnum)).collect(Collectors.toList());
+		return v5ReposOwnerRepoContentsSpending.stream()
+		                                       //后缀为.svg
+		                                       .filter(v5ReposOwnerRepoContent -> v5ReposOwnerRepoContent.getName().endsWith(".svg"))
+		                                       //按照序号排序
+		                                       .sorted(Comparator.comparingInt(GiteeContent::getItemSort))
+		                                       //映射成Consumption
+		                                       .map(v5ReposOwnerRepoContent -> convert(v5ReposOwnerRepoContent, consumptionTypeEnum))
+		                                       //to list
+		                                       .collect(Collectors.toList());
 	}
 
-	@NotNull
 	private Consumption convert(GiteeContent v5ReposOwnerRepoContent, ConsumptionTypeEnum spending) {
 		Consumption consumption = new Consumption();
 		consumption.setName(v5ReposOwnerRepoContent.showName());

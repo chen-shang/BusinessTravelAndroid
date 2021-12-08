@@ -16,6 +16,7 @@ import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.service.MemberService;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.ImageLoadUtil;
+import com.business.travel.app.utils.Try;
 import com.business.travel.utils.SplitUtil;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
@@ -75,7 +76,7 @@ public class DetailBillActivity extends BaseActivity<ActivityDetailBillBinding> 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		showBill(selectedBill);
+		Try.of(() -> showBill(selectedBill));
 	}
 
 	private void showBill(Bill bill) {

@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import androidx.annotation.Nullable;
+import com.blankj.utilcode.util.LogUtils;
 import com.business.travel.app.exceptions.ApiException;
 import com.business.travel.app.model.GiteeContent;
 import com.business.travel.app.utils.HttpWrapper;
@@ -82,10 +84,11 @@ public class BusinessTravelResourceApi {
 	 * https://gitee.com/api/v5/swagger#/getV5ReposOwnerRepoContents(Path)
 	 */
 	public static List<GiteeContent> getV5ReposOwnerRepoContents(String path) {
-		HttpUrl.Builder urlBuilder = HttpUrl.parse(URL_ + "/contents/" + path).newBuilder().addQueryParameter("access_token", ACCESS_TOKEN);
+		HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(URL_ + "/contents/" + path)).newBuilder().addQueryParameter("access_token", ACCESS_TOKEN);
 		Request request = new Builder().url(urlBuilder.build()).build();
 		try {
 			String response = httpClient.sendRequest(request);
+			LogUtils.i("获取仓库具体路径下的内容:" + response);
 			if (StringUtils.isEmpty(response)) {
 				return Collections.emptyList();
 			}

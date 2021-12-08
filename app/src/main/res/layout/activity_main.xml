@@ -20,22 +20,22 @@
             android:layout_marginTop="150dp"/>
 
     <TextView
-            android:text="@string/app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/app_name"
             android:textColor="@color/black_100"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/UI_MainActivity_ImageView_Icon"
-            android:layout_marginTop="28dp"/>
+            android:layout_marginTop="30dp"/>
 
     <com.github.ybq.android.spinkit.SpinKitView
-            style="@style/SpinKitView.Large.ThreeBounce"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:SpinKit_Color="@color/teal_800"
+            style="@style/SpinKitView.Large.ThreeBounce"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>

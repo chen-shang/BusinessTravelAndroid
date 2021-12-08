@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Bill;
@@ -29,6 +28,7 @@ import com.business.travel.app.utils.AnimalUtil;
 import com.business.travel.app.utils.HeaderView;
 import com.business.travel.utils.DateTimeUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -53,6 +53,10 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	@Setter
 	@Getter
 	private Long selectedProjectId;
+	/**
+	 * 中间的加号
+	 */
+	private FloatingActionButton floatingActionButton;
 
 	@Override
 	protected void inject() {
@@ -65,15 +69,17 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = super.onCreateView(inflater, container, savedInstanceState);
+		//初始化中间的加号
+		floatingActionButton = requireActivity().findViewById(R.id.UI_MasterActivity_FloatingActionButton);
 		//注册账单列表页
-		registerSwipeRecyclerView();
+		registerSwipeRecyclerView(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
 		return view;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		FloatingActionButton floatingActionButton = requireActivity().findViewById(R.id.UI_MasterActivity_FloatingActionButton);
+		//旋转上升动画显示中间的加号
 		AnimalUtil.show(floatingActionButton);
 		//刷新当前项目的账单数据
 		refreshBillList(selectedProjectId);
@@ -82,18 +88,17 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	@Override
 	public void onPause() {
 		super.onPause();
-		FloatingActionButton floatingActionButton = requireActivity().findViewById(R.id.UI_MasterActivity_FloatingActionButton);
 		AnimalUtil.reset(floatingActionButton);
 	}
 
 	/**
 	 * 注册账单列表页
 	 */
-	private void registerSwipeRecyclerView() {
-		LayoutManager layoutManager = new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false);
-		viewBinding.UIBillFragmentSwipeRecyclerViewBillList.setLayoutManager(layoutManager);
+	private void registerSwipeRecyclerView(SwipeRecyclerView swipeRecyclerView) {
+		//线性布局
+		swipeRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
 		billRecyclerViewAdapter = new BillRecyclerViewAdapter(dateBillInfoList, (MasterActivity)requireActivity());
-		viewBinding.UIBillFragmentSwipeRecyclerViewBillList.setAdapter(billRecyclerViewAdapter);
+		swipeRecyclerView.setAdapter(billRecyclerViewAdapter);
 	}
 
 	@SuppressLint({"SetTextI18n", "NotifyDataSetChanged"})
@@ -131,7 +136,19 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		}
 
 		HeaderView.of(headView).removeFrom(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
-		List<DateBillInfo> newDateBillInfoList = billList.stream().collect(Collectors.groupingBy(item -> DateTimeUtil.format(item.getConsumeDate(), "yyyy-MM-dd"))).entrySet().stream().map(entry -> new DateBillInfo(DateTimeUtil.timestamp(entry.getKey(), "yyyy-MM-dd"), entry.getValue())).sorted(Comparator.comparing(DateBillInfo::getDate).reversed()).collect(Collectors.toList());
+		List<DateBillInfo> newDateBillInfoList = billList
+				//to stream
+				.stream()
+				//按照消费日期分组,先转换成对应的面月日
+				.collect(Collectors.groupingBy(item -> DateTimeUtil.format(item.getConsumeDate(), "yyyy-MM-dd")))
+				//获取 entry set
+				.entrySet()
+				//to stream
+				.stream()
+				//转成时间戳
+				.map(entry -> new DateBillInfo(DateTimeUtil.timestamp(entry.getKey(), "yyyy-MM-dd"), entry.getValue()))
+				//按照消费时间有小到大排序
+				.sorted(Comparator.comparing(DateBillInfo::getDate).reversed()).collect(Collectors.toList());
 		this.dateBillInfoList.clear();
 		dateBillInfoList.addAll(newDateBillInfoList);
 		billRecyclerViewAdapter.notifyDataSetChanged();
@@ -141,12 +158,11 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		//统计一下总收入
 		Long sumTotalIncomeMoney = billService.sumTotalIncomeMoney(id);
 		viewBinding.UIBillFragmentTextViewIncome.setVisibility(sumTotalIncomeMoney == null ? View.GONE : View.VISIBLE);
-		Optional.ofNullable(sumTotalIncomeMoney).ifPresent(money -> viewBinding.UIBillFragmentTextViewIncome.setText("收入:" + (double)money / 100));
+		Optional.ofNullable(sumTotalIncomeMoney).ifPresent(money -> viewBinding.UIBillFragmentTextViewIncome.setText(String.format("收入:%s", (double)money / 100)));
 
 		//统计一下总支出
 		Long sumTotalSpendingMoney = billService.sumTotalSpendingMoney(id);
 		viewBinding.UIBillFragmentTextViewPay.setVisibility(sumTotalSpendingMoney == null ? View.GONE : View.VISIBLE);
-		Optional.ofNullable(sumTotalSpendingMoney).ifPresent(money -> viewBinding.UIBillFragmentTextViewPay.setText("支出:" + (double)money / 100));
+		Optional.ofNullable(sumTotalSpendingMoney).ifPresent(money -> viewBinding.UIBillFragmentTextViewPay.setText(String.format("支出:%s", (double)money / 100)));
 	}
-
 }

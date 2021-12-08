@@ -125,7 +125,7 @@ public class ProjectService {
 		Preconditions.checkArgument(StringUtils.isNotBlank(name), "project name can not be null");
 		Project record = projectDao.selectByName(name);
 		Preconditions.checkArgument(record == null, "项目已存在");
-		
+
 		project.setCreateTime(DateTimeUtil.timestamp());
 		project.setModifyTime(DateTimeUtil.timestamp());
 		projectDao.insert(project);
