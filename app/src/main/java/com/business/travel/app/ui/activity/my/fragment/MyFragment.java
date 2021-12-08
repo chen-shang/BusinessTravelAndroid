@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import com.business.travel.app.databinding.FragmentMyBinding;
-import com.business.travel.app.ui.TestActivity;
+import com.business.travel.app.ui.test.TestActivity;
 import com.business.travel.app.ui.activity.log.ChangeLogActivity;
 import com.business.travel.app.ui.base.BaseFragment;
 

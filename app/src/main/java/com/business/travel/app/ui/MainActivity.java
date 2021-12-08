@@ -1,4 +1,4 @@
-package com.business.travel.app;
+package com.business.travel.app.ui;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -8,6 +8,7 @@ import android.os.Bundle;
 import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.ColorUtils;
 import com.blankj.utilcode.util.LogUtils;
+import com.business.travel.app.R;
 import com.business.travel.app.databinding.ActivityMainBinding;
 import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.service.MemberService;

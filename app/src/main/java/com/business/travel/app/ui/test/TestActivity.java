@@ -1,4 +1,4 @@
-package com.business.travel.app.ui;
+package com.business.travel.app.ui.test;
 
 import android.os.Bundle;
 import android.view.View;
