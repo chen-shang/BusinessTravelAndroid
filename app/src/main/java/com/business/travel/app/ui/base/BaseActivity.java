@@ -30,7 +30,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
 	protected VB viewBinding;
 
 	/**
-	 * 初始化注册一些变量
+	 * 初始化注册一些变量 主要是service
 	 */
 	protected void inject() {}
 

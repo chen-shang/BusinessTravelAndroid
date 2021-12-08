@@ -1,12 +1,12 @@
 package com.business.travel.app.service;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import android.content.Context;
 import com.blankj.utilcode.util.CollectionUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.business.travel.app.dal.dao.MemberDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Member;
@@ -14,7 +14,6 @@ import com.business.travel.app.enums.ItemIconEnum;
 import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.model.converter.MemberConverter;
-import com.business.travel.app.utils.Log;
 import com.business.travel.utils.DateTimeUtil;
 
 public class MemberService {
@@ -56,8 +55,9 @@ public class MemberService {
 	 * 初次使用app的时候,数据库中是没有人员图标数据的,因此需要初始化一些默认的图标
 	 */
 	public void initMember() {
-		Log.info("开始初始化人员默认图标");
+		LogUtils.i("开始初始化人员默认图标");
 		if (memberDao.count() > 0) {
+			LogUtils.i("已经初始化人员默认图标");
 			return;
 		}
 

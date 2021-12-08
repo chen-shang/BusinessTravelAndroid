@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager;
+import com.blankj.utilcode.util.LogUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Bill;
@@ -30,12 +31,11 @@ import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.service.MemberService;
 import com.business.travel.app.service.ProjectService;
+import com.business.travel.app.ui.activity.bill.fragment.BillFragment;
 import com.business.travel.app.ui.activity.item.consumption.EditConsumptionActivity;
 import com.business.travel.app.ui.activity.item.member.EditMemberActivity;
-import com.business.travel.app.ui.activity.bill.fragment.BillFragment;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.ImageLoadUtil;
-import com.business.travel.app.utils.Log;
 import com.business.travel.app.utils.LogToast;
 import com.business.travel.utils.DateTimeUtil;
 import com.google.common.base.Preconditions;
@@ -376,7 +376,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 
 	public void saveBill() {
 		AppDatabase.getInstance(this).runInTransaction(() -> {
-			Log.info("开启数据库事务");
+			LogUtils.i("开启数据库事务");
 			//参数校验
 			String projectName = viewBinding.UIAddBillActivitySearchBar.getPlaceHolderText().toString();
 			//如果不存在则新增项目
