@@ -6,12 +6,11 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import com.blankj.utilcode.util.LogUtils;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityEditProjectBinding;
 import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.base.BaseActivity;
-import com.business.travel.app.utils.LogToast;
+import com.business.travel.app.utils.Try;
 import com.business.travel.utils.DateTimeUtil;
 import org.apache.commons.lang3.StringUtils;
 
@@ -57,29 +56,30 @@ public class EditProjectActivity extends BaseActivity<ActivityEditProjectBinding
 	}
 
 	private void registerSaveButton(View saveButton) {
-		saveButton.setOnClickListener(v -> {
-			try {
-				Project project = new Project();
-				project.setName(viewBinding.projectName.getText().toString());
-				String startTime = viewBinding.projectStartTime.getText().toString();
-				if (StringUtils.isNotBlank(startTime)) {
-					project.setStartTime(DateTimeUtil.timestamp(startTime, "yyyy-MM-dd"));
-				}
-				String endTime = viewBinding.projectEndTime.getText().toString();
-				if (StringUtils.isNotBlank(endTime)) {
-					project.setEndTime(DateTimeUtil.timestamp(endTime, "yyyy-MM-dd"));
-				}
-
-				if (selectProjectId != null) {
-					projectService.updateProject(selectProjectId, project);
-				} else {
-					projectService.createProject(project);
-				}
-			} catch (Exception e) {
-				LogUtils.e("保存失败", e);
-				LogToast.errorShow("保存失败:" + e.getMessage());
+		saveButton.setOnClickListener(v -> Try.of(() -> {
+			Project project = new Project();
+			project.setName(viewBinding.projectName.getText().toString());
+			String startTime = viewBinding.projectStartTime.getText().toString();
+			if (StringUtils.isNotBlank(startTime)) {
+				project.setStartTime(DateTimeUtil.timestamp(startTime, "yyyy-MM-dd"));
 			}
-		});
+			String endTime = viewBinding.projectEndTime.getText().toString();
+			if (StringUtils.isNotBlank(endTime)) {
+				project.setEndTime(DateTimeUtil.timestamp(endTime, "yyyy-MM-dd"));
+			}
+
+			String remark = viewBinding.projectRemark.getText().toString();
+			project.setRemark(remark);
+
+			if (selectProjectId != null) {
+				projectService.updateProject(selectProjectId, project);
+			} else {
+				projectService.createProject(project);
+			}
+
+			//退出
+			this.finish();
+		}));
 	}
 
 	private void registerDateTicker(TextView projectEndTime) {
@@ -131,6 +131,11 @@ public class EditProjectActivity extends BaseActivity<ActivityEditProjectBinding
 		final Long endTime = project.getEndTime();
 		if (endTime != null) {
 			viewBinding.projectEndTime.setText(DateTimeUtil.format(endTime, "yyyy-MM-dd"));
+		}
+
+		final String remark = project.getRemark();
+		if (StringUtils.isNotBlank(remark)) {
+			viewBinding.projectRemark.setText(remark);
 		}
 	}
 

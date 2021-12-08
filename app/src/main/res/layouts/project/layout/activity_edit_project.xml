@@ -106,7 +106,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp">
 
-
                 <androidx.cardview.widget.CardView
                         android:layout_width="150dp"
                         android:layout_height="50dp"
@@ -172,7 +171,9 @@
             <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_margin="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
                     android:id="@+id/cardView5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -180,17 +181,18 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
+                        android:padding="10dp"
                         android:layout_height="match_parent">
 
-                    <TextView
-                            android:id="@+id/projectMark"
+                    <EditText
+                            android:id="@+id/projectRemark"
                             android:layout_width="match_parent"
-                            android:layout_margin="10dp"
-                            android:layout_height="wrap_content"
-                            android:drawablePadding="10dp"
-                            android:gravity="center_vertical"
-                            android:hint="备注"
+                            android:background="@null"
                             android:drawableLeft="@drawable/ic_project_mark"
+                            android:layout_height="wrap_content"
+                            android:hint="备注"
+                            android:textSize="15dp"
+                            android:drawablePadding="10dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintTop_toTopOf="parent"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>

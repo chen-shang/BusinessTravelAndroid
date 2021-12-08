@@ -27,6 +27,7 @@ import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.utils.AnimalUtil;
 import com.business.travel.app.utils.HeaderView;
+import com.business.travel.utils.DateTimeUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,6 +38,7 @@ import lombok.Setter;
 public class BillFragment extends BaseFragment<FragmentBillBinding> {
 
 	private final List<DateBillInfo> dateBillInfoList = new ArrayList<>();
+	private final List<String> dateList = new ArrayList<>();
 	/**
 	 * 列表为空时候显示的内容,用headView实现该效果
 	 */
@@ -45,7 +47,6 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	private BillRecyclerViewAdapter billRecyclerViewAdapter;
 	private ProjectService projectService;
 	private BillService billService;
-
 	/**
 	 * 当前页面选中的项目
 	 */
@@ -120,7 +121,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		refreshMoneyShow(this.selectedProjectId);
 
 		//查询全部的账单列表
-		List<Bill> billList = billService.selectByProjectId(this.selectedProjectId);
+		List<Bill> billList = billService.queryBillByProjectId(this.selectedProjectId);
 		if (CollectionUtils.isEmpty(billList)) {
 			//展示空的头部即可
 			HeaderView.of(headView).addTo(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
@@ -130,8 +131,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		}
 
 		HeaderView.of(headView).removeFrom(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
-		List<DateBillInfo> newDateBillInfoList = billList.stream().collect(Collectors.groupingBy(Bill::getConsumeDate)).entrySet().stream().map(entry -> new DateBillInfo(entry.getKey(), entry.getValue())).sorted(
-				Comparator.comparing(DateBillInfo::getDate).reversed()).collect(Collectors.toList());
+		List<DateBillInfo> newDateBillInfoList = billList.stream().collect(Collectors.groupingBy(item -> DateTimeUtil.format(item.getConsumeDate(), "yyyy-MM-dd"))).entrySet().stream().map(entry -> new DateBillInfo(DateTimeUtil.timestamp(entry.getKey(), "yyyy-MM-dd"), entry.getValue())).sorted(Comparator.comparing(DateBillInfo::getDate).reversed()).collect(Collectors.toList());
 		this.dateBillInfoList.clear();
 		dateBillInfoList.addAll(newDateBillInfoList);
 		billRecyclerViewAdapter.notifyDataSetChanged();

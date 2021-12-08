@@ -59,7 +59,13 @@ public class BillService {
 		return billDao.sumTotalIncomeMoney(projectId, consumeDate);
 	}
 
-	public List<Bill> selectByProjectId(Long projectId) {
+	/**
+	 * 查询一个项目下所有的账单
+	 *
+	 * @param projectId
+	 * @return
+	 */
+	public List<Bill> queryBillByProjectId(Long projectId) {
 		return billDao.selectByProjectId(projectId);
 	}
 }

@@ -102,7 +102,7 @@ public class ProjectService {
 		if (project.getEndTime() != null) {
 			record.setEndTime(project.getEndTime());
 		}
-		if (StringUtils.isNotBlank(project.getRemark())) {
+		if (project.getRemark() != null) {
 			record.setRemark(project.getRemark());
 		}
 		if (project.getStatus() != null) {
@@ -111,7 +111,7 @@ public class ProjectService {
 		if (project.getSortId() != null) {
 			record.setSortId(project.getSortId());
 		}
-		final Long modifyTime = project.getModifyTime();
+		Long modifyTime = project.getModifyTime();
 		if (modifyTime != null) {
 			record.setModifyTime(modifyTime);
 		}
@@ -119,14 +119,13 @@ public class ProjectService {
 	}
 
 	public Long createProject(Project project) {
+		LogUtils.i("新建项目 project:" + JacksonUtil.toPrettyString(project));
 		Preconditions.checkArgument(project != null, "param can not be null");
 		String name = project.getName();
 		Preconditions.checkArgument(StringUtils.isNotBlank(name), "project name can not be null");
 		Project record = projectDao.selectByName(name);
-		if (record != null) {
-			throw new IllegalArgumentException("项目已存在");
-		}
-
+		Preconditions.checkArgument(record == null, "项目已存在");
+		
 		project.setCreateTime(DateTimeUtil.timestamp());
 		project.setModifyTime(DateTimeUtil.timestamp());
 		projectDao.insert(project);
