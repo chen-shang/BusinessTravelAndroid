@@ -85,7 +85,7 @@
                         android:id="@+id/projectName"
                         android:layout_width="match_parent"
                         android:background="@null"
-                        android:drawableLeft="@drawable/ic_me"
+                        android:drawableLeft="@drawable/ic_project_project"
                         android:layout_height="wrap_content"
                         android:hint="项目名称"
                         android:textSize="15dp"

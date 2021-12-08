@@ -7,7 +7,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
-        tools:context=".ui.activity.master.fragment.BillItemRecyclerViewAdapter">
+        tools:context=".ui.activity.bill.fragment.BillItemRecyclerViewAdapter">
 
 
     <androidx.cardview.widget.CardView

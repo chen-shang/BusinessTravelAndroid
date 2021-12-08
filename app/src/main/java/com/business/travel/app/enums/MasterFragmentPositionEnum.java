@@ -7,9 +7,9 @@ import java.util.Map;
 import android.os.Build.VERSION_CODES;
 import androidx.annotation.RequiresApi;
 import androidx.viewbinding.ViewBinding;
-import com.business.travel.app.ui.activity.master.fragment.BillFragment;
-import com.business.travel.app.ui.activity.master.fragment.MyFragment;
-import com.business.travel.app.ui.activity.master.fragment.ProjectFragment;
+import com.business.travel.app.ui.activity.bill.fragment.BillFragment;
+import com.business.travel.app.ui.activity.my.fragment.MyFragment;
+import com.business.travel.app.ui.activity.project.gragment.ProjectFragment;
 import com.business.travel.app.ui.base.BaseFragment;
 
 /**

@@ -1,4 +1,4 @@
-package com.business.travel.app.ui.activity.master.fragment;
+package com.business.travel.app.ui.activity.project.gragment;
 
 import java.util.ArrayList;
 import java.util.List;

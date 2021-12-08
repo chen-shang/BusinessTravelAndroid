@@ -1,4 +1,4 @@
-package com.business.travel.app.ui.activity.master.fragment;
+package com.business.travel.app.ui.activity.my.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;

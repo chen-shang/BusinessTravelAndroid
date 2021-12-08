@@ -1,4 +1,4 @@
-package com.business.travel.app.ui.activity.master.fragment;
+package com.business.travel.app.ui.activity.bill.fragment;
 
 import java.util.ArrayList;
 import java.util.Comparator;

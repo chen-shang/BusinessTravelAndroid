@@ -81,6 +81,7 @@ android {
                            'src/main/res/drawables/icon',
                            'src/main/res/drawables/icon/keyboard',
                            'src/main/res/drawables/icon/common',
+                           'src/main/res/drawables/icon/project',
                            'src/main/res/drawables/icon/consumption',
                            'src/main/res/drawables/icon/consumption/income',
                            'src/main/res/drawables/icon/consumption/spending',

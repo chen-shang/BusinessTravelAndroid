@@ -2,7 +2,6 @@ package com.business.travel.app.ui.activity.bill;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +32,7 @@ import com.business.travel.app.service.MemberService;
 import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.activity.item.consumption.EditConsumptionActivity;
 import com.business.travel.app.ui.activity.item.member.EditMemberActivity;
-import com.business.travel.app.ui.activity.master.fragment.BillFragment;
+import com.business.travel.app.ui.activity.bill.fragment.BillFragment;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.app.utils.Log;

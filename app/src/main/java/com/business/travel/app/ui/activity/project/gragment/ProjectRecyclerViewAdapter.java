@@ -1,4 +1,4 @@
-package com.business.travel.app.ui.activity.master.fragment;
+package com.business.travel.app.ui.activity.project.gragment;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,8 +22,9 @@ import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.ProjectService;
-import com.business.travel.app.ui.activity.master.fragment.ProjectRecyclerViewAdapter.ProjectAdapterHolder;
+import com.business.travel.app.ui.activity.bill.fragment.BillFragment;
 import com.business.travel.app.ui.activity.project.EditProjectActivity;
+import com.business.travel.app.ui.activity.project.gragment.ProjectRecyclerViewAdapter.ProjectAdapterHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.lxj.xpopup.XPopup.Builder;

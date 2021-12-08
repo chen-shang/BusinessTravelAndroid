@@ -4,7 +4,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              tools:context=".ui.activity.master.fragment.BillRecyclerViewAdapter">
+              tools:context=".ui.activity.bill.fragment.BillRecyclerViewAdapter">
 
     <androidx.cardview.widget.CardView
             android:id="@+id/UI_BillFragment_BillAdapter_CardView"

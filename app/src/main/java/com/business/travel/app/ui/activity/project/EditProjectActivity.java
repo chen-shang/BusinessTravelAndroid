@@ -111,7 +111,7 @@ public class EditProjectActivity extends BaseActivity<ActivityEditProjectBinding
 		}
 		final Long endTime = project.getEndTime();
 		if (endTime != null) {
-			viewBinding.projectStartTime.setText(DateTimeUtil.format(endTime, "yyyy-MM-dd"));
+			viewBinding.projectEndTime.setText(DateTimeUtil.format(endTime, "yyyy-MM-dd"));
 		}
 	}
 

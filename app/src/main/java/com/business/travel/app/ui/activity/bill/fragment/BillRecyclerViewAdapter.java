@@ -1,4 +1,4 @@
-package com.business.travel.app.ui.activity.master.fragment;
+package com.business.travel.app.ui.activity.bill.fragment;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +21,7 @@ import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.enums.WeekEnum;
 import com.business.travel.app.model.DateBillInfo;
 import com.business.travel.app.service.BillService;
-import com.business.travel.app.ui.activity.master.fragment.BillRecyclerViewAdapter.BillRecyclerViewAdapterViewHolder;
+import com.business.travel.app.ui.activity.bill.fragment.BillRecyclerViewAdapter.BillRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.utils.DateTimeUtil;
