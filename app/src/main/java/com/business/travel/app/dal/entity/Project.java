@@ -49,6 +49,18 @@ public class Project extends BaseEntity {
 	 * 顺序id
 	 */
 	private Long sortId;
+	/**
+	 * 图标地址
+	 */
+	private String iconDownloadUrl;
+	/**
+	 * 预算
+	 */
+	private Long budget;
+	/**
+	 * 主题ID
+	 */
+	private Long themeId;
 
 	/**
 	 * 项目开始时间-结束时间

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ca5a30ed75a33758b10527e6ae0ad8db",
+    "identityHash": "8333a3ea584462206cd667a2a7dc98cc",
     "entities": [
       {
         "tableName": "Member",
@@ -237,7 +237,7 @@
       },
       {
         "tableName": "Project",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `startTime` INTEGER, `endTime` INTEGER, `remark` TEXT, `status` INTEGER, `sortId` INTEGER, `createTime` INTEGER, `modifyTime` INTEGER DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `startTime` INTEGER, `endTime` INTEGER, `remark` TEXT, `status` INTEGER, `sortId` INTEGER, `iconDownloadUrl` TEXT, `budget` INTEGER, `themeId` INTEGER, `createTime` INTEGER, `modifyTime` INTEGER DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -278,6 +278,24 @@
           {
             "fieldPath": "sortId",
             "columnName": "sortId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iconDownloadUrl",
+            "columnName": "iconDownloadUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "budget",
+            "columnName": "budget",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "themeId",
+            "columnName": "themeId",
             "affinity": "INTEGER",
             "notNull": false
           },
@@ -323,7 +341,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ca5a30ed75a33758b10527e6ae0ad8db')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8333a3ea584462206cd667a2a7dc98cc')"
     ]
   }
 }
