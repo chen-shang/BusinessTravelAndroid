@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -149,6 +151,14 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 				.map(entry -> new DateBillInfo(DateTimeUtil.timestamp(entry.getKey(), "yyyy-MM-dd"), entry.getValue()))
 				//按照消费时间有小到大排序
 				.sorted(Comparator.comparing(DateBillInfo::getDate).reversed()).collect(Collectors.toList());
+
+		View headView2 = getLayoutInflater().inflate(R.layout.project_info, null);
+		headView2.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		//todo
+		//final TextView textView = headView2.findViewById(R.id.projectName);
+		//textView.setText(project.getName());
+		HeaderView.of(headView2).addTo(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
+
 		this.dateBillInfoList.clear();
 		dateBillInfoList.addAll(newDateBillInfoList);
 		billRecyclerViewAdapter.notifyDataSetChanged();
