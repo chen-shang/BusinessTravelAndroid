@@ -50,7 +50,8 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 	@Override
 	public BillRecyclerViewAdapterViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
 		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_bill_recyclerview, parent, false);
-		return new BillRecyclerViewAdapterViewHolder(view) {};
+		return new BillRecyclerViewAdapterViewHolder(view) {
+		};
 	}
 
 	@SuppressLint("SetTextI18n")

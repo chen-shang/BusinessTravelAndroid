@@ -1,6 +1,7 @@
 package com.business.travel.app.ui.activity.bill;
 
 import java.math.BigDecimal;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -200,13 +201,6 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		});
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		//每次进来该页面的时候都需要刷新一下数据
-		refreshData();
-	}
-
 	private void registerConsumptionPageView() {
 		registerPageViewCommonProperty(viewBinding.UIAddBillActivityGridViewPagerBillIcon)
 				// 设置数据总数量
@@ -216,7 +210,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 				// 设置是否显示指示器
 				.setPointIsShow(true)
 				// 设置背景图片(此时设置的背景色无效，以背景图片为主)
-				.setBackgroundImageLoader(bgImageView -> {})
+				.setBackgroundImageLoader(bgImageView -> {
+				})
 				// 数据绑定
 				.setImageTextLoaderInterface((imageView, textView, position) -> {
 					// 自己进行数据的绑定，灵活度更高，不受任何限制
@@ -237,29 +232,41 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 				});
 	}
 
-	private void bind(ImageView imageView, TextView textView, ImageIconInfo imageIconInfo, Class<?> cls) {
-		boolean isEditImageButton = ItemIconEnum.ItemIconEdit.getIconDownloadUrl().equals(imageIconInfo.getIconDownloadUrl());
-		//默认未选中状态
-		imageView.setBackgroundResource(R.drawable.corners_shape_unselect);
-		imageView.setImageResource(R.drawable.ic_base_placeholder);
-
-		textView.setText(imageIconInfo.getName());
-
-		int unSelectColor = ContextCompat.getColor(getApplicationContext(), R.color.black_100);
-		int selectColor = ContextCompat.getColor(getApplicationContext(), R.color.teal_800);
-		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView, imageIconInfo.isSelected() ? selectColor : unSelectColor);
-
-		imageView.setOnClickListener(v -> {
-			//如果是编辑按钮
-			if (isEditImageButton) {
-				Intent intent = new Intent(this, cls);
-				intent.putExtra("consumptionType", consumptionType.name());
-				this.startActivity(intent);
-				return;
+	private void registerKeyboard() {
+		GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4) {
+			@Override
+			public boolean canScrollVertically() {
+				return false;
 			}
-			//否则,改变选中颜色
-			imageIconInfo.setSelected(!imageIconInfo.isSelected());
-			ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView, imageIconInfo.isSelected() ? selectColor : unSelectColor);
+		};
+		viewBinding.UIAddBillActivitySwipeRecyclerViewKeyboard.setLayoutManager(gridLayoutManager);
+		KeyboardRecyclerViewAdapter keyboardRecyclerViewAdapter = new KeyboardRecyclerViewAdapter(new ArrayList<>(), this).onSaveClick(v -> {
+			try {
+				//当键盘保存按钮点击之后
+				saveBill();
+				//6.账单创建完成后跳转到 DashboardFragment
+				this.finish();
+			} catch (Exception e) {
+				LogToast.errorShow(e.getMessage());
+			}
+		}).onReRecordClick(v -> {
+			try {
+				//当键盘保存按钮点击之后
+				saveBill();
+				//初始化数据
+				this.clear();
+			} catch (Exception e) {
+				LogToast.errorShow(e.getMessage());
+			}
+		});
+		viewBinding.UIAddBillActivitySwipeRecyclerViewKeyboard.setAdapter(keyboardRecyclerViewAdapter);
+	}
+
+	private void registerConsumptionType() {
+		viewBinding.UIAddBillActivityTextViewPayType.setOnClickListener(v -> {
+			consumptionType = changeConsumptionType(consumptionType);
+			viewBinding.UIAddBillActivityTextViewPayType.setText(consumptionType.getMsg());
+			refreshConsumptionIcon(consumptionType);
 		});
 	}
 
@@ -295,7 +302,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 				// 指示器item选中的颜色
 				.setPointSelectColor(ContextCompat.getColor(getBaseContext(), R.color.teal_800))
 				// 设置背景图片(此时设置的背景色无效，以背景图片为主)
-				.setBackgroundImageLoader(bgImageView -> {})
+				.setBackgroundImageLoader(bgImageView -> {
+				})
 				// Item点击
 				.setGridItemClickListener(position -> {
 
@@ -306,72 +314,30 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 				});
 	}
 
-	private void registerConsumptionType() {
-		viewBinding.UIAddBillActivityTextViewPayType.setOnClickListener(v -> {
-			consumptionType = changeConsumptionType(consumptionType);
-			viewBinding.UIAddBillActivityTextViewPayType.setText(consumptionType.getMsg());
-			refreshConsumptionIcon(consumptionType);
+	private void bind(ImageView imageView, TextView textView, ImageIconInfo imageIconInfo, Class<?> cls) {
+		boolean isEditImageButton = ItemIconEnum.ItemIconEdit.getIconDownloadUrl().equals(imageIconInfo.getIconDownloadUrl());
+		//默认未选中状态
+		imageView.setBackgroundResource(R.drawable.corners_shape_unselect);
+		imageView.setImageResource(R.drawable.ic_base_placeholder);
+
+		textView.setText(imageIconInfo.getName());
+
+		int unSelectColor = ContextCompat.getColor(getApplicationContext(), R.color.black_100);
+		int selectColor = ContextCompat.getColor(getApplicationContext(), R.color.teal_800);
+		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView, imageIconInfo.isSelected() ? selectColor : unSelectColor);
+
+		imageView.setOnClickListener(v -> {
+			//如果是编辑按钮
+			if (isEditImageButton) {
+				Intent intent = new Intent(this, cls);
+				intent.putExtra("consumptionType", consumptionType.name());
+				this.startActivity(intent);
+				return;
+			}
+			//否则,改变选中颜色
+			imageIconInfo.setSelected(!imageIconInfo.isSelected());
+			ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView, imageIconInfo.isSelected() ? selectColor : unSelectColor);
 		});
-	}
-
-	private ConsumptionTypeEnum refreshConsumptionType() {
-		String payType = viewBinding.UIAddBillActivityTextViewPayType.getText().toString();
-		if (ConsumptionTypeEnum.INCOME.getMsg().equals(payType)) {
-			return ConsumptionTypeEnum.INCOME;
-		} else if (ConsumptionTypeEnum.SPENDING.getMsg().equals(payType)) {
-			return ConsumptionTypeEnum.SPENDING;
-		} else {
-			throw new IllegalArgumentException("未知的消费项类型标识:" + payType);
-		}
-	}
-
-	private ConsumptionTypeEnum changeConsumptionType(ConsumptionTypeEnum consumptionType) {
-		if (ConsumptionTypeEnum.SPENDING == consumptionType) {
-			return ConsumptionTypeEnum.INCOME;
-		} else if (ConsumptionTypeEnum.INCOME == consumptionType) {
-			return ConsumptionTypeEnum.SPENDING;
-		} else {
-			throw new IllegalArgumentException("未知的消费项类型标识");
-		}
-	}
-
-	private void registerKeyboard() {
-		GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4) {
-			@Override
-			public boolean canScrollVertically() {
-				return false;
-			}
-		};
-		viewBinding.UIAddBillActivitySwipeRecyclerViewKeyboard.setLayoutManager(gridLayoutManager);
-		KeyboardRecyclerViewAdapter keyboardRecyclerViewAdapter = new KeyboardRecyclerViewAdapter(new ArrayList<>(), this).onSaveClick(v -> {
-			try {
-				//当键盘保存按钮点击之后
-				saveBill();
-				//6.账单创建完成后跳转到 DashboardFragment
-				this.finish();
-			} catch (Exception e) {
-				LogToast.errorShow(e.getMessage());
-			}
-		}).onReRecordClick(v -> {
-			try {
-				//当键盘保存按钮点击之后
-				saveBill();
-				//初始化数据
-				this.clear();
-			} catch (Exception e) {
-				LogToast.errorShow(e.getMessage());
-			}
-		});
-		viewBinding.UIAddBillActivitySwipeRecyclerViewKeyboard.setAdapter(keyboardRecyclerViewAdapter);
-	}
-
-	private void clear() {
-		consumptionImageIconList.forEach(item -> item.setSelected(false));
-		memberIconList.forEach(item -> item.setSelected(false));
-		viewBinding.UIAddBillActivityGridViewPagerBillIcon.setDataAllCount(consumptionImageIconList.size()).show();
-		viewBinding.UIAddBillActivityGridViewPagerMemberIcon.setDataAllCount(memberIconList.size()).show();
-		viewBinding.UIAddBillActivityTextViewAmount.setText(null);
-		viewBinding.UIAddBillActivityEditTextRemark.setText(null);
 	}
 
 	public void saveBill() {
@@ -393,6 +359,40 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		});
 	}
 
+	private void clear() {
+		consumptionImageIconList.forEach(item -> item.setSelected(false));
+		memberIconList.forEach(item -> item.setSelected(false));
+		viewBinding.UIAddBillActivityGridViewPagerBillIcon.setDataAllCount(consumptionImageIconList.size()).show();
+		viewBinding.UIAddBillActivityGridViewPagerMemberIcon.setDataAllCount(memberIconList.size()).show();
+		viewBinding.UIAddBillActivityTextViewAmount.setText(null);
+		viewBinding.UIAddBillActivityEditTextRemark.setText(null);
+	}
+
+	private ConsumptionTypeEnum changeConsumptionType(ConsumptionTypeEnum consumptionType) {
+		if (ConsumptionTypeEnum.SPENDING == consumptionType) {
+			return ConsumptionTypeEnum.INCOME;
+		} else if (ConsumptionTypeEnum.INCOME == consumptionType) {
+			return ConsumptionTypeEnum.SPENDING;
+		} else {
+			throw new IllegalArgumentException("未知的消费项类型标识");
+		}
+	}
+
+	public void refreshConsumptionIcon(ConsumptionTypeEnum consumptionType) {
+		List<ImageIconInfo> imageIconInfos = consumptionService.queryAllConsumptionIconInfo(consumptionType);
+
+		//添加编辑按钮编辑按钮永远在最后
+		ImageIconInfo imageIconInfo = new ImageIconInfo();
+		imageIconInfo.setName(ItemIconEnum.ItemIconEdit.getName());
+		imageIconInfo.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
+		imageIconInfo.setSelected(false);
+		imageIconInfos.add(imageIconInfo);
+
+		consumptionImageIconList.clear();
+		consumptionImageIconList.addAll(imageIconInfos);
+		viewBinding.UIAddBillActivityGridViewPagerBillIcon.setDataAllCount(consumptionImageIconList.size()).show();
+	}
+
 	private void createBillWithProject(Project project) {
 		//3. 日期、备注、金额
 		String amount = viewBinding.UIAddBillActivityTextViewAmount.getText().toString().trim();
@@ -411,7 +411,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		//消费金额
 		bill.setAmount(new BigDecimal(amount).multiply(new BigDecimal(100)).longValue());
 		//消费日期
-		bill.setConsumeDate(selectedDate);
+		long l = DateTimeUtil.toLocalDateTime(selectedDate).toLocalDate().atStartOfDay(ZoneOffset.ofHours(8)).toInstant().toEpochMilli();
+		bill.setConsumeDate(l);
 		bill.setMemberIds(memberItemList);
 		bill.setCreateTime(DateTimeUtil.timestamp());
 		bill.setModifyTime(DateTimeUtil.timestamp());
@@ -420,6 +421,13 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		String iconDownloadUrl = consumptionImageIconList.stream().filter(ImageIconInfo::isSelected).findFirst().map(ImageIconInfo::getIconDownloadUrl).orElse("");
 		bill.setIconDownloadUrl(iconDownloadUrl);
 		billService.creatBill(bill);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		//每次进来该页面的时候都需要刷新一下数据
+		refreshData();
 	}
 
 	private void refreshData() {
@@ -445,19 +453,15 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		viewBinding.UIAddBillActivitySearchBar.setPlaceHolder(project.getName());
 	}
 
-	public void refreshConsumptionIcon(ConsumptionTypeEnum consumptionType) {
-		List<ImageIconInfo> imageIconInfos = consumptionService.queryAllConsumptionIconInfo(consumptionType);
-
-		//添加编辑按钮编辑按钮永远在最后
-		ImageIconInfo imageIconInfo = new ImageIconInfo();
-		imageIconInfo.setName(ItemIconEnum.ItemIconEdit.getName());
-		imageIconInfo.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
-		imageIconInfo.setSelected(false);
-		imageIconInfos.add(imageIconInfo);
-
-		consumptionImageIconList.clear();
-		consumptionImageIconList.addAll(imageIconInfos);
-		viewBinding.UIAddBillActivityGridViewPagerBillIcon.setDataAllCount(consumptionImageIconList.size()).show();
+	private ConsumptionTypeEnum refreshConsumptionType() {
+		String payType = viewBinding.UIAddBillActivityTextViewPayType.getText().toString();
+		if (ConsumptionTypeEnum.INCOME.getMsg().equals(payType)) {
+			return ConsumptionTypeEnum.INCOME;
+		} else if (ConsumptionTypeEnum.SPENDING.getMsg().equals(payType)) {
+			return ConsumptionTypeEnum.SPENDING;
+		} else {
+			throw new IllegalArgumentException("未知的消费项类型标识:" + payType);
+		}
 	}
 
 	private void refreshMemberIcon() {

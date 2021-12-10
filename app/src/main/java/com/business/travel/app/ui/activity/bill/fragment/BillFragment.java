@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,6 +44,8 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	 * 列表为空时候显示的内容,用headView实现该效果
 	 */
 	private View headView;
+	private View headView0;
+
 	@Getter
 	private BillRecyclerViewAdapter billRecyclerViewAdapter;
 	private ProjectService projectService;
@@ -66,6 +67,11 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		projectService = new ProjectService(requireActivity());
 		billService = new BillService(requireActivity());
 		headView = HeaderView.newEmptyHeaderView(getLayoutInflater());
+
+		headView0 = getLayoutInflater().inflate(R.layout.project_info, null, false);
+		headView0.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+
+		HeaderView.of(headView0).addTo(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
 	}
 
 	@Override
@@ -76,6 +82,16 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		//注册账单列表页
 		registerSwipeRecyclerView(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
 		return view;
+	}
+
+	/**
+	 * 注册账单列表页
+	 */
+	private void registerSwipeRecyclerView(SwipeRecyclerView swipeRecyclerView) {
+		//线性布局
+		swipeRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
+		billRecyclerViewAdapter = new BillRecyclerViewAdapter(dateBillInfoList, (MasterActivity)requireActivity());
+		swipeRecyclerView.setAdapter(billRecyclerViewAdapter);
 	}
 
 	@Override
@@ -93,16 +109,6 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		AnimalUtil.reset(floatingActionButton);
 	}
 
-	/**
-	 * 注册账单列表页
-	 */
-	private void registerSwipeRecyclerView(SwipeRecyclerView swipeRecyclerView) {
-		//线性布局
-		swipeRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
-		billRecyclerViewAdapter = new BillRecyclerViewAdapter(dateBillInfoList, (MasterActivity)requireActivity());
-		swipeRecyclerView.setAdapter(billRecyclerViewAdapter);
-	}
-
 	@SuppressLint({"SetTextI18n", "NotifyDataSetChanged"})
 	public void refreshBillList(Long projectId) {
 		Project project = Optional.ofNullable(projectId).map(projectService::queryById).orElseGet(() -> projectService.queryLatestModify());
@@ -112,6 +118,10 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 			//viewBinding.UIBillFragmentTextViewDate.setText(null);
 			viewBinding.UIBillFragmentTextViewIncome.setVisibility(View.INVISIBLE);
 			viewBinding.UIBillFragmentTextViewPay.setVisibility(View.INVISIBLE);
+
+			//todo
+			//final TextView textView = headView2.findViewById(R.id.projectName);
+			//textView.setText(project.getName());
 			//展示空的头部即可
 			HeaderView.of(headView).addTo(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
 			return;
@@ -130,7 +140,6 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		//查询全部的账单列表
 		List<Bill> billList = billService.queryBillByProjectId(this.selectedProjectId);
 		if (CollectionUtils.isEmpty(billList)) {
-			//展示空的头部即可
 			HeaderView.of(headView).addTo(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
 			dateBillInfoList.clear();
 			billRecyclerViewAdapter.notifyDataSetChanged();
@@ -151,13 +160,6 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 				.map(entry -> new DateBillInfo(DateTimeUtil.timestamp(entry.getKey(), "yyyy-MM-dd"), entry.getValue()))
 				//按照消费时间有小到大排序
 				.sorted(Comparator.comparing(DateBillInfo::getDate).reversed()).collect(Collectors.toList());
-
-		View headView2 = getLayoutInflater().inflate(R.layout.project_info, null);
-		headView2.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-		//todo
-		//final TextView textView = headView2.findViewById(R.id.projectName);
-		//textView.setText(project.getName());
-		HeaderView.of(headView2).addTo(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
 
 		this.dateBillInfoList.clear();
 		dateBillInfoList.addAll(newDateBillInfoList);

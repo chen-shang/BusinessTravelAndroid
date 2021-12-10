@@ -71,6 +71,7 @@ public class KeyboardRecyclerViewAdapter extends BaseRecyclerViewAdapter<Keyboar
 					final CardDatePickerDialog cardDatePickerDialog = new Builder(activity).setTitle("选择日期").setDisplayType(0, 1, 2).showBackNow(false).showFocusDateInfo(true).setOnChoose("选择", timestamp -> {
 						if (DateTimeUtil.toLocalDateTime(timestamp).toLocalDate().isEqual(DateTimeUtil.now().toLocalDate())) {
 							holder.dateTextView.setText("今天");
+							((AddBillActivity)activity).setSelectedDate(timestamp);
 							return;
 						}
 						holder.dateTextView.setText(DateTimeUtil.format(timestamp, "MM.dd"));
@@ -164,13 +165,13 @@ public class KeyboardRecyclerViewAdapter extends BaseRecyclerViewAdapter<Keyboar
 	}
 
 	@Override
-	public int getItemCount() {
-		return 16;
+	public int getItemViewType(int position) {
+		return position;
 	}
 
 	@Override
-	public int getItemViewType(int position) {
-		return position;
+	public int getItemCount() {
+		return 16;
 	}
 
 	class KeyboardRecyclerViewAdapterViewHolder extends ViewHolder {

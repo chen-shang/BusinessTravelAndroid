@@ -11,7 +11,9 @@ public class HeaderView {
 
 	private final View headView;
 
-	public HeaderView(View headView) {this.headView = headView;}
+	public HeaderView(View headView) {
+		this.headView = headView;
+	}
 
 	public static HeaderView of(View headView) {
 		return new HeaderView(headView);
@@ -25,7 +27,7 @@ public class HeaderView {
 	}
 
 	public void addTo(SwipeRecyclerView swipeRecyclerView) {
-		if (swipeRecyclerView.getHeaderCount() == 0) {
+		if (swipeRecyclerView.getHeaderCount() < 2) {
 			swipeRecyclerView.addHeaderView(headView);
 		}
 	}
