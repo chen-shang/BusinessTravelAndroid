@@ -24,7 +24,7 @@ public interface BillDao extends BaseDao<Bill> {
 	 *
 	 * @param projectId
 	 * @return
-	 * @see ConsumptionTypeEnum
+	 * @see com.business.travel.vo.enums.ConsumptionTypeEnum
 	 */
 	@Query("SELECT sum(amount) FROM bill where projectId=:projectId and consumptionType='SPENDING' and isDeleted=1")
 	Long sumTotalSpendingMoney(Long projectId);
@@ -34,7 +34,7 @@ public interface BillDao extends BaseDao<Bill> {
 	 *
 	 * @param projectId
 	 * @return
-	 * @see ConsumptionTypeEnum
+	 * @see com.business.travel.vo.enums.ConsumptionTypeEnum
 	 */
 	@Query("SELECT sum(amount) FROM bill where projectId=:projectId and consumptionType='INCOME' and isDeleted=1")
 	Long sumTotalIncomeMoney(Long projectId);
@@ -44,7 +44,7 @@ public interface BillDao extends BaseDao<Bill> {
 	 *
 	 * @param projectId
 	 * @return
-	 * @see ConsumptionTypeEnum
+	 * @see com.business.travel.vo.enums.ConsumptionTypeEnum
 	 */
 	@Query("SELECT sum(amount) FROM bill where projectId=:projectId and consumptionType='SPENDING' and isDeleted=1 and consumeDate=:consumeDate")
 	Long sumTotalSpendingMoney(Long projectId, Long consumeDate);
@@ -54,7 +54,7 @@ public interface BillDao extends BaseDao<Bill> {
 	 *
 	 * @param projectId
 	 * @return
-	 * @see ConsumptionTypeEnum
+	 * @see com.business.travel.vo.enums.ConsumptionTypeEnum
 	 */
 	@Query("SELECT sum(amount) FROM bill where projectId=:projectId and consumptionType='INCOME' and isDeleted=1 and consumeDate=:consumeDate")
 	Long sumTotalIncomeMoney(Long projectId, Long consumeDate);

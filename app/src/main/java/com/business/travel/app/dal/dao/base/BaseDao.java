@@ -37,5 +37,4 @@ public interface BaseDao<T> {
 
 	@Update
 	void batchUpdate(List<T> records);
-
 }
