@@ -1,23 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/public' }
-        maven {
-            url 'https://packages.aliyun.com/maven/repository/2164317-release-1i2kAC/'
-
-            credentials {
-                username '61b1f2fbae805dbacc53086a'
-                password 'md5IY7FDGRzM'
-            }
-        }
-        maven {
-            url 'https://packages.aliyun.com/maven/repository/2164317-snapshot-EKywFT/'
-
-            credentials {
-                username '61b1f2fbae805dbacc53086a'
-                password 'md5IY7FDGRzM'
-            }
-        }
         google()
         mavenCentral()
     }
@@ -55,6 +38,12 @@ allprojects {
         jcenter() // Warning: this repository is going to shut down soon
     }
 }
+
+configurations.all {
+    // check for updates every build
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
 
 
 task clean(type: Delete) {

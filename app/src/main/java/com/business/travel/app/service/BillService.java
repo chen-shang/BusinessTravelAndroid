@@ -6,6 +6,7 @@ import android.content.Context;
 import com.business.travel.app.dal.dao.BillDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Bill;
+import org.apache.commons.lang3.StringUtils;
 
 public class BillService {
 
@@ -67,5 +68,20 @@ public class BillService {
 	 */
 	public List<Bill> queryBillByProjectId(Long projectId) {
 		return billDao.selectByProjectId(projectId);
+	}
+
+	public void updateBill(Long id, Bill bill) {
+		Bill record = billDao.selectByPrimaryKey(id);
+		String remark = bill.getRemark();
+
+		boolean change = false;
+		if (StringUtils.isNotBlank(remark) && !remark.equals(record.getRemark())) {
+			record.setRemark(remark);
+			change = true;
+		}
+
+		if (change) {
+			billDao.update(record);
+		}
 	}
 }

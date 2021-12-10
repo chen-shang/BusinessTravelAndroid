@@ -71,7 +71,6 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		headView0 = getLayoutInflater().inflate(R.layout.project_info, null, false);
 		headView0.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
-		HeaderView.of(headView0).addTo(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
 	}
 
 	@Override
@@ -91,6 +90,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		//线性布局
 		swipeRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
 		billRecyclerViewAdapter = new BillRecyclerViewAdapter(dateBillInfoList, (MasterActivity)requireActivity());
+		HeaderView.of(headView0).addTo(swipeRecyclerView);
 		swipeRecyclerView.setAdapter(billRecyclerViewAdapter);
 	}
 
@@ -118,10 +118,6 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 			//viewBinding.UIBillFragmentTextViewDate.setText(null);
 			viewBinding.UIBillFragmentTextViewIncome.setVisibility(View.INVISIBLE);
 			viewBinding.UIBillFragmentTextViewPay.setVisibility(View.INVISIBLE);
-
-			//todo
-			//final TextView textView = headView2.findViewById(R.id.projectName);
-			//textView.setText(project.getName());
 			//展示空的头部即可
 			HeaderView.of(headView).addTo(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
 			return;

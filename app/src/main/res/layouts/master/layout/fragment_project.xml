@@ -11,7 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/UI_ProjectFragment_ConstraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="50dp"
             android:background="@color/teal_800">
 
         <ImageView

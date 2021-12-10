@@ -166,8 +166,8 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 		public ImageView iconImageView;
 		@BindView(R.id.UI_BillFragment_BillItemAdapter_Amount)
 		public TextView amountTextView;
-		@BindView(R.id.UI_BillFragment_BillItemAdapter_Associate)
-		public TextView associateTextView;
+		//@BindView(R.id.UI_BillFragment_BillItemAdapter_Associate)
+		//public TextView associateTextView;
 		@BindView(R.id.UI_BillFragment_BillItemAdapter_ConsumptionItem)
 		public TextView consumptionItemTextView;
 		@BindView(R.id.card)

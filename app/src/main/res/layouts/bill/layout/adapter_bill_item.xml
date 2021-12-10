@@ -9,7 +9,6 @@
         android:paddingBottom="2dp"
         tools:context=".ui.activity.bill.fragment.BillItemRecyclerViewAdapter">
 
-
     <androidx.cardview.widget.CardView
             android:id="@+id/card"
             android:clickable="true"
@@ -39,18 +38,11 @@
                     app:layout_constraintStart_toEndOf="@+id/UI_BillFragment_BillItemAdapter_Icon"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginStart="12dp"
-                    app:layout_constraintVertical_bias="0.5">
-            </TextView>
-
-            <TextView
-                    android:id="@+id/UI_BillFragment_BillItemAdapter_Associate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/UI_BillFragment_BillItemAdapter_ConsumptionItem"
+                    android:layout_marginStart="10dp"
+                    android:maxLines="1"
+                    android:maxWidth="250dp"
+                    android:ellipsize="end"
+                    app:layout_constraintVertical_bias="0.47"
                     >
             </TextView>
 

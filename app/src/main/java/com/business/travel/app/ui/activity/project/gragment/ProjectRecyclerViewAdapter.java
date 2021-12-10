@@ -27,6 +27,7 @@ import com.business.travel.app.ui.activity.project.EditProjectActivity;
 import com.business.travel.app.ui.activity.project.gragment.ProjectRecyclerViewAdapter.ProjectAdapterHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
+import com.business.travel.utils.DateTimeUtil;
 import com.lxj.xpopup.XPopup.Builder;
 import com.lxj.xpopup.impl.AttachListPopupView;
 import org.jetbrains.annotations.NotNull;
@@ -90,7 +91,12 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 		holder.projectNameTextView.setText(project.getName());
 
 		//点击项目的时候跳转到账单页面，并把项目id传递过去
-		holder.cardView.setOnClickListener(v -> goToBillFragment(project));
+		holder.cardView.setOnClickListener(v -> {
+			//最后更新时间
+			project.setModifyTime(DateTimeUtil.timestamp());
+			projectService.updateProject(project.getId(), project);
+			goToBillFragment(project);
+		});
 		//初始化 长按时候 的弹窗事件
 		AttachListPopupView attachListPopupView = initAttachListPopView(holder, position, project);
 		//长按项目的时候弹出操作框

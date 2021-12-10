@@ -1,10 +1,12 @@
 package com.business.travel.app.ui.activity.project;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityEditProjectBinding;
@@ -32,7 +34,8 @@ public class EditProjectActivity extends BaseActivity<ActivityEditProjectBinding
 	@Override
 	protected void inject() {
 		projectService = new ProjectService(this);
-		datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {}, DateTimeUtil.now().getYear(), DateTimeUtil.now().getMonth().getValue() - 1, DateTimeUtil.now().getDayOfMonth());
+		datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+		}, DateTimeUtil.now().getYear(), DateTimeUtil.now().getMonth().getValue() - 1, DateTimeUtil.now().getDayOfMonth());
 	}
 
 	@Override
@@ -41,10 +44,10 @@ public class EditProjectActivity extends BaseActivity<ActivityEditProjectBinding
 		//从别的页面传递过来的项目id
 		initProject();
 		//注册返回按钮点击事件
-		registerImageButtonBack();
+		registerImageButtonBack(viewBinding.UIEditProjectActivityImageButtonBack);
 		//注册项目开始结束时间点击事件
-		registerDateTicker(viewBinding.projectEndTime);
-		registerDateTicker(viewBinding.projectStartTime);
+		registerDatePicker(viewBinding.projectEndTime);
+		registerDatePicker(viewBinding.projectStartTime);
 		//注册右上角对号保存按钮点击事件
 		registerSaveButton(viewBinding.UIEditProjectActivityImageButtonSave);
 	}
@@ -82,16 +85,15 @@ public class EditProjectActivity extends BaseActivity<ActivityEditProjectBinding
 		}));
 	}
 
-	private void registerDateTicker(TextView projectEndTime) {
-		projectEndTime.setOnClickListener(v -> {
+	private void registerDatePicker(TextView textview) {
+		textview.setOnClickListener(v -> {
 			final String nowDate = ((TextView)v).getText().toString();
 			if (StringUtils.isNotBlank(nowDate)) {
 				final LocalDateTime localDateTime = DateTimeUtil.parseLocalDateTime(nowDate, "yyyy-MM-dd");
-				datePickerDialog.updateDate(localDateTime.getYear(), localDateTime.getMonth().getValue() - 1, localDateTime.getDayOfMonth());
+				datePickerDialog.updateDate(localDateTime.getYear(), localDateTime.getMonth().ordinal(), localDateTime.getDayOfMonth());
 			}
-
 			datePickerDialog.setOnDateSetListener((view, year, month, dayOfMonth) -> {
-				final LocalDateTime localDate = LocalDateTime.of(year, month, dayOfMonth, 0, 0, 0);
+				LocalDate localDate = LocalDate.of(year, month + 1, dayOfMonth);
 				((TextView)v).setText(DateTimeUtil.format(localDate, "yyyy-MM-dd"));
 			});
 
@@ -139,8 +141,8 @@ public class EditProjectActivity extends BaseActivity<ActivityEditProjectBinding
 		}
 	}
 
-	private void registerImageButtonBack() {
+	private void registerImageButtonBack(ImageButton imageButton) {
 		//返回按钮点击后
-		viewBinding.UIEditProjectActivityImageButtonBack.setOnClickListener(v -> this.finish());
+		imageButton.setOnClickListener(v -> this.finish());
 	}
 }

@@ -24,7 +24,7 @@ public interface ProjectDao extends BaseDao<Project> {
 	@Query("SELECT * FROM project where name=:projectName and isDeleted=1")
 	Project selectByName(String projectName);
 
-	@Query("SELECT * FROM project where isDeleted=1 order by modifyTime asc limit 1")
+	@Query("SELECT * FROM project where isDeleted=1 order by modifyTime desc limit 1")
 	Project selectLatestModify();
 
 	/**

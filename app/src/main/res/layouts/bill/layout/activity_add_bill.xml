@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/UI_AddBillActivity_ConstraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="90dp"
+            android:layout_height="50dp"
             android:background="@color/teal_800"
             app:layout_constraintTop_toTopOf="parent"
             android:padding="20dp"
@@ -22,6 +22,8 @@
     <com.mancj.materialsearchbar.MaterialSearchBar
             android:id="@+id/UI_AddBillActivity_SearchBar"
             style="@style/MaterialSearchBarLight"
+            android:ellipsize="end"
+            android:lines="1"
             app:mt_maxSuggestionsCount="10"
             app:mt_searchIconDrawable="@drawable/ic_base_sort"
             app:mt_backIconDrawable="@drawable/ic_base_right"
@@ -30,7 +32,6 @@
             app:mt_textColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:elevation="8dp"
             android:animateLayoutChanges="false"
             app:layout_constraintTop_toTopOf="@+id/UI_AddBillActivity_ConstraintLayout"/>
@@ -135,6 +136,7 @@
                     android:id="@+id/UI_AddBillActivity_TextView_Amount"
                     android:hint="0.00"
                     android:maxLines="1"
+                    android:ellipsize="end"
                     android:textAlignment="textEnd"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"

@@ -19,9 +19,13 @@
 
     <TextView
             android:id="@+id/UI_TextView_Description"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textAlignment="center"
-            app:layout_constraintTop_toBottomOf="@+id/UI_ImageView_Icon"
-            android:layout_marginTop="2dp"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="消费"
+            android:gravity="center"
+            android:ellipsize="end"
+            android:lines="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/UI_ImageView_Icon"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
