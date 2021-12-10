@@ -34,7 +34,7 @@ public class Consumption extends BaseEntity {
 	/**
 	 * 消费项目类型
 	 *
-	 * @see ConsumptionTypeEnum
+	 * @see com.business.travel.vo.enums.ConsumptionTypeEnum
 	 */
 	private String consumptionType;
 	/**

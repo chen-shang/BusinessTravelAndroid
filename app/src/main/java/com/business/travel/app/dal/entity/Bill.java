@@ -31,7 +31,7 @@ public class Bill extends BaseEntity {
 	/**
 	 * 消费类型
 	 *
-	 * @see ConsumptionTypeEnum
+	 * @see com.business.travel.vo.enums.ConsumptionTypeEnum
 	 */
 	private String consumptionType;
 	/**

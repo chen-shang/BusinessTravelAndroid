@@ -6,7 +6,9 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
+import androidx.room.RawQuery;
 import androidx.room.Update;
+import androidx.sqlite.db.SupportSQLiteQuery;
 
 @Dao
 public interface BaseDao<T> {
@@ -37,4 +39,7 @@ public interface BaseDao<T> {
 
 	@Update
 	void batchUpdate(List<T> records);
+
+	@RawQuery
+	List<T> selectByQuery(SupportSQLiteQuery query);
 }
