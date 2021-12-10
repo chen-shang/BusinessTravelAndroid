@@ -11,18 +11,16 @@
             android:id="@+id/showLog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="change log"/>
-
-    <TextView
-            android:id="@+id/log"
-            android:scrollbars="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
+            android:text="运行日志"/>
 
     <TextView
             android:id="@+id/versionHistory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
+    <EditText
+            android:id="@+id/log"
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 </LinearLayout>

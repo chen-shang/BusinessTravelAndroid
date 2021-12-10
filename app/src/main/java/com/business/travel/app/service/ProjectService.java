@@ -10,9 +10,9 @@ import com.business.travel.app.dal.dao.BillDao;
 import com.business.travel.app.dal.dao.ProjectDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Project;
-import com.business.travel.app.enums.DeleteEnum;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.JacksonUtil;
+import com.business.travel.vo.enums.DeleteEnum;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 

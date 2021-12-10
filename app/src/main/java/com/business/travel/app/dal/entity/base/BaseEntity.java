@@ -1,8 +1,8 @@
 package com.business.travel.app.dal.entity.base;
 
 import androidx.room.ColumnInfo;
-import com.business.travel.app.enums.DeleteEnum;
 import com.business.travel.utils.DateTimeUtil;
+import com.business.travel.vo.enums.DeleteEnum;
 import lombok.Data;
 
 /**

@@ -37,6 +37,8 @@ import org.jetbrains.annotations.NotNull;
 public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectAdapterHolder, Project> {
 
 	private final ProjectFragment projectFragment = MasterFragmentPositionEnum.PROJECT_FRAGMENT.getFragment();
+	private final BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
+
 	public ProjectService projectService;
 	public BillService billService;
 
@@ -147,12 +149,11 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 	}
 
 	private void goToBillFragment(Project project) {
+		//把选中的数据传递给 BillFragment 页面
+		billFragment.setSelectedProjectId(project.getId());
+
 		ViewPager2 viewPager2 = activity.findViewById(R.id.UI_MasterActivity_ViewPager2);
 		viewPager2.setCurrentItem(MasterFragmentPositionEnum.BILL_FRAGMENT.getPosition());
-
-		//把选中的数据传递给 BillFragment 页面
-		BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
-		billFragment.setSelectedProjectId(project.getId());
 	}
 
 	@SuppressLint("NonConstantResourceId")

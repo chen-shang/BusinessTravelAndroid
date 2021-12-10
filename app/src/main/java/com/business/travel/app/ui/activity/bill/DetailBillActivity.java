@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.databinding.ActivityDetailBillBinding;
-import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.ConsumptionService;
@@ -18,6 +17,7 @@ import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.app.utils.Try;
 import com.business.travel.utils.SplitUtil;
+import com.business.travel.vo.enums.ItemTypeEnum;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 /**

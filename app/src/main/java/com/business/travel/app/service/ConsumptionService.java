@@ -12,14 +12,14 @@ import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.dal.dao.ConsumptionDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Consumption;
-import com.business.travel.app.enums.ConsumptionTypeEnum;
-import com.business.travel.app.enums.DeleteEnum;
-import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.GiteeContent;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.model.converter.ConsumptionConverter;
 import com.business.travel.app.utils.FutureUtil;
 import com.business.travel.utils.DateTimeUtil;
+import com.business.travel.vo.enums.ConsumptionTypeEnum;
+import com.business.travel.vo.enums.DeleteEnum;
+import com.business.travel.vo.enums.ItemTypeEnum;
 import org.jetbrains.annotations.NotNull;
 
 public class ConsumptionService {

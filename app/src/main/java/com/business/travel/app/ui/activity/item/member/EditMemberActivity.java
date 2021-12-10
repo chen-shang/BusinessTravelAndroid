@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.databinding.ActivityEditMemberBinding;
-import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.service.MemberService;
 import com.business.travel.app.ui.activity.item.AddItemActivity;
@@ -23,6 +22,7 @@ import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
 import com.business.travel.app.utils.HeaderView;
 import com.business.travel.app.utils.ImageIconUtil;
+import com.business.travel.vo.enums.ItemTypeEnum;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
 

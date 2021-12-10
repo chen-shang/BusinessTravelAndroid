@@ -6,7 +6,6 @@ import androidx.room.Dao;
 import androidx.room.Query;
 import com.business.travel.app.dal.dao.base.BaseDao;
 import com.business.travel.app.dal.entity.Bill;
-import com.business.travel.app.enums.ConsumptionTypeEnum;
 
 /**
  * @author chenshang

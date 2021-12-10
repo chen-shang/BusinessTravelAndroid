@@ -1,7 +1,5 @@
 package com.business.travel.app.ui.activity.bill;
 
-import java.util.List;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -18,21 +16,21 @@ import butterknife.ButterKnife;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.business.travel.app.R;
-import com.business.travel.app.enums.ConsumptionTypeEnum;
 import com.business.travel.app.enums.ItemIconEnum;
-import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.activity.bill.ItemIconRecyclerViewAdapter.IconRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.activity.item.consumption.EditConsumptionActivity;
 import com.business.travel.app.ui.activity.item.member.EditMemberActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
-import com.business.travel.app.utils.FutureUtil;
 import com.business.travel.app.utils.ImageLoadUtil;
+import com.business.travel.vo.enums.ConsumptionTypeEnum;
+import com.business.travel.vo.enums.ItemTypeEnum;
 import org.jetbrains.annotations.NotNull;
 
-import static com.business.travel.app.enums.ItemTypeEnum.CONSUMPTION;
-import static com.business.travel.app.enums.ItemTypeEnum.MEMBER;
+import java.util.List;
+
+
 
 /**
  * @author chenshang
@@ -85,12 +83,12 @@ public class ItemIconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRec
 		boolean isEditImageButton = ItemIconEnum.ItemIconEdit.getIconDownloadUrl().equals(iconDownloadUrl);
 		//当图片按钮被点击的时候
 		uiImageViewIcon.setOnClickListener(v -> {
-			if (isEditImageButton && MEMBER == itemTypeEnum) {
+			if (isEditImageButton && ItemTypeEnum.MEMBER == itemTypeEnum) {
 				activity.startActivity(new Intent(activity, EditMemberActivity.class));
 				return;
 			}
 
-			if (isEditImageButton && CONSUMPTION == itemTypeEnum) {
+			if (isEditImageButton && ItemTypeEnum.CONSUMPTION == itemTypeEnum) {
 				Intent intent = new Intent(activity, EditConsumptionActivity.class);
 				ConsumptionTypeEnum selectedConsumptionType = getSelectedConsumptionType();
 				intent.putExtra("consumptionType", selectedConsumptionType.name());

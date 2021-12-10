@@ -11,10 +11,10 @@ import com.business.travel.app.dal.dao.MemberDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Member;
 import com.business.travel.app.enums.ItemIconEnum;
-import com.business.travel.app.enums.ItemTypeEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.model.converter.MemberConverter;
 import com.business.travel.utils.DateTimeUtil;
+import com.business.travel.vo.enums.ItemTypeEnum;
 
 public class MemberService {
 	private final MemberDao memberDao;

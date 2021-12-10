@@ -18,13 +18,13 @@ import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
-import com.business.travel.app.enums.WeekEnum;
 import com.business.travel.app.model.DateBillInfo;
 import com.business.travel.app.service.BillService;
 import com.business.travel.app.ui.activity.bill.fragment.BillRecyclerViewAdapter.BillRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.utils.DateTimeUtil;
+import com.business.travel.vo.enums.WeekEnum;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import org.jetbrains.annotations.NotNull;
 
