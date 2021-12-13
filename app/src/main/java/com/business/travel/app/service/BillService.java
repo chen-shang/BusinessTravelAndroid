@@ -178,7 +178,7 @@ public class BillService {
 			record.setConsumptionIds(consumptionType);
 			change = true;
 		}
-		
+
 		//结果处理
 		if (change) {
 			billDao.update(record);

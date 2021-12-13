@@ -90,12 +90,12 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 		//统计一下总收入
 		Long sumTotalIncomeMoney = billService.sumTotalIncomeMoney(projectId, date);
 		viewHolder.incomeTextView.setVisibility(sumTotalIncomeMoney == null ? View.GONE : View.VISIBLE);
-		Optional.ofNullable(sumTotalIncomeMoney).ifPresent(money -> viewHolder.incomeTextView.setText("收入:" + (double)money / 100));
+		Optional.ofNullable(sumTotalIncomeMoney).ifPresent(money -> viewHolder.incomeTextView.setText(String.format("收入:%s", (double)money / 100)));
 
 		//统计一下总支出
 		Long sumTotalSpendingMoney = billService.sumTotalSpendingMoney(projectId, date);
 		viewHolder.payTextView.setVisibility(sumTotalSpendingMoney == null ? View.GONE : View.VISIBLE);
-		Optional.ofNullable(sumTotalSpendingMoney).ifPresent(money -> viewHolder.payTextView.setText("支出:" + (double)money / 100));
+		Optional.ofNullable(sumTotalSpendingMoney).ifPresent(money -> viewHolder.payTextView.setText(String.format("支出:%s", (double)money / 100)));
 	}
 
 	@SuppressLint("NonConstantResourceId")

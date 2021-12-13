@@ -67,16 +67,17 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		super.inject();
 		projectService = new ProjectService(requireActivity());
 		billService = new BillService(requireActivity());
-		
+
 		billListHeadView = HeaderView.newBillHeaderView(getLayoutInflater());
 		billListEmptyHeaderView = HeaderView.newEmptyHeaderView(getLayoutInflater());
+
+		//初始化中间的加号
+		floatingActionButton = requireActivity().findViewById(R.id.UI_MasterActivity_FloatingActionButton);
 	}
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = super.onCreateView(inflater, container, savedInstanceState);
-		//初始化中间的加号
-		floatingActionButton = requireActivity().findViewById(R.id.UI_MasterActivity_FloatingActionButton);
 		//注册账单列表页
 		registerSwipeRecyclerView(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
 		return view;
@@ -145,7 +146,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		List<DateBillInfo> newDateBillInfoList = billList
 				//to stream
 				.stream()
-				//按照消费日期分组,先转换成对应的面月日
+				//按照消费日期分组,先转换成对应的年月日
 				.collect(Collectors.groupingBy(item -> DateTimeUtil.format(item.getConsumeDate(), "yyyy-MM-dd")))
 				//获取 entry set
 				.entrySet()
@@ -161,14 +162,14 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		billRecyclerViewAdapter.notifyDataSetChanged();
 	}
 
-	public void refreshMoneyShow(Long id) {
+	public void refreshMoneyShow(Long projectId) {
 		//统计一下总收入
-		Long sumTotalIncomeMoney = billService.sumTotalIncomeMoney(id);
+		Long sumTotalIncomeMoney = billService.sumTotalIncomeMoney(projectId);
 		viewBinding.UIBillFragmentTextViewIncome.setVisibility(sumTotalIncomeMoney == null ? View.GONE : View.VISIBLE);
 		Optional.ofNullable(sumTotalIncomeMoney).ifPresent(money -> viewBinding.UIBillFragmentTextViewIncome.setText(String.format("收入:%s", (double)money / 100)));
 
 		//统计一下总支出
-		Long sumTotalSpendingMoney = billService.sumTotalSpendingMoney(id);
+		Long sumTotalSpendingMoney = billService.sumTotalSpendingMoney(projectId);
 		viewBinding.UIBillFragmentTextViewPay.setVisibility(sumTotalSpendingMoney == null ? View.GONE : View.VISIBLE);
 		Optional.ofNullable(sumTotalSpendingMoney).ifPresent(money -> viewBinding.UIBillFragmentTextViewPay.setText(String.format("支出:%s", (double)money / 100)));
 	}
