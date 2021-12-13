@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.blankj.utilcode.util.CollectionUtils;
@@ -57,9 +58,9 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = super.onCreateView(inflater, container, savedInstanceState);
 		//注册项目列表页
-		registerSwipeRecyclerView();
+		registerSwipeRecyclerView(viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList);
 		//注册右上角点击事件
-		registerPopupView();
+		registerPopupView(viewBinding.UIProjectFragmentImageViewOther);
 		return view;
 	}
 
@@ -73,25 +74,23 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 	/**
 	 * 注册右上角点击事件
 	 */
-	private void registerPopupView() {
+	private void registerPopupView(ImageView imageView) {
 		//这个是添加新项目时候弹出的
 		//这个是点击右上角三个小圆点弹出的
-		final AttachListPopupView attachListPopupView = new Builder(getContext()).atView(viewBinding.UIProjectFragmentImageViewOther).asAttachList(new String[] {"添加项目"}, new int[] {R.drawable.ic_base_sort}, (position, text) -> {
-			startActivity(new Intent(this.requireActivity(), EditProjectActivity.class));
-		});
-		viewBinding.UIProjectFragmentImageViewOther.setOnClickListener(v -> attachListPopupView.show());
+		final AttachListPopupView attachListPopupView = new Builder(getContext()).atView(imageView).asAttachList(new String[] {"添加项目"}, new int[] {R.drawable.ic_base_sort}, (position, text) -> startActivity(new Intent(this.requireActivity(), EditProjectActivity.class)));
+		imageView.setOnClickListener(v -> attachListPopupView.show());
 	}
 
 	/**
 	 * 注册项目列表页
 	 */
-	private void registerSwipeRecyclerView() {
+	private void registerSwipeRecyclerView(SwipeRecyclerView swipeRecyclerView) {
 		//采用线性布局
-		viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
+		swipeRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
 		HeaderView.of(projectListHeaderView).addTo(viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList);
 		//项目列表适配器,这里面有项目卡片的布局
 		projectListRecyclerViewAdapter = new ProjectRecyclerViewAdapter(projectList, (MasterActivity)requireActivity());
-		viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList.setAdapter(projectListRecyclerViewAdapter);
+		swipeRecyclerView.setAdapter(projectListRecyclerViewAdapter);
 	}
 
 	/**

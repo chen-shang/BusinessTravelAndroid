@@ -65,7 +65,8 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 	@Override
 	public BillItemRecyclerViewAdapterViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
 		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bill_item, parent, false);
-		return new BillItemRecyclerViewAdapterViewHolder(view) {};
+		return new BillItemRecyclerViewAdapterViewHolder(view) {
+		};
 	}
 
 	@Override
@@ -160,7 +161,7 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 	}
 
 	@SuppressLint("NonConstantResourceId")
-	class BillItemRecyclerViewAdapterViewHolder extends ViewHolder {
+	static class BillItemRecyclerViewAdapterViewHolder extends ViewHolder {
 
 		@BindView(R.id.UI_BillFragment_BillItemAdapter_Icon)
 		public ImageView iconImageView;
