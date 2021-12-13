@@ -38,6 +38,7 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 	private ProjectRecyclerViewAdapter projectListRecyclerViewAdapter;
 
 	private ProjectService projectService;
+	private View projectListHeaderView;
 	/**
 	 * 列表为空时候显示的内容,用headView实现该效果
 	 */
@@ -47,6 +48,8 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 	protected void inject() {
 		super.inject();
 		projectService = new ProjectService(requireActivity());
+
+		projectListHeaderView = HeaderView.newProjectHeaderView(getLayoutInflater());
 		headView = HeaderView.newEmptyHeaderView(getLayoutInflater());
 	}
 
@@ -85,6 +88,7 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 	private void registerSwipeRecyclerView() {
 		//采用线性布局
 		viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
+		HeaderView.of(projectListHeaderView).addTo(viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList);
 		//项目列表适配器,这里面有项目卡片的布局
 		projectListRecyclerViewAdapter = new ProjectRecyclerViewAdapter(projectList, (MasterActivity)requireActivity());
 		viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList.setAdapter(projectListRecyclerViewAdapter);

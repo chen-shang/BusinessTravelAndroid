@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,13 +37,15 @@ import lombok.Setter;
  */
 public class BillFragment extends BaseFragment<FragmentBillBinding> {
 
+	/**
+	 * 账单列表数据
+	 */
 	private final List<DateBillInfo> dateBillInfoList = new ArrayList<>();
-	private final List<String> dateList = new ArrayList<>();
+	private View billListHeadView;
 	/**
 	 * 列表为空时候显示的内容,用headView实现该效果
 	 */
-	private View headView;
-	private View headView0;
+	private View billListEmptyHeaderView;
 
 	@Getter
 	private BillRecyclerViewAdapter billRecyclerViewAdapter;
@@ -66,11 +67,9 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		super.inject();
 		projectService = new ProjectService(requireActivity());
 		billService = new BillService(requireActivity());
-		headView = HeaderView.newEmptyHeaderView(getLayoutInflater());
-
-		headView0 = getLayoutInflater().inflate(R.layout.project_info, null, false);
-		headView0.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-
+		
+		billListHeadView = HeaderView.newBillHeaderView(getLayoutInflater());
+		billListEmptyHeaderView = HeaderView.newEmptyHeaderView(getLayoutInflater());
 	}
 
 	@Override
@@ -90,7 +89,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		//线性布局
 		swipeRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
 		billRecyclerViewAdapter = new BillRecyclerViewAdapter(dateBillInfoList, (MasterActivity)requireActivity());
-		HeaderView.of(headView0).addTo(swipeRecyclerView);
+		HeaderView.of(billListHeadView).addTo(swipeRecyclerView);
 		swipeRecyclerView.setAdapter(billRecyclerViewAdapter);
 	}
 
@@ -119,7 +118,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 			viewBinding.UIBillFragmentTextViewIncome.setVisibility(View.INVISIBLE);
 			viewBinding.UIBillFragmentTextViewPay.setVisibility(View.INVISIBLE);
 			//展示空的头部即可
-			HeaderView.of(headView).addTo(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
+			HeaderView.of(billListEmptyHeaderView).addTo(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
 			return;
 		}
 
@@ -136,13 +135,13 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		//查询全部的账单列表
 		List<Bill> billList = billService.queryBillByProjectId(this.selectedProjectId);
 		if (CollectionUtils.isEmpty(billList)) {
-			HeaderView.of(headView).addTo(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
+			HeaderView.of(billListEmptyHeaderView).addTo(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
 			dateBillInfoList.clear();
 			billRecyclerViewAdapter.notifyDataSetChanged();
 			return;
 		}
 
-		HeaderView.of(headView).removeFrom(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
+		HeaderView.of(billListEmptyHeaderView).removeFrom(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
 		List<DateBillInfo> newDateBillInfoList = billList
 				//to stream
 				.stream()
