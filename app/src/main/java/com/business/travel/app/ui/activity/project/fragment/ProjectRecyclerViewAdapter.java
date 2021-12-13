@@ -1,4 +1,4 @@
-package com.business.travel.app.ui.activity.project.gragment;
+package com.business.travel.app.ui.activity.project.fragment;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +24,7 @@ import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.activity.bill.fragment.BillFragment;
 import com.business.travel.app.ui.activity.project.EditProjectActivity;
-import com.business.travel.app.ui.activity.project.gragment.ProjectRecyclerViewAdapter.ProjectAdapterHolder;
+import com.business.travel.app.ui.activity.project.fragment.ProjectRecyclerViewAdapter.ProjectAdapterHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.utils.DateTimeUtil;

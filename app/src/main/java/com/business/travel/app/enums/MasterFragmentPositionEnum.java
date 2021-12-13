@@ -9,7 +9,7 @@ import androidx.annotation.RequiresApi;
 import androidx.viewbinding.ViewBinding;
 import com.business.travel.app.ui.activity.bill.fragment.BillFragment;
 import com.business.travel.app.ui.activity.my.fragment.MyFragment;
-import com.business.travel.app.ui.activity.project.gragment.ProjectFragment;
+import com.business.travel.app.ui.activity.project.fragment.ProjectFragment;
 import com.business.travel.app.ui.base.BaseFragment;
 
 /**

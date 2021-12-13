@@ -1,4 +1,4 @@
-package com.business.travel.app.ui.activity.project.gragment;
+package com.business.travel.app.ui.activity.project.fragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Project;
@@ -57,6 +58,7 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = super.onCreateView(inflater, container, savedInstanceState);
+		BarUtils.setStatusBarLightMode(this.getActivity(), true);
 		//注册项目列表页
 		registerSwipeRecyclerView(viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList);
 		//注册右上角点击事件
