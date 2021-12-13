@@ -24,12 +24,13 @@ public interface ProjectDao extends BaseDao<Project> {
 	@Query("SELECT * FROM project where name=:projectName and isDeleted=1")
 	Project selectByName(String projectName);
 
-	@Query("SELECT * FROM project where isDeleted=1 order by modifyTime desc limit 1")
-	Project selectLatestModify();
-
 	/**
 	 * 查询单条
 	 */
 	@Query("SELECT * FROM project where id=:id and isDeleted=1")
 	Project selectByPrimaryKey(Long id);
+
+	@Query("SELECT * FROM project where isDeleted=1 order by modifyTime desc limit 1")
+	Project selectLatestModify();
+
 }

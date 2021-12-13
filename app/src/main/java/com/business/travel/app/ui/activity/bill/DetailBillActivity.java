@@ -74,7 +74,7 @@ public class DetailBillActivity extends BaseActivity<ActivityDetailBillBinding> 
 		swipeRecyclerView2.setAdapter(memberRecyclerViewAdapter2);
 
 		viewBinding.remark.setOnFocusChangeListener((v, hasFocus) -> {
-			if (hasFocus) {
+			if (!hasFocus) {
 				Bill record = new Bill();
 				record.setRemark(viewBinding.remark.getText().toString());
 				billService.updateBill(selectBillId, record);
