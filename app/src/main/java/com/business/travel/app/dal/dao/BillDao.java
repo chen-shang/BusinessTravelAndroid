@@ -40,7 +40,7 @@ public interface BillDao extends BaseDao<Bill> {
 	Long sumTotalIncomeMoney(Long projectId);
 
 	/**
-	 * 统计项目的总支出
+	 * 统计项目某天的总支出
 	 *
 	 * @param projectId
 	 * @return
@@ -50,7 +50,7 @@ public interface BillDao extends BaseDao<Bill> {
 	Long sumTotalSpendingMoney(Long projectId, Long consumeDate);
 
 	/**
-	 * 统计项目的总收入
+	 * 统计项目某天的总收入
 	 *
 	 * @param projectId
 	 * @return
@@ -59,6 +59,12 @@ public interface BillDao extends BaseDao<Bill> {
 	@Query("SELECT sum(amount) FROM bill where projectId=:projectId and consumptionType='INCOME' and isDeleted=1 and consumeDate=:consumeDate")
 	Long sumTotalIncomeMoney(Long projectId, Long consumeDate);
 
+	/**
+	 * 查询一个项目下所有的账单
+	 *
+	 * @param projectId
+	 * @return
+	 */
 	@Query("SELECT * FROM bill where projectId=:projectId and isDeleted=1")
 	List<Bill> selectByProjectId(Long projectId);
 
@@ -66,7 +72,7 @@ public interface BillDao extends BaseDao<Bill> {
 	void softDeleteByProjectId(Long id);
 
 	@Query("update bill set isDeleted=0 where id=:id and isDeleted!=0")
-	void softDeleteById(Long id);
+	void softDeleteByPrimaryKey(Long id);
 
 	@Query("SELECT * FROM bill where id=:id limit 1")
 	Bill selectByPrimaryKey(Long id);
