@@ -42,7 +42,13 @@ allprojects {
 configurations.all {
     // check for updates every build
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    dependencyManagement {
+        resolutionStrategy {
+            cacheChangingModulesFor 0, 'seconds'
+        }
+    }
 }
+
 
 
 
