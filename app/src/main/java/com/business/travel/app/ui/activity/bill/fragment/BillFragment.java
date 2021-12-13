@@ -116,8 +116,8 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 			//记得清空数据
 			viewBinding.UIBillFragmentTextViewProjectName.setText(null);
 			//viewBinding.UIBillFragmentTextViewDate.setText(null);
-			viewBinding.UIBillFragmentTextViewIncome.setVisibility(View.INVISIBLE);
-			viewBinding.UIBillFragmentTextViewPay.setVisibility(View.INVISIBLE);
+			//viewBinding.UIBillFragmentTextViewIncome.setVisibility(View.INVISIBLE);
+			//viewBinding.UIBillFragmentTextViewPay.setVisibility(View.INVISIBLE);
 			//展示空的头部即可
 			HeaderView.of(billListEmptyHeaderView).addTo(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
 			return;
@@ -165,12 +165,12 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	public void refreshMoneyShow(Long projectId) {
 		//统计一下总收入
 		Long sumTotalIncomeMoney = billService.sumTotalIncomeMoney(projectId);
-		viewBinding.UIBillFragmentTextViewIncome.setVisibility(sumTotalIncomeMoney == null ? View.GONE : View.VISIBLE);
-		Optional.ofNullable(sumTotalIncomeMoney).ifPresent(money -> viewBinding.UIBillFragmentTextViewIncome.setText(String.format("收入:%s", (double)money / 100)));
+		//viewBinding.UIBillFragmentTextViewIncome.setVisibility(sumTotalIncomeMoney == null ? View.GONE : View.VISIBLE);
+		//Optional.ofNullable(sumTotalIncomeMoney).ifPresent(money -> viewBinding.UIBillFragmentTextViewIncome.setText(String.format("收入:%s", (double)money / 100)));
 
 		//统计一下总支出
 		Long sumTotalSpendingMoney = billService.sumTotalSpendingMoney(projectId);
-		viewBinding.UIBillFragmentTextViewPay.setVisibility(sumTotalSpendingMoney == null ? View.GONE : View.VISIBLE);
-		Optional.ofNullable(sumTotalSpendingMoney).ifPresent(money -> viewBinding.UIBillFragmentTextViewPay.setText(String.format("支出:%s", (double)money / 100)));
+		//viewBinding.UIBillFragmentTextViewPay.setVisibility(sumTotalSpendingMoney == null ? View.GONE : View.VISIBLE);
+		//Optional.ofNullable(sumTotalSpendingMoney).ifPresent(money -> viewBinding.UIBillFragmentTextViewPay.setText(String.format("支出:%s", (double)money / 100)));
 	}
 }

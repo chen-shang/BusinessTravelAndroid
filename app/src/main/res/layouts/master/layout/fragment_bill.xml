@@ -1,87 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         tools:context=".ui.activity.bill.fragment.BillFragment">
 
-    <LinearLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:orientation="vertical">
+            android:layout_height="@dimen/top_height"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="@color/white">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
+        <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="@dimen/top_height"
                 android:layout_height="@dimen/top_height"
-                android:background="@color/teal_800">
+                android:src="@drawable/ic_me"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
-            <TextView
-                    android:id="@+id/UI_BillFragment_TextView_ProjectName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:layout_marginStart="24dp"
-                    android:background="@null"
-                    android:textSize="30sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:drawableTintMode="src_over">
-            </TextView>
+        <TextView
+                android:id="@+id/UI_BillFragment_TextView_ProjectName"
+                android:hint="@string/app_name"
+                android:layout_width="wrap_content"
+                android:textSize="20sp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toEndOf="@+id/imageView4">
+        </TextView>
 
-<!--            <TextView-->
-<!--                    android:id="@+id/UI_BillFragment_TextView_Date"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:textColor="@color/white"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    android:layout_marginStart="24dp"-->
-<!--                    app:layout_constraintVertical_bias="0.85">-->
-<!--            </TextView>-->
+        <ImageView
+                android:id="@+id/UI_ProjectFragment_ImageView_Other"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_base_other"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
-            <TextView
-                    android:id="@+id/UI_BillFragment_TextView_Pay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:hint="1234"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.847"
-                    app:layout_constraintStart_toEndOf="@+id/UI_BillFragment_TextView_Income"
-                    android:layout_marginStart="24dp">
-            </TextView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                    android:id="@+id/UI_BillFragment_TextView_Income"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="5432"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.847"
-                    android:textColor="@color/white"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginStart="24dp">
-            </TextView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:orientation="vertical">
-
-            <com.yanzhenjie.recyclerview.SwipeRecyclerView
-                    android:id="@+id/UI_BillFragment_SwipeRecyclerView_BillList"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-        </LinearLayout>
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.yanzhenjie.recyclerview.SwipeRecyclerView
+            android:id="@+id/UI_BillFragment_SwipeRecyclerView_BillList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+</LinearLayout>
