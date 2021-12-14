@@ -1,7 +1,9 @@
 package com.business.travel.app.ui.activity.bill.fragment;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -11,6 +13,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -165,12 +168,42 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	public void refreshMoneyShow(Long projectId) {
 		//统计一下总收入
 		Long sumTotalIncomeMoney = billService.sumTotalIncomeMoney(projectId);
-		//viewBinding.UIBillFragmentTextViewIncome.setVisibility(sumTotalIncomeMoney == null ? View.GONE : View.VISIBLE);
-		//Optional.ofNullable(sumTotalIncomeMoney).ifPresent(money -> viewBinding.UIBillFragmentTextViewIncome.setText(String.format("收入:%s", (double)money / 100)));
+		TextView uIBillFragmentTextViewIncome = billListHeadView.findViewById(R.id.UIBillFragmentTextViewIncome);
+		Optional.ofNullable(sumTotalIncomeMoney).ifPresent(money -> uIBillFragmentTextViewIncome.setText(String.valueOf(money / 100)));
 
 		//统计一下总支出
 		Long sumTotalSpendingMoney = billService.sumTotalSpendingMoney(projectId);
-		//viewBinding.UIBillFragmentTextViewPay.setVisibility(sumTotalSpendingMoney == null ? View.GONE : View.VISIBLE);
-		//Optional.ofNullable(sumTotalSpendingMoney).ifPresent(money -> viewBinding.UIBillFragmentTextViewPay.setText(String.format("支出:%s", (double)money / 100)));
+		TextView UIBillFragmentTextViewPay = billListHeadView.findViewById(R.id.UIBillFragmentTextViewPay);
+		Optional.ofNullable(sumTotalSpendingMoney).ifPresent(money -> UIBillFragmentTextViewPay.setText(String.valueOf(money / 100)));
+
+		TextView startTime = billListHeadView.findViewById(R.id.startTime);
+		TextView endTime = billListHeadView.findViewById(R.id.endTime);
+		Project project = projectService.queryById(projectId);
+		if (project.getStartTime() == null || project.getStartTime() <= 0) {
+			startTime.setText("--");
+		} else {
+			startTime.setText(DateTimeUtil.format(project.getStartTime(), "yyyy-MM-dd"));
+		}
+
+		if (project.getEndTime() == null || project.getEndTime() <= 0) {
+			endTime.setText("--");
+		} else {
+			endTime.setText(DateTimeUtil.format(project.getEndTime(), "yyyy-MM-dd"));
+		}
+
+		TextView durationDay = billListHeadView.findViewById(R.id.durationDay);
+		if (project.getStartTime() == null || project.getStartTime() <= 0) {
+			durationDay.setText("--");
+			return;
+		}
+
+		if (project.getEndTime() == null || project.getEndTime() <= 0) {
+			long l = Duration.between(DateTimeUtil.toLocalDateTime(new Date()), DateTimeUtil.toLocalDateTime(project.getEndTime())).toDays();
+			durationDay.setText(String.valueOf(l));
+		} else {
+			long l = Duration.between(DateTimeUtil.toLocalDateTime(project.getStartTime()), DateTimeUtil.toLocalDateTime(project.getEndTime())).toDays();
+			durationDay.setText(String.valueOf(l));
+		}
+
 	}
 }
