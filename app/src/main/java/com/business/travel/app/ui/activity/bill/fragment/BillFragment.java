@@ -201,7 +201,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 
 		//项目结束时间
 		String endTime = parseTime(project.getEndTime());
-		billListHeaderViewHolder.startTime.setText(endTime);
+		billListHeaderViewHolder.endTime.setText(endTime);
 
 		//项目耗时
 		String duration = genDuration(project.getStartTime(), project.getEndTime());
