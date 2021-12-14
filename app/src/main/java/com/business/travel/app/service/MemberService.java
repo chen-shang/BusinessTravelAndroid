@@ -29,7 +29,7 @@ public class MemberService {
 	 * @return
 	 */
 	public List<ImageIconInfo> queryAllMembersIconInfo() {
-		return convert(memberDao.selectAll());
+		return convert(memberDao.selectByPrimaryKeys());
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class MemberService {
 	}
 
 	public List<ImageIconInfo> queryAll(List<Long> ids) {
-		List<Member> members = memberDao.selectAll(ids);
+		List<Member> members = memberDao.selectByPrimaryKeys(ids);
 		return convert(members);
 	}
 

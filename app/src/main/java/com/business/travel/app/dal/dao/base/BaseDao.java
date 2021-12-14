@@ -31,15 +31,36 @@ public interface BaseDao<T> {
 	@Delete
 	void delete(T record);
 
+	/**
+	 * 批量删除
+	 *
+	 * @param records
+	 */
 	@Delete
 	void batchDelete(List<T> records);
 
+	/**
+	 * 更新
+	 *
+	 * @param record
+	 */
 	@Update
 	void update(T record);
 
+	/**
+	 * 批量更新
+	 *
+	 * @param records
+	 */
 	@Update
 	void batchUpdate(List<T> records);
 
+	/**
+	 * 通用查询
+	 *
+	 * @param query
+	 * @return
+	 */
 	@RawQuery
 	List<T> selectByQuery(SupportSQLiteQuery query);
 }

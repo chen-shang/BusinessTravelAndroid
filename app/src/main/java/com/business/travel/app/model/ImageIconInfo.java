@@ -1,7 +1,6 @@
 package com.business.travel.app.model;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * 图片图标信息
@@ -25,7 +24,7 @@ public class ImageIconInfo {
 	 */
 	private String iconName;
 	/**
-	 * @see com.business.travel.app.enums.ItemTypeEnum
+	 * @see com.business.travel.vo.enums.ItemTypeEnum
 	 */
 	private String itemType;
 	/**

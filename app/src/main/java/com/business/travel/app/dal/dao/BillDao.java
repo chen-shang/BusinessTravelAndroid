@@ -85,12 +85,36 @@ public interface BillDao extends BaseDao<Bill> {
 	@Query("SELECT * FROM bill where projectId=:projectId and isDeleted=1")
 	List<Bill> selectByProjectId(Long projectId);
 
+	/**
+	 * 删除一个项目下所有的账单
+	 *
+	 * @param id
+	 */
 	@Query("update bill set isDeleted=0 where projectId=:id and isDeleted!=0")
 	void softDeleteByProjectId(Long id);
 
+	/**
+	 * 根据主键id删除账单
+	 *
+	 * @param id
+	 */
 	@Query("update bill set isDeleted=0 where id=:id and isDeleted!=0")
 	void softDeleteByPrimaryKey(Long id);
 
+	/**
+	 * 根据主键id查询账单
+	 *
+	 * @param id
+	 * @return
+	 */
 	@Query("SELECT * FROM bill where id=:id limit 1")
 	Bill selectByPrimaryKey(Long id);
+
+	/**
+	 * 统计账单总数
+	 *
+	 * @return
+	 */
+	@Query("SELECT count(*) FROM bill where isDeleted=1")
+	Long count();
 }

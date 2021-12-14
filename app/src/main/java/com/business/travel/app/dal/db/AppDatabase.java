@@ -12,6 +12,7 @@ import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.dal.entity.Consumption;
 import com.business.travel.app.dal.entity.Member;
 import com.business.travel.app.dal.entity.Project;
+import com.business.travel.app.dal.entity.User;
 
 /**
  * @author chenshang
@@ -20,17 +21,15 @@ import com.business.travel.app.dal.entity.Project;
 		Member.class,
 		Bill.class,
 		Consumption.class,
-		Project.class
+		Project.class,
+		User.class
 }, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 	private static AppDatabase INSTANCE;
 
-	//todo DCL
 	public static synchronized AppDatabase getInstance(Context context) {
 		if (INSTANCE == null) {
-			INSTANCE =
-					Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "app.db")
-							//FIXME 后续改成异步,所有用到数据库的地方不能用UI线程
+			INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "app.db")
 							.allowMainThreadQueries()
 							.build();
 		}

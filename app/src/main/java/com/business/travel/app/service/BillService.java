@@ -184,4 +184,13 @@ public class BillService {
 			billDao.update(record);
 		}
 	}
+
+	/**
+	 * 账单总的数量
+	 *
+	 * @return
+	 */
+	public Long countBill() {
+		return billDao.count();
+	}
 }

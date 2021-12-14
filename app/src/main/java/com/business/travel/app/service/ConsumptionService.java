@@ -110,7 +110,7 @@ public class ConsumptionService {
 	}
 
 	public List<ImageIconInfo> queryByIds(List<Long> ids) {
-		return convert(consumptionDao.selectByIds(ids));
+		return convert(consumptionDao.selectByPrimaryKeys(ids));
 	}
 
 	public List<ImageIconInfo> queryAllConsumptionIconInfo(ConsumptionTypeEnum consumptionType) {
