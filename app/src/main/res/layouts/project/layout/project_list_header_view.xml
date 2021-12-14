@@ -10,7 +10,7 @@
     <androidx.cardview.widget.CardView
             android:id="@+id/UI_BillFragment_BillAdapter_CardView"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="@dimen/listHeaderViewHeight"
             android:foreground="?android:attr/selectableItemBackground"
             android:backgroundTint="@color/teal_800"
             app:cardCornerRadius="5dp"
@@ -35,7 +35,8 @@
                         android:orientation="vertical"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent">
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:id="@+id/linearLayout3">
 
                     <LinearLayout
                             android:layout_width="wrap_content"
@@ -84,16 +85,25 @@
                         <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="5个"
+                                android:text="5"
                                 android:textColor="@color/white"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                android:id="@+id/endTime"
+                                android:id="@+id/projectCount"
+                                app:layout_constraintStart_toStartOf="parent"
+                                />
+
+                        <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="个"
+                                android:textColor="@color/white"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 />
                     </LinearLayout>
                 </LinearLayout>
-
 
                 <androidx.cardview.widget.CardView
                         android:layout_width="1dp"
@@ -111,7 +121,8 @@
                         app:layout_constraintStart_toEndOf="@+id/cardView6"
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:layout_marginLeft="10dp"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:id="@+id/linearLayout4">
 
                     <TextView
                             android:layout_width="wrap_content"
@@ -140,6 +151,12 @@
                             tools:layout_editor_absoluteX="189dp"/>
                 </LinearLayout>
 
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_project_background"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -170,7 +187,7 @@
                             />
 
                     <TextView
-                            android:id="@+id/UIBillFragmentTextViewIncome"
+                            android:id="@+id/UIProjectFragmentTextViewPay"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0"
@@ -202,7 +219,7 @@
                             />
 
                     <TextView
-                            android:id="@+id/UIBillFragmentTextViewPay"
+                            android:id="@+id/UIProjectFragmentTextViewIncome"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0"

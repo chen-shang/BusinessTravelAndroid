@@ -134,27 +134,19 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 		projectListRecyclerViewAdapter.notifyDataSetChanged();
 	}
 
-	private void refreshProjectHeader() {
+	public void refreshProjectHeader() {
 		//统计一下总收入
 		Long sumTotalIncomeMoney = Optional.ofNullable(projectService.sumTotalIncomeMoney()).orElse(0L);
-		TextView uIBillFragmentTextViewIncome = listHeaderViewHolder.uIBillFragmentTextViewIncome;
+		TextView uIBillFragmentTextViewIncome = listHeaderViewHolder.projectIncome;
 		uIBillFragmentTextViewIncome.setText(String.valueOf(sumTotalIncomeMoney / 100));
 
 		//统计一下总支出
 		Long sumTotalSpendingMoney = Optional.ofNullable(projectService.sumTotalSpendingMoney()).orElse(0L);
-		TextView UIBillFragmentTextViewPay = listHeaderViewHolder.UIBillFragmentTextViewPay;
+		TextView UIBillFragmentTextViewPay = listHeaderViewHolder.projectPay;
 		UIBillFragmentTextViewPay.setText(String.valueOf(sumTotalSpendingMoney / 100));
 
-		//查询一下项目信息
-		//Project project = projectService.queryById(projectId);
-
-		////项目开始时间
-		//String startTime = parseTime(project.getStartTime());
-		//billListHeaderViewHolder.startTime.setText(startTime);
-
-		//项目结束时间
-		//String endTime = parseTime(project.getEndTime());
-		//billListHeaderViewHolder.endTime.setText(endTime);
+		Long countTotalProjectByYear = projectService.countTotalProjectByYear(null);
+		listHeaderViewHolder.projectCount.setText(String.valueOf(countTotalProjectByYear));
 
 		//项目耗时
 		Long duration = projectService.countTotalTravelDayByYear(null);
@@ -165,16 +157,18 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 }
 
 class ListHeaderViewHolder {
-	TextView uIBillFragmentTextViewIncome;
-	TextView UIBillFragmentTextViewPay;
-	TextView startTime;
+	TextView projectIncome;
+	TextView projectPay;
+	TextView projectCount;
 	TextView endTime;
 	TextView durationDay;
 
 	public static ListHeaderViewHolder init(View listHeadView) {
 		ListHeaderViewHolder holder = new ListHeaderViewHolder();
-		holder.uIBillFragmentTextViewIncome = listHeadView.findViewById(R.id.UIBillFragmentTextViewIncome);
-		holder.UIBillFragmentTextViewPay = listHeadView.findViewById(R.id.UIBillFragmentTextViewPay);
+		holder.projectIncome = listHeadView.findViewById(R.id.UIProjectFragmentTextViewIncome);
+		holder.projectPay = listHeadView.findViewById(R.id.UIProjectFragmentTextViewPay);
+		holder.projectCount = listHeadView.findViewById(R.id.projectCount);
+
 		//holder.startTime = listHeadView.findViewById(R.id.startTime);
 		//holder.endTime = listHeadView.findViewById(R.id.endTime);
 		holder.durationDay = listHeadView.findViewById(R.id.durationDay);

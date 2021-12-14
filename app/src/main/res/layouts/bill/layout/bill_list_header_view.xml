@@ -10,7 +10,7 @@
     <androidx.cardview.widget.CardView
             android:id="@+id/UI_BillFragment_BillAdapter_CardView"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="@dimen/listHeaderViewHeight"
             android:foreground="?android:attr/selectableItemBackground"
             android:backgroundTint="@color/teal_800"
             app:cardCornerRadius="5dp"

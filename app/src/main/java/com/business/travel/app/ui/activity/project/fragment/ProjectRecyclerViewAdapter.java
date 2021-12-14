@@ -152,6 +152,7 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 		if (CollectionUtils.isEmpty(dataList)) {
 			projectFragment.refreshProjectList();
 		}
+		projectFragment.refreshProjectHeader();
 	}
 
 	private void goToBillFragment(Project project) {

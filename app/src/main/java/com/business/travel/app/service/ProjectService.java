@@ -20,7 +20,6 @@ import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.JacksonUtil;
 import com.business.travel.vo.enums.DeleteEnum;
 import com.google.common.base.Preconditions;
-import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -51,6 +50,7 @@ public class ProjectService {
 		Project record = projectDao.selectByName(name);
 		Preconditions.checkArgument(record == null, "项目已存在");
 
+		project.setStartTime(DateTimeUtil.timestamp());
 		project.setCreateTime(DateTimeUtil.timestamp());
 		project.setModifyTime(DateTimeUtil.timestamp());
 		projectDao.insert(project);
@@ -226,7 +226,7 @@ public class ProjectService {
 		if (CollectionUtils.isEmpty(projects)) {
 			return 0L;
 		}
-		
+
 		if (projects.size() == 1) {
 			Project project = projects.get(0);
 			Pair<Long, Long> firstProjectTimePeriod = convertTimeBucket(project);
@@ -245,7 +245,7 @@ public class ProjectService {
 		        //过滤掉开始时间为空的
 		        .filter(item -> Objects.nonNull(item.getStartTime()))
 		        //过滤掉结束时间为空的
-		        .filter(item -> Objects.nonNull(item.getEndTime()))
+		        //.filter(item -> Objects.nonNull(item.getEndTime()))
 		        //先按照开始时间排序,开始时间非空
 		        .sorted(Comparator.comparing(Project::getStartTime))
 		        //转换成时间
@@ -295,11 +295,5 @@ public class ProjectService {
 			endTime = DateTimeUtil.timestamp();
 		}
 		return Pair.of(startTime, endTime);
-	}
-
-	@Data
-	static class TimeBucket {
-		private Long start;
-		private Long end;
 	}
 }
