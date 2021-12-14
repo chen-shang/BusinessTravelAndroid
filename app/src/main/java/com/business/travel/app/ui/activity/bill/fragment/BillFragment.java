@@ -59,7 +59,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	/**
 	 * 账单顶部view内的元素
 	 */
-	private BillListHeaderViewHolder billListHeaderViewHolder;
+	private ListHeaderViewHolder billListHeaderViewHolder;
 	/**
 	 * 列表为空时候显示的内容,用headView实现该效果
 	 */
@@ -86,7 +86,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		//注入head view
 		billListHeadView = HeaderView.newBillHeaderView(getLayoutInflater());
 		//初始化head view对应的view
-		billListHeaderViewHolder = BillListHeaderViewHolder.init(billListHeadView);
+		billListHeaderViewHolder = ListHeaderViewHolder.init(billListHeadView);
 
 		billListEmptyHeaderView = HeaderView.newEmptyHeaderView(getLayoutInflater());
 
@@ -227,20 +227,20 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	}
 }
 
-class BillListHeaderViewHolder {
+class ListHeaderViewHolder {
 	TextView uIBillFragmentTextViewIncome;
 	TextView UIBillFragmentTextViewPay;
 	TextView startTime;
 	TextView endTime;
 	TextView durationDay;
 
-	public static BillListHeaderViewHolder init(View billListHeadView) {
-		BillListHeaderViewHolder holder = new BillListHeaderViewHolder();
-		holder.uIBillFragmentTextViewIncome = billListHeadView.findViewById(R.id.UIBillFragmentTextViewIncome);
-		holder.UIBillFragmentTextViewPay = billListHeadView.findViewById(R.id.UIBillFragmentTextViewPay);
-		holder.startTime = billListHeadView.findViewById(R.id.startTime);
-		holder.endTime = billListHeadView.findViewById(R.id.endTime);
-		holder.durationDay = billListHeadView.findViewById(R.id.durationDay);
+	public static ListHeaderViewHolder init(View listHeadView) {
+		ListHeaderViewHolder holder = new ListHeaderViewHolder();
+		holder.uIBillFragmentTextViewIncome = listHeadView.findViewById(R.id.UIBillFragmentTextViewIncome);
+		holder.UIBillFragmentTextViewPay = listHeadView.findViewById(R.id.UIBillFragmentTextViewPay);
+		holder.startTime = listHeadView.findViewById(R.id.startTime);
+		holder.endTime = listHeadView.findViewById(R.id.endTime);
+		holder.durationDay = listHeadView.findViewById(R.id.durationDay);
 		return holder;
 	}
 }

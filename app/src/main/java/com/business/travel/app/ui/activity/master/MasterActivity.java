@@ -9,6 +9,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback;
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.BarUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.databinding.ActivityMasterBinding;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
@@ -44,6 +45,8 @@ public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//因为主界面用的白色背景,因此标题需要反差才行
+		BarUtils.setStatusBarLightMode(this, true);
 		//初始化viewPage控件
 		registerViewPager(viewBinding.UIMasterActivityViewPager2);
 		//初始化navView控件

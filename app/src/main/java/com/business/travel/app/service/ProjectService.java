@@ -168,4 +168,11 @@ public class ProjectService {
 	public List<Project> queryAll() {
 		return projectDao.selectAll();
 	}
+
+	//差旅项目数
+	public Long countProject() {
+		// TODO: 2021/12/14  
+		return 0L;
+	}
+
 }

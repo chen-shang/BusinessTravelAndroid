@@ -9,9 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Project;
@@ -41,6 +41,7 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 
 	private ProjectService projectService;
 	private View projectListHeaderView;
+	private ListHeaderViewHolder listHeaderViewHolder;
 	/**
 	 * 列表为空时候显示的内容,用headView实现该效果
 	 */
@@ -52,13 +53,14 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 		projectService = new ProjectService(requireActivity());
 
 		projectListHeaderView = HeaderView.newProjectHeaderView(getLayoutInflater());
+		listHeaderViewHolder = ListHeaderViewHolder.init(projectListHeaderView);
+		
 		projectListEmptyHeaderView = HeaderView.newEmptyHeaderView(getLayoutInflater());
 	}
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = super.onCreateView(inflater, container, savedInstanceState);
-		BarUtils.setStatusBarLightMode(this.getActivity(), true);
 		//注册项目列表页
 		registerSwipeRecyclerView(viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList);
 		//注册右上角点击事件
@@ -127,5 +129,18 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 		projectList.clear();
 		projectList.addAll(allProjects);
 		projectListRecyclerViewAdapter.notifyDataSetChanged();
+	}
+}
+
+class ListHeaderViewHolder {
+	TextView uIBillFragmentTextViewIncome;
+	TextView UIBillFragmentTextViewPay;
+	TextView startTime;
+	TextView endTime;
+	TextView durationDay;
+
+	public static ListHeaderViewHolder init(View listHeadView) {
+		ListHeaderViewHolder holder = new ListHeaderViewHolder();
+		return holder;
 	}
 }
