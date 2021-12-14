@@ -7,15 +7,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
@@ -94,11 +91,6 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//BarUtils.setStatusBarColor(this, ColorUtils.getColor(R.color.teal_800));
-		Window window = this.getWindow();
-		window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-		//设置状态栏的颜色
-		window.setStatusBarColor(Resources.getSystem().getColor(R.color.teal_800));
 		//注册消费项列表分页、点击事件
 		registerMaterialSearchBar();
 		//注册消费项列表分页、点击事件

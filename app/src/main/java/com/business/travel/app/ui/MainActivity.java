@@ -5,10 +5,7 @@ import java.util.TimerTask;
 
 import android.content.Intent;
 import android.os.Bundle;
-import com.blankj.utilcode.util.BarUtils;
-import com.blankj.utilcode.util.ColorUtils;
 import com.blankj.utilcode.util.LogUtils;
-import com.business.travel.app.R;
 import com.business.travel.app.databinding.ActivityMainBinding;
 import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.service.MemberService;
@@ -33,7 +30,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		BarUtils.setStatusBarColor(this, ColorUtils.getColor(R.color.white));
 	}
 
 	@Override
