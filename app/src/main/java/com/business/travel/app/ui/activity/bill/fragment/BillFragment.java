@@ -3,7 +3,6 @@ package com.business.travel.app.ui.activity.bill.fragment;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -135,9 +134,11 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		if (project == null) {
 			//记得清空数据
 			viewBinding.UIBillFragmentTextViewProjectName.setText(null);
-			//viewBinding.UIBillFragmentTextViewDate.setText(null);
-			//viewBinding.UIBillFragmentTextViewIncome.setVisibility(View.INVISIBLE);
-			//viewBinding.UIBillFragmentTextViewPay.setVisibility(View.INVISIBLE);
+			billListHeaderViewHolder.uIBillFragmentTextViewIncome.setText(null);
+			billListHeaderViewHolder.UIBillFragmentTextViewPay.setText(null);
+			billListHeaderViewHolder.startTime.setText(null);
+			billListHeaderViewHolder.endTime.setText(null);
+			billListHeaderViewHolder.durationDay.setText("0");
 			//展示空的头部即可
 			HeaderView.of(billListEmptyHeaderView).addTo(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
 			return;
@@ -147,10 +148,8 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 
 		//先刷新头部
 		viewBinding.UIBillFragmentTextViewProjectName.setText(project.getName().trim());
-		//viewBinding.UIBillFragmentTextViewDate.setText(project.getProductTime());
-		//刷新项目信息
 
-		//刷新右上角金额
+		//刷新顶部金额
 		refreshMoneyShow(this.selectedProjectId);
 
 		//查询全部的账单列表
@@ -184,54 +183,64 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 
 	public void refreshMoneyShow(Long projectId) {
 		//统计一下总收入
-		Long sumTotalIncomeMoney = billService.sumTotalIncomeMoney(projectId);
+		Long sumTotalIncomeMoney = Optional.ofNullable(billService.sumTotalIncomeMoney(projectId)).orElse(0L);
 		TextView uIBillFragmentTextViewIncome = billListHeaderViewHolder.uIBillFragmentTextViewIncome;
-		Optional.ofNullable(sumTotalIncomeMoney).ifPresent(money -> uIBillFragmentTextViewIncome.setText(String.valueOf(money / 100)));
+		uIBillFragmentTextViewIncome.setText(String.valueOf(sumTotalIncomeMoney / 100));
 
 		//统计一下总支出
-		Long sumTotalSpendingMoney = billService.sumTotalSpendingMoney(projectId);
+		Long sumTotalSpendingMoney = Optional.ofNullable(billService.sumTotalSpendingMoney(projectId)).orElse(0L);
 		TextView UIBillFragmentTextViewPay = billListHeaderViewHolder.UIBillFragmentTextViewPay;
-		Optional.ofNullable(sumTotalSpendingMoney).ifPresent(money -> UIBillFragmentTextViewPay.setText(String.valueOf(money / 100)));
+		UIBillFragmentTextViewPay.setText(String.valueOf(sumTotalSpendingMoney / 100));
 
-		TextView startTime = billListHeadView.findViewById(R.id.startTime);
-		TextView endTime = billListHeadView.findViewById(R.id.endTime);
+		//查询一下项目信息
 		Project project = projectService.queryById(projectId);
-		if (project.getStartTime() == null || project.getStartTime() <= 0) {
-			startTime.setText("--");
-		} else {
-			startTime.setText(DateTimeUtil.format(project.getStartTime(), "yyyy-MM-dd"));
+
+		//项目开始时间
+		String startTime = parseTime(project.getStartTime());
+		billListHeaderViewHolder.startTime.setText(startTime);
+
+		//项目结束时间
+		String endTime = parseTime(project.getEndTime());
+		billListHeaderViewHolder.startTime.setText(endTime);
+
+		//项目耗时
+		String duration = genDuration(project.getStartTime(), project.getEndTime());
+		billListHeaderViewHolder.durationDay.setText(duration);
+	}
+
+	private String genDuration(Long startTime, Long endTime) {
+		if (startTime == null || startTime <= 0) {
+			return "∞";
+		}
+		if (endTime == null || endTime <= 0) {
+			return String.valueOf(Duration.between(DateTimeUtil.toLocalDateTime(startTime), DateTimeUtil.now()).toDays());
+		}
+		return String.valueOf(Duration.between(DateTimeUtil.toLocalDateTime(startTime), DateTimeUtil.toLocalDateTime(endTime)).toDays());
+	}
+
+	private String parseTime(Long startTime) {
+		if (startTime == null || startTime <= 0) {
+			return "--";
 		}
 
-		if (project.getEndTime() == null || project.getEndTime() <= 0) {
-			endTime.setText("--");
-		} else {
-			endTime.setText(DateTimeUtil.format(project.getEndTime(), "yyyy-MM-dd"));
-		}
-
-		TextView durationDay = billListHeadView.findViewById(R.id.durationDay);
-		if (project.getStartTime() == null || project.getStartTime() <= 0) {
-			durationDay.setText("--");
-			return;
-		}
-
-		long l;
-		if (project.getEndTime() == null || project.getEndTime() <= 0) {
-			l = Duration.between(DateTimeUtil.toLocalDateTime(new Date()), DateTimeUtil.toLocalDateTime(project.getEndTime())).toDays();
-		} else {
-			l = Duration.between(DateTimeUtil.toLocalDateTime(project.getStartTime()), DateTimeUtil.toLocalDateTime(project.getEndTime())).toDays();
-		}
-		durationDay.setText(String.valueOf(l));
+		return DateTimeUtil.format(startTime, "yyyy-MM-dd");
 	}
 }
 
 class BillListHeaderViewHolder {
 	TextView uIBillFragmentTextViewIncome;
 	TextView UIBillFragmentTextViewPay;
+	TextView startTime;
+	TextView endTime;
+	TextView durationDay;
 
 	public static BillListHeaderViewHolder init(View billListHeadView) {
-		BillListHeaderViewHolder billListHeaderViewHolder = new BillListHeaderViewHolder();
-		billListHeaderViewHolder.uIBillFragmentTextViewIncome = billListHeadView.findViewById(R.id.UIBillFragmentTextViewIncome);
-		billListHeaderViewHolder.UIBillFragmentTextViewPay = billListHeadView.findViewById(R.id.UIBillFragmentTextViewPay);
-		return billListHeaderViewHolder;
+		BillListHeaderViewHolder holder = new BillListHeaderViewHolder();
+		holder.uIBillFragmentTextViewIncome = billListHeadView.findViewById(R.id.UIBillFragmentTextViewIncome);
+		holder.UIBillFragmentTextViewPay = billListHeadView.findViewById(R.id.UIBillFragmentTextViewPay);
+		holder.startTime = billListHeadView.findViewById(R.id.startTime);
+		holder.endTime = billListHeadView.findViewById(R.id.endTime);
+		holder.durationDay = billListHeadView.findViewById(R.id.durationDay);
+		return holder;
 	}
 }
