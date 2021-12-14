@@ -44,7 +44,7 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 	/**
 	 * 列表为空时候显示的内容,用headView实现该效果
 	 */
-	private View headView;
+	private View projectListEmptyHeaderView;
 
 	@Override
 	protected void inject() {
@@ -52,7 +52,7 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 		projectService = new ProjectService(requireActivity());
 
 		projectListHeaderView = HeaderView.newProjectHeaderView(getLayoutInflater());
-		headView = HeaderView.newEmptyHeaderView(getLayoutInflater());
+		projectListEmptyHeaderView = HeaderView.newEmptyHeaderView(getLayoutInflater());
 	}
 
 	@Override
@@ -107,12 +107,12 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 			//如果没有数据就展示空Header
 			notifyProjectDataClear();
 			//显示空的Header
-			HeaderView.of(headView).addTo(swipeRecyclerView);
+			HeaderView.of(projectListEmptyHeaderView).addTo(swipeRecyclerView);
 			return;
 		}
 
 		//移除空的Header
-		HeaderView.of(headView).removeFrom(swipeRecyclerView);
+		HeaderView.of(projectListEmptyHeaderView).removeFrom(swipeRecyclerView);
 		//通知adapter更新列表
 		notifyProjectListDataChange(projectList);
 	}
