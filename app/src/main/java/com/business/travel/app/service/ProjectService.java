@@ -1,10 +1,16 @@
 package com.business.travel.app.service;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import android.content.Context;
 import androidx.annotation.Nullable;
 import androidx.room.Transaction;
+import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.business.travel.app.dal.dao.BillDao;
 import com.business.travel.app.dal.dao.ProjectDao;
@@ -14,7 +20,10 @@ import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.JacksonUtil;
 import com.business.travel.vo.enums.DeleteEnum;
 import com.google.common.base.Preconditions;
+import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
 /**
  *
@@ -169,10 +178,128 @@ public class ProjectService {
 		return projectDao.selectAll();
 	}
 
-	//差旅项目数
-	public Long countProject() {
-		// TODO: 2021/12/14  
-		return 0L;
+	/**
+	 * 统计所有项目的总收入
+	 */
+	public Long sumTotalIncomeMoney() {
+		Long totalIncomeMoney = billDao.sumTotalIncomeMoney();
+		LogUtils.i("统计所有项目的总收入:" + totalIncomeMoney);
+		return totalIncomeMoney;
 	}
 
+	/**
+	 * 统计所有项目的总支出
+	 */
+	public Long sumTotalSpendingMoney() {
+		Long totalSpendingMoney = billDao.sumTotalSpendingMoney();
+		LogUtils.i("统计所有项目的总支出:" + totalSpendingMoney);
+		return totalSpendingMoney;
+	}
+
+	/**
+	 * 统计指定年份差旅项目数
+	 */
+	public Long countTotalProjectByYear(Integer year) {
+		if (year == null) {
+			return projectDao.count();
+		}
+		long start = DateTimeUtil.timestamp(LocalDate.of(year, 1, 1));
+		long end = DateTimeUtil.timestamp(LocalDate.of(year, 1, 1).plusYears(1));
+		return projectDao.countByTime(start, end);
+	}
+
+	/**
+	 * 统计每年差旅天数
+	 *
+	 * @return
+	 */
+	public Long countTotalTravelDayByYear(Integer year) {
+		List<Project> projects;
+		if (year == null) {
+			projects = projectDao.selectAll();
+		} else {
+			long start = DateTimeUtil.timestamp(LocalDate.of(year, 1, 1));
+			long end = DateTimeUtil.timestamp(LocalDate.of(year, 1, 1).plusYears(1));
+			projects = projectDao.selectByTime(start, end);
+		}
+
+		if (CollectionUtils.isEmpty(projects)) {
+			return 0L;
+		}
+		
+		if (projects.size() == 1) {
+			Project project = projects.get(0);
+			Pair<Long, Long> firstProjectTimePeriod = convertTimeBucket(project);
+			return durationDay(firstProjectTimePeriod);
+		}
+
+		//项目不重复的时间段
+		List<Pair<Long, Long>> timePeriods = genTimePeriods(projects);
+		return sumDurationDay(timePeriods);
+	}
+
+	@NotNull
+	private List<Pair<Long, Long>> genTimePeriods(List<Project> projects) {
+		List<Pair<Long, Long>> timePeriods = new ArrayList<>();
+		projects.stream()
+		        //过滤掉开始时间为空的
+		        .filter(item -> Objects.nonNull(item.getStartTime()))
+		        //过滤掉结束时间为空的
+		        .filter(item -> Objects.nonNull(item.getEndTime()))
+		        //先按照开始时间排序,开始时间非空
+		        .sorted(Comparator.comparing(Project::getStartTime))
+		        //转换成时间
+		        .map(this::convertTimeBucket)
+		        //开始处理重复时间段时间
+		        .reduce((first, second) -> {
+			        Long firstStartTime = first.getLeft();
+			        Long firstEndTime = first.getRight();
+
+			        Long secondStartTime = second.getLeft();
+			        Long secondEndTime = second.getRight();
+			        //第二段的开始时间比第一段的结束时间大
+			        if (secondStartTime > firstEndTime) {
+				        //先把第一段加入结果集合
+				        timePeriods.add(first);
+				        //返回第二段时间作为下一个时间段,因为已经断开了
+				        return second;
+			        }
+
+			        if (secondEndTime <= firstEndTime) {
+				        //返回第一段,因为第一段时间包含第二段时间
+				        return first;
+			        }
+
+			        return Pair.of(firstStartTime, secondEndTime);
+		        }).ifPresent(timePeriods::add);
+		return timePeriods;
+	}
+
+	public Long sumDurationDay(List<Pair<Long, Long>> timePeriods) {
+		return timePeriods.stream().map(this::durationDay).reduce(Long::sum).orElse(0L);
+	}
+
+	public Long durationDay(Pair<Long, Long> timePeriod) {
+		return Duration.between(DateTimeUtil.toLocalDateTime(timePeriod.getLeft()), DateTimeUtil.toLocalDateTime(timePeriod.getRight())).toDays();
+	}
+
+	@NotNull
+	private Pair<Long, Long> convertTimeBucket(Project project) {
+		Long startTime = project.getStartTime();
+		Long endTime = project.getEndTime();
+		if (startTime == null || startTime <= 0) {
+			startTime = DateTimeUtil.timestamp();
+		}
+
+		if (endTime == null || endTime <= 0) {
+			endTime = DateTimeUtil.timestamp();
+		}
+		return Pair.of(startTime, endTime);
+	}
+
+	@Data
+	static class TimeBucket {
+		private Long start;
+		private Long end;
+	}
 }

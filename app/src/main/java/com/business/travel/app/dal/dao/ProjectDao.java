@@ -30,7 +30,39 @@ public interface ProjectDao extends BaseDao<Project> {
 	@Query("SELECT * FROM project where id=:id and isDeleted=1")
 	Project selectByPrimaryKey(Long id);
 
+	/**
+	 * 查询最近访问过的项目
+	 *
+	 * @return
+	 */
 	@Query("SELECT * FROM project where isDeleted=1 order by modifyTime desc limit 1")
 	Project selectLatestModify();
 
+	/**
+	 * 统计项目总数
+	 *
+	 * @return
+	 */
+	@Query("SELECT count(*) FROM project where isDeleted=1")
+	Long count();
+
+	/**
+	 * 按照时间段统计项目数量
+	 *
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	@Query("SELECT count(*) FROM project where isDeleted=1 and :startTime <=startTime and startTime <= :endTime")
+	Long countByTime(Long startTime, Long endTime);
+
+	/**
+	 * 按照时间段查询项目
+	 *
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	@Query("SELECT * FROM project where isDeleted=1 and :startTime <=startTime and startTime <= :endTime")
+	List<Project> selectByTime(Long startTime, Long endTime);
 }

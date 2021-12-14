@@ -30,6 +30,14 @@ public interface BillDao extends BaseDao<Bill> {
 	Long sumTotalSpendingMoney(Long projectId);
 
 	/**
+	 * 统计总收入
+	 *
+	 * @see com.business.travel.vo.enums.ConsumptionTypeEnum
+	 */
+	@Query("SELECT sum(amount) FROM bill where consumptionType='INCOME' and isDeleted=1")
+	Long sumTotalIncomeMoney();
+
+	/**
 	 * 统计项目的总收入
 	 *
 	 * @param projectId
@@ -38,6 +46,15 @@ public interface BillDao extends BaseDao<Bill> {
 	 */
 	@Query("SELECT sum(amount) FROM bill where projectId=:projectId and consumptionType='INCOME' and isDeleted=1")
 	Long sumTotalIncomeMoney(Long projectId);
+
+	/**
+	 * 统计总支出
+	 *
+	 * @return
+	 * @see com.business.travel.vo.enums.ConsumptionTypeEnum
+	 */
+	@Query("SELECT sum(amount) FROM bill where  consumptionType='SPENDING' and isDeleted=1")
+	Long sumTotalSpendingMoney();
 
 	/**
 	 * 统计项目某天的总支出

@@ -2,6 +2,7 @@ package com.business.travel.app.ui.activity.project.fragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -54,7 +55,7 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 
 		projectListHeaderView = HeaderView.newProjectHeaderView(getLayoutInflater());
 		listHeaderViewHolder = ListHeaderViewHolder.init(projectListHeaderView);
-		
+
 		projectListEmptyHeaderView = HeaderView.newEmptyHeaderView(getLayoutInflater());
 	}
 
@@ -73,6 +74,8 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 		super.onResume();
 		// 每次进来的时候,都要刷新一下项目列表
 		refreshProjectList();
+
+		refreshProjectHeader();
 	}
 
 	/**
@@ -130,6 +133,35 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 		projectList.addAll(allProjects);
 		projectListRecyclerViewAdapter.notifyDataSetChanged();
 	}
+
+	private void refreshProjectHeader() {
+		//统计一下总收入
+		Long sumTotalIncomeMoney = Optional.ofNullable(projectService.sumTotalIncomeMoney()).orElse(0L);
+		TextView uIBillFragmentTextViewIncome = listHeaderViewHolder.uIBillFragmentTextViewIncome;
+		uIBillFragmentTextViewIncome.setText(String.valueOf(sumTotalIncomeMoney / 100));
+
+		//统计一下总支出
+		Long sumTotalSpendingMoney = Optional.ofNullable(projectService.sumTotalSpendingMoney()).orElse(0L);
+		TextView UIBillFragmentTextViewPay = listHeaderViewHolder.UIBillFragmentTextViewPay;
+		UIBillFragmentTextViewPay.setText(String.valueOf(sumTotalSpendingMoney / 100));
+
+		//查询一下项目信息
+		//Project project = projectService.queryById(projectId);
+
+		////项目开始时间
+		//String startTime = parseTime(project.getStartTime());
+		//billListHeaderViewHolder.startTime.setText(startTime);
+
+		//项目结束时间
+		//String endTime = parseTime(project.getEndTime());
+		//billListHeaderViewHolder.endTime.setText(endTime);
+
+		//项目耗时
+		Long duration = projectService.countTotalTravelDayByYear(null);
+		listHeaderViewHolder.durationDay.setText(String.valueOf(duration));
+
+	}
+
 }
 
 class ListHeaderViewHolder {
@@ -141,6 +173,11 @@ class ListHeaderViewHolder {
 
 	public static ListHeaderViewHolder init(View listHeadView) {
 		ListHeaderViewHolder holder = new ListHeaderViewHolder();
+		holder.uIBillFragmentTextViewIncome = listHeadView.findViewById(R.id.UIBillFragmentTextViewIncome);
+		holder.UIBillFragmentTextViewPay = listHeadView.findViewById(R.id.UIBillFragmentTextViewPay);
+		//holder.startTime = listHeadView.findViewById(R.id.startTime);
+		//holder.endTime = listHeadView.findViewById(R.id.endTime);
+		holder.durationDay = listHeadView.findViewById(R.id.durationDay);
 		return holder;
 	}
 }
