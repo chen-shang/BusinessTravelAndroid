@@ -39,27 +39,39 @@ import lombok.Setter;
  * @author chenshang
  */
 public class BillFragment extends BaseFragment<FragmentBillBinding> {
-
 	/**
 	 * 账单列表数据
 	 */
 	private final List<DateBillInfo> dateBillInfoList = new ArrayList<>();
-	private View billListHeadView;
-	/**
-	 * 列表为空时候显示的内容,用headView实现该效果
-	 */
-	private View billListEmptyHeaderView;
-
 	@Getter
 	private BillRecyclerViewAdapter billRecyclerViewAdapter;
-	private ProjectService projectService;
-	private BillService billService;
+
 	/**
 	 * 当前页面选中的项目
 	 */
 	@Setter
 	@Getter
 	private Long selectedProjectId;
+
+	/**
+	 * 账单列表顶部
+	 */
+	private View billListHeadView;
+	/**
+	 * 账单顶部view内的元素
+	 */
+	private BillListHeaderViewHolder billListHeaderViewHolder;
+	/**
+	 * 列表为空时候显示的内容,用headView实现该效果
+	 */
+	private View billListEmptyHeaderView;
+
+	/**
+	 * 引入各种service
+	 */
+	private ProjectService projectService;
+	private BillService billService;
+
 	/**
 	 * 中间的加号
 	 */
@@ -68,10 +80,15 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	@Override
 	protected void inject() {
 		super.inject();
+		//注入service
 		projectService = new ProjectService(requireActivity());
 		billService = new BillService(requireActivity());
 
+		//注入head view
 		billListHeadView = HeaderView.newBillHeaderView(getLayoutInflater());
+		//初始化head view对应的view
+		billListHeaderViewHolder = BillListHeaderViewHolder.init(billListHeadView);
+
 		billListEmptyHeaderView = HeaderView.newEmptyHeaderView(getLayoutInflater());
 
 		//初始化中间的加号
@@ -168,12 +185,12 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	public void refreshMoneyShow(Long projectId) {
 		//统计一下总收入
 		Long sumTotalIncomeMoney = billService.sumTotalIncomeMoney(projectId);
-		TextView uIBillFragmentTextViewIncome = billListHeadView.findViewById(R.id.UIBillFragmentTextViewIncome);
+		TextView uIBillFragmentTextViewIncome = billListHeaderViewHolder.uIBillFragmentTextViewIncome;
 		Optional.ofNullable(sumTotalIncomeMoney).ifPresent(money -> uIBillFragmentTextViewIncome.setText(String.valueOf(money / 100)));
 
 		//统计一下总支出
 		Long sumTotalSpendingMoney = billService.sumTotalSpendingMoney(projectId);
-		TextView UIBillFragmentTextViewPay = billListHeadView.findViewById(R.id.UIBillFragmentTextViewPay);
+		TextView UIBillFragmentTextViewPay = billListHeaderViewHolder.UIBillFragmentTextViewPay;
 		Optional.ofNullable(sumTotalSpendingMoney).ifPresent(money -> UIBillFragmentTextViewPay.setText(String.valueOf(money / 100)));
 
 		TextView startTime = billListHeadView.findViewById(R.id.startTime);
@@ -197,13 +214,24 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 			return;
 		}
 
+		long l;
 		if (project.getEndTime() == null || project.getEndTime() <= 0) {
-			long l = Duration.between(DateTimeUtil.toLocalDateTime(new Date()), DateTimeUtil.toLocalDateTime(project.getEndTime())).toDays();
-			durationDay.setText(String.valueOf(l));
+			l = Duration.between(DateTimeUtil.toLocalDateTime(new Date()), DateTimeUtil.toLocalDateTime(project.getEndTime())).toDays();
 		} else {
-			long l = Duration.between(DateTimeUtil.toLocalDateTime(project.getStartTime()), DateTimeUtil.toLocalDateTime(project.getEndTime())).toDays();
-			durationDay.setText(String.valueOf(l));
+			l = Duration.between(DateTimeUtil.toLocalDateTime(project.getStartTime()), DateTimeUtil.toLocalDateTime(project.getEndTime())).toDays();
 		}
+		durationDay.setText(String.valueOf(l));
+	}
+}
 
+class BillListHeaderViewHolder {
+	TextView uIBillFragmentTextViewIncome;
+	TextView UIBillFragmentTextViewPay;
+
+	public static BillListHeaderViewHolder init(View billListHeadView) {
+		BillListHeaderViewHolder billListHeaderViewHolder = new BillListHeaderViewHolder();
+		billListHeaderViewHolder.uIBillFragmentTextViewIncome = billListHeadView.findViewById(R.id.UIBillFragmentTextViewIncome);
+		billListHeaderViewHolder.UIBillFragmentTextViewPay = billListHeadView.findViewById(R.id.UIBillFragmentTextViewPay);
+		return billListHeaderViewHolder;
 	}
 }
