@@ -17,7 +17,7 @@
             >
 
         <ImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/icon"
                 android:layout_width="@dimen/top_height"
                 android:layout_height="@dimen/top_height"
                 android:src="@drawable/ic_me"
@@ -34,7 +34,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:textColor="@color/black"
-                app:layout_constraintStart_toEndOf="@+id/imageView4"/>
+                app:layout_constraintStart_toEndOf="@+id/icon"/>
 
         <ImageView
                 android:id="@+id/UI_ProjectFragment_ImageView_Other"

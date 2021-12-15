@@ -21,6 +21,7 @@ import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.SplitUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.ItemTypeEnum;
+import com.business.travel.vo.enums.WeekEnum;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 /**
@@ -66,12 +67,12 @@ public class DetailBillActivity extends BaseActivity<ActivityDetailBillBinding> 
 		registerImageButtonBack();
 
 		SwipeRecyclerView swipeRecyclerView = findViewById(R.id.UI_SwipeRecyclerView_Member);
-		swipeRecyclerView.setLayoutManager(new GridLayoutManager(this, 5));
+		swipeRecyclerView.setLayoutManager(new GridLayoutManager(this, 6));
 		memberRecyclerViewAdapter = new ItemIconRecyclerViewAdapter(ItemTypeEnum.MEMBER, memberIconList, this);
 		swipeRecyclerView.setAdapter(memberRecyclerViewAdapter);
 
 		SwipeRecyclerView swipeRecyclerView2 = findViewById(R.id.UI_SwipeRecyclerView_Consuption);
-		swipeRecyclerView2.setLayoutManager(new GridLayoutManager(this, 5));
+		swipeRecyclerView2.setLayoutManager(new GridLayoutManager(this, 6));
 		memberRecyclerViewAdapter2 = new ItemIconRecyclerViewAdapter(ItemTypeEnum.CONSUMPTION, consumptionIconList, this);
 		swipeRecyclerView2.setAdapter(memberRecyclerViewAdapter2);
 	}
@@ -102,7 +103,9 @@ public class DetailBillActivity extends BaseActivity<ActivityDetailBillBinding> 
 
 		viewBinding.ammount.setText(MoneyUtil.toYuanString(bill.getAmount()));
 
-		viewBinding.time.setText(DateTimeUtil.format(bill.getConsumeDate(), "yyyy-MM-dd"));
+		int code = DateTimeUtil.toLocalDateTime(bill.getConsumeDate()).getDayOfWeek().getValue();
+		WeekEnum weekEnum = WeekEnum.ofCode(code);
+		viewBinding.time.setText(DateTimeUtil.format(bill.getConsumeDate(), "yyyy-MM-dd") + " " + weekEnum.getMsg());
 
 		viewBinding.remark.setText(bill.getRemark());
 
@@ -112,9 +115,7 @@ public class DetailBillActivity extends BaseActivity<ActivityDetailBillBinding> 
 
 	private void registerImageButtonBack() {
 		//返回按钮点击后
-		viewBinding.UIDetailBillImageButtonBack.setOnClickListener(v -> {
-			this.finish();
-		});
+		viewBinding.UIDetailBillImageButtonBack.setOnClickListener(v -> this.finish());
 	}
 
 	private void initSelectedBill(long selectBillId) {

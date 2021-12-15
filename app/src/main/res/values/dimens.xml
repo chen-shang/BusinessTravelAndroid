@@ -2,4 +2,5 @@
 <resources>
     <dimen name="top_height">50dp</dimen>
     <dimen name="listHeaderViewHeight">120dp</dimen>
+    <dimen name="topTextSize">20sp</dimen>
 </resources>

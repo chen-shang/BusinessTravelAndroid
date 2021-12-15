@@ -8,34 +8,8 @@
         tools:context=".ui.activity.my.fragment.MyFragment"
         android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/top_height"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:background="@color/white">
-
-        <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="@dimen/top_height"
-                android:layout_height="@dimen/top_height"
-                android:src="@drawable/ic_me"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-        <TextView
-                android:id="@+id/UI_BillFragment_TextView_ProjectName"
-                android:text="@string/title_my"
-                android:layout_width="wrap_content"
-                android:textSize="20sp"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toEndOf="@+id/imageView4">
-        </TextView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!--  顶部自定义标题栏  -->
+    <include layout="@layout/base_top"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
