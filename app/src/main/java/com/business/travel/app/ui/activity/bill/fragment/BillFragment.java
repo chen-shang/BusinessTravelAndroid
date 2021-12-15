@@ -138,7 +138,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 			billListHeaderViewHolder.UIBillFragmentTextViewPay.setText(null);
 			billListHeaderViewHolder.startTime.setText(null);
 			billListHeaderViewHolder.endTime.setText(null);
-			billListHeaderViewHolder.durationDay.setText("0");
+			billListHeaderViewHolder.durationDay.setText(null);
 			//展示空的头部即可
 			HeaderView.of(billListEmptyHeaderView).addTo(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
 			return;
