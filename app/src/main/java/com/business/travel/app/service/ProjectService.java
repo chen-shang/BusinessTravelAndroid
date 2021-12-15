@@ -1,6 +1,5 @@
 package com.business.travel.app.service;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -16,6 +15,7 @@ import com.business.travel.app.dal.dao.BillDao;
 import com.business.travel.app.dal.dao.ProjectDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Project;
+import com.business.travel.app.utils.DurationUtil;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.JacksonUtil;
 import com.business.travel.vo.enums.DeleteEnum;
@@ -229,13 +229,13 @@ public class ProjectService {
 
 		if (projects.size() == 1) {
 			Project project = projects.get(0);
-			Pair<Long, Long> firstProjectTimePeriod = convertTimeBucket(project);
-			return durationDay(firstProjectTimePeriod);
+			Pair<Long, Long> firstProjectTimePeriod = DurationUtil.convertTimePeriod(project);
+			return DurationUtil.durationDay(firstProjectTimePeriod);
 		}
 
 		//项目不重复的时间段
 		List<Pair<Long, Long>> timePeriods = genTimePeriods(projects);
-		return sumDurationDay(timePeriods);
+		return DurationUtil.sumDurationDay(timePeriods);
 	}
 
 	@NotNull
@@ -249,7 +249,7 @@ public class ProjectService {
 		        //先按照开始时间排序,开始时间非空
 		        .sorted(Comparator.comparing(Project::getStartTime))
 		        //转换成时间
-		        .map(this::convertTimeBucket)
+		        .map(DurationUtil::convertTimePeriod)
 		        //开始处理重复时间段时间
 		        .reduce((first, second) -> {
 			        Long firstStartTime = first.getLeft();
@@ -273,27 +273,5 @@ public class ProjectService {
 			        return Pair.of(firstStartTime, secondEndTime);
 		        }).ifPresent(timePeriods::add);
 		return timePeriods;
-	}
-
-	public Long sumDurationDay(List<Pair<Long, Long>> timePeriods) {
-		return timePeriods.stream().map(this::durationDay).reduce(Long::sum).orElse(0L);
-	}
-
-	public Long durationDay(Pair<Long, Long> timePeriod) {
-		return Duration.between(DateTimeUtil.toLocalDateTime(timePeriod.getLeft()), DateTimeUtil.toLocalDateTime(timePeriod.getRight())).toDays();
-	}
-
-	@NotNull
-	private Pair<Long, Long> convertTimeBucket(Project project) {
-		Long startTime = project.getStartTime();
-		Long endTime = project.getEndTime();
-		if (startTime == null || startTime <= 0) {
-			startTime = DateTimeUtil.timestamp();
-		}
-
-		if (endTime == null || endTime <= 0) {
-			endTime = DateTimeUtil.timestamp();
-		}
-		return Pair.of(startTime, endTime);
 	}
 }

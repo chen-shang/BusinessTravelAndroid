@@ -1,6 +1,5 @@
 package com.business.travel.app.ui.activity.bill.fragment;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -27,6 +26,7 @@ import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.utils.AnimalUtil;
+import com.business.travel.app.utils.DurationUtil;
 import com.business.travel.app.utils.HeaderView;
 import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.utils.DateTimeUtil;
@@ -205,25 +205,14 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		billListHeaderViewHolder.endTime.setText(endTime);
 
 		//项目耗时
-		String duration = genDuration(project.getStartTime(), project.getEndTime());
+		String duration = String.valueOf(DurationUtil.durationDay(DurationUtil.convertTimePeriod(project)));
 		billListHeaderViewHolder.durationDay.setText(duration);
-	}
-
-	private String genDuration(Long startTime, Long endTime) {
-		if (startTime == null || startTime <= 0) {
-			return "∞";
-		}
-		if (endTime == null || endTime <= 0) {
-			return String.valueOf(Duration.between(DateTimeUtil.toLocalDateTime(startTime), DateTimeUtil.now()).toDays());
-		}
-		return String.valueOf(Duration.between(DateTimeUtil.toLocalDateTime(startTime), DateTimeUtil.toLocalDateTime(endTime)).toDays());
 	}
 
 	private String parseTime(Long startTime) {
 		if (startTime == null || startTime <= 0) {
 			return "--";
 		}
-
 		return DateTimeUtil.format(startTime, "yyyy-MM-dd");
 	}
 }

@@ -8,12 +8,10 @@
         tools:context=".ui.activity.item.member.EditMemberActivity"
         android:orientation="vertical">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/top_height"
             android:background="@color/teal_800">
-
 
         <ImageButton
                 android:id="@+id/UI_DetailBill_ImageButton_Back"
@@ -46,82 +44,176 @@
             android:padding="10dp"
             android:orientation="vertical">
 
-        <TextView
-                android:id="@+id/consuptionType"
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="消费类型 支出"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:textSize="20sp"
-                />
+                android:orientation="vertical">
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="消费内容"/>
+
+            <com.yanzhenjie.recyclerview.SwipeRecyclerView
+                    android:id="@+id/UI_SwipeRecyclerView_Consuption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
 
         <include layout="@layout/base_line"/>
 
-        <TextView
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="消费内容"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:textSize="20sp"
-                />
-        <!--消费人员 头像 + 列表 -->
-        <com.yanzhenjie.recyclerview.SwipeRecyclerView
-                android:id="@+id/UI_SwipeRecyclerView_Consuption"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@+id/UI_AssociateItem_Button_AddItem"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                android:orientation="vertical">
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="消费人员"/>
+
+            <com.yanzhenjie.recyclerview.SwipeRecyclerView
+                    android:id="@+id/UI_SwipeRecyclerView_Member"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
 
         <include layout="@layout/base_line"/>
 
-        <TextView
+        <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="消费人"
-                android:textSize="20sp"
-                />
-        <!--消费人员 头像 + 列表 -->
-        <com.yanzhenjie.recyclerview.SwipeRecyclerView
-                android:id="@+id/UI_SwipeRecyclerView_Member"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@+id/UI_AssociateItem_Button_AddItem"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                android:layout_height="wrap_content">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_weight="3"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:text="消费类型"/>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:id="@+id/consumerType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:text="消费类型"/>
+            </LinearLayout>
+        </LinearLayout>
 
         <include layout="@layout/base_line"/>
 
-        <TextView
-                android:id="@+id/ammount"
+        <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="金额"
-                android:textSize="20sp"
-                />
+                android:layout_height="wrap_content">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_weight="3"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:text="消费金额"/>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:id="@+id/ammount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:text="299.90"/>
+            </LinearLayout>
+
+        </LinearLayout>
 
         <include layout="@layout/base_line"/>
 
-        <TextView
-                android:id="@+id/time"
+        <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="日期"
-                android:textSize="20sp"
-                />
+                android:layout_height="wrap_content">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_weight="3"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:text="消费日期"/>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:id="@+id/time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:text="xxxxx xxxx"/>
+            </LinearLayout>
+        </LinearLayout>
 
         <include layout="@layout/base_line"/>
 
-        <EditText
-                android:id="@+id/remark"
+        <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="备注"
-                android:textSize="20sp"
-                />
+                android:layout_height="wrap_content">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="left"
+                        android:text="备注"/>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:id="@+id/remark"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:text="xxxxx xxxx"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <include layout="@layout/base_line"/>
     </LinearLayout>
 </LinearLayout>

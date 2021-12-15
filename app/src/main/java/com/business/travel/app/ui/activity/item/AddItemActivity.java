@@ -86,12 +86,10 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 		super.onCreate(savedInstanceState);
 
 		//icon分类和列表
-		SwipeRecyclerView swipeRecyclerView = viewBinding.UIAddItemActivitySwipeRecyclerView;
-		registerSwipeRecyclerView(swipeRecyclerView);
+		registerSwipeRecyclerView(viewBinding.UIAddItemActivitySwipeRecyclerView);
 
 		//返回按钮被点击后
-		ImageButton returnButton = viewBinding.UIAddItemActivityImageButtonReturn;
-		registerReturnButton(returnButton);
+		registerReturnButton(viewBinding.UIAddItemActivityImageButtonReturn);
 
 		//itemTypeEnum 跳过来的是什么类型
 		final String itemType = getIntent().getStringExtra("itemType");

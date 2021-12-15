@@ -15,9 +15,11 @@ import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.service.MemberService;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.ImageLoadUtil;
+import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.app.utils.Try;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.SplitUtil;
+import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.ItemTypeEnum;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
@@ -72,14 +74,6 @@ public class DetailBillActivity extends BaseActivity<ActivityDetailBillBinding> 
 		swipeRecyclerView2.setLayoutManager(new GridLayoutManager(this, 5));
 		memberRecyclerViewAdapter2 = new ItemIconRecyclerViewAdapter(ItemTypeEnum.CONSUMPTION, consumptionIconList, this);
 		swipeRecyclerView2.setAdapter(memberRecyclerViewAdapter2);
-
-		viewBinding.remark.setOnFocusChangeListener((v, hasFocus) -> {
-			if (!hasFocus) {
-				Bill record = new Bill();
-				record.setRemark(viewBinding.remark.getText().toString());
-				billService.updateBill(selectBillId, record);
-			}
-		});
 	}
 
 	@Override
@@ -106,11 +100,14 @@ public class DetailBillActivity extends BaseActivity<ActivityDetailBillBinding> 
 		memberIconList.addAll(imageIconInfos);
 		memberRecyclerViewAdapter.notifyDataSetChanged();
 
-		viewBinding.ammount.setText("金额: " + bill.getAmount());
+		viewBinding.ammount.setText(MoneyUtil.toYuanString(bill.getAmount()));
 
-		viewBinding.time.setText("日期: " + DateTimeUtil.format(bill.getConsumeDate(), "yyyy-MM-dd"));
+		viewBinding.time.setText(DateTimeUtil.format(bill.getConsumeDate(), "yyyy-MM-dd"));
 
 		viewBinding.remark.setText(bill.getRemark());
+
+		String consumptionType = bill.getConsumptionType();
+		viewBinding.consumerType.setText(ConsumptionTypeEnum.valueOf(consumptionType).getMsg());
 	}
 
 	private void registerImageButtonBack() {
