@@ -8,45 +8,14 @@
         tools:context=".ui.activity.project.fragment.ProjectFragment"
         android:orientation="vertical">
     <!--头部绿色区域-->
-    <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/UI_ProjectFragment_ConstraintLayout"
+    <com.business.travel.app.view.TopTitleBar
+            android:id="@+id/topTitleBar"
             android:layout_width="match_parent"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_height="@dimen/top_height"
-            >
-
-        <ImageView
-                android:id="@+id/icon"
-                android:layout_width="@dimen/top_height"
-                android:layout_height="@dimen/top_height"
-                android:src="@drawable/ic_me"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-        <TextView
-                android:id="@+id/UI_ProjectFragment_TextView_Title"
-                android:text="@string/app_name"
-                android:layout_width="wrap_content"
-                android:textSize="20sp"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toEndOf="@+id/icon"/>
-
-        <ImageView
-                android:id="@+id/UI_ProjectFragment_ImageView_Other"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_base_other"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+            android:layout_height="wrap_content"
+            app:top_title_bar_icon="@drawable/ic_me"
+            app:top_title_bar_title="@string/app_name"
+            app:top_title_bar_more="@drawable/ic_base_other"
+            />
 
     <com.yanzhenjie.recyclerview.SwipeRecyclerView
             android:id="@+id/UI_ProjectFragment_SwipeRecyclerView_ProjectList"

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TopTitleBar">
+        <attr name="top_title_bar_icon" format="reference"/>
+        <attr name="top_title_bar_title" format="string"/>
+        <attr name="top_title_bar_more" format="reference"/>
+    </declare-styleable>
+</resources>

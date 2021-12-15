@@ -9,35 +9,13 @@
         tools:context=".ui.activity.bill.fragment.BillFragment">
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!--  顶部自定义标题栏  -->
+    <com.business.travel.app.view.TopTitleBar
+            android:id="@+id/topTitleBar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/top_height"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:background="@color/white">
-
-        <ImageView
-                android:id="@+id/icon"
-                android:layout_width="@dimen/top_height"
-                android:layout_height="@dimen/top_height"
-                android:src="@drawable/ic_me"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-        <TextView
-                android:id="@+id/UI_BillFragment_TextView_ProjectName"
-                android:hint="@string/app_name"
-                android:layout_width="wrap_content"
-                android:textSize="20sp"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toEndOf="@+id/icon">
-        </TextView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+            android:layout_height="wrap_content"
+            app:top_title_bar_icon="@drawable/ic_me"
+            />
 
     <com.yanzhenjie.recyclerview.SwipeRecyclerView
             android:id="@+id/UI_BillFragment_SwipeRecyclerView_BillList"

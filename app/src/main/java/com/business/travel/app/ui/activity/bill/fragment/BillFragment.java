@@ -134,7 +134,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		Project project = Optional.ofNullable(projectId).map(projectService::queryById).orElseGet(() -> projectService.queryLatestModify());
 		if (project == null) {
 			//记得清空数据
-			viewBinding.UIBillFragmentTextViewProjectName.setText(null);
+			viewBinding.topTitleBar.topTitleBarTitle.setText(null);
 			billListHeaderViewHolder.uIBillFragmentTextViewIncome.setText(null);
 			billListHeaderViewHolder.UIBillFragmentTextViewPay.setText(null);
 			billListHeaderViewHolder.startTime.setText(null);
@@ -148,7 +148,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		this.selectedProjectId = project.getId();
 
 		//先刷新头部
-		viewBinding.UIBillFragmentTextViewProjectName.setText(project.getName().trim());
+		viewBinding.topTitleBar.topTitleBarTitle.setText(project.getName());
 
 		//刷新顶部金额
 		refreshMoneyShow(this.selectedProjectId);

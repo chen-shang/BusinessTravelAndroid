@@ -8,7 +8,7 @@
         android:layout_height="wrap_content">
 
     <ImageView
-            android:id="@+id/icon"
+            android:id="@+id/top_title_bar_icon"
             android:layout_width="@dimen/top_height"
             android:layout_height="@dimen/top_height"
             android:src="@drawable/ic_me"
@@ -17,12 +17,21 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
+            android:id="@+id/top_title_bar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title_my"
             android:textSize="@dimen/topTextSize"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/icon"/>
+            app:layout_constraintStart_toEndOf="@+id/top_title_bar_icon"/>
+
+    <ImageView
+            android:id="@+id/top_title_bar_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_base_other"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

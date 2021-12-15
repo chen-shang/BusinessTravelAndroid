@@ -66,7 +66,7 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 		//注册项目列表页
 		registerSwipeRecyclerView(viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList);
 		//注册右上角点击事件
-		registerPopupView(viewBinding.UIProjectFragmentImageViewOther);
+		registerPopupView(viewBinding.topTitleBar.topTitleBarMore);
 		return view;
 	}
 
