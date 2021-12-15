@@ -27,6 +27,7 @@ import com.business.travel.app.ui.activity.project.EditProjectActivity;
 import com.business.travel.app.ui.activity.project.fragment.ProjectRecyclerViewAdapter.ProjectAdapterHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
+import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.utils.DateTimeUtil;
 import com.lxj.xpopup.XPopup.Builder;
 import com.lxj.xpopup.impl.AttachListPopupView;
@@ -81,12 +82,12 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 		//统计一下总收入
 		final Long sumTotalIncomeMoney = billService.sumTotalIncomeMoney(project.getId());
 		holder.incomeTextView.setVisibility(sumTotalIncomeMoney == null ? View.GONE : View.VISIBLE);
-		Optional.ofNullable(sumTotalIncomeMoney).ifPresent(money -> holder.incomeTextView.setText("收入:" + (double)money / 100));
+		Optional.ofNullable(sumTotalIncomeMoney).ifPresent(money -> holder.incomeTextView.setText("收入:" + MoneyUtil.toYuanString(money)));
 
 		//统计一下总支出
 		final Long sumTotalSpendingMoney = billService.sumTotalSpendingMoney(project.getId());
 		holder.payTextView.setVisibility(sumTotalSpendingMoney == null ? View.GONE : View.VISIBLE);
-		Optional.ofNullable(sumTotalSpendingMoney).ifPresent(money -> holder.payTextView.setText("支出:" + (double)money / 100));
+		Optional.ofNullable(sumTotalSpendingMoney).ifPresent(money -> holder.payTextView.setText("支出:" + MoneyUtil.toYuanString(money)));
 
 		holder.projectNameTextView.setText(project.getName());
 

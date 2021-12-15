@@ -22,6 +22,7 @@ import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.activity.project.EditProjectActivity;
 import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.utils.HeaderView;
+import com.business.travel.app.utils.MoneyUtil;
 import com.lxj.xpopup.XPopup.Builder;
 import com.lxj.xpopup.impl.AttachListPopupView;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
@@ -138,12 +139,12 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 		//统计一下总收入
 		Long sumTotalIncomeMoney = Optional.ofNullable(projectService.sumTotalIncomeMoney()).orElse(0L);
 		TextView uIBillFragmentTextViewIncome = listHeaderViewHolder.projectIncome;
-		uIBillFragmentTextViewIncome.setText(String.valueOf(sumTotalIncomeMoney / 100));
+		uIBillFragmentTextViewIncome.setText(MoneyUtil.toYuanString(sumTotalIncomeMoney));
 
 		//统计一下总支出
 		Long sumTotalSpendingMoney = Optional.ofNullable(projectService.sumTotalSpendingMoney()).orElse(0L);
 		TextView UIBillFragmentTextViewPay = listHeaderViewHolder.projectPay;
-		UIBillFragmentTextViewPay.setText(String.valueOf(sumTotalSpendingMoney / 100));
+		UIBillFragmentTextViewPay.setText(MoneyUtil.toYuanString(sumTotalSpendingMoney));
 
 		Long countTotalProjectByYear = projectService.countTotalProjectByYear(null);
 		listHeaderViewHolder.projectCount.setText(String.valueOf(countTotalProjectByYear));

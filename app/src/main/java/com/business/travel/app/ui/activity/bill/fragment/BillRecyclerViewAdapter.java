@@ -23,6 +23,7 @@ import com.business.travel.app.service.BillService;
 import com.business.travel.app.ui.activity.bill.fragment.BillRecyclerViewAdapter.BillRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
+import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.vo.enums.WeekEnum;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
@@ -90,12 +91,12 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 		//统计一下总收入
 		Long sumTotalIncomeMoney = billService.sumTotalIncomeMoney(projectId, date);
 		viewHolder.incomeTextView.setVisibility(sumTotalIncomeMoney == null ? View.GONE : View.VISIBLE);
-		Optional.ofNullable(sumTotalIncomeMoney).ifPresent(money -> viewHolder.incomeTextView.setText(String.format("收入:%s", (double)money / 100)));
+		Optional.ofNullable(sumTotalIncomeMoney).ifPresent(money -> viewHolder.incomeTextView.setText(String.format("收入:%s", MoneyUtil.toYuanString(money))));
 
 		//统计一下总支出
 		Long sumTotalSpendingMoney = billService.sumTotalSpendingMoney(projectId, date);
 		viewHolder.payTextView.setVisibility(sumTotalSpendingMoney == null ? View.GONE : View.VISIBLE);
-		Optional.ofNullable(sumTotalSpendingMoney).ifPresent(money -> viewHolder.payTextView.setText(String.format("支出:%s", (double)money / 100)));
+		Optional.ofNullable(sumTotalSpendingMoney).ifPresent(money -> viewHolder.payTextView.setText(String.format("支出:%s", MoneyUtil.toYuanString(money))));
 	}
 
 	@SuppressLint("NonConstantResourceId")

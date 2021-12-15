@@ -28,6 +28,7 @@ import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.utils.AnimalUtil;
 import com.business.travel.app.utils.HeaderView;
+import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.utils.DateTimeUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
@@ -185,12 +186,12 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		//统计一下总收入
 		Long sumTotalIncomeMoney = Optional.ofNullable(billService.sumTotalIncomeMoney(projectId)).orElse(0L);
 		TextView uIBillFragmentTextViewIncome = billListHeaderViewHolder.uIBillFragmentTextViewIncome;
-		uIBillFragmentTextViewIncome.setText(String.valueOf(sumTotalIncomeMoney / 100));
+		uIBillFragmentTextViewIncome.setText(MoneyUtil.toYuanString(sumTotalIncomeMoney));
 
 		//统计一下总支出
 		Long sumTotalSpendingMoney = Optional.ofNullable(billService.sumTotalSpendingMoney(projectId)).orElse(0L);
 		TextView UIBillFragmentTextViewPay = billListHeaderViewHolder.UIBillFragmentTextViewPay;
-		UIBillFragmentTextViewPay.setText(String.valueOf(sumTotalSpendingMoney / 100));
+		UIBillFragmentTextViewPay.setText(MoneyUtil.toYuanString((sumTotalSpendingMoney)));
 
 		//查询一下项目信息
 		Project project = projectService.queryById(projectId);

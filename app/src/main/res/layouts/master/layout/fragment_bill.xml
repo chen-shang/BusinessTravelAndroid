@@ -36,16 +36,6 @@
                 android:textColor="@color/black"
                 app:layout_constraintStart_toEndOf="@+id/imageView4">
         </TextView>
-
-        <ImageView
-                android:id="@+id/UI_ProjectFragment_ImageView_Other"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_base_other"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
