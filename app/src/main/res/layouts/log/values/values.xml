@@ -3,7 +3,9 @@
 
     <!--  记录版本之间的功能变更,不宜太多,测试专用  -->
     <string-array name="change_log">
-        <item>2.0</item>
-        <item>1. 测试</item>
+        <item>2.1</item>
+        <item>1. 优化新增账单页面布局,精简布局代码</item>
+        <item>2. 修改账单图标文字大小为13dp</item>
+        <item>3. 修改顶部title bar 为自定义空间</item>
     </string-array>
 </resources>

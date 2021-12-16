@@ -284,7 +284,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 				// 设置文字与图片的间距
 				.setTextImgMargin(5)
 				// 设置文字大小
-				.setTextSize(15)
+				.setTextSize(12)
 				// 设置无限循环
 				.setPageLoop(false)
 				// 设置指示器与page的间距 // 设置指示器与底部的间距
