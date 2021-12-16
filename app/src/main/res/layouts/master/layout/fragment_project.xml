@@ -12,7 +12,7 @@
             android:id="@+id/topTitleBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:top_title_bar_icon="@drawable/ic_me"
+            app:top_title_bar_icon="@drawable/ic_launcher_foreground"
             app:top_title_bar_title="@string/app_name"
             app:top_title_bar_more="@drawable/ic_base_other"
             />

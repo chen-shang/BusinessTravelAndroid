@@ -63,7 +63,8 @@ public class ImageLoadUtil {
 				}
 
 				@Override
-				public <T> T onSvgElement(@Nullable @org.jetbrains.annotations.Nullable String id, @NonNull @NotNull T element, @Nullable @org.jetbrains.annotations.Nullable RectF elementBounds, @NonNull @NotNull Canvas canvas, @Nullable @org.jetbrains.annotations.Nullable RectF canvasBounds, @Nullable @org.jetbrains.annotations.Nullable Paint paint) {
+				public <T> T onSvgElement(@Nullable @org.jetbrains.annotations.Nullable String id, @NonNull @NotNull T element, @Nullable @org.jetbrains.annotations.Nullable RectF elementBounds, @NonNull @NotNull Canvas canvas, @Nullable @org.jetbrains.annotations.Nullable RectF canvasBounds,
+				                          @Nullable @org.jetbrains.annotations.Nullable Paint paint) {
 					if (paint != null) {
 						paint.setColor(color);
 						return element;

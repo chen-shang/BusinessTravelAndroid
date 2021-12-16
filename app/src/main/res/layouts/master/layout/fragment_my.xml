@@ -12,7 +12,7 @@
     <com.business.travel.app.view.TopTitleBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:top_title_bar_icon="@drawable/ic_me"
+            app:top_title_bar_icon="@drawable/ic_launcher_foreground"
             app:top_title_bar_title="@string/title_my"
             />
 
