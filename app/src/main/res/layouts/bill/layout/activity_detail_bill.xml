@@ -8,35 +8,15 @@
         tools:context=".ui.activity.item.member.EditMemberActivity"
         android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.business.travel.app.view.TopTitleBar
+            android:id="@+id/topTitleBar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/top_height"
-            android:background="@color/teal_800">
-
-        <ImageButton
-                android:id="@+id/UI_DetailBill_ImageButton_Back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_base_return"
-                android:layout_marginStart="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="账单明细"
-                android:textSize="20sp"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/UI_DetailBill_ImageButton_Back"
-                android:layout_marginStart="12dp"
-                app:layout_constraintVertical_bias="0.509"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="wrap_content"
+            android:background="@drawable/corners_shape_change"
+            app:top_title_bar_icon="@drawable/ic_base_return"
+            app:top_title_bar_title="账单明细"
+            app:top_title_bar_title_color="@color/white"
+            />
 
     <LinearLayout
             android:layout_width="match_parent"

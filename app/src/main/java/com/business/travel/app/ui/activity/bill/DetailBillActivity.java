@@ -63,8 +63,6 @@ public class DetailBillActivity extends BaseActivity<ActivityDetailBillBinding> 
 		long selectBillId = getIntent().getExtras().getLong("selectBillId");
 
 		initSelectedBill(selectBillId);
-		//注册返回按钮操作事件
-		registerImageButtonBack();
 
 		SwipeRecyclerView swipeRecyclerView = findViewById(R.id.UI_SwipeRecyclerView_Member);
 		swipeRecyclerView.setLayoutManager(new GridLayoutManager(this, 6));
@@ -111,11 +109,6 @@ public class DetailBillActivity extends BaseActivity<ActivityDetailBillBinding> 
 
 		String consumptionType = bill.getConsumptionType();
 		viewBinding.consumerType.setText(ConsumptionTypeEnum.valueOf(consumptionType).getMsg());
-	}
-
-	private void registerImageButtonBack() {
-		//返回按钮点击后
-		viewBinding.UIDetailBillImageButtonBack.setOnClickListener(v -> this.finish());
 	}
 
 	private void initSelectedBill(long selectBillId) {

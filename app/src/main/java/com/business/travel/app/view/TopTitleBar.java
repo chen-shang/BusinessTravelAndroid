@@ -4,12 +4,15 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import com.blankj.utilcode.util.ActivityUtils;
 import com.business.travel.app.R;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -37,6 +40,11 @@ public class TopTitleBar extends ConstraintLayout {
 		} else {
 			topTitleBarIcon.setVisibility(VISIBLE);
 			topTitleBarIcon.setImageDrawable(drawableIcon);
+
+			String iconPath = typedArray.getString(R.styleable.TopTitleBar_top_title_bar_icon);
+			if ("res/drawable/ic_base_return.xml".equals(iconPath)) {
+				topTitleBarIcon.setOnClickListener(v -> ActivityUtils.getTopActivity().finish());
+			}
 		}
 
 		//中间文字
@@ -48,6 +56,13 @@ public class TopTitleBar extends ConstraintLayout {
 
 		int color = typedArray.getColor(R.styleable.TopTitleBar_top_title_bar_title_color, topTitleBarTitle.getCurrentTextColor());
 		topTitleBarTitle.setTextColor(color);
+
+		String gravity = typedArray.getString(R.styleable.TopTitleBar_top_title_bar_title_gravity);
+		if ("1".equals(gravity)) {
+			RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+			topTitleBarTitle.setLayoutParams(layoutParams);
+			topTitleBarTitle.setGravity(Gravity.CENTER);
+		}
 
 		//右侧图标
 		topTitleBarMore = inflate.findViewById(R.id.top_title_bar_more);
