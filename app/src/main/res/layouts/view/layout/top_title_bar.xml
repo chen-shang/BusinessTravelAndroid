@@ -5,12 +5,12 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="@dimen/top_height">
 
     <ImageView
             android:id="@+id/top_title_bar_icon"
-            android:layout_width="@dimen/top_height"
-            android:layout_height="@dimen/top_height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/ic_me"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -24,7 +24,8 @@
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/top_title_bar_icon"/>
+            app:layout_constraintStart_toEndOf="@+id/top_title_bar_icon"
+            android:layout_marginStart="5dp"/>
 
     <ImageView
             android:id="@+id/top_title_bar_more"

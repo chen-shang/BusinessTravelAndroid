@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -42,6 +43,9 @@ public class TopTitleBar extends ConstraintLayout {
 		if (StringUtils.isNotBlank(title)) {
 			topTitleBarTitle.setText(title);
 		}
+
+		int color = typedArray.getColor(R.styleable.TopTitleBar_top_title_bar_title_color, topTitleBarTitle.getCurrentTextColor());
+		topTitleBarTitle.setTextColor(color);
 
 		topTitleBarMore = inflate.findViewById(R.id.top_title_bar_more);
 		Drawable drawableMore = typedArray.getDrawable(R.styleable.TopTitleBar_top_title_bar_more);

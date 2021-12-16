@@ -141,7 +141,7 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 	 */
 	private void registerEditConsumptionActivityImageButtonBack() {
 		//返回按钮点击后
-		viewBinding.UIEditAssociateActivityImageButtonBack.setOnClickListener(v -> this.finish());
+		viewBinding.topTitleBar.topTitleBarIcon.setOnClickListener(v -> this.finish());
 	}
 
 	/**
