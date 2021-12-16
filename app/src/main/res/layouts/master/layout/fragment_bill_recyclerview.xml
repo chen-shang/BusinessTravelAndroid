@@ -20,9 +20,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingTop="20dp"
-                android:paddingLeft="20dp"
+                android:paddingStart="20dp"
                 android:paddingBottom="20dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                tools:ignore="RtlSymmetry">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -67,19 +68,17 @@
                         android:layout_marginEnd="20dp"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
             <!--横线-->
-            <View
+            <include
+                    layout="@layout/base_line"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="@color/gray"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"/>
 
             <com.yanzhenjie.recyclerview.SwipeRecyclerView
                     android:id="@+id/UI_BillFragment_BillAdapter_SwipeRecyclerView_BillItem"
                     android:layout_width="match_parent"
-                    android:layout_marginEnd="20dp"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="20dp"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>

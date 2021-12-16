@@ -11,11 +11,12 @@
 
     <androidx.cardview.widget.CardView
             android:id="@+id/card"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            app:cardElevation="5dp"
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
-            app:cardElevation="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="36dp">
+            >
 
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -23,8 +24,8 @@
 
             <ImageView
                     android:id="@+id/UI_BillFragment_BillItemAdapter_Icon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:src="@drawable/ic_base_placeholder"
                     android:background="@drawable/corners_shape_unselect"
                     app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +43,6 @@
                     android:maxLines="1"
                     android:maxWidth="250dp"
                     android:ellipsize="end"
-                    app:layout_constraintVertical_bias="0.47"
                     >
             </TextView>
 

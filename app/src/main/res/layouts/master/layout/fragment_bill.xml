@@ -8,7 +8,6 @@
         android:orientation="vertical"
         tools:context=".ui.activity.bill.fragment.BillFragment">
 
-
     <!--  顶部自定义标题栏  -->
     <com.business.travel.app.view.TopTitleBar
             android:id="@+id/topTitleBar"
