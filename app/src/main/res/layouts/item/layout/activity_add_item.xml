@@ -8,55 +8,17 @@
         tools:context=".ui.activity.item.AddItemActivity"
         android:orientation="vertical">
 
-    <LinearLayout
+    <com.business.travel.app.view.TopTitleBar
+            android:id="@+id/topTitleBar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/top_height"
+            android:layout_height="wrap_content"
             android:background="@color/teal_800"
-            android:orientation="vertical">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-
-            <ImageButton
-                    android:id="@+id/UI_AddItemActivity_ImageButton_Return"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_base_return"
-                    android:layout_marginStart="10dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
-
-            <TextView
-                    android:id="@+id/UI_AddItemActivity_TextView_Header"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/text_add_type"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-
-            <TextView
-                    android:id="@+id/UI_AddItemActivity_TextView_Save"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="完成"
-                    android:clickable="true"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:layout_marginEnd="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
+            app:top_title_bar_icon="@drawable/ic_base_return"
+            app:top_title_bar_title="@string/text_add_type"
+            app:top_title_bar_title_color="@color/white"
+            app:top_title_bar_title_gravity="center"
+            app:top_title_bar_more="@drawable/ic_base_right"
+            />
 
     <androidx.cardview.widget.CardView
             android:layout_width="match_parent"

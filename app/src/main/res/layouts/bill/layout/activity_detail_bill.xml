@@ -12,7 +12,7 @@
             android:id="@+id/topTitleBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/corners_shape_change"
+            android:background="@color/teal_800"
             app:top_title_bar_icon="@drawable/ic_base_return"
             app:top_title_bar_title="账单明细"
             app:top_title_bar_title_color="@color/white"

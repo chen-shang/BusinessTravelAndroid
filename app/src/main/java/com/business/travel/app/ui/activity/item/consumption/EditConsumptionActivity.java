@@ -73,8 +73,6 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 		registerSwipeRecyclerView();
 		//注册收入支出按钮事件
 		registerButton();
-		//注册返回按钮操作事件
-		registerEditConsumptionActivityImageButtonBack();
 		//注册添加按钮操作事件
 		registerConsumptionButtonAddItem();
 
@@ -189,14 +187,6 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 			intent.putExtra("consumptionType", consumptionType.name());
 			startActivity(intent);
 		});
-	}
-
-	/**
-	 * 注册返回按钮操作事件
-	 */
-	private void registerEditConsumptionActivityImageButtonBack() {
-		//返回按钮点击后
-		viewBinding.UIEditConsumptionActivityImageButtonBack.setOnClickListener(v -> this.finish());
 	}
 
 	@Override

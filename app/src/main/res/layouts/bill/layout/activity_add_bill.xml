@@ -6,17 +6,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <!--头部绿色区域-->
-    <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-    <!--            android:id="@+id/UI_AddBillActivity_ConstraintLayout"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="@dimen/top_height"-->
-    <!--            android:background="@color/teal_800"-->
-    <!--            app:layout_constraintTop_toTopOf="parent"-->
-    <!--            android:padding="20dp"-->
-    <!--            app:layout_constraintEnd_toEndOf="parent"-->
-    <!--            app:layout_constraintStart_toStartOf="parent">-->
-    <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
     <!--  编辑搜索框  -->
     <com.mancj.materialsearchbar.MaterialSearchBar

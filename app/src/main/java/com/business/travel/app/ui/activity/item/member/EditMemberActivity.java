@@ -61,10 +61,6 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 		 * 注册列表
 		 */
 		registerSwipeRecyclerView();
-		/**
-		 * 注册返回按钮
-		 */
-		registerEditConsumptionActivityImageButtonBack();
 		//注册添加按钮操作事件
 		registerConsumerItemButtonAddItem();
 	}
@@ -134,14 +130,6 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 		memberIconList.addAll(newLeastMemberIconList);
 		editConsumptionRecyclerViewAdapter.notifyDataSetChanged();
 		checkEmpty();
-	}
-
-	/**
-	 * 注册返回按钮操作事件
-	 */
-	private void registerEditConsumptionActivityImageButtonBack() {
-		//返回按钮点击后
-		viewBinding.topTitleBar.topTitleBarIcon.setOnClickListener(v -> this.finish());
 	}
 
 	/**

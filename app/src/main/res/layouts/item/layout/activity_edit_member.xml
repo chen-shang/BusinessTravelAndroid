@@ -16,6 +16,7 @@
             app:top_title_bar_icon="@drawable/ic_base_return"
             app:top_title_bar_title="@string/text_edit_member"
             app:top_title_bar_title_color="@color/white"
+            app:top_title_bar_title_gravity="center"
             />
 
     <androidx.constraintlayout.widget.ConstraintLayout

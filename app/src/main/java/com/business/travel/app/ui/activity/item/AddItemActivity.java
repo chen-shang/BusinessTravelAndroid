@@ -10,7 +10,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import android.os.Bundle;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -88,9 +87,6 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 		//icon分类和列表
 		registerSwipeRecyclerView(viewBinding.UIAddItemActivitySwipeRecyclerView);
 
-		//返回按钮被点击后
-		registerReturnButton(viewBinding.UIAddItemActivityImageButtonReturn);
-
 		//itemTypeEnum 跳过来的是什么类型
 		final String itemType = getIntent().getStringExtra("itemType");
 		if (StringUtils.isNotBlank(itemType)) {
@@ -98,15 +94,15 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 		}
 
 		//是添加人员还是添加消费项
-		TextView headerText = viewBinding.UIAddItemActivityTextViewHeader;
+		TextView headerText = viewBinding.topTitleBar.topTitleBarTitle;
 		registerHeaderText(headerText);
 
-		TextView saveButton = viewBinding.UIAddItemActivityTextViewSave;
+		ImageView saveButton = viewBinding.topTitleBar.topTitleBarMore;
 		registerSaveButton(saveButton);
 
 	}
 
-	private void registerSaveButton(TextView saveButton) {
+	private void registerSaveButton(ImageView saveButton) {
 		saveButton.setOnClickListener(v -> {
 			if (itemTypeEnum == ItemTypeEnum.CONSUMPTION) {
 				saveConsumption();
@@ -163,10 +159,6 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 			headerText.setText("添加人员");
 		}
 
-	}
-
-	private void registerReturnButton(ImageButton returnButton) {
-		returnButton.setOnClickListener(v -> finish());
 	}
 
 	private void registerSwipeRecyclerView(SwipeRecyclerView swipeRecyclerView) {

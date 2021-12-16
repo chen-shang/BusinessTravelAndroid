@@ -18,33 +18,14 @@
                 android:background="@color/teal_800"
                 android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.business.travel.app.view.TopTitleBar
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                <ImageButton
-                        android:id="@+id/UI_EditConsumptionActivity_ImageButton_Back"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="?android:attr/selectableItemBackgroundBorderless"
-                        android:src="@drawable/ic_base_return"
-                        android:layout_marginStart="10dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"/>
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/text_edit_type"
-                        android:textColor="@color/white"
-                        android:textSize="20sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:layout_height="wrap_content"
+                    app:top_title_bar_icon="@drawable/ic_base_return"
+                    app:top_title_bar_title="设置类别"
+                    app:top_title_bar_title_gravity="center"
+                    app:top_title_bar_title_color="@color/white"
+                    />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
