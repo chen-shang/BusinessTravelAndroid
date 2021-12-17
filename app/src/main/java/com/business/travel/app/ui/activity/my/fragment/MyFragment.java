@@ -13,7 +13,6 @@ import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.activity.log.ChangeLogActivity;
 import com.business.travel.app.ui.base.BaseFragment;
-import com.business.travel.app.ui.test.TestActivity;
 import com.business.travel.app.utils.MoneyUtil;
 
 /**
@@ -34,7 +33,6 @@ public class MyFragment extends BaseFragment<FragmentMyBinding> {
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		final View view = super.onCreateView(inflater, container, savedInstanceState);
-		viewBinding.circleImageView.setOnClickListener(v -> startActivity(new Intent(this.getActivity(), TestActivity.class)));
 		viewBinding.aboutMe.contentBarLeftIcon.setOnClickListener(v -> startActivity(new Intent(this.getActivity(), ChangeLogActivity.class)));
 		return view;
 	}

@@ -4,8 +4,14 @@
     <!--  记录版本之间的功能变更,不宜太多,测试专用  -->
     <string-array name="change_log">
         <item>2.1</item>
+        <item>1. 修改我的页面布局</item>
+        <item>2. 新增关于差旅记账页面布局</item>
+        <item>3. 修改部分配色，顶部渐变</item>
+        <item>4. 抽取公共代码，精简布局</item>
+
+        <item>2.1</item>
         <item>1. 优化新增账单页面布局,精简布局代码</item>
         <item>2. 修改账单图标文字大小为13dp</item>
-        <item>3. 修改顶部title bar 为自定义空间</item>
+        <item>3. 修改顶部title bar 为自定义控件</item>
     </string-array>
 </resources>

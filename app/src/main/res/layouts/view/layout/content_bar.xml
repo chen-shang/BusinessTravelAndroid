@@ -16,6 +16,7 @@
             android:background="?android:attr/selectableItemBackgroundBorderless"
             app:layout_constraintHeight_max="@dimen/top_height"
             app:layout_constraintWidth_max="@dimen/top_height"
+            android:clickable="true"
             android:src="@drawable/ic_launcher_foreground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
