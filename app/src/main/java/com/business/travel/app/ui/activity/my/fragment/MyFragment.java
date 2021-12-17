@@ -35,7 +35,7 @@ public class MyFragment extends BaseFragment<FragmentMyBinding> {
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		final View view = super.onCreateView(inflater, container, savedInstanceState);
 		viewBinding.circleImageView.setOnClickListener(v -> startActivity(new Intent(this.getActivity(), TestActivity.class)));
-		viewBinding.imageView7.setOnClickListener(v -> startActivity(new Intent(this.getActivity(), ChangeLogActivity.class)));
+		viewBinding.aboutMe.contentBarLeftIcon.setOnClickListener(v -> startActivity(new Intent(this.getActivity(), ChangeLogActivity.class)));
 		return view;
 	}
 
