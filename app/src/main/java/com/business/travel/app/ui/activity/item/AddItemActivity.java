@@ -94,10 +94,10 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 		}
 
 		//是添加人员还是添加消费项
-		TextView headerText = viewBinding.topTitleBar.topTitleBarTitle;
+		TextView headerText = viewBinding.topTitleBar.contentBarTitle;
 		registerHeaderText(headerText);
 
-		ImageView saveButton = viewBinding.topTitleBar.topTitleBarMore;
+		ImageView saveButton = viewBinding.topTitleBar.contentBarRightIcon;
 		registerSaveButton(saveButton);
 
 	}

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="TopTitleBar">
-        <attr name="top_title_bar_icon" format="reference"/>
-        <attr name="top_title_bar_title" format="string"/>
-        <attr name="top_title_bar_title_color" format="color"/>
-        <attr name="top_title_bar_title_gravity" format="enum">
+    <declare-styleable name="ContentBar">
+        <attr name="content_bar_left_icon" format="reference"/>
+        <attr name="content_bar_title" format="string"/>
+        <attr name="content_bar_title_color" format="color"/>
+        <attr name="content_bar_title_gravity" format="enum">
             <enum name="center" value="1"/>
             <enum name="left" value="2"/>
         </attr>
-        <attr name="top_title_bar_more" format="reference"/>
+        <attr name="content_bar_right_icon" format="reference"/>
     </declare-styleable>
 </resources>

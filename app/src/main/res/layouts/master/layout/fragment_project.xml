@@ -8,13 +8,13 @@
         tools:context=".ui.activity.project.fragment.ProjectFragment"
         android:orientation="vertical">
     <!--头部绿色区域-->
-    <com.business.travel.app.view.TopTitleBar
+    <com.business.travel.app.view.ContentBar
             android:id="@+id/topTitleBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:top_title_bar_icon="@drawable/ic_launcher_foreground"
-            app:top_title_bar_title="@string/app_name"
-            app:top_title_bar_more="@drawable/ic_base_other"
+            app:content_bar_left_icon="@drawable/ic_launcher_foreground"
+            app:content_bar_title="@string/app_name"
+            app:content_bar_right_icon="@drawable/ic_base_other"
             />
 
     <com.yanzhenjie.recyclerview.SwipeRecyclerView

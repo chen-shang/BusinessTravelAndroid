@@ -8,7 +8,7 @@
         android:layout_height="@dimen/top_height">
 
     <ImageView
-            android:id="@+id/top_title_bar_icon"
+            android:id="@+id/content_bar_left_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxWidth="@dimen/top_height"
@@ -22,18 +22,18 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
-            android:id="@+id/top_title_bar_title"
+            android:id="@+id/content_bar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/topTextSize"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/top_title_bar_icon"
+            app:layout_constraintStart_toEndOf="@+id/content_bar_left_icon"
             android:layout_marginStart="5dp"/>
 
     <ImageView
-            android:id="@+id/top_title_bar_more"
+            android:id="@+id/content_bar_right_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxWidth="@dimen/top_height"

@@ -9,11 +9,11 @@
         android:orientation="vertical">
 
     <!--  顶部自定义标题栏  -->
-    <com.business.travel.app.view.TopTitleBar
+    <com.business.travel.app.view.ContentBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:top_title_bar_icon="@drawable/ic_launcher_foreground"
-            app:top_title_bar_title="@string/title_my"
+            app:content_bar_left_icon="@drawable/ic_launcher_foreground"
+            app:content_bar_title="@string/title_my"
             />
 
     <androidx.constraintlayout.widget.ConstraintLayout
