@@ -43,13 +43,11 @@ public class EditProjectActivity extends BaseActivity<ActivityEditProjectBinding
 		super.onCreate(savedInstanceState);
 		//从别的页面传递过来的项目id
 		initProject();
-		//注册返回按钮点击事件
-		registerImageButtonBack(viewBinding.UIEditProjectActivityImageButtonBack);
 		//注册项目开始结束时间点击事件
 		registerDatePicker(viewBinding.projectEndTime);
 		registerDatePicker(viewBinding.projectStartTime);
 		//注册右上角对号保存按钮点击事件
-		registerSaveButton(viewBinding.UIEditProjectActivityImageButtonSave);
+		registerSaveButton(viewBinding.topTitleBar.contentBarRightIcon);
 	}
 
 	@Override
@@ -105,10 +103,10 @@ public class EditProjectActivity extends BaseActivity<ActivityEditProjectBinding
 		long projectId = getIntent().getLongExtra("projectId", -1L);
 		if (projectId < 0) {
 			selectProjectId = null;
-			viewBinding.title.setText("新增项目");
+			viewBinding.topTitleBar.contentBarTitle.setText("新增项目");
 		} else {
 			selectProjectId = projectId;
-			viewBinding.title.setText("编辑项目");
+			viewBinding.topTitleBar.contentBarTitle.setText("编辑项目");
 		}
 	}
 

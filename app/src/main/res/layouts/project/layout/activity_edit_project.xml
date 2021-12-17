@@ -9,48 +9,18 @@
         android:orientation="vertical">
 
     <!--  header  -->
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <com.business.travel.app.view.ContentBar
+            android:id="@+id/topTitleBar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/top_height"
-            android:background="@color/teal_800"
-            android:padding="10dp">
-
-        <ImageButton
-                android:id="@+id/UI_EditProjectActivity_ImageButton_Back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_base_return"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_add_project"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:textAlignment="center"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/UI_EditProjectActivity_ImageButton_Back"
-                android:id="@+id/title"
-                app:layout_constraintVertical_bias="0.521"
-                android:layout_marginStart="8dp"/>
-
-        <ImageButton
-                android:id="@+id/UI_EditProjectActivity_ImageButton_save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_base_right"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="wrap_content"
+            android:background="@drawable/corners_shape_change"
+            app:content_bar_left_icon_mode="back"
+            app:content_bar_left_icon="@drawable/ic_base_return"
+            app:content_bar_title="@string/text_add_project"
+            app:content_bar_title_color="@color/white"
+            app:content_bar_right_icon="@drawable/ic_base_right"
+            />
 
     <!--body-->
     <androidx.constraintlayout.widget.ConstraintLayout

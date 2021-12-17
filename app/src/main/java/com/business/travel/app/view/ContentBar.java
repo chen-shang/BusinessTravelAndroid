@@ -40,11 +40,10 @@ public class ContentBar extends ConstraintLayout {
 		} else {
 			contentBarLeftIcon.setVisibility(VISIBLE);
 			contentBarLeftIcon.setImageDrawable(drawableIcon);
-
-			String iconPath = typedArray.getString(R.styleable.ContentBar_content_bar_left_icon);
-			if ("res/drawable/ic_base_return.xml".equals(iconPath)) {
-				contentBarLeftIcon.setOnClickListener(v -> ActivityUtils.getTopActivity().finish());
-			}
+		}
+		String mode = typedArray.getString(R.styleable.ContentBar_content_bar_left_icon_mode);
+		if ("1".equals(mode)) {
+			contentBarLeftIcon.setOnClickListener(v -> ActivityUtils.getActivityByContext(context).finish());
 		}
 
 		//中间文字

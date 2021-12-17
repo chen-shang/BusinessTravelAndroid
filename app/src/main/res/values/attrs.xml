@@ -2,6 +2,9 @@
 <resources>
     <declare-styleable name="ContentBar">
         <attr name="content_bar_left_icon" format="reference"/>
+        <attr name="content_bar_left_icon_mode" format="enum">
+            <enum name="back" value="1"/>
+        </attr>
         <attr name="content_bar_title" format="string"/>
         <attr name="content_bar_title_color" format="color"/>
         <attr name="content_bar_title_gravity" format="enum">
