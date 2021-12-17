@@ -6,6 +6,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+    <!--头部绿色区域-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/UI_AddBillActivity_ConstraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/top_height"
+            android:background="@color/red_0"
+            app:layout_constraintTop_toTopOf="parent"
+            android:padding="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!--  编辑搜索框  -->
     <com.mancj.materialsearchbar.MaterialSearchBar
@@ -13,17 +24,18 @@
             style="@style/MaterialSearchBarLight"
             android:ellipsize="end"
             android:lines="1"
+            android:background="@drawable/corners_shape_change"
             app:mt_maxSuggestionsCount="10"
             app:mt_searchIconDrawable="@drawable/ic_base_sort"
             app:mt_backIconDrawable="@drawable/ic_base_right"
-            app:mt_searchBarColor="@color/teal_800"
+            app:mt_searchBarColor="@color/red_0"
             app:mt_textCursorTint="@color/white"
             app:mt_textColor="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/top_height"
+            android:layout_height="wrap_content"
             android:elevation="8dp"
             android:animateLayoutChanges="false"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="@+id/UI_AddBillActivity_ConstraintLayout"/>
 
     <!--  账单图标   -->
     <androidx.cardview.widget.CardView
@@ -37,7 +49,7 @@
             android:padding="5dp"
             android:layout_margin="10dp"
             tools:layout_editor_absoluteX="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/UI_AddBillActivity_SearchBar">
+            app:layout_constraintTop_toBottomOf="@+id/UI_AddBillActivity_ConstraintLayout">
         <!--  下面的项目列表数据   -->
 
         <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
