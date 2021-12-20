@@ -10,6 +10,7 @@
 
     <!--  顶部自定义标题栏  -->
     <com.business.travel.app.view.ContentBar
+            android:id="@+id/topTitleBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:content_bar_left_icon="@drawable/ic_me_top"
