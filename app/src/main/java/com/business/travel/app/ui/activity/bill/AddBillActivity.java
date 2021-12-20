@@ -323,7 +323,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		textView.setText(imageIconInfo.getName());
 
 		int unSelectColor = ContextCompat.getColor(getApplicationContext(), R.color.black_100);
-		int selectColor = ContextCompat.getColor(getApplicationContext(), R.color.teal_800);
+		int selectColor = ContextCompat.getColor(getApplicationContext(), R.color.red_2);
 		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView, imageIconInfo.isSelected() ? selectColor : unSelectColor);
 
 		imageView.setOnClickListener(v -> {
