@@ -136,7 +136,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 			//记得清空数据
 			viewBinding.topTitleBar.contentBarTitle.setText(null);
 			billListHeaderViewHolder.uIBillFragmentTextViewIncome.setText(null);
-			billListHeaderViewHolder.UIBillFragmentTextViewPay.setText(null);
+			billListHeaderViewHolder.uIBillFragmentTextViewPay.setText(null);
 			billListHeaderViewHolder.startTime.setText(null);
 			billListHeaderViewHolder.endTime.setText(null);
 			billListHeaderViewHolder.durationDay.setText(null);
@@ -193,7 +193,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 
 		//统计一下总支出
 		Long sumTotalSpendingMoney = Optional.ofNullable(billService.sumTotalSpendingMoney(projectId)).orElse(0L);
-		TextView UIBillFragmentTextViewPay = billListHeaderViewHolder.UIBillFragmentTextViewPay;
+		TextView UIBillFragmentTextViewPay = billListHeaderViewHolder.uIBillFragmentTextViewPay;
 		UIBillFragmentTextViewPay.setText(MoneyUtil.toYuanString((sumTotalSpendingMoney)));
 
 		//查询一下项目信息
@@ -222,7 +222,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 
 class ListHeaderViewHolder {
 	TextView uIBillFragmentTextViewIncome;
-	TextView UIBillFragmentTextViewPay;
+	TextView uIBillFragmentTextViewPay;
 	TextView startTime;
 	TextView endTime;
 	TextView durationDay;
@@ -230,7 +230,7 @@ class ListHeaderViewHolder {
 	public static ListHeaderViewHolder init(View listHeadView) {
 		ListHeaderViewHolder holder = new ListHeaderViewHolder();
 		holder.uIBillFragmentTextViewIncome = listHeadView.findViewById(R.id.UIBillFragmentTextViewIncome);
-		holder.UIBillFragmentTextViewPay = listHeadView.findViewById(R.id.UIBillFragmentTextViewPay);
+		holder.uIBillFragmentTextViewPay = listHeadView.findViewById(R.id.UIBillFragmentTextViewPay);
 		holder.startTime = listHeadView.findViewById(R.id.startTime);
 		holder.endTime = listHeadView.findViewById(R.id.endTime);
 		holder.durationDay = listHeadView.findViewById(R.id.durationDay);
