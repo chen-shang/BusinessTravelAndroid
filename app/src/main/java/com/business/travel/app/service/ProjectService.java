@@ -50,7 +50,6 @@ public class ProjectService {
 		Project record = projectDao.selectByName(name);
 		Preconditions.checkArgument(record == null, "项目已存在");
 
-		project.setStartTime(DateTimeUtil.timestamp());
 		project.setCreateTime(DateTimeUtil.timestamp());
 		project.setModifyTime(DateTimeUtil.timestamp());
 		projectDao.insert(project);

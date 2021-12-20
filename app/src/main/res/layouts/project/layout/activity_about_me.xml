@@ -53,7 +53,6 @@
                     android:text="版本 1.0.0"
                     android:textColor="@color/gray"
                     />
-
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.cardview.widget.CardView>
 
