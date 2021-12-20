@@ -11,37 +11,39 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
 
     <application
+            android:name=".BootApplication"
             android:allowBackup="true"
             android:fullBackupContent="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:name=".BootApplication"
             android:theme="@style/Theme.Application">
         <activity
-                android:theme="@style/Theme.GreenHeader"
-                android:name=".ui.activity.project.EditProjectActivity"
+                android:name=".ui.activity.my.AboutMeActivity"
                 android:exported="true"/>
         <activity
-                android:theme="@style/Theme.GreenHeader"
-                android:name=".ui.activity.log.ChangeLogActivity"/>
+                android:name=".ui.activity.project.EditProjectActivity"
+                android:exported="true"
+                android:theme="@style/Theme.GreenHeader"/>
+        <activity
+                android:name=".ui.activity.log.ChangeLogActivity"
+                android:theme="@style/Theme.GreenHeader"/>
         <activity android:name=".ui.activity.login.LoginActivity"/>
         <activity
-                android:theme="@style/Theme.GreenHeader"
                 android:name=".ui.activity.bill.DetailBillActivity"
+                android:theme="@style/Theme.GreenHeader"
                 android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity
-                android:theme="@style/Theme.GreenHeader"
-                android:name=".ui.activity.item.member.EditMemberActivity"/>
+                android:name=".ui.activity.item.member.EditMemberActivity"
+                android:theme="@style/Theme.GreenHeader"/>
         <activity
-                android:theme="@style/Theme.GreenHeader"
-                android:name=".ui.activity.item.AddItemActivity"/>
+                android:name=".ui.activity.item.AddItemActivity"
+                android:theme="@style/Theme.GreenHeader"/>
         <activity
-                android:theme="@style/Theme.GreenHeader"
-                android:name=".ui.activity.item.consumption.EditConsumptionActivity"/>
-        <activity
-                android:name=".ui.activity.master.MasterActivity"/>
+                android:name=".ui.activity.item.consumption.EditConsumptionActivity"
+                android:theme="@style/Theme.GreenHeader"/>
+        <activity android:name=".ui.activity.master.MasterActivity"/>
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -50,8 +52,8 @@
             </intent-filter>
         </activity>
         <activity
-                android:theme="@style/Theme.GreenHeader"
                 android:name=".ui.activity.bill.AddBillActivity"
+                android:theme="@style/Theme.GreenHeader"
                 android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity android:name=".ui.test.TestActivity"/>
     </application>
