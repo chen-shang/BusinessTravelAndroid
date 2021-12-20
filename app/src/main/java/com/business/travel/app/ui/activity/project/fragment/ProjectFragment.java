@@ -21,7 +21,7 @@ import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.activity.project.EditProjectActivity;
 import com.business.travel.app.ui.base.BaseFragment;
-import com.business.travel.app.utils.HeaderView;
+import com.business.travel.app.view.HeaderView;
 import com.business.travel.app.utils.MoneyUtil;
 import com.lxj.xpopup.XPopup.Builder;
 import com.lxj.xpopup.impl.AttachListPopupView;

@@ -20,7 +20,7 @@ import com.business.travel.app.ui.activity.item.AddItemActivity;
 import com.business.travel.app.ui.activity.item.EditItemRecyclerViewAdapter;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
-import com.business.travel.app.utils.HeaderView;
+import com.business.travel.app.view.HeaderView;
 import com.business.travel.app.utils.ImageIconUtil;
 import com.business.travel.app.utils.StatusBarUtil;
 import com.business.travel.vo.enums.ItemTypeEnum;

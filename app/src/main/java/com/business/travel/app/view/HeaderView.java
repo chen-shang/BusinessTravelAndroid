@@ -1,4 +1,4 @@
-package com.business.travel.app.utils;
+package com.business.travel.app.view;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -7,11 +7,14 @@ import android.view.ViewGroup.LayoutParams;
 import com.business.travel.app.R;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
+/**
+ *
+ */
 public class HeaderView {
 
 	private final View headView;
 
-	public HeaderView(View headView) {
+	private HeaderView(View headView) {
 		this.headView = headView;
 	}
 

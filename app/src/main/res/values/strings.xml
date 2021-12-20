@@ -17,4 +17,7 @@
     <string name="num_2">2</string>
 
     <string name="text_add_project">添加项目</string>
+
+
+    <string name="no_data">还没有任何数据</string>
 </resources>

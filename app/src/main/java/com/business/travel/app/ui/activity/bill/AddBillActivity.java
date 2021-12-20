@@ -202,7 +202,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	}
 
 	private void registerConsumptionPageView() {
-		registerPageViewCommonProperty(viewBinding.UIAddBillActivityGridViewPagerBillIcon)
+		registerPageViewCommonProperty(viewBinding.GridViewPagerConsumptionIconList)
 				// 设置数据总数量
 				.setDataAllCount(consumptionImageIconList.size())
 				// 设置每页行数 // 设置每页列数
@@ -220,7 +220,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	}
 
 	private void registerMemberPageView() {
-		registerPageViewCommonProperty(viewBinding.UIAddBillActivityGridViewPagerMemberIcon)
+		registerPageViewCommonProperty(viewBinding.GridViewPagerMemberIconList)
 				// 设置数据总数量
 				.setDataAllCount(memberIconList.size())
 				// 设置每页行数 // 设置每页列数
@@ -362,8 +362,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	private void clear() {
 		consumptionImageIconList.forEach(item -> item.setSelected(false));
 		memberIconList.forEach(item -> item.setSelected(false));
-		viewBinding.UIAddBillActivityGridViewPagerBillIcon.setDataAllCount(consumptionImageIconList.size()).show();
-		viewBinding.UIAddBillActivityGridViewPagerMemberIcon.setDataAllCount(memberIconList.size()).show();
+		viewBinding.GridViewPagerConsumptionIconList.setDataAllCount(consumptionImageIconList.size()).show();
+		viewBinding.GridViewPagerMemberIconList.setDataAllCount(memberIconList.size()).show();
 		viewBinding.UIAddBillActivityTextViewAmount.setText(null);
 		viewBinding.UIAddBillActivityEditTextRemark.setText(null);
 	}
@@ -390,7 +390,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 
 		consumptionImageIconList.clear();
 		consumptionImageIconList.addAll(imageIconInfos);
-		viewBinding.UIAddBillActivityGridViewPagerBillIcon.setDataAllCount(consumptionImageIconList.size()).show();
+		viewBinding.GridViewPagerConsumptionIconList.setDataAllCount(consumptionImageIconList.size()).show();
 	}
 
 	private void createBillWithProject(Project project) {
@@ -474,6 +474,6 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		editImageIcon.setName(ItemIconEnum.ItemIconEdit.getName());
 		editImageIcon.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
 		memberIconList.add(editImageIcon);
-		viewBinding.UIAddBillActivityGridViewPagerMemberIcon.setDataAllCount(memberIconList.size()).show();
+		viewBinding.GridViewPagerMemberIconList.setDataAllCount(memberIconList.size()).show();
 	}
 }

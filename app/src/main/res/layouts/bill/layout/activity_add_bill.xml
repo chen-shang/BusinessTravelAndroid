@@ -4,6 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
+        tools:context=".ui.activity.bill.AddBillActivity"
         android:layout_height="match_parent"
         android:orientation="vertical">
     <!--头部绿色区域-->
@@ -12,8 +13,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/top_height"
             android:background="@color/red_2"
-            app:layout_constraintTop_toTopOf="parent"
             android:padding="20dp"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -21,21 +22,22 @@
     <!--  编辑搜索框  -->
     <com.mancj.materialsearchbar.MaterialSearchBar
             android:id="@+id/UI_AddBillActivity_SearchBar"
-            style="@style/MaterialSearchBarLight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:ellipsize="end"
             android:lines="1"
             android:background="@color/red_2"
+            android:animateLayoutChanges="false"
+            android:elevation="8dp"
             app:mt_maxSuggestionsCount="10"
             app:mt_searchIconDrawable="@drawable/ic_base_sort"
             app:mt_backIconDrawable="@drawable/ic_base_right"
             app:mt_searchBarColor="@color/red_2"
             app:mt_textCursorTint="@color/white"
             app:mt_textColor="@color/white"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="8dp"
-            android:animateLayoutChanges="false"
-            app:layout_constraintTop_toTopOf="@+id/UI_AddBillActivity_ConstraintLayout"/>
+            app:layout_constraintTop_toTopOf="@+id/UI_AddBillActivity_ConstraintLayout"
+            style="@style/MaterialSearchBarLight"
+            />
 
     <!--  账单图标   -->
     <androidx.cardview.widget.CardView
@@ -51,9 +53,8 @@
             tools:layout_editor_absoluteX="10dp"
             app:layout_constraintTop_toBottomOf="@+id/UI_AddBillActivity_ConstraintLayout">
         <!--  下面的项目列表数据   -->
-
         <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
-                android:id="@+id/UI_AddBillActivity_GridViewPager_BillIcon"
+                android:id="@+id/GridViewPager_ConsumptionIconList"
                 android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -74,7 +75,7 @@
             app:layout_constraintTop_toBottomOf="@+id/UI_AddBillActivity_CardView_BillIcon">
 
         <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
-                android:id="@+id/UI_AddBillActivity_GridViewPager_MemberIcon"
+                android:id="@+id/GridViewPager_MemberIconList"
                 android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

@@ -5,26 +5,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-    <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_base_empty_box"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="112dp"
-            android:id="@+id/imageView"/>
-
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/no_data"
             android:textColor="@color/gray"
-            android:text="还没有任何数据\n点击下方按钮添加吧!"
             app:layout_constraintEnd_toEndOf="parent"
-            android:textAlignment="center"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.25"
+            app:drawableTopCompat="@drawable/ic_base_empty_box"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

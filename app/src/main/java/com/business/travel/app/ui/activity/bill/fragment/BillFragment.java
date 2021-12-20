@@ -27,8 +27,8 @@ import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.utils.AnimalUtil;
 import com.business.travel.app.utils.DurationUtil;
-import com.business.travel.app.utils.HeaderView;
 import com.business.travel.app.utils.MoneyUtil;
+import com.business.travel.app.view.HeaderView;
 import com.business.travel.utils.DateTimeUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
@@ -99,7 +99,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = super.onCreateView(inflater, container, savedInstanceState);
 		//注册账单列表页
-		registerSwipeRecyclerView(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
+		registerSwipeRecyclerView(viewBinding.RecyclerViewBillList);
 		return view;
 	}
 
@@ -144,7 +144,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 			dateBillInfoList.clear();
 			billRecyclerViewAdapter.notifyDataSetChanged();
 			//展示空的头部即可
-			HeaderView.of(billListEmptyHeaderView).addTo(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
+			HeaderView.of(billListEmptyHeaderView).addTo(viewBinding.RecyclerViewBillList);
 			return;
 		}
 
@@ -159,13 +159,13 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		//查询全部的账单列表
 		List<Bill> billList = billService.queryBillByProjectId(this.selectedProjectId);
 		if (CollectionUtils.isEmpty(billList)) {
-			HeaderView.of(billListEmptyHeaderView).addTo(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
+			HeaderView.of(billListEmptyHeaderView).addTo(viewBinding.RecyclerViewBillList);
 			dateBillInfoList.clear();
 			billRecyclerViewAdapter.notifyDataSetChanged();
 			return;
 		}
 
-		HeaderView.of(billListEmptyHeaderView).removeFrom(viewBinding.UIBillFragmentSwipeRecyclerViewBillList);
+		HeaderView.of(billListEmptyHeaderView).removeFrom(viewBinding.RecyclerViewBillList);
 		List<DateBillInfo> newDateBillInfoList = billList
 				//to stream
 				.stream()

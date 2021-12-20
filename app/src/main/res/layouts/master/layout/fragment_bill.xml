@@ -17,7 +17,7 @@
             />
 
     <com.yanzhenjie.recyclerview.SwipeRecyclerView
-            android:id="@+id/UI_BillFragment_SwipeRecyclerView_BillList"
+            android:id="@+id/RecyclerView_BillList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 </LinearLayout>
