@@ -4,48 +4,50 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
-import android.widget.ImageView;
 import androidx.recyclerview.widget.GridLayoutManager;
-import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.databinding.ActivityDetailBillBinding;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.service.MemberService;
-import com.business.travel.app.ui.base.BaseActivity;
-import com.business.travel.app.utils.ImageLoadUtil;
+import com.business.travel.app.ui.base.ColorStatusBarActivity;
 import com.business.travel.app.utils.MoneyUtil;
-import com.business.travel.app.utils.StatusBarUtil;
 import com.business.travel.app.utils.Try;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.SplitUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.ItemTypeEnum;
 import com.business.travel.vo.enums.WeekEnum;
-import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 /**
  * 账单详情页面
  */
-public class DetailBillActivity extends BaseActivity<ActivityDetailBillBinding> {
+public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBillBinding> {
 
 	/**
 	 * 成员图标
 	 */
 	private final List<ImageIconInfo> memberIconList = new ArrayList<>();
+	/**
+	 * 消费项图标列表
+	 */
 	private final List<ImageIconInfo> consumptionIconList = new ArrayList<>();
 
 	/**
 	 * 成员列表适配器
 	 */
-	private ItemIconRecyclerViewAdapter memberRecyclerViewAdapter;
-	private ItemIconRecyclerViewAdapter memberRecyclerViewAdapter2;
+	private ItemIconRecyclerViewAdapter memberIconRecyclerViewAdapter;
+	/**
+	 * 消费项图标适配器
+	 */
+	private ItemIconRecyclerViewAdapter consumptionIconRecyclerViewAdapter;
 
 	/**
 	 * 当前被选中的账单信息
 	 */
-	private Bill selectedBill;
+	private Long selectBillId;
+
 	//注入service
 	private BillService billService;
 	private MemberService memberService;
@@ -56,52 +58,49 @@ public class DetailBillActivity extends BaseActivity<ActivityDetailBillBinding> 
 		billService = new BillService(this);
 		memberService = new MemberService(this);
 		consumptionService = new ConsumptionService(this);
+
+		selectBillId = getIntent().getExtras().getLong("selectBillId");
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//顶部渐变
-		StatusBarUtil.setStatusBarView(getWindow(), getResources(), R.drawable.corners_shape_change);
-		
-		long selectBillId = getIntent().getExtras().getLong("selectBillId");
 
-		initSelectedBill(selectBillId);
+		viewBinding.UISwipeRecyclerViewMember.setLayoutManager(new GridLayoutManager(this, 6));
+		memberIconRecyclerViewAdapter = new ItemIconRecyclerViewAdapter(ItemTypeEnum.MEMBER, memberIconList, this);
+		viewBinding.UISwipeRecyclerViewMember.setAdapter(memberIconRecyclerViewAdapter);
 
-		SwipeRecyclerView swipeRecyclerView = findViewById(R.id.UI_SwipeRecyclerView_Member);
-		swipeRecyclerView.setLayoutManager(new GridLayoutManager(this, 6));
-		memberRecyclerViewAdapter = new ItemIconRecyclerViewAdapter(ItemTypeEnum.MEMBER, memberIconList, this);
-		swipeRecyclerView.setAdapter(memberRecyclerViewAdapter);
-
-		SwipeRecyclerView swipeRecyclerView2 = findViewById(R.id.UI_SwipeRecyclerView_Consuption);
-		swipeRecyclerView2.setLayoutManager(new GridLayoutManager(this, 6));
-		memberRecyclerViewAdapter2 = new ItemIconRecyclerViewAdapter(ItemTypeEnum.CONSUMPTION, consumptionIconList, this);
-		swipeRecyclerView2.setAdapter(memberRecyclerViewAdapter2);
+		viewBinding.UISwipeRecyclerViewConsuption.setLayoutManager(new GridLayoutManager(this, 6));
+		consumptionIconRecyclerViewAdapter = new ItemIconRecyclerViewAdapter(ItemTypeEnum.CONSUMPTION, consumptionIconList, this);
+		viewBinding.UISwipeRecyclerViewConsuption.setAdapter(consumptionIconRecyclerViewAdapter);
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		Try.of(() -> showBill(selectedBill));
+
+		if (selectBillId <= 0) {
+			return;
+		}
+
+		Try.of(() -> showBill(billService.queryBillById(selectBillId)));
 	}
 
 	private void showBill(Bill bill) {
-		ImageView imageView = findViewById(R.id.UI_ImageView_Icon);
-		ImageLoadUtil.loadImageToView(bill.getIconDownloadUrl(), imageView);
 
 		String consumptionIds = bill.getConsumptionIds();
-		final List<Long> ids = SplitUtil.trimToLongList(consumptionIds);
-		List<ImageIconInfo> consumptions = consumptionService.queryByIds(ids);
+		List<Long> consumptionIdList = SplitUtil.trimToLongList(consumptionIds);
+		List<ImageIconInfo> consumptions = consumptionService.queryByIds(consumptionIdList);
 		consumptionIconList.clear();
 		consumptionIconList.addAll(consumptions);
-		memberRecyclerViewAdapter2.notifyDataSetChanged();
+		consumptionIconRecyclerViewAdapter.notifyDataSetChanged();
 
 		String memberIds = bill.getMemberIds();
-		List<Long> longs = SplitUtil.trimToLongList(memberIds);
-		final List<ImageIconInfo> imageIconInfos = memberService.queryAll(longs);
+		List<Long> memberIdList = SplitUtil.trimToLongList(memberIds);
+		List<ImageIconInfo> imageIconInfos = memberService.queryAll(memberIdList);
 		memberIconList.clear();
 		memberIconList.addAll(imageIconInfos);
-		memberRecyclerViewAdapter.notifyDataSetChanged();
+		memberIconRecyclerViewAdapter.notifyDataSetChanged();
 
 		viewBinding.ammount.setText(MoneyUtil.toYuanString(bill.getAmount()));
 
@@ -115,10 +114,4 @@ public class DetailBillActivity extends BaseActivity<ActivityDetailBillBinding> 
 		viewBinding.consumerType.setText(ConsumptionTypeEnum.valueOf(consumptionType).getMsg());
 	}
 
-	private void initSelectedBill(long selectBillId) {
-		if (selectBillId <= 0) {
-			return;
-		}
-		selectedBill = billService.queryBillById(selectBillId);
-	}
 }

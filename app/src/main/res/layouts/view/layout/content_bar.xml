@@ -41,6 +41,8 @@
             android:maxHeight="@dimen/top_height"
             app:layout_constraintHeight_max="@dimen/top_height"
             app:layout_constraintWidth_max="@dimen/top_height"
+            android:clickable="true"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_base_other"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -149,17 +149,19 @@
                 android:foreground="?android:attr/selectableItemBackground"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="5dp"
-                android:layout_margin="10dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 app:layout_constraintTop_toBottomOf="@+id/cardView">
 
-                <com.business.travel.app.view.ContentBar
-                        android:id="@+id/aboutMe"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:content_bar_left_icon="@drawable/ic_me_about"
-                        app:content_bar_title="关于差旅记账"
-                        app:content_bar_title_color="@color/black"
-                        app:content_bar_right_icon="@drawable/ic_base_right_arrow"/>
+            <com.business.travel.app.view.ContentBar
+                    android:id="@+id/aboutMe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:content_bar_left_icon="@drawable/ic_me_about"
+                    app:content_bar_title="关于差旅记账"
+                    app:content_bar_title_color="@color/black"
+                    app:content_bar_right_icon="@drawable/ic_base_right_arrow"/>
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

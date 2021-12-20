@@ -22,5 +22,6 @@
     <WebView
             android:id="@+id/webContent"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:background="@drawable/ic_base_empty_box"/>
 </LinearLayout>

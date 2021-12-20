@@ -173,6 +173,8 @@ dependencies {
     //文本框
     implementation 'org.sufficientlysecure:html-textview:4.0'
     implementation 'com.github.lygttpod:SuperTextView:2.4.6'
+
+    implementation 'com.github.wangfeng19930909:DragFloatingActionButton:1.0.1'
 }
 
 //编译的时候织入代码

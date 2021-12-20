@@ -2,7 +2,7 @@ package com.business.travel.app.enums;
 
 public enum WebTextTypeEnum {
 	USER_AGREEMENT("用户协议", "https://gitee.com/chen-shang/business-travel-resource/raw/master/about/user_agreement.txt"),
-	PRIVACY_POLICY("隐私政策", ""),
+	PRIVACY_POLICY("隐私政策", "https://gitee.com/chen-shang/business-travel-resource/raw/master/about/privacy_policy.txt"),
 	;
 	private final String msg;
 	private final String url;

@@ -11,9 +11,17 @@ public class AboutMeActivity extends ColorStatusBarActivity<ActivityAboutMeBindi
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//注册用户协议点击事件
 		viewBinding.aboutMeUserAgreement.setOnClickListener(v -> {
 			Intent intent = new Intent(this, WebTextActivity.class);
 			intent.putExtra("WebTextType", WebTextTypeEnum.USER_AGREEMENT.name());
+			startActivity(intent);
+		});
+
+		//注册隐私政策
+		viewBinding.aboutMePolicy.setOnClickListener(v -> {
+			Intent intent = new Intent(this, WebTextActivity.class);
+			intent.putExtra("WebTextType", WebTextTypeEnum.PRIVACY_POLICY.name());
 			startActivity(intent);
 		});
 	}

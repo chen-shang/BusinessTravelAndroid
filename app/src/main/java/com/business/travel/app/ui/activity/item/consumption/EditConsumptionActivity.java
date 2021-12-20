@@ -116,11 +116,11 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 	private void highlightIncome() {
 		GradientDrawable gradientDrawableExpense = (GradientDrawable)viewBinding.UIConsumerItemTextViewExpense.getBackground();
 		GradientDrawable gradientDrawableIncome = (GradientDrawable)viewBinding.UIConsumerItemTextViewIncome.getBackground();
-		viewBinding.UIConsumerItemTextViewIncome.setTextColor(ColorUtils.getColor(R.color.teal_800));
+		viewBinding.UIConsumerItemTextViewIncome.setTextColor(ColorUtils.getColor(R.color.red_2));
 		gradientDrawableIncome.setColor(ColorUtils.getColor(R.color.white));
 
 		viewBinding.UIConsumerItemTextViewExpense.setTextColor(ColorUtils.getColor(R.color.white));
-		gradientDrawableExpense.setColor(ColorUtils.getColor(R.color.teal_800));
+		gradientDrawableExpense.setColor(ColorUtils.getColor(R.color.red_2));
 	}
 
 	/**
@@ -129,11 +129,11 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 	private void highlightSpending() {
 		GradientDrawable gradientDrawableExpense = (GradientDrawable)viewBinding.UIConsumerItemTextViewExpense.getBackground();
 		GradientDrawable gradientDrawableIncome = (GradientDrawable)viewBinding.UIConsumerItemTextViewIncome.getBackground();
-		viewBinding.UIConsumerItemTextViewExpense.setTextColor(ColorUtils.getColor(R.color.teal_800));
+		viewBinding.UIConsumerItemTextViewExpense.setTextColor(ColorUtils.getColor(R.color.red_2));
 		gradientDrawableExpense.setColor(ColorUtils.getColor(R.color.white));
 
 		viewBinding.UIConsumerItemTextViewIncome.setTextColor(ColorUtils.getColor(R.color.white));
-		gradientDrawableIncome.setColor(ColorUtils.getColor(R.color.teal_800));
+		gradientDrawableIncome.setColor(ColorUtils.getColor(R.color.red_2));
 	}
 
 	private void registerSwipeRecyclerView() {

@@ -8,7 +8,7 @@
             android:bottomRightRadius="30dp"
             />
     <!-- 设置背景颜色 -->
-    <solid android:color="@color/teal_800"/>
+    <solid android:color="@color/red_2"/>
     <!-- 设置边框颜色以及宽度 -->
     <stroke
             android:color="@color/white"

@@ -109,7 +109,7 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 	}
 
 	private void registerConsumerItemButtonAddItem() {
-		viewBinding.UIAssociateItemButtonAddItem.setOnClickListener(v -> {
+		viewBinding.UIConsumerItemButtonAddItem.setOnClickListener(v -> {
 			Intent intent = new Intent(this, AddItemActivity.class);
 			intent.putExtra("itemType", ItemTypeEnum.MEMBER.name());
 			startActivity(intent);
