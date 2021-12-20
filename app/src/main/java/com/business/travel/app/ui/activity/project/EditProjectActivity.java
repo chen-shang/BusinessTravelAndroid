@@ -2,6 +2,7 @@ package com.business.travel.app.ui.activity.project;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import android.app.DatePickerDialog;
 import android.graphics.drawable.Drawable;
@@ -58,7 +59,7 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 	@Override
 	protected void onStart() {
 		super.onStart();
-		refreshSelectProjectInfo(selectProjectId);
+		showSelectProjectInfo(selectProjectId);
 	}
 
 	private void registerSaveButton(View saveButton) {
@@ -90,7 +91,7 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 	}
 
 	private Long getTime(String startTime) {
-		if (StringUtils.isNotBlank(startTime)) {
+		if (StringUtils.isBlank(startTime)) {
 			return null;
 		}
 		if (DateTimeTagEnum.TobeDetermined.getMsg().equals(startTime)) {
@@ -99,13 +100,23 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 		return DateTimeUtil.timestamp(startTime, "yyyy-MM-dd");
 	}
 
+	private String parseTime(Long time) {
+		if (time == null) {
+			return null;
+		}
+		if (DateTimeTagEnum.TobeDetermined.getCode() == time) {
+			return DateTimeTagEnum.TobeDetermined.getMsg();
+		}
+		return DateTimeUtil.format(time, "yyyy-MM-dd");
+	}
+
 	private void registerDatePicker(TextView textview) {
 		//这个是添加新项目时候弹出的
 		//这个是点击右上角三个小圆点弹出的
 		AttachListPopupView attachListPopupView = new Builder(this).atView(textview).asAttachList(new String[] {"待定", "日期"}, new int[] {R.drawable.ic_base_to_be_determined, R.drawable.ic_calendar}, (position, text) -> {
 			if (position == 0) {
 				//如果选择了待定
-				whenChoseTobeDetermined(textview);
+				refreshTimeShow(DateTimeTagEnum.TobeDetermined.getCode(), textview);
 				return;
 			}
 
@@ -122,7 +133,7 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 		updatePickDialogDate(nowDate);
 		datePickerDialog.setOnDateSetListener((view, year, month, dayOfMonth) -> {
 			LocalDate localDate = LocalDate.of(year, month + 1, dayOfMonth);
-			textview.setText(DateTimeUtil.format(localDate, "yyyy-MM-dd"));
+			refreshTimeShow(DateTimeUtil.timestamp(localDate), textview);
 		});
 
 		datePickerDialog.show();
@@ -143,20 +154,6 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 		datePickerDialog.updateDate(localDateTime.getYear(), localDateTime.getMonth().ordinal(), localDateTime.getDayOfMonth());
 	}
 
-	private void whenChoseTobeDetermined(TextView textview) {
-		Drawable drawable = ResourceUtils.getDrawable(R.drawable.ic_base_to_be_determined);
-		drawable.setBounds(0, 0, drawable.getIntrinsicWidth() / 2, drawable.getIntrinsicHeight() / 2);
-		textview.setCompoundDrawables(drawable, null, null, null);
-		textview.setText("待定");
-	}
-
-	private void tobeDetermined(TextView textview) {
-		Drawable drawable = ResourceUtils.getDrawable(R.drawable.ic_base_to_be_determined);
-		drawable.setBounds(0, 0, drawable.getIntrinsicWidth() / 2, drawable.getIntrinsicHeight() / 2);
-		textview.setCompoundDrawables(drawable, null, null, null);
-		textview.setText("待定");
-	}
-
 	private void initProject() {
 		long projectId = getIntent().getLongExtra("projectId", -1L);
 		if (projectId < 0) {
@@ -168,7 +165,7 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 		}
 	}
 
-	private void refreshSelectProjectInfo(Long projectId) {
+	private void showSelectProjectInfo(Long projectId) {
 		if (projectId == null || projectId < 0) {
 			return;
 		}
@@ -177,29 +174,17 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 		if (project == null) {
 			return;
 		}
+
 		final String name = project.getName();
 		if (StringUtils.isNotBlank(name)) {
 			viewBinding.projectName.setText(name);
 		}
 
 		final Long startTime = project.getStartTime();
-		if (startTime != null) {
-			if (-1 == startTime) {
-				//显示待定
-				tobeDetermined(viewBinding.projectStartTime);
-			} else {
-				viewBinding.projectStartTime.setText(DateTimeUtil.format(startTime, "yyyy-MM-dd"));
-			}
-		}
+		refreshTimeShow(startTime, viewBinding.projectStartTime);
+
 		final Long endTime = project.getEndTime();
-		if (endTime != null) {
-			if (-1 == endTime) {
-				//显示待定
-				tobeDetermined(viewBinding.projectEndTime);
-			} else {
-				viewBinding.projectEndTime.setText(DateTimeUtil.format(endTime, "yyyy-MM-dd"));
-			}
-		}
+		refreshTimeShow(endTime, viewBinding.projectEndTime);
 
 		final String remark = project.getRemark();
 		if (StringUtils.isNotBlank(remark)) {
@@ -207,4 +192,21 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 		}
 	}
 
+	public void refreshTimeShow(Long time, TextView textView) {
+		String projectStartTime = parseTime(time);
+		textView.setText(projectStartTime);
+
+		Integer icon = parseIcon(time);
+		Drawable drawable = ResourceUtils.getDrawable(icon);
+		//drawable.setBounds(0, 0, drawable.getIntrinsicWidth() / 2, drawable.getIntrinsicHeight() / 2);
+		textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+	}
+
+	private Integer parseIcon(Long time) {
+		if (Objects.equals(DateTimeTagEnum.TobeDetermined.getCode(), time)) {
+			return R.drawable.ic_base_to_be_determined;
+		}
+
+		return R.drawable.ic_calendar;
+	}
 }
