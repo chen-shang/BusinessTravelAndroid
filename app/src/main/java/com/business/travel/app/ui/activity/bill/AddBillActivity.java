@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
+import android.os.MessageQueue;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -37,6 +39,7 @@ import com.business.travel.app.ui.activity.item.member.EditMemberActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.app.utils.LogToast;
+import com.business.travel.app.utils.StatusBarUtil;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.google.common.base.Preconditions;
@@ -80,6 +83,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	private MemberService memberService;
 	private ConsumptionService consumptionService;
 
+	private View statusBarView;
+
 	@Override
 	protected void inject() {
 		memberService = new MemberService(this);
@@ -91,6 +96,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//顶部渐变
+		StatusBarUtil.setStatusBarView(getWindow(), getResources(), R.drawable.corners_shape_change);
 		//注册消费项列表分页、点击事件
 		registerMaterialSearchBar();
 		//注册消费项列表分页、点击事件

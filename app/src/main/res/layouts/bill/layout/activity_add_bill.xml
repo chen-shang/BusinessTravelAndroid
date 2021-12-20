@@ -11,7 +11,7 @@
             android:id="@+id/UI_AddBillActivity_ConstraintLayout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/top_height"
-            android:background="@color/red_0"
+            android:background="@drawable/corners_shape_change"
             app:layout_constraintTop_toTopOf="parent"
             android:padding="20dp"
             app:layout_constraintEnd_toEndOf="parent"
