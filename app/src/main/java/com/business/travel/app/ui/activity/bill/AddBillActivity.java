@@ -300,7 +300,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 				// 指示器item未选中的颜色
 				.setPointNormalColor(ContextCompat.getColor(getBaseContext(), R.color.black_100))
 				// 指示器item选中的颜色
-				.setPointSelectColor(ContextCompat.getColor(getBaseContext(), R.color.teal_800))
+				.setPointSelectColor(ContextCompat.getColor(getBaseContext(), R.color.red_2))
 				// 设置背景图片(此时设置的背景色无效，以背景图片为主)
 				.setBackgroundImageLoader(bgImageView -> {
 				})
