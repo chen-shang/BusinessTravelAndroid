@@ -112,7 +112,7 @@ public class KeyboardRecyclerViewAdapter extends BaseRecyclerViewAdapter<Keyboar
 				});
 				break;
 			case 15:
-				holder.itemView.setBackgroundColor(ColorUtils.getColor(R.color.teal_800));
+				holder.itemView.setBackgroundColor(ColorUtils.getColor(R.color.red_2));
 				holder.numButton.setText("保存");
 				holder.numButton.setOnClickListener(onSaveClick);
 				holder.numButton.setOnLongClickListener(v -> {

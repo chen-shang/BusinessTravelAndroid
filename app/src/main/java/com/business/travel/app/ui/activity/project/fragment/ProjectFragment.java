@@ -85,7 +85,7 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 	private void registerPopupView(ImageView imageView) {
 		//这个是添加新项目时候弹出的
 		//这个是点击右上角三个小圆点弹出的
-		final AttachListPopupView attachListPopupView = new Builder(getContext()).atView(imageView).asAttachList(new String[] {"添加项目"}, new int[] {R.drawable.ic_base_sort}, (position, text) -> startActivity(new Intent(this.requireActivity(), EditProjectActivity.class)));
+		final AttachListPopupView attachListPopupView = new Builder(getContext()).atView(imageView).asAttachList(new String[] {"添加项目"}, new int[] {R.drawable.ic_project_add}, (position, text) -> startActivity(new Intent(this.requireActivity(), EditProjectActivity.class)));
 		imageView.setOnClickListener(v -> attachListPopupView.show());
 	}
 

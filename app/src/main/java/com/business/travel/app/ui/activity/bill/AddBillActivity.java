@@ -94,8 +94,6 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//顶部渐变
-		StatusBarUtil.setStatusBarView(getWindow(), getResources(), R.drawable.corners_shape_change);
 		//注册消费项列表分页、点击事件
 		registerMaterialSearchBar();
 		//注册消费项列表分页、点击事件
