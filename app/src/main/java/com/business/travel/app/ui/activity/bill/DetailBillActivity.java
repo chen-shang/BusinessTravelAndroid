@@ -16,6 +16,7 @@ import com.business.travel.app.service.MemberService;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.app.utils.MoneyUtil;
+import com.business.travel.app.utils.StatusBarUtil;
 import com.business.travel.app.utils.Try;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.SplitUtil;
@@ -60,6 +61,9 @@ public class DetailBillActivity extends BaseActivity<ActivityDetailBillBinding> 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//顶部渐变
+		StatusBarUtil.setStatusBarView(getWindow(), getResources(), R.drawable.corners_shape_change);
+		
 		long selectBillId = getIntent().getExtras().getLong("selectBillId");
 
 		initSelectedBill(selectBillId);
