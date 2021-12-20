@@ -8,6 +8,17 @@
         tools:context=".ui.activity.my.AboutMeActivity"
         android:orientation="vertical">
 
+    <com.business.travel.app.view.ContentBar
+            android:id="@+id/topTitleBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/corners_shape_change"
+            app:content_bar_left_icon_mode="back"
+            app:content_bar_left_icon="@drawable/ic_base_return"
+            app:content_bar_title="关于"
+            app:content_bar_title_color="@color/white"
+            />
+
     <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="300dp"

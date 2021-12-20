@@ -8,8 +8,6 @@ import java.util.stream.Collectors;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
-import android.os.MessageQueue;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -39,7 +37,6 @@ import com.business.travel.app.ui.activity.item.member.EditMemberActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.app.utils.LogToast;
-import com.business.travel.app.utils.StatusBarUtil;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.google.common.base.Preconditions;
