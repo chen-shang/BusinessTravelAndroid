@@ -28,7 +28,7 @@
             app:mt_maxSuggestionsCount="10"
             app:mt_searchIconDrawable="@drawable/ic_base_sort"
             app:mt_backIconDrawable="@drawable/ic_base_right"
-            app:mt_searchBarColor="@color/red_0"
+            app:mt_searchBarColor="@drawable/corners_shape_change"
             app:mt_textCursorTint="@color/white"
             app:mt_textColor="@color/white"
             android:layout_width="match_parent"

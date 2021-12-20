@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import com.business.travel.app.R;
 import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.dal.dao.ConsumptionDao;
 import com.business.travel.app.dal.dao.MemberDao;
@@ -25,6 +26,7 @@ import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.FutureUtil;
 import com.business.travel.app.utils.LogToast;
+import com.business.travel.app.utils.StatusBarUtil;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.ItemTypeEnum;
@@ -83,7 +85,9 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		//顶部渐变
+		StatusBarUtil.setStatusBarView(getWindow(), getResources(), R.drawable.corners_shape_change);
+		
 		//icon分类和列表
 		registerSwipeRecyclerView(viewBinding.UIAddItemActivitySwipeRecyclerView);
 

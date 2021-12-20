@@ -83,8 +83,6 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	private MemberService memberService;
 	private ConsumptionService consumptionService;
 
-	private View statusBarView;
-
 	@Override
 	protected void inject() {
 		memberService = new MemberService(this);

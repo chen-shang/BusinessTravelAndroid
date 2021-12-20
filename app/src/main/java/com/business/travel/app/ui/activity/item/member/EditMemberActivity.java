@@ -22,6 +22,7 @@ import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
 import com.business.travel.app.utils.HeaderView;
 import com.business.travel.app.utils.ImageIconUtil;
+import com.business.travel.app.utils.StatusBarUtil;
 import com.business.travel.vo.enums.ItemTypeEnum;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
@@ -57,6 +58,8 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//顶部渐变
+		StatusBarUtil.setStatusBarView(getWindow(), getResources(), R.drawable.corners_shape_change);
 		/**
 		 * 注册列表
 		 */

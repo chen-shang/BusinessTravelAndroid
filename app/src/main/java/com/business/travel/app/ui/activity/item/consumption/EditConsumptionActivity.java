@@ -27,6 +27,7 @@ import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
 import com.business.travel.app.utils.HeaderView;
 import com.business.travel.app.utils.ImageIconUtil;
+import com.business.travel.app.utils.StatusBarUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.ItemTypeEnum;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
@@ -67,6 +68,8 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//顶部渐变
+		StatusBarUtil.setStatusBarView(getWindow(), getResources(), R.drawable.corners_shape_change);
 		//获取当前是什么类型
 		registerConsumptionType();
 		//注册下拉列表事件

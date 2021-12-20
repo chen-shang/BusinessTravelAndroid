@@ -8,10 +8,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityEditProjectBinding;
 import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.base.BaseActivity;
+import com.business.travel.app.utils.StatusBarUtil;
 import com.business.travel.app.utils.Try;
 import com.business.travel.utils.DateTimeUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -41,6 +43,8 @@ public class EditProjectActivity extends BaseActivity<ActivityEditProjectBinding
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//顶部渐变
+		StatusBarUtil.setStatusBarView(getWindow(), getResources(), R.drawable.corners_shape_change);
 		//从别的页面传递过来的项目id
 		initProject();
 		//注册项目开始结束时间点击事件
