@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.activity.my.WebTextActivity"
+        android:orientation="vertical">
+
+    <com.business.travel.app.view.ContentBar
+            android:id="@+id/topTitleBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/corners_shape_change"
+            app:content_bar_left_icon_mode="back"
+            app:content_bar_left_icon="@drawable/ic_base_return"
+            app:content_bar_title="用户协议"
+            app:content_bar_title_color="@color/white"
+            />
+
+    <WebView
+            android:id="@+id/webContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+</LinearLayout>

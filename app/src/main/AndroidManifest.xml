@@ -20,6 +20,9 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.Application">
         <activity
+                android:name=".ui.activity.my.WebTextActivity"
+                android:exported="true"/>
+        <activity
                 android:name=".ui.activity.my.AboutMeActivity"
                 android:exported="true"/>
         <activity

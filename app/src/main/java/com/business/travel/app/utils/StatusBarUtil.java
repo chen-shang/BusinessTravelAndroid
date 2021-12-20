@@ -32,7 +32,7 @@ public class StatusBarUtil {
 				});
 
 				//只走一次
-				return false;
+				return true;
 			}
 		});
 	}
