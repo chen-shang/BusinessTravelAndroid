@@ -95,7 +95,7 @@
                                 android:layout_margin="10dp"
                                 android:layout_height="wrap_content"
                                 android:hint="项目开始时间"
-                                android:drawableLeft="@drawable/icon_date"
+                                android:drawableLeft="@drawable/ic_calendar"
                                 android:gravity="center"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"/>
@@ -130,7 +130,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="项目结束时间"
-                                android:drawableLeft="@drawable/icon_date"
+                                android:drawableLeft="@drawable/ic_calendar"
                                 android:gravity="center"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"/>

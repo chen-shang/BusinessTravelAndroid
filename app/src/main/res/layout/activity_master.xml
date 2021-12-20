@@ -32,7 +32,7 @@
             android:clickable="true"
             app:maxImageSize="?attr/actionBarSize"
             app:tint="@null"
-            android:src="@drawable/ic_bill_add"
+            android:src="@drawable/ic_base_bill_add"
             android:backgroundTint="?android:attr/windowBackground"
             android:id="@+id/UI_MasterActivity_FloatingActionButton"
             app:elevation="8dp"
