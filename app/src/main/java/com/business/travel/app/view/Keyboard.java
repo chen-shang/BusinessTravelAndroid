@@ -27,15 +27,28 @@ public class Keyboard extends ConstraintLayout {
 	/**
 	 * 备注编辑框
 	 */
-	protected EditText editTextRemark;
+	public EditText editTextRemark;
 	/**
 	 * 收入支出显示tag
 	 */
-	protected TextView textViewPayType;
+	public TextView textViewPayType;
 	/**
 	 * 金额展示
 	 */
-	protected TextView textViewAmount;
+	public TextView textViewAmount;
+
+	private OnClickListener onSaveClick;
+	private OnClickListener onReRecordClick;
+
+	public Keyboard onSaveClick(OnClickListener onSaveClick) {
+		this.onSaveClick = onSaveClick;
+		return this;
+	}
+
+	public Keyboard onReRecordClick(OnClickListener onReRecordClick) {
+		this.onReRecordClick = onReRecordClick;
+		return this;
+	}
 
 	public Keyboard(@NonNull @NotNull Context context, @Nullable @org.jetbrains.annotations.Nullable AttributeSet attrs) {
 		super(context, attrs);
@@ -122,9 +135,9 @@ public class Keyboard extends ConstraintLayout {
 				case 15:
 					holder.itemView.setBackgroundColor(ColorUtils.getColor(R.color.red_2));
 					holder.numButton.setText("保存");
-					//holder.numButton.setOnClickListener(onSaveClick);
+					holder.numButton.setOnClickListener(onSaveClick);
 					holder.numButton.setOnLongClickListener(v -> {
-						//onReRecordClick.onClick(v);
+						onReRecordClick.onClick(v);
 						return true;
 					});
 					break;

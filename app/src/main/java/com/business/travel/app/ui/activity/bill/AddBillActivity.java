@@ -15,7 +15,6 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
 import cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager;
 import com.blankj.utilcode.util.LogUtils;
 import com.business.travel.app.R;
@@ -36,6 +35,7 @@ import com.business.travel.app.ui.activity.item.member.EditMemberActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.app.utils.LogToast;
+import com.business.travel.app.utils.Try;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.google.common.base.Preconditions;
@@ -226,39 +226,21 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	}
 
 	private void registerKeyboard() {
-		GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4) {
-			@Override
-			public boolean canScrollVertically() {
-				return false;
-			}
-		};
-		viewBinding.UIAddBillActivitySwipeRecyclerViewKeyboard.setLayoutManager(gridLayoutManager);
-		KeyboardRecyclerViewAdapter keyboardRecyclerViewAdapter = new KeyboardRecyclerViewAdapter(new ArrayList<>(), this).onSaveClick(v -> {
-			try {
-				//当键盘保存按钮点击之后
-				saveBill();
-				//6.账单创建完成后跳转到 DashboardFragment
-				this.finish();
-			} catch (Exception e) {
-				LogToast.errorShow(e.getMessage());
-			}
-		}).onReRecordClick(v -> {
-			try {
-				//当键盘保存按钮点击之后
-				saveBill();
-				//初始化数据
-				this.clear();
-			} catch (Exception e) {
-				LogToast.errorShow(e.getMessage());
-			}
-		});
-		viewBinding.UIAddBillActivitySwipeRecyclerViewKeyboard.setAdapter(keyboardRecyclerViewAdapter);
+		viewBinding.keyboard.onSaveClick(v -> Try.of(() -> {
+			//当键盘保存按钮点击之后
+			saveBill();
+			//6.账单创建完成后跳转到 DashboardFragment
+			this.finish();
+		})).onReRecordClick(v -> Try.of(() -> {
+			saveBill();
+			clear();
+		}));
 	}
 
 	private void registerConsumptionType() {
-		viewBinding.UIAddBillActivityTextViewPayType.setOnClickListener(v -> {
+		viewBinding.keyboard.textViewPayType.setOnClickListener(v -> {
 			consumptionType = changeConsumptionType(consumptionType);
-			viewBinding.UIAddBillActivityTextViewPayType.setText(consumptionType.getMsg());
+			((TextView)v).setText(consumptionType.getMsg());
 			refreshConsumptionIcon(consumptionType);
 		});
 	}
@@ -357,8 +339,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		memberIconList.forEach(item -> item.setSelected(false));
 		viewBinding.GridViewPagerConsumptionIconList.setDataAllCount(consumptionImageIconList.size()).show();
 		viewBinding.GridViewPagerMemberIconList.setDataAllCount(memberIconList.size()).show();
-		viewBinding.UIAddBillActivityTextViewAmount.setText(null);
-		viewBinding.UIAddBillActivityEditTextRemark.setText(null);
+		viewBinding.keyboard.textViewAmount.setText(null);
+		viewBinding.keyboard.editTextRemark.setText(null);
 	}
 
 	private ConsumptionTypeEnum changeConsumptionType(ConsumptionTypeEnum consumptionType) {
@@ -388,7 +370,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 
 	private void createBillWithProject(Project project) {
 		//3. 日期、备注、金额
-		String amount = viewBinding.UIAddBillActivityTextViewAmount.getText().toString().trim();
+		String amount = viewBinding.keyboard.textViewAmount.getText().toString().trim();
 		Preconditions.checkArgument(StringUtils.isNotBlank(amount), "请输入消费金额");
 		//1. 选中的消费项 id 的列表
 		String consumerItemList = consumptionImageIconList.stream().filter(ImageIconInfo::isSelected).map(ImageIconInfo::getId).map(String::valueOf).filter(StringUtils::isNotBlank).collect(Collectors.joining(","));
@@ -397,7 +379,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		String memberItemList = memberIconList.stream().filter(ImageIconInfo::isSelected).map(ImageIconInfo::getId).map(String::valueOf).filter(StringUtils::isNotBlank).collect(Collectors.joining(","));
 		Preconditions.checkArgument(StringUtils.isNotBlank(memberItemList), "请选择消费人员");
 
-		String remark = viewBinding.UIAddBillActivityEditTextRemark.getText().toString().trim();
+		String remark = viewBinding.keyboard.editTextRemark.getText().toString().trim();
 		Bill bill = new Bill();
 		bill.setConsumptionIds(consumerItemList);
 		bill.setProjectId(project.getId());
@@ -447,7 +429,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	}
 
 	private ConsumptionTypeEnum refreshConsumptionType() {
-		String payType = viewBinding.UIAddBillActivityTextViewPayType.getText().toString();
+		String payType = viewBinding.keyboard.textViewPayType.getText().toString();
 		if (ConsumptionTypeEnum.INCOME.getMsg().equals(payType)) {
 			return ConsumptionTypeEnum.INCOME;
 		} else if (ConsumptionTypeEnum.SPENDING.getMsg().equals(payType)) {

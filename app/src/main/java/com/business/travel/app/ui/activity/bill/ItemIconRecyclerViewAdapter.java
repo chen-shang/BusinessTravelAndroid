@@ -1,5 +1,7 @@
 package com.business.travel.app.ui.activity.bill;
 
+import java.util.List;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -27,8 +29,6 @@ import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.ItemTypeEnum;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 
 
@@ -109,7 +109,7 @@ public class ItemIconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRec
 	}
 
 	private ConsumptionTypeEnum getSelectedConsumptionType() {
-		String consumptionType = ((TextView)(activity.findViewById(R.id.UI_AddBillActivity_TextView_PayType))).getText().toString();
+		String consumptionType = ((TextView)(activity.findViewById(R.id.TextView_PayType))).getText().toString();
 		if (ConsumptionTypeEnum.INCOME.getMsg().equals(consumptionType)) {
 			return ConsumptionTypeEnum.INCOME;
 		} else if (ConsumptionTypeEnum.SPENDING.getMsg().equals(consumptionType)) {
