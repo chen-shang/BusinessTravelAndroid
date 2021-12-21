@@ -7,6 +7,8 @@
         <item>1. 键盘实现抽象成键盘组件</item>
         <item>2. 关于差旅记账页面布局更新</item>
         <item>3. 用户协议页面实现</item>
+        <item>4. 布局文件目录移动</item>
+        <item>5. 组件id命名规范了一下</item>
 
         <item>2.2</item>
         <item>1. 修改我的页面布局</item>
