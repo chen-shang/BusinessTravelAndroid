@@ -17,6 +17,7 @@ import com.blankj.utilcode.util.PathUtils;
 import com.business.travel.app.exceptions.ApiException;
 import com.business.travel.app.model.GiteeContent;
 import com.business.travel.app.utils.HttpWrapper;
+import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.JacksonUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import okhttp3.HttpUrl;
@@ -79,6 +80,16 @@ public class BusinessTravelResourceApi {
 		if (!file.exists()) {
 			return null;
 		}
+
+		//超过3分钟重新下载
+		long nowTimestamp = DateTimeUtil.timestamp();
+		long lastModified = file.lastModified();
+		if (nowTimestamp - lastModified > 3 * 60 * 1000) {
+			boolean delete = file.delete();
+			LogUtils.i("清除缓存" + iconFullName + " :" + delete);
+			return null;
+		}
+
 		return new FileInputStream(file);
 	}
 

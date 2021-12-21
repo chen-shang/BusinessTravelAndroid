@@ -33,7 +33,10 @@ public class Keyboard extends ConstraintLayout {
 	 * 日历弹框
 	 */
 	private final DatePickerDialog datePickerDialog;
-	private Long selectedDate = DateTimeUtil.timestamp();
+	/**
+	 * 选中的时间
+	 */
+	private Long selectedDate;
 	/**
 	 * 备注编辑框
 	 */
@@ -85,6 +88,7 @@ public class Keyboard extends ConstraintLayout {
 		recyclerViewKeyboard.setAdapter(new KeyboardRecyclerViewAdapter());
 	}
 
+	@Nullable
 	public Long getSelectedDate() {
 		return selectedDate;
 	}

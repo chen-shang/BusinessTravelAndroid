@@ -1,8 +1,8 @@
 package com.business.travel.app.ui.activity.bill;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import android.content.Intent;
@@ -34,6 +34,7 @@ import com.business.travel.app.ui.activity.item.member.EditMemberActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.app.utils.LogToast;
+import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.app.utils.Try;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
@@ -297,9 +298,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 
 		textView.setText(imageIconInfo.getName());
 
-		int unSelectColor = ContextCompat.getColor(getApplicationContext(), R.color.black_100);
 		int selectColor = ContextCompat.getColor(getApplicationContext(), R.color.red_2);
-		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView, imageIconInfo.isSelected() ? selectColor : unSelectColor);
+		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView, imageIconInfo.isSelected() ? selectColor : null);
 
 		imageView.setOnClickListener(v -> {
 			//如果是编辑按钮
@@ -311,7 +311,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 			}
 			//否则,改变选中颜色
 			imageIconInfo.setSelected(!imageIconInfo.isSelected());
-			ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView, imageIconInfo.isSelected() ? selectColor : unSelectColor);
+			ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView, imageIconInfo.isSelected() ? selectColor : null);
 		});
 	}
 
@@ -384,10 +384,11 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		bill.setConsumptionIds(consumerItemList);
 		bill.setProjectId(project.getId());
 		//消费金额
-		bill.setAmount(new BigDecimal(amount).multiply(new BigDecimal(100)).longValue());
+		bill.setAmount(MoneyUtil.toFen(amount));
 		//消费日期
-		Long selectedDate = viewBinding.keyboard.getSelectedDate();
+		Long selectedDate = Optional.ofNullable(viewBinding.keyboard.getSelectedDate()).orElse(DateTimeUtil.timestamp(DateTimeUtil.now().toLocalDate()));
 		bill.setConsumeDate(selectedDate);
+
 		bill.setMemberIds(memberItemList);
 		bill.setCreateTime(DateTimeUtil.timestamp());
 		bill.setModifyTime(DateTimeUtil.timestamp());

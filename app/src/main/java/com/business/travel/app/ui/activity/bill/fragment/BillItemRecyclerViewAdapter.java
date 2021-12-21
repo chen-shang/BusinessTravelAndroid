@@ -157,9 +157,6 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 		billFragment.getBillRecyclerViewAdapter().refreshMoneyShow(viewHolder, bill.getProjectId(), bill.getConsumeDate());
 	}
 
-	private void onEdit(Bill bill) {
-	}
-
 	@SuppressLint("NonConstantResourceId")
 	static class BillItemRecyclerViewAdapterViewHolder extends ViewHolder {
 

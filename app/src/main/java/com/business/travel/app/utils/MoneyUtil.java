@@ -16,4 +16,19 @@ public class MoneyUtil {
 	public static String toYuanString(Long money) {
 		return String.valueOf(toYuan(money));
 	}
+
+	public static Long toFen(Double money) {
+		if (money == null) {
+			return 0L;
+		}
+		return BigDecimal.valueOf(money).multiply(divisor).longValue();
+	}
+
+	public static Long toFen(String money) {
+		return toFen(Double.valueOf(money));
+	}
+
+	public static String toFenString(Double money) {
+		return String.valueOf(toFen(money));
+	}
 }
