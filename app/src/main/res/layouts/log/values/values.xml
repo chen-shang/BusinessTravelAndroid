@@ -3,7 +3,12 @@
 
     <!--  记录版本之间的功能变更,不宜太多,测试专用  -->
     <string-array name="change_log">
-        <item>2.1</item>
+        <item>2.3</item>
+        <item>1. 键盘实现抽象成键盘组件</item>
+        <item>2. 关于差旅记账页面布局更新</item>
+        <item>3. 用户协议页面实现</item>
+
+        <item>2.2</item>
         <item>1. 修改我的页面布局</item>
         <item>2. 新增关于差旅记账页面布局</item>
         <item>3. 修改部分配色，顶部渐变</item>
