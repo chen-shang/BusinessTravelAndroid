@@ -13,6 +13,7 @@ import java.util.StringJoiner;
 import androidx.annotation.Nullable;
 import com.blankj.utilcode.util.FileIOUtils;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.PathUtils;
 import com.business.travel.app.exceptions.ApiException;
 import com.business.travel.app.model.GiteeContent;
@@ -50,6 +51,10 @@ public class BusinessTravelResourceApi {
 	@Nullable
 	public static InputStream getIcon(String iconFullName) {
 		if (StringUtils.isBlank(iconFullName)) {
+			return null;
+		}
+
+		if (!NetworkUtils.isAvailable()) {
 			return null;
 		}
 

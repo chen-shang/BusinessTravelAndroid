@@ -21,7 +21,6 @@ import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.activity.item.AddItemRecyclerViewInnerAdapter.AddConsumptionItemIconRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
-import com.business.travel.app.utils.FutureUtil;
 import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.utils.SplitUtil;
 import org.jetbrains.annotations.NotNull;
@@ -68,6 +67,8 @@ public class AddItemRecyclerViewInnerAdapter extends BaseRecyclerViewAdapter<Add
 				imageIconInfo.setSelected(false);
 			} else {
 				uiImageViewIcon.setBackgroundResource(R.drawable.corners_shape_select);
+				imageIconInfo.setSelected(true);
+
 				ImageView imageView = activity.findViewById(R.id.UI_AddItemActivity_ImageView_ShowIcon);
 
 				EditText editTextName = activity.findViewById(R.id.UI_AddItemActivity_EditText_Name);
@@ -75,10 +76,9 @@ public class AddItemRecyclerViewInnerAdapter extends BaseRecyclerViewAdapter<Add
 				editTextName.setText(format(name));
 
 				imageView.setImageDrawable(uiImageViewIcon.getDrawable());
-				imageIconInfo.setSelected(true);
 
 				final AddItemActivity addItemActivity = (AddItemActivity)this.activity;
-				if (addItemActivity.getLastSelectedImageView() != null) {
+				if (addItemActivity.getLastSelectedImageView() != null && addItemActivity.getLastSelectedImageView() != uiImageViewIcon) {
 					addItemActivity.getLastSelectedImageView().setBackgroundResource(R.drawable.corners_shape_unselect);
 					addItemActivity.getLastSelectedImageIcon().setSelected(false);
 				}

@@ -101,6 +101,12 @@ public class AddItemActivity extends ColorStatusBarActivity<ActivityAddItemBindi
 
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		refreshData(itemTypeEnum);
+	}
+
 	private void registerSaveButton(ImageView saveButton) {
 		saveButton.setOnClickListener(v -> {
 			if (itemTypeEnum == ItemTypeEnum.CONSUMPTION) {
@@ -164,12 +170,6 @@ public class AddItemActivity extends ColorStatusBarActivity<ActivityAddItemBindi
 		swipeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 		addItemRecyclerViewAdapter = new AddItemRecyclerViewAdapter(iconTypeList, this);
 		swipeRecyclerView.setAdapter(addItemRecyclerViewAdapter);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		refreshData(itemTypeEnum);
 	}
 
 	private void refreshData(ItemTypeEnum itemTypeEnum) {

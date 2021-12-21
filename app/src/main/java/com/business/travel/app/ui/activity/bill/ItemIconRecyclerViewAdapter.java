@@ -73,7 +73,7 @@ public class ItemIconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRec
 		ImageLoadUtil.loadImageToView(iconDownloadUrl, uiImageViewIcon);
 
 		int unSelectColor = ContextCompat.getColor(uiImageViewIcon.getContext(), R.color.black_100);
-		int selectColor = ContextCompat.getColor(uiImageViewIcon.getContext(), R.color.teal_800);
+		int selectColor = ContextCompat.getColor(uiImageViewIcon.getContext(), R.color.red_2);
 		uiImageViewIcon.setBackgroundResource(R.drawable.corners_shape_unselect);
 		//初始化 uiTextViewDescription
 		TextView uiTextViewDescription = holder.uiTextViewDescription;

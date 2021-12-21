@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
 import com.blankj.utilcode.util.ResourceUtils;
+import com.business.travel.app.R;
 import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.enums.ItemIconEnum;
 import com.pixplicity.sharp.OnSvgElementListener;
@@ -39,35 +40,40 @@ public class ImageLoadUtil {
 	public static void loadImageToView(String iconDownloadUrl, ImageView uiImageViewIcon, @ColorInt Integer color) {
 		final ItemIconEnum itemIconEnum = ItemIconEnum.ofUrl(iconDownloadUrl);
 		if (itemIconEnum != null) {
-			uiImageViewIcon.setImageResource(itemIconEnum.getResourceId());
-			if (color != null) {
-				//需要改变颜色
-				uiImageViewIcon.getDrawable().setTint(color);
-			} else {
-				//恢复原来的颜色
-				Drawable drawable = ResourceUtils.getDrawable(itemIconEnum.getResourceId());
-				uiImageViewIcon.setImageDrawable(drawable);
-			}
+			changeLocalIconColor(uiImageViewIcon, itemIconEnum.getResourceId(), color);
 			return;
 		}
 
 		FutureUtil.supplyAsync(() -> BusinessTravelResourceApi.getIcon(iconDownloadUrl)).whenComplete((inputStream, throwable) -> {
 			if (inputStream == null) {
+				changeLocalIconColor(uiImageViewIcon, R.drawable.ic_base_placeholder, color);
 				return;
 			}
 			//需要改变颜色
-			Sharp.loadInputStream(inputStream).setOnElementListener(new ChangeToColor(color)).into(uiImageViewIcon);
+			Sharp.loadInputStream(inputStream).setOnElementListener(new ChangeRemoteIconColor(color)).into(uiImageViewIcon);
 		});
+	}
+
+	private static void changeLocalIconColor(ImageView uiImageViewIcon, int resourceId, Integer color) {
+		uiImageViewIcon.setImageResource(resourceId);
+		if (color != null) {
+			//需要改变颜色
+			uiImageViewIcon.getDrawable().setTint(color);
+		} else {
+			//恢复原来的颜色
+			Drawable drawable = ResourceUtils.getDrawable(resourceId);
+			uiImageViewIcon.setImageDrawable(drawable);
+		}
 	}
 
 	/**
 	 * 改变颜色的函数
 	 */
-	static class ChangeToColor implements OnSvgElementListener {
+	static class ChangeRemoteIconColor implements OnSvgElementListener {
 		@ColorInt
 		private final Integer color;
 
-		public ChangeToColor(Integer color) {
+		public ChangeRemoteIconColor(Integer color) {
 			this.color = color;
 		}
 
