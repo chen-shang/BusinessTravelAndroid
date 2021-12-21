@@ -1,7 +1,6 @@
 package com.business.travel.app.ui.activity.bill;
 
 import java.math.BigDecimal;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,7 +41,6 @@ import com.google.common.base.Preconditions;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.SimpleOnSearchActionListener;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter.OnItemViewClickListener;
-import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -68,12 +66,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	 * 当前被选中的是支出还是收入
 	 */
 	private ConsumptionTypeEnum consumptionType = ConsumptionTypeEnum.SPENDING;
-	/**
-	 * 选中的日期
-	 * 格式 yyyy-MM-dd
-	 */
-	@Setter
-	private Long selectedDate = DateTimeUtil.timestamp();
+	//各种service
 	private BillService billService;
 	private ProjectService projectService;
 	private MemberService memberService;
@@ -100,6 +93,13 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		registerKeyboard();
 		//注册支出/收入按钮点击事件
 		registerConsumptionType();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		//每次进来该页面的时候都需要刷新一下数据
+		refreshData();
 	}
 
 	private void registerMaterialSearchBar() {
@@ -386,8 +386,8 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		//消费金额
 		bill.setAmount(new BigDecimal(amount).multiply(new BigDecimal(100)).longValue());
 		//消费日期
-		long l = DateTimeUtil.toLocalDateTime(selectedDate).toLocalDate().atStartOfDay(ZoneOffset.ofHours(8)).toInstant().toEpochMilli();
-		bill.setConsumeDate(l);
+		Long selectedDate = viewBinding.keyboard.getSelectedDate();
+		bill.setConsumeDate(selectedDate);
 		bill.setMemberIds(memberItemList);
 		bill.setCreateTime(DateTimeUtil.timestamp());
 		bill.setModifyTime(DateTimeUtil.timestamp());
@@ -396,13 +396,6 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		String iconDownloadUrl = consumptionImageIconList.stream().filter(ImageIconInfo::isSelected).findFirst().map(ImageIconInfo::getIconDownloadUrl).orElse("");
 		bill.setIconDownloadUrl(iconDownloadUrl);
 		billService.creatBill(bill);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		//每次进来该页面的时候都需要刷新一下数据
-		refreshData();
 	}
 
 	private void refreshData() {

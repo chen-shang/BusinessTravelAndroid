@@ -43,6 +43,26 @@ public class BillService {
 	}
 
 	/**
+	 * 查询一个项目下所有的消费日期
+	 *
+	 * @param projectId
+	 * @return
+	 */
+	public List<Bill> queryBillByProjectIdAndConsumeDate(Long projectId, Long consumeDate) {
+		return billDao.selectByProjectIdAndConsumeDate(projectId, consumeDate);
+	}
+
+	/**
+	 * 查询一个项目下所有的消费日期
+	 *
+	 * @param projectId
+	 * @return
+	 */
+	public List<Long> queryConsumeDateByProjectId(Long projectId) {
+		return billDao.selectConsumeDateByProjectId(projectId);
+	}
+
+	/**
 	 * 删除账单
 	 *
 	 * @param id

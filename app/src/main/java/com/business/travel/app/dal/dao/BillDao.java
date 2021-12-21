@@ -86,6 +86,24 @@ public interface BillDao extends BaseDao<Bill> {
 	List<Bill> selectByProjectId(Long projectId);
 
 	/**
+	 * 查询一个项目下所有的消费日期
+	 *
+	 * @param projectId
+	 * @return
+	 */
+	@Query("SELECT  * FROM bill where projectId=:projectId and isDeleted=1 and consumeDate=:consumeDate")
+	List<Bill> selectByProjectIdAndConsumeDate(Long projectId, Long consumeDate);
+
+	/**
+	 * 查询一个项目下所有的消费日期
+	 *
+	 * @param projectId
+	 * @return
+	 */
+	@Query("SELECT distinct consumeDate FROM bill where projectId=:projectId and isDeleted=1")
+	List<Long> selectConsumeDateByProjectId(Long projectId);
+
+	/**
 	 * 删除一个项目下所有的账单
 	 *
 	 * @param id

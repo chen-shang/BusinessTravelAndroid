@@ -71,10 +71,9 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 
 		//后面可以改成查询数据库
 		Long selectedProjectId = billFragment.getSelectedProjectId();
-		List<Bill> billList = dateBillInfo.getBillList();
+		//List<Bill> billList = dateBillInfo.getBillList();
+		List<Bill> billList = billService.queryBillByProjectIdAndConsumeDate(selectedProjectId, date);
 		if (CollectionUtils.isEmpty(billList)) {
-			dataList.remove(position);
-			this.notifyDataSetChanged();
 			return;
 		}
 

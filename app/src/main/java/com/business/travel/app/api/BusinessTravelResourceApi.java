@@ -30,6 +30,8 @@ import org.springframework.util.DigestUtils;
 
 /**
  * @author chenshang
+ *
+ * 远程资源API
  */
 public class BusinessTravelResourceApi {
 
@@ -116,26 +118,5 @@ public class BusinessTravelResourceApi {
 		} catch (IOException e) {
 			throw new ApiException(-1, "网络异常,请稍后重试");
 		}
-	}
-
-	private static String getFileFromServer(String iconFullName) {
-		try {
-			Request request = new Builder().url(iconFullName).build();
-			Response response = new OkHttpClient().newCall(request).execute();
-			if (!response.isSuccessful()) {
-				throw new RuntimeException("请求失败:" + response.code() + ",请稍后再试");
-			}
-			ResponseBody body = response.body();
-			if (body == null) {
-				throw new RuntimeException("请求失败,请稍后再试");
-			}
-			return body.string();
-		} catch (IOException e) {
-			throw new IllegalArgumentException("获取图标失败");
-		}
-	}
-
-	public static String getUserAgreement() {
-		return getFileFromServer("https://gitee.com/chen-shang/business-travel-resource/raw/master/about/user_agreement.txt");
 	}
 }

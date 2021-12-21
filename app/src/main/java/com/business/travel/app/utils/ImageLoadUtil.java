@@ -13,6 +13,9 @@ import com.pixplicity.sharp.OnSvgElementListener;
 import com.pixplicity.sharp.Sharp;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * 加载图片到指定的ImageView工具类
+ */
 public class ImageLoadUtil {
 	/**
 	 * 加载图片到指定的ImageView
@@ -51,32 +54,45 @@ public class ImageLoadUtil {
 				Sharp.loadInputStream(inputStream).into(uiImageViewIcon);
 				return;
 			}
-			Sharp.loadInputStream(inputStream).setOnElementListener(new OnSvgElementListener() {
-				@Override
-				public void onSvgStart(@NonNull @NotNull Canvas canvas, @Nullable @org.jetbrains.annotations.Nullable RectF bounds) {
-
-				}
-
-				@Override
-				public void onSvgEnd(@NonNull @NotNull Canvas canvas, @Nullable @org.jetbrains.annotations.Nullable RectF bounds) {
-
-				}
-
-				@Override
-				public <T> T onSvgElement(@Nullable @org.jetbrains.annotations.Nullable String id, @NonNull @NotNull T element, @Nullable @org.jetbrains.annotations.Nullable RectF elementBounds, @NonNull @NotNull Canvas canvas, @Nullable @org.jetbrains.annotations.Nullable RectF canvasBounds,
-				                          @Nullable @org.jetbrains.annotations.Nullable Paint paint) {
-					if (paint != null) {
-						paint.setColor(color);
-						return element;
-					}
-					return null;
-				}
-
-				@Override
-				public <T> void onSvgElementDrawn(@Nullable @org.jetbrains.annotations.Nullable String id, @NonNull @NotNull T element, @NonNull @NotNull Canvas canvas, @Nullable @org.jetbrains.annotations.Nullable Paint paint) {
-
-				}
-			}).into(uiImageViewIcon);
+			//需要改变颜色
+			Sharp.loadInputStream(inputStream).setOnElementListener(new ChangeToColor(color)).into(uiImageViewIcon);
 		});
+	}
+
+	/**
+	 * 改变颜色的函数
+	 */
+	static class ChangeToColor implements OnSvgElementListener {
+		@ColorInt
+		private final Integer color;
+
+		public ChangeToColor(Integer color) {
+			this.color = color;
+		}
+
+		@Override
+		public void onSvgStart(@NonNull @NotNull Canvas canvas, @Nullable @org.jetbrains.annotations.Nullable RectF bounds) {
+
+		}
+
+		@Override
+		public void onSvgEnd(@NonNull @NotNull Canvas canvas, @Nullable @org.jetbrains.annotations.Nullable RectF bounds) {
+
+		}
+
+		@Override
+		public <T> T onSvgElement(@Nullable @org.jetbrains.annotations.Nullable String id, @NonNull @NotNull T element, @Nullable @org.jetbrains.annotations.Nullable RectF elementBounds, @NonNull @NotNull Canvas canvas, @Nullable @org.jetbrains.annotations.Nullable RectF canvasBounds,
+		                          @Nullable @org.jetbrains.annotations.Nullable Paint paint) {
+			if (paint != null) {
+				paint.setColor(color);
+				return element;
+			}
+			return null;
+		}
+
+		@Override
+		public <T> void onSvgElementDrawn(@Nullable @org.jetbrains.annotations.Nullable String id, @NonNull @NotNull T element, @NonNull @NotNull Canvas canvas, @Nullable @org.jetbrains.annotations.Nullable Paint paint) {
+
+		}
 	}
 }

@@ -43,6 +43,8 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	 * 账单列表数据
 	 */
 	private final List<DateBillInfo> dateBillInfoList = new ArrayList<>();
+
+	private final List<Long> dateList = new ArrayList<>();
 	@Getter
 	private BillRecyclerViewAdapter billRecyclerViewAdapter;
 
@@ -103,17 +105,6 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		return view;
 	}
 
-	/**
-	 * 注册账单列表页
-	 */
-	private void registerSwipeRecyclerView(SwipeRecyclerView swipeRecyclerView) {
-		//线性布局
-		swipeRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
-		billRecyclerViewAdapter = new BillRecyclerViewAdapter(dateBillInfoList, (MasterActivity)requireActivity());
-		HeaderView.of(billListHeadView).addTo(swipeRecyclerView);
-		swipeRecyclerView.setAdapter(billRecyclerViewAdapter);
-	}
-
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -129,8 +120,20 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		AnimalUtil.reset(floatingActionButton);
 	}
 
+	/**
+	 * 注册账单列表页
+	 */
+	private void registerSwipeRecyclerView(SwipeRecyclerView swipeRecyclerView) {
+		//线性布局
+		swipeRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
+		billRecyclerViewAdapter = new BillRecyclerViewAdapter(dateBillInfoList, (MasterActivity)requireActivity());
+		HeaderView.of(billListHeadView).addTo(swipeRecyclerView);
+		swipeRecyclerView.setAdapter(billRecyclerViewAdapter);
+	}
+
 	@SuppressLint({"SetTextI18n", "NotifyDataSetChanged"})
 	public void refreshBillList(Long projectId) {
+		//默认显示最后一次访问过的项目
 		Project project = Optional.ofNullable(projectId).map(projectService::queryById).orElseGet(() -> projectService.queryLatestModify());
 		if (project == null) {
 			//记得清空数据
@@ -158,6 +161,9 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 
 		//查询全部的账单列表
 		List<Bill> billList = billService.queryBillByProjectId(this.selectedProjectId);
+		//消费日期,列表的最外层
+		List<Long> dateList = billService.queryConsumeDateByProjectId(this.selectedProjectId);
+
 		if (CollectionUtils.isEmpty(billList)) {
 			HeaderView.of(billListEmptyHeaderView).addTo(viewBinding.RecyclerViewBillList);
 			dateBillInfoList.clear();

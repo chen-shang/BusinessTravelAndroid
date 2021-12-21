@@ -33,6 +33,7 @@ public class Keyboard extends ConstraintLayout {
 	 * 日历弹框
 	 */
 	private final DatePickerDialog datePickerDialog;
+	private Long selectedDate = DateTimeUtil.timestamp();
 	/**
 	 * 备注编辑框
 	 */
@@ -84,6 +85,15 @@ public class Keyboard extends ConstraintLayout {
 		recyclerViewKeyboard.setAdapter(new KeyboardRecyclerViewAdapter());
 	}
 
+	public Long getSelectedDate() {
+		return selectedDate;
+	}
+
+	public void setSelectedDate(Long selectedDate) {
+		this.selectedDate = selectedDate;
+		//todo show
+	}
+
 	class KeyboardRecyclerViewAdapter extends RecyclerView.Adapter<KeyboardRecyclerViewAdapterViewHolder> {
 
 		@NonNull
@@ -112,6 +122,8 @@ public class Keyboard extends ConstraintLayout {
 						// TODO: 2021/11/30
 						datePickerDialog.setOnDateSetListener((view, year, month, dayOfMonth) -> {
 							LocalDate localDate = LocalDate.of(year, month + 1, dayOfMonth);
+							//更新选中的日期
+							selectedDate = DateTimeUtil.timestamp(localDate);
 							((TextView)v).setText(DateTimeUtil.format(localDate, "MM.dd"));
 						});
 						datePickerDialog.show();
