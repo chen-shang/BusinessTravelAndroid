@@ -23,9 +23,5 @@ public class TestActivity extends BaseActivity<ActivityTestBinding> {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		viewBinding.ceshi.setOnClickListener(v -> {
-			throw new IllegalArgumentException("我错了！！！！呜呜呜");
-		});
-		viewBinding.west.loadUrl("https://gitee.com/chen-shang/business-travel-resource/raw/master/about/user_agreement.txt");
 	}
 }

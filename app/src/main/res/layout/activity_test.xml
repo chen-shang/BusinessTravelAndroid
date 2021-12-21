@@ -7,14 +7,7 @@
         tools:context=".ui.test.TestActivity"
         android:orientation="vertical">
 
-    <Button
-            android:id="@+id/ceshi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="测试"/>
-
-    <WebView
-            android:id="@+id/west"
+    <com.business.travel.app.view.Keyboard
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 

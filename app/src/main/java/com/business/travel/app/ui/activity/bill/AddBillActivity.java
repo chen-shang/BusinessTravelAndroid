@@ -12,7 +12,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
@@ -169,26 +168,20 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 			}
 		});
 
-		searchBar.getSearchEditText().setOnFocusChangeListener(new OnFocusChangeListener() {
-			@Override
-			public void onFocusChange(View v, boolean hasFocus) {
-				LogToast.infoShow("OnFocusChangeListener:" + hasFocus);
-				if (!hasFocus) {
-					searchBar.closeSearch();
-				}
+		searchBar.getSearchEditText().setOnFocusChangeListener((v, hasFocus) -> {
+			LogToast.infoShow("OnFocusChangeListener:" + hasFocus);
+			if (!hasFocus) {
+				searchBar.closeSearch();
 			}
 		});
 		ImageView clearIcon = findViewById(R.id.mt_clear);
 		clearIcon.setVisibility(View.GONE);
 		ImageView arrowIcon = findViewById(R.id.mt_arrow);
-		arrowIcon.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				final Editable text = searchBar.getSearchEditText().getText();
-				if (StringUtils.isBlank(text.toString())) {
-					LogToast.errorShow("请输入项目名称");
-					searchBar.openSearch();
-				}
+		arrowIcon.setOnClickListener(v -> {
+			Editable text = searchBar.getSearchEditText().getText();
+			if (StringUtils.isBlank(text.toString())) {
+				LogToast.errorShow("请输入项目名称");
+				searchBar.openSearch();
 			}
 		});
 

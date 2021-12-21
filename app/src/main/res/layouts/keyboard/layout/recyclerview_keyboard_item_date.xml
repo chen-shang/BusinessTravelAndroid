@@ -11,7 +11,7 @@
             android:layout_height="wrap_content"
             android:text="今天"
             android:gravity="center"
-            android:textSize="10dp"
+            android:textSize="11sp"
             style="?android:attr/borderlessButtonStyle"
             app:drawableStartCompat="@drawable/ic_calendar"
             app:layout_constraintEnd_toEndOf="parent"
