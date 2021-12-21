@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import com.business.travel.app.R;
 import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.dal.dao.ConsumptionDao;
 import com.business.travel.app.dal.dao.MemberDao;
@@ -23,10 +22,9 @@ import com.business.travel.app.dal.entity.Member;
 import com.business.travel.app.databinding.ActivityAddItemBinding;
 import com.business.travel.app.model.GiteeContent;
 import com.business.travel.app.model.ImageIconInfo;
-import com.business.travel.app.ui.base.BaseActivity;
+import com.business.travel.app.ui.base.ColorStatusBarActivity;
 import com.business.travel.app.utils.FutureUtil;
 import com.business.travel.app.utils.LogToast;
-import com.business.travel.app.utils.StatusBarUtil;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.ItemTypeEnum;
@@ -43,7 +41,7 @@ import org.jetbrains.annotations.NotNull;
  * @author chenshang
  * 添加消费项页 或 添加人员页面
  */
-public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
+public class AddItemActivity extends ColorStatusBarActivity<ActivityAddItemBinding> {
 
 	/**
 	 * 缓存一下对应图标的目录信息
@@ -85,9 +83,6 @@ public class AddItemActivity extends BaseActivity<ActivityAddItemBinding> {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//顶部渐变
-		StatusBarUtil.setStatusBarView(getWindow(), getResources(), R.drawable.corners_shape_change);
-		
 		//icon分类和列表
 		registerSwipeRecyclerView(viewBinding.UIAddItemActivitySwipeRecyclerView);
 

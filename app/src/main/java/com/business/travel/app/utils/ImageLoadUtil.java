@@ -3,10 +3,12 @@ package com.business.travel.app.utils;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
+import com.blankj.utilcode.util.ResourceUtils;
 import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.enums.ItemIconEnum;
 import com.pixplicity.sharp.OnSvgElementListener;
@@ -41,17 +43,16 @@ public class ImageLoadUtil {
 			if (color != null) {
 				//需要改变颜色
 				uiImageViewIcon.getDrawable().setTint(color);
+			} else {
+				//恢复原来的颜色
+				Drawable drawable = ResourceUtils.getDrawable(itemIconEnum.getResourceId());
+				uiImageViewIcon.setImageDrawable(drawable);
 			}
 			return;
 		}
 
 		FutureUtil.supplyAsync(() -> BusinessTravelResourceApi.getIcon(iconDownloadUrl)).whenComplete((inputStream, throwable) -> {
 			if (inputStream == null) {
-				return;
-			}
-			if (color == null) {
-				//不需要改变颜色
-				Sharp.loadInputStream(inputStream).into(uiImageViewIcon);
 				return;
 			}
 			//需要改变颜色
@@ -83,11 +84,11 @@ public class ImageLoadUtil {
 		@Override
 		public <T> T onSvgElement(@Nullable @org.jetbrains.annotations.Nullable String id, @NonNull @NotNull T element, @Nullable @org.jetbrains.annotations.Nullable RectF elementBounds, @NonNull @NotNull Canvas canvas, @Nullable @org.jetbrains.annotations.Nullable RectF canvasBounds,
 		                          @Nullable @org.jetbrains.annotations.Nullable Paint paint) {
-			if (paint != null) {
+			if (paint != null && color != null) {
 				paint.setColor(color);
 				return element;
 			}
-			return null;
+			return element;
 		}
 
 		@Override

@@ -4,9 +4,10 @@
 
     <!-- 设置圆角弧度 -->
     <corners android:radius="100dp"/>
+<!--    <solid android:color="@color/red_2"/>-->
     <!-- 设置背景颜色 -->
     <stroke
-            android:color="@color/teal_800"
+            android:color="@color/red_2"
             android:width="1dp"/>
     <padding
             android:bottom="5dp"
