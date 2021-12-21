@@ -1,6 +1,7 @@
 package com.business.travel.app.view;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -29,6 +30,10 @@ import org.jetbrains.annotations.NotNull;
 public class Keyboard extends ConstraintLayout {
 
 	/**
+	 * 日历弹框
+	 */
+	private final DatePickerDialog datePickerDialog;
+	/**
 	 * 备注编辑框
 	 */
 	public EditText editTextRemark;
@@ -40,12 +45,8 @@ public class Keyboard extends ConstraintLayout {
 	 * 金额展示
 	 */
 	public TextView textViewAmount;
-
 	private OnClickListener onSaveClick;
 	private OnClickListener onReRecordClick;
-
-	private final DatePickerDialog datePickerDialog;
-
 	public Keyboard onSaveClick(OnClickListener onSaveClick) {
 		this.onSaveClick = onSaveClick;
 		return this;
@@ -69,8 +70,8 @@ public class Keyboard extends ConstraintLayout {
 		//键盘布局
 		SwipeRecyclerView recyclerViewKeyboard = inflate.findViewById(R.id.RecyclerView_Keyboard);
 
-		datePickerDialog = new DatePickerDialog(context, (view, year, month, dayOfMonth) -> {
-		}, DateTimeUtil.now().getYear(), DateTimeUtil.now().getMonth().getValue() - 1, DateTimeUtil.now().getDayOfMonth());
+		LocalDateTime now = DateTimeUtil.now();
+		datePickerDialog = new DatePickerDialog(context, (view, year, month, dayOfMonth) -> {}, now.getYear(), now.getMonth().getValue() - 1, now.getDayOfMonth());
 
 		//4*4 布局
 		GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 4) {
@@ -80,8 +81,7 @@ public class Keyboard extends ConstraintLayout {
 			}
 		};
 		recyclerViewKeyboard.setLayoutManager(gridLayoutManager);
-		KeyboardRecyclerViewAdapter keyboardRecyclerViewAdapter = new KeyboardRecyclerViewAdapter();
-		recyclerViewKeyboard.setAdapter(keyboardRecyclerViewAdapter);
+		recyclerViewKeyboard.setAdapter(new KeyboardRecyclerViewAdapter());
 	}
 
 	class KeyboardRecyclerViewAdapter extends RecyclerView.Adapter<KeyboardRecyclerViewAdapterViewHolder> {
