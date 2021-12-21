@@ -16,7 +16,6 @@ import androidx.viewbinding.ViewBinding;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.blankj.utilcode.util.CollectionUtils;
-import com.blankj.utilcode.util.StringUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.enums.ItemIconEnum;
 import com.business.travel.app.model.ImageIconInfo;
@@ -28,6 +27,7 @@ import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.ItemTypeEnum;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -64,7 +64,7 @@ public class ItemIconRecyclerViewAdapter extends BaseRecyclerViewAdapter<IconRec
 		}
 		//先根据RUL地址查询本地资源
 		String iconDownloadUrl = imageIconInfo.getIconDownloadUrl();
-		if (StringUtils.isEmpty(iconDownloadUrl)) {
+		if (StringUtils.isBlank(iconDownloadUrl)) {
 			return;
 		}
 

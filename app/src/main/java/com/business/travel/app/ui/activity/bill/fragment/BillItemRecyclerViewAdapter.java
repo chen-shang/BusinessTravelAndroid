@@ -115,7 +115,7 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 	}
 
 	private AttachListPopupView newAttachListPopupView(@NotNull BillItemRecyclerViewAdapterViewHolder holder, int position, Bill bill) {
-		return new Builder(activity).atView(holder.iconImageView).asAttachList(new String[] {"删除", "编辑"}, new int[] {R.drawable.ic_base_delete, R.drawable.ic_base_green_edit}, (pos, text) -> {
+		return new Builder(activity).atView(holder.iconImageView).asAttachList(new String[] {"删除", "编辑"}, new int[] {R.drawable.ic_base_delete, R.drawable.ic_base_edit}, (pos, text) -> {
 			switch (pos) {
 				case 0:
 					delete(position, bill);
@@ -130,7 +130,7 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 	}
 
 	private void edit(int position, Bill bill) {
-
+		//todo
 	}
 
 	private void delete(int position, Bill bill) {
@@ -167,8 +167,6 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 		public ImageView iconImageView;
 		@BindView(R.id.UI_BillFragment_BillItemAdapter_Amount)
 		public TextView amountTextView;
-		//@BindView(R.id.UI_BillFragment_BillItemAdapter_Associate)
-		//public TextView associateTextView;
 		@BindView(R.id.UI_BillFragment_BillItemAdapter_ConsumptionItem)
 		public TextView consumptionItemTextView;
 		@BindView(R.id.card)

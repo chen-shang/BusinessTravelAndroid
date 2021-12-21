@@ -18,7 +18,6 @@ import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
-import com.business.travel.app.model.DateBillInfo;
 import com.business.travel.app.service.BillService;
 import com.business.travel.app.ui.activity.bill.fragment.BillRecyclerViewAdapter.BillRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
@@ -32,13 +31,13 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author chenshang
  */
-public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecyclerViewAdapterViewHolder, DateBillInfo> {
+public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecyclerViewAdapterViewHolder, Long> {
 
 	private final BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
 	private BillService billService;
 
-	public BillRecyclerViewAdapter(List<DateBillInfo> dateBillInfos, BaseActivity<? extends ViewBinding> baseActivity) {
-		super(dateBillInfos, baseActivity);
+	public BillRecyclerViewAdapter(List<Long> dateList, BaseActivity<? extends ViewBinding> baseActivity) {
+		super(dateList, baseActivity);
 	}
 
 	@Override
@@ -62,28 +61,23 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 			return;
 		}
 
-		DateBillInfo dateBillInfo = dataList.get(position);
-		Long date = dateBillInfo.getDate();
+		Long date = dataList.get(position);
+		//后面可以改成查询数据库
+		Long selectedProjectId = billFragment.getSelectedProjectId();
+		List<Bill> billList = billService.queryBillByProjectIdAndConsumeDate(selectedProjectId, date);
+		if (CollectionUtils.isNotEmpty(billList)) {
+			//接下来是当天的账单列表显示
+			holder.billItemSwipeRecyclerView.setLayoutManager(new LinearLayoutManager(activity.getApplicationContext()));
+			holder.billItemSwipeRecyclerView.setAdapter(new BillItemRecyclerViewAdapter(billList, activity, holder));
+		}
+
 		holder.consumerDateTextView.setText(DateTimeUtil.format(date, "yyyy-MM-dd"));
 		int code = DateTimeUtil.toLocalDateTime(date).getDayOfWeek().getValue();
 		WeekEnum weekEnum = WeekEnum.ofCode(code);
 		holder.consumerWeekTextView.setText(weekEnum.getMsg());
 
-		//后面可以改成查询数据库
-		Long selectedProjectId = billFragment.getSelectedProjectId();
-		//List<Bill> billList = dateBillInfo.getBillList();
-		List<Bill> billList = billService.queryBillByProjectIdAndConsumeDate(selectedProjectId, date);
-		if (CollectionUtils.isEmpty(billList)) {
-			return;
-		}
-
 		//刷新金额显示
 		refreshMoneyShow(holder, selectedProjectId, date);
-
-		//接下来是当天的账单列表显示
-		holder.billItemSwipeRecyclerView.setLayoutManager(new LinearLayoutManager(activity.getApplicationContext()));
-		final BillItemRecyclerViewAdapter adapter = new BillItemRecyclerViewAdapter(billList, activity, holder);
-		holder.billItemSwipeRecyclerView.setAdapter(adapter);
 	}
 
 	public void refreshMoneyShow(BillRecyclerViewAdapterViewHolder viewHolder, Long projectId, Long date) {

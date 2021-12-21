@@ -100,7 +100,7 @@ public interface BillDao extends BaseDao<Bill> {
 	 * @param projectId
 	 * @return
 	 */
-	@Query("SELECT distinct consumeDate FROM bill where projectId=:projectId and isDeleted=1")
+	@Query("SELECT distinct consumeDate FROM bill where projectId=:projectId and isDeleted=1 order by consumeDate desc")
 	List<Long> selectConsumeDateByProjectId(Long projectId);
 
 	/**

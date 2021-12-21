@@ -1,10 +1,8 @@
 package com.business.travel.app.ui.activity.bill.fragment;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -17,10 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
-import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.FragmentBillBinding;
-import com.business.travel.app.model.DateBillInfo;
 import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.activity.master.MasterActivity;
@@ -42,8 +38,6 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	/**
 	 * 账单列表数据
 	 */
-	private final List<DateBillInfo> dateBillInfoList = new ArrayList<>();
-
 	private final List<Long> dateList = new ArrayList<>();
 	@Getter
 	private BillRecyclerViewAdapter billRecyclerViewAdapter;
@@ -126,7 +120,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	private void registerSwipeRecyclerView(SwipeRecyclerView swipeRecyclerView) {
 		//线性布局
 		swipeRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
-		billRecyclerViewAdapter = new BillRecyclerViewAdapter(dateBillInfoList, (MasterActivity)requireActivity());
+		billRecyclerViewAdapter = new BillRecyclerViewAdapter(dateList, (MasterActivity)requireActivity());
 		HeaderView.of(billListHeadView).addTo(swipeRecyclerView);
 		swipeRecyclerView.setAdapter(billRecyclerViewAdapter);
 	}
@@ -144,7 +138,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 			billListHeaderViewHolder.endTime.setText(null);
 			billListHeaderViewHolder.durationDay.setText(null);
 
-			dateBillInfoList.clear();
+			dateList.clear();
 			billRecyclerViewAdapter.notifyDataSetChanged();
 			//展示空的头部即可
 			HeaderView.of(billListEmptyHeaderView).addTo(viewBinding.RecyclerViewBillList);
@@ -159,35 +153,19 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		//刷新顶部金额
 		refreshMoneyShow(this.selectedProjectId);
 
-		//查询全部的账单列表
-		List<Bill> billList = billService.queryBillByProjectId(this.selectedProjectId);
 		//消费日期,列表的最外层
 		List<Long> dateList = billService.queryConsumeDateByProjectId(this.selectedProjectId);
-
-		if (CollectionUtils.isEmpty(billList)) {
+		if (CollectionUtils.isEmpty(dateList)) {
 			HeaderView.of(billListEmptyHeaderView).addTo(viewBinding.RecyclerViewBillList);
-			dateBillInfoList.clear();
+			dateList.clear();
 			billRecyclerViewAdapter.notifyDataSetChanged();
 			return;
 		}
 
 		HeaderView.of(billListEmptyHeaderView).removeFrom(viewBinding.RecyclerViewBillList);
-		List<DateBillInfo> newDateBillInfoList = billList
-				//to stream
-				.stream()
-				//按照消费日期分组,先转换成对应的年月日
-				.collect(Collectors.groupingBy(item -> DateTimeUtil.format(item.getConsumeDate(), "yyyy-MM-dd")))
-				//获取 entry set
-				.entrySet()
-				//to stream
-				.stream()
-				//转成时间戳
-				.map(entry -> new DateBillInfo(DateTimeUtil.timestamp(entry.getKey(), "yyyy-MM-dd"), entry.getValue()))
-				//按照消费时间有小到大排序
-				.sorted(Comparator.comparing(DateBillInfo::getDate).reversed()).collect(Collectors.toList());
 
-		this.dateBillInfoList.clear();
-		dateBillInfoList.addAll(newDateBillInfoList);
+		this.dateList.clear();
+		this.dateList.addAll(dateList);
 		billRecyclerViewAdapter.notifyDataSetChanged();
 	}
 
