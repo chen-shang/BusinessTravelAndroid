@@ -198,7 +198,6 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 
 		Integer icon = parseIcon(time);
 		Drawable drawable = ResourceUtils.getDrawable(icon);
-		//drawable.setBounds(0, 0, drawable.getIntrinsicWidth() / 2, drawable.getIntrinsicHeight() / 2);
 		textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
 	}
 

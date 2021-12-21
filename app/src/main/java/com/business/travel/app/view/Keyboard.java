@@ -1,5 +1,8 @@
 package com.business.travel.app.view;
 
+import java.time.LocalDate;
+
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -18,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.blankj.utilcode.util.ColorUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.view.Keyboard.KeyboardRecyclerViewAdapter.KeyboardRecyclerViewAdapterViewHolder;
+import com.business.travel.utils.DateTimeUtil;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -39,6 +43,8 @@ public class Keyboard extends ConstraintLayout {
 
 	private OnClickListener onSaveClick;
 	private OnClickListener onReRecordClick;
+
+	private final DatePickerDialog datePickerDialog;
 
 	public Keyboard onSaveClick(OnClickListener onSaveClick) {
 		this.onSaveClick = onSaveClick;
@@ -62,6 +68,9 @@ public class Keyboard extends ConstraintLayout {
 		textViewAmount = inflate.findViewById(R.id.TextView_Amount);
 		//键盘布局
 		SwipeRecyclerView recyclerViewKeyboard = inflate.findViewById(R.id.RecyclerView_Keyboard);
+
+		datePickerDialog = new DatePickerDialog(context, (view, year, month, dayOfMonth) -> {
+		}, DateTimeUtil.now().getYear(), DateTimeUtil.now().getMonth().getValue() - 1, DateTimeUtil.now().getDayOfMonth());
 
 		//4*4 布局
 		GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 4) {
@@ -101,6 +110,11 @@ public class Keyboard extends ConstraintLayout {
 					//date 日期按钮样式
 					holder.dateTextView.setOnClickListener(v -> {
 						// TODO: 2021/11/30
+						datePickerDialog.setOnDateSetListener((view, year, month, dayOfMonth) -> {
+							LocalDate localDate = LocalDate.of(year, month + 1, dayOfMonth);
+							((TextView)v).setText(DateTimeUtil.format(localDate, "MM.dd"));
+						});
+						datePickerDialog.show();
 					});
 					break;
 				case 14:
