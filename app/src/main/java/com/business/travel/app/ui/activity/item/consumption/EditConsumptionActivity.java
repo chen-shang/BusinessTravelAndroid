@@ -184,7 +184,7 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 	 * 注册添加按钮操作事件
 	 */
 	private void registerConsumptionButtonAddItem() {
-		viewBinding.UIConsumerItemButtonAddItem.setOnClickListener(v -> {
+		viewBinding.DragFloatActionButton.setOnClickListener(v -> {
 			Intent intent = new Intent(this, AddItemActivity.class);
 			intent.putExtra("itemType", ItemTypeEnum.CONSUMPTION.name());
 			intent.putExtra("consumptionType", consumptionType.name());

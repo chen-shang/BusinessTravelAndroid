@@ -20,9 +20,9 @@ import com.business.travel.app.ui.activity.item.AddItemActivity;
 import com.business.travel.app.ui.activity.item.EditItemRecyclerViewAdapter;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
-import com.business.travel.app.view.HeaderView;
 import com.business.travel.app.utils.ImageIconUtil;
 import com.business.travel.app.utils.StatusBarUtil;
+import com.business.travel.app.view.HeaderView;
 import com.business.travel.vo.enums.ItemTypeEnum;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
@@ -109,7 +109,7 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 	}
 
 	private void registerConsumerItemButtonAddItem() {
-		viewBinding.UIConsumerItemButtonAddItem.setOnClickListener(v -> {
+		viewBinding.DragFloatActionButton.setOnClickListener(v -> {
 			Intent intent = new Intent(this, AddItemActivity.class);
 			intent.putExtra("itemType", ItemTypeEnum.MEMBER.name());
 			startActivity(intent);

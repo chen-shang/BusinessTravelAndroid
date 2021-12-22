@@ -113,7 +113,7 @@ public class BusinessTravelResourceApi {
 	 * https://gitee.com/api/v5/swagger#/getV5ReposOwnerRepoContents(Path)
 	 */
 	public static List<GiteeContent> getRepoContents(String path) {
-		String uri = "https://gitee.com/api/v5/repos/chen-shang/business-travel-resource/contents" + path;
+		String uri = "https://gitee.com/api/v5/repos/chen-shang/business-travel-resource/contents/" + path;
 		HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(uri)).newBuilder().addQueryParameter("access_token", ACCESS_TOKEN);
 		Request request = new Builder().url(urlBuilder.build()).build();
 		try {
@@ -131,7 +131,7 @@ public class BusinessTravelResourceApi {
 
 	public static String getRepoRaw(String path) {
 		try {
-			String uri = "https://gitee.com/chen-shang/business-travel-resource/raw" + path;
+			String uri = "https://gitee.com/chen-shang/business-travel-resource/raw/" + path;
 			ResponseBody body = getResponseBody(uri);
 			return body.string();
 		} catch (IOException e) {

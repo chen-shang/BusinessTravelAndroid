@@ -33,17 +33,17 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
 
         <com.barnettwong.dragfloatactionbuttonlibrary.view.DragFloatActionButton
-                android:id="@+id/UIConsumerItemButtonAddItem"
+                android:id="@+id/DragFloatActionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
                 android:layout_marginEnd="20dp"
                 android:clickable="true"
                 android:src="@drawable/ic_base_bill_add"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
-                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 />
     </androidx.constraintlayout.widget.ConstraintLayout>
