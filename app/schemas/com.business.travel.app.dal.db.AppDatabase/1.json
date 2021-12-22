@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "9d889b1f7aa670af6c32ea9f307ddcdc",
+    "identityHash": "83c1d2da348e3163a455cbfdc42079f4",
     "entities": [
       {
         "tableName": "Member",
@@ -237,7 +237,7 @@
       },
       {
         "tableName": "Project",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `startTime` INTEGER, `endTime` INTEGER, `remark` TEXT, `status` INTEGER, `sortId` INTEGER, `iconDownloadUrl` TEXT, `budget` INTEGER, `themeId` INTEGER, `createTime` INTEGER, `modifyTime` INTEGER DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `startTime` INTEGER, `endTime` INTEGER, `remark` TEXT, `status` INTEGER, `sortId` INTEGER, `iconDownloadUrl` TEXT, `budget` INTEGER, `themeId` INTEGER, `cityId` INTEGER, `createTime` INTEGER, `modifyTime` INTEGER DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -300,6 +300,12 @@
             "notNull": false
           },
           {
+            "fieldPath": "cityId",
+            "columnName": "cityId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
             "fieldPath": "createTime",
             "columnName": "createTime",
             "affinity": "INTEGER",
@@ -332,6 +338,7 @@
             "columnNames": [
               "name"
             ],
+            "orders": [],
             "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Project_name` ON `${TABLE_NAME}` (`name`)"
           }
         ],
@@ -398,7 +405,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9d889b1f7aa670af6c32ea9f307ddcdc')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '83c1d2da348e3163a455cbfdc42079f4')"
     ]
   }
 }

@@ -61,6 +61,10 @@ public class Project extends BaseEntity {
 	 * 主题ID
 	 */
 	private Long themeId;
+	/**
+	 * 出差城市
+	 */
+	private Long cityId;
 
 	/**
 	 * 项目开始时间-结束时间
