@@ -201,7 +201,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 				// 设置数据总数量
 				.setDataAllCount(consumptionImageIconList.size())
 				// 设置每页行数 // 设置每页列数
-				.setRowCount(3).setColumnCount(5)
+				.setRowCount(4).setColumnCount(5)
 				// 设置是否显示指示器
 				.setPointIsShow(true)
 				// 设置背景图片(此时设置的背景色无效，以背景图片为主)
@@ -444,6 +444,6 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		editImageIcon.setName(ItemIconEnum.ItemIconEdit.getName());
 		editImageIcon.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
 		memberIconList.add(editImageIcon);
-		viewBinding.GridViewPagerMemberIconList.setDataAllCount(memberIconList.size()).show();
+		viewBinding.GridViewPagerMemberIconList.setDataAllCount(memberIconList.size()).setRowCount(memberIconList.size() > 5 ? 2 : 1).show();
 	}
 }

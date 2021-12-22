@@ -43,7 +43,7 @@
     <androidx.cardview.widget.CardView
             android:id="@+id/UI_AddBillActivity_CardView_BillIcon"
             android:layout_width="match_parent"
-            android:layout_height="230dp"
+            android:layout_height="wrap_content"
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="5dp"
@@ -65,7 +65,7 @@
     <androidx.cardview.widget.CardView
             android:id="@+id/UI_AddBillActivity_CardView_Associate"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="wrap_content"
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="5dp"
