@@ -8,7 +8,9 @@ import java.util.stream.Collectors;
 import android.content.Context;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.NetworkUtils;
 import com.business.travel.app.api.BusinessTravelResourceApi;
+import com.business.travel.app.constant.BusinessTravelResourceConstant;
 import com.business.travel.app.dal.dao.ConsumptionDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Consumption;
@@ -16,6 +18,7 @@ import com.business.travel.app.model.GiteeContent;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.model.converter.ConsumptionConverter;
 import com.business.travel.app.utils.FutureUtil;
+import com.business.travel.app.utils.LogToast;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.DeleteEnum;
@@ -58,22 +61,30 @@ public class ConsumptionService {
 	 * 初次使用app的时候,数据库中是没有消费项图标数据的,因此需要初始化一些默认的图标
 	 */
 	public void initConsumption() {
-		LogUtils.i("开始初始化默认图标");
 		if (consumptionDao.count() > 0) {
 			LogUtils.d("已经初始化默认图标");
 			return;
 		}
+
+		if (!NetworkUtils.isAvailable()) {
+			LogUtils.e("网络不稳定,请稍后重试");
+			LogToast.infoShow("网络不稳定");
+			return;
+		}
+
+		LogUtils.i("开始初始化默认图标");
+
 		//先获取远程的默认消费项列表,然后插入数据库,注意sortId
 		List<Consumption> consumptions = new ArrayList<>();
 
 		FutureUtil.supplyAsync(() -> {
-			List<GiteeContent> v5ReposOwnerRepoContentsIncome = BusinessTravelResourceApi.getV5ReposOwnerRepoContents("icon/DEFAULT/CONSUMPTION/INCOME");
+			List<GiteeContent> v5ReposOwnerRepoContentsIncome = BusinessTravelResourceApi.getV5ReposOwnerRepoContents(BusinessTravelResourceConstant.INCOME_ICON_PATH);
 			LogUtils.i("开始初始化默认图标: 收入图标共计:" + v5ReposOwnerRepoContentsIncome.size());
 			if (CollectionUtils.isNotEmpty(v5ReposOwnerRepoContentsIncome)) {
 				List<Consumption> IncomeConsumptionList = getConsumptions(v5ReposOwnerRepoContentsIncome, ConsumptionTypeEnum.INCOME);
 				consumptions.addAll(IncomeConsumptionList);
 			}
-			List<GiteeContent> v5ReposOwnerRepoContentsSpending = BusinessTravelResourceApi.getV5ReposOwnerRepoContents("icon/DEFAULT/CONSUMPTION/SPENDING");
+			List<GiteeContent> v5ReposOwnerRepoContentsSpending = BusinessTravelResourceApi.getV5ReposOwnerRepoContents(BusinessTravelResourceConstant.SPENDING_ICON_PATH);
 			LogUtils.i("开始初始化默认图标: 支出图标共计:" + v5ReposOwnerRepoContentsSpending.size());
 			if (CollectionUtils.isNotEmpty(v5ReposOwnerRepoContentsSpending)) {
 				List<Consumption> IncomeConsumptionList = getConsumptions(v5ReposOwnerRepoContentsSpending, ConsumptionTypeEnum.SPENDING);

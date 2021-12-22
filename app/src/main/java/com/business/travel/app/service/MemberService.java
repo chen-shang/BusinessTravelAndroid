@@ -7,12 +7,14 @@ import java.util.stream.Collectors;
 import android.content.Context;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.NetworkUtils;
 import com.business.travel.app.dal.dao.MemberDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Member;
 import com.business.travel.app.enums.ItemIconEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.model.converter.MemberConverter;
+import com.business.travel.app.utils.LogToast;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.vo.enums.ItemTypeEnum;
 
@@ -55,11 +57,18 @@ public class MemberService {
 	 * 初次使用app的时候,数据库中是没有人员图标数据的,因此需要初始化一些默认的图标
 	 */
 	public void initMember() {
-		LogUtils.i("开始初始化人员默认图标");
 		if (memberDao.count() > 0) {
 			LogUtils.i("已经初始化人员默认图标");
 			return;
 		}
+
+		if (!NetworkUtils.isAvailable()) {
+			LogUtils.e("网络不稳定,请稍后重试");
+			LogToast.infoShow("网络不稳定");
+			return;
+		}
+
+		LogUtils.i("开始初始化人员默认图标");
 
 		Member member = new Member();
 		member.setName("我");

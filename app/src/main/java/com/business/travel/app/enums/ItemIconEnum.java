@@ -6,16 +6,11 @@ import java.util.Map;
 
 import com.business.travel.app.R;
 
+/**
+ * 本地图标映射
+ */
 public enum ItemIconEnum {
-
-	ItemIconJiangJin("https://gitee.com/chen-shang/business-travel-resource/raw/master/收入/奖金.svg", R.drawable.ic_spending_jiangjin, "奖金"),
-	ItemIconGongZi("https://gitee.com/chen-shang/business-travel-resource/raw/master/收入/工资.svg", R.drawable.ic_spending_gongzi, "工资"),
-	ItemIconLiJin("https://gitee.com/chen-shang/business-travel-resource/raw/master/收入/礼金.svg", R.drawable.ic_spending_lijin, "礼金"),
-	ItemIconHongBao("https://gitee.com/chen-shang/business-travel-resource/raw/master/收入/红包.svg", R.drawable.ic_spending_hongbao, "红包"),
-	ItemIconZhuanZhang("https://gitee.com/chen-shang/business-travel-resource/raw/master/收入/转账.svg", R.drawable.ic_spending_zhuanzhang, "转账"),
-	ItemIconYinHangKa("https://gitee.com/chen-shang/business-travel-resource/raw/master/收入/银行卡.svg", R.drawable.ic_spending_yinhangka, "银行卡"),
 	ItemIconEdit("https://gitee.com/chen-shang/business-travel-resource/raw/master/基础/设置.svg", R.drawable.ic_base_setting, "编辑"),
-
 	ItemIconMe("https://gitee.com/api/v5/repos/chen-shang/business-travel-resource/contents/icon/COMMON/我.svg", R.drawable.ic_me, "我"),
 	;
 
