@@ -78,13 +78,13 @@ public class ConsumptionService {
 		List<Consumption> consumptions = new ArrayList<>();
 
 		FutureUtil.supplyAsync(() -> {
-			List<GiteeContent> v5ReposOwnerRepoContentsIncome = BusinessTravelResourceApi.getV5ReposOwnerRepoContents(BusinessTravelResourceConstant.INCOME_ICON_PATH);
+			List<GiteeContent> v5ReposOwnerRepoContentsIncome = BusinessTravelResourceApi.getRepoContents(BusinessTravelResourceConstant.INCOME_ICON_PATH);
 			LogUtils.i("开始初始化默认图标: 收入图标共计:" + v5ReposOwnerRepoContentsIncome.size());
 			if (CollectionUtils.isNotEmpty(v5ReposOwnerRepoContentsIncome)) {
 				List<Consumption> IncomeConsumptionList = getConsumptions(v5ReposOwnerRepoContentsIncome, ConsumptionTypeEnum.INCOME);
 				consumptions.addAll(IncomeConsumptionList);
 			}
-			List<GiteeContent> v5ReposOwnerRepoContentsSpending = BusinessTravelResourceApi.getV5ReposOwnerRepoContents(BusinessTravelResourceConstant.SPENDING_ICON_PATH);
+			List<GiteeContent> v5ReposOwnerRepoContentsSpending = BusinessTravelResourceApi.getRepoContents(BusinessTravelResourceConstant.SPENDING_ICON_PATH);
 			LogUtils.i("开始初始化默认图标: 支出图标共计:" + v5ReposOwnerRepoContentsSpending.size());
 			if (CollectionUtils.isNotEmpty(v5ReposOwnerRepoContentsSpending)) {
 				List<Consumption> IncomeConsumptionList = getConsumptions(v5ReposOwnerRepoContentsSpending, ConsumptionTypeEnum.SPENDING);

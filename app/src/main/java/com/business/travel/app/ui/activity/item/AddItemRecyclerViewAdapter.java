@@ -40,10 +40,10 @@ public class AddItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<AddItemR
 			CacheBuilder.newBuilder().maximumSize(5).expireAfterWrite(1, TimeUnit.MINUTES).build(new CacheLoader<String, List<GiteeContent>>() {
 				@Override
 				public List<GiteeContent> load(String path) {
-					return BusinessTravelResourceApi.getV5ReposOwnerRepoContents(path).stream()
-							.filter(item -> "file".equals(item.getType()))
-							.filter(item -> item.getName().endsWith("svg"))
-							.collect(Collectors.toList());
+					return BusinessTravelResourceApi.getRepoContents(path).stream()
+					                                .filter(item -> "file".equals(item.getType()))
+					                                .filter(item -> item.getName().endsWith("svg"))
+					                                .collect(Collectors.toList());
 				}
 			});
 

@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.StringJoiner;
 
 import androidx.annotation.Nullable;
@@ -15,7 +16,9 @@ import com.blankj.utilcode.util.FileIOUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.PathUtils;
+import com.business.travel.app.constant.AppConfig;
 import com.business.travel.app.exceptions.ApiException;
+import com.business.travel.app.model.Config;
 import com.business.travel.app.model.GiteeContent;
 import com.business.travel.app.utils.HttpWrapper;
 import com.business.travel.utils.DateTimeUtil;
@@ -28,6 +31,7 @@ import okhttp3.Request.Builder;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.util.DigestUtils;
 
 /**
@@ -38,11 +42,7 @@ import org.springframework.util.DigestUtils;
 public class BusinessTravelResourceApi {
 
 	private static final HttpWrapper httpClient = HttpWrapper.withOkHttpClient(new OkHttpClient());
-	private static final String OWNER = "chen-shang";
-	private static final String REPOSITORY = "business-travel-resource";
-	private static final String BASE_URL = "https://gitee.com/api/v5/repos";
 	private static final String ACCESS_TOKEN = "a1b50339ccf80a7c96f6a96fa97fcdaf";
-	private static final String URL_ = BASE_URL + "/" + OWNER + "/" + REPOSITORY;
 
 	/**
 	 * @param iconFullName
@@ -89,7 +89,8 @@ public class BusinessTravelResourceApi {
 		//超过3分钟重新下载
 		long nowTimestamp = DateTimeUtil.timestamp();
 		long lastModified = file.lastModified();
-		if (nowTimestamp - lastModified > 3 * 60 * 1000) {
+		Long iconTtl = Optional.ofNullable(AppConfig.getConfig()).map(Config::getIconTtl).orElse(5 * 60 * 1000L);
+		if (nowTimestamp - lastModified > iconTtl) {
 			boolean delete = file.delete();
 			LogUtils.i("清除缓存" + iconFullName + " :" + delete);
 			return null;
@@ -100,15 +101,7 @@ public class BusinessTravelResourceApi {
 
 	private static InputStream getIconFromServer(String iconFullName) {
 		try {
-			Request request = new Builder().url(iconFullName).build();
-			Response response = new OkHttpClient().newCall(request).execute();
-			if (!response.isSuccessful()) {
-				throw new RuntimeException("请求失败:" + response.code() + ",请稍后再试");
-			}
-			ResponseBody body = response.body();
-			if (body == null) {
-				throw new RuntimeException("请求失败,请稍后再试");
-			}
+			ResponseBody body = getResponseBody(iconFullName);
 			return body.byteStream();
 		} catch (IOException e) {
 			throw new IllegalArgumentException("获取图标失败");
@@ -119,8 +112,8 @@ public class BusinessTravelResourceApi {
 	 * 获取仓库具体路径下的内容
 	 * https://gitee.com/api/v5/swagger#/getV5ReposOwnerRepoContents(Path)
 	 */
-	public static List<GiteeContent> getV5ReposOwnerRepoContents(String path) {
-		String uri = URL_ + "/contents/" + path;
+	public static List<GiteeContent> getRepoContents(String path) {
+		String uri = "https://gitee.com/api/v5/repos/chen-shang/business-travel-resource/contents" + path;
 		HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(uri)).newBuilder().addQueryParameter("access_token", ACCESS_TOKEN);
 		Request request = new Builder().url(urlBuilder.build()).build();
 		try {
@@ -134,5 +127,29 @@ public class BusinessTravelResourceApi {
 		} catch (IOException e) {
 			throw new ApiException(-1, "网络异常,请稍后重试");
 		}
+	}
+
+	public static String getRepoRaw(String path) {
+		try {
+			String uri = "https://gitee.com/chen-shang/business-travel-resource/raw" + path;
+			ResponseBody body = getResponseBody(uri);
+			return body.string();
+		} catch (IOException e) {
+			throw new IllegalArgumentException("获取文件失败");
+		}
+	}
+
+	@NotNull
+	private static ResponseBody getResponseBody(String uri) throws IOException {
+		Request request = new Builder().url(uri).build();
+		Response response = new OkHttpClient().newCall(request).execute();
+		if (!response.isSuccessful()) {
+			throw new RuntimeException("请求失败:" + response.code() + ",请稍后再试");
+		}
+		ResponseBody body = response.body();
+		if (body == null) {
+			throw new RuntimeException("请求失败,请稍后再试");
+		}
+		return body;
 	}
 }

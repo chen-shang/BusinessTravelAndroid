@@ -3,6 +3,13 @@
 
     <!--  记录版本之间的功能变更,不宜太多,测试专用  -->
     <string-array name="change_log">
+        <item>2.4</item>
+        <item>1. 图标颜色优化</item>
+        <item>2. 图标站位符优化</item>
+        <item>3. 没有网络的时候图标点击兜底逻辑</item>
+        <item>4. 图标文件缓存</item>
+        <item>5. 图标文件缓存时间可配置</item>
+
         <item>2.3</item>
         <item>1. 键盘实现抽象成键盘组件</item>
         <item>2. 关于差旅记账页面布局更新</item>

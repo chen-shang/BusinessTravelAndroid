@@ -50,7 +50,7 @@ public class AddItemActivity extends ColorStatusBarActivity<ActivityAddItemBindi
 	private static final LoadingCache<String, List<GiteeContent>> CACHE = CacheBuilder.newBuilder().maximumSize(5).expireAfterWrite(1, TimeUnit.MINUTES).build(new CacheLoader<String, List<GiteeContent>>() {
 		@Override
 		public List<GiteeContent> load(@NotNull String path) {
-			return BusinessTravelResourceApi.getV5ReposOwnerRepoContents(path).stream().filter(item -> "dir".equals(item.getType())).collect(Collectors.toList());
+			return BusinessTravelResourceApi.getRepoContents(path).stream().filter(item -> "dir".equals(item.getType())).collect(Collectors.toList());
 		}
 	});
 	/**
