@@ -100,8 +100,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
 
 
-    implementation "androidx.room:room-runtime:2.3.0"
-    def room_version = "2.3.0"
+    def room_version = "2.4.0"
+    implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     // optional - RxJava2 support for Room
     implementation "androidx.room:room-rxjava2:$room_version"
@@ -112,7 +112,7 @@ dependencies {
     // optional - Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
     // optional - Paging 3 Integration
-    implementation "androidx.room:room-paging:2.4.0-rc01"
+    implementation "androidx.room:room-paging:$room_version"
 
     implementation 'com.jakewharton:butterknife:10.2.3'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
