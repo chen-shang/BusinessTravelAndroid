@@ -36,6 +36,7 @@ public class BootApplication extends Application {
 			if (StringUtils.isBlank(config)) {
 				return;
 			}
+			LogUtils.i("加载配置文件:" + config);
 			Config newConfig = JacksonUtil.toBean(config, Config.class);
 			AppConfig.setConfig(newConfig);
 			//开启日志记录写入文件,最大栈深度为1,最多保留一天
