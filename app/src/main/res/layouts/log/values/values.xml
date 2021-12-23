@@ -3,6 +3,11 @@
 
     <!--  记录版本之间的功能变更,不宜太多,测试专用  -->
     <string-array name="change_log">
+        <item>2.5</item>
+        <item>1. 人员图标自适应</item>
+        <item>2. 消费图标4行</item>
+        <item>3. 隐藏测试页面</item>
+        
         <item>2.4</item>
         <item>1. 图标颜色优化</item>
         <item>2. 图标站位符优化</item>
