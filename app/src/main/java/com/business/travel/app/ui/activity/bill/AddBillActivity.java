@@ -7,10 +7,6 @@ import java.util.stream.Collectors;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
@@ -31,25 +27,21 @@ import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.activity.bill.fragment.BillFragment;
 import com.business.travel.app.ui.activity.item.consumption.EditConsumptionActivity;
 import com.business.travel.app.ui.activity.item.member.EditMemberActivity;
-import com.business.travel.app.ui.base.BaseActivity;
+import com.business.travel.app.ui.base.ColorStatusBarActivity;
 import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.app.utils.LogToast;
 import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.app.utils.Try;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
-import com.business.travel.vo.enums.ItemTypeEnum;
 import com.google.common.base.Preconditions;
-import com.mancj.materialsearchbar.MaterialSearchBar;
-import com.mancj.materialsearchbar.SimpleOnSearchActionListener;
-import com.mancj.materialsearchbar.adapter.SuggestionsAdapter.OnItemViewClickListener;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author chenshang
  * 添加账单
  */
-public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
+public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBinding> {
 
 	/**
 	 * 消费项图标信息
@@ -63,7 +55,6 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	/**
 	 * 可选项目列表
 	 */
-	private List<String> projectNames = new ArrayList<>();
 	/**
 	 * 当前被选中的是支出还是收入
 	 */
@@ -105,94 +96,17 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 	}
 
 	private void registerMaterialSearchBar() {
-		MaterialSearchBar searchBar = viewBinding.UIAddBillActivitySearchBar;
-		searchBar.setOnSearchActionListener(new SimpleOnSearchActionListener() {
-			@Override
-			public void onSearchStateChanged(boolean enabled) {
-				if (enabled) {
-					List<Project> projects = projectService.queryAll();
-					projectNames = projects.stream().map(Project::getName).collect(Collectors.toList());
-
-					searchBar.setText(searchBar.getPlaceHolderText().toString());
-					searchBar.showSuggestionsList();
-				} else {
-					searchBar.setPlaceHolder(searchBar.getText());
-					searchBar.hideSuggestionsList();
-				}
+		viewBinding.searchBar.withQuerySearch(s -> {
+			List<Project> projects = projectService.queryAll();
+			List<String> projectNames = projects.stream().map(Project::getName).collect(Collectors.toList());
+			if (StringUtils.isBlank(s)) {
+				return projectNames;
 			}
-
-			@Override
-			public void onSearchConfirmed(CharSequence text) {
-			}
-
-			@Override
-			public void onButtonClicked(int buttonCode) {
-				LogToast.infoShow("buttonCode:" + buttonCode);
-			}
-		});
-		searchBar.addTextChangeListener(new TextWatcher() {
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				if (StringUtils.isBlank(s)) {
-					searchBar.setLastSuggestions(projectNames);
-					return;
-				}
-
-				final List<String> head = projectNames.stream().filter(item -> item.toLowerCase().contains(s.toString().toLowerCase())).collect(Collectors.toList());
-				projectNames.removeAll(head);
-				head.addAll(projectNames);
-				projectNames = head;
-				searchBar.setLastSuggestions(projectNames);
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-			}
-		});
-
-		searchBar.setSuggestionsClickListener(new OnItemViewClickListener() {
-			@Override
-			public void OnItemClickListener(int position, View v) {
-				final String s = projectNames.get(position);
-				searchBar.setText(s);
-				searchBar.setPlaceHolder(s);
-				searchBar.hideSuggestionsList();
-			}
-
-			@Override
-			public void OnItemDeleteListener(int position, View v) {
-
-			}
-		});
-
-		searchBar.getSearchEditText().setOnFocusChangeListener((v, hasFocus) -> {
-			LogToast.infoShow("OnFocusChangeListener:" + hasFocus);
-			if (!hasFocus) {
-				searchBar.closeSearch();
-			}
-		});
-		ImageView clearIcon = findViewById(R.id.mt_clear);
-		clearIcon.setVisibility(View.GONE);
-		ImageView arrowIcon = findViewById(R.id.mt_arrow);
-		arrowIcon.setOnClickListener(v -> {
-			Editable text = searchBar.getSearchEditText().getText();
-			if (StringUtils.isBlank(text.toString())) {
-				LogToast.errorShow("请输入项目名称");
-				searchBar.openSearch();
-			}
-		});
-
-		searchBar.getPlaceHolderView().setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				LogToast.infoShow("getPlaceHolderView");
-				searchBar.openSearch();
-			}
+			return projectNames.stream().sorted((o1, o2) -> {
+				int o1S = o1.toLowerCase().contains(s.toLowerCase()) ? 0 : 1;
+				int o2S = o2.toLowerCase().contains(s.toLowerCase()) ? 0 : 1;
+				return o1S - o2S;
+			}).collect(Collectors.toList());
 		});
 	}
 
@@ -320,7 +234,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		AppDatabase.getInstance(this).runInTransaction(() -> {
 			LogUtils.i("开启数据库事务");
 			//参数校验
-			String projectName = viewBinding.UIAddBillActivitySearchBar.getPlaceHolderText().toString();
+			String projectName = viewBinding.searchBar.selectedResultTextView.getText().toString();
 			//如果不存在则新增项目
 			Project project = projectService.createIfNotExist(projectName);
 			if (project == null) {
@@ -420,7 +334,7 @@ public class AddBillActivity extends BaseActivity<ActivityAddBillBinding> {
 		if (project == null) {
 			return;
 		}
-		viewBinding.UIAddBillActivitySearchBar.setPlaceHolder(project.getName());
+		viewBinding.searchBar.selectedResultTextView.setText(project.getName());
 	}
 
 	private ConsumptionTypeEnum refreshConsumptionType() {

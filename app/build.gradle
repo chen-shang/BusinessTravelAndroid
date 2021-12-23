@@ -67,6 +67,7 @@ android {
                            'src/main/res/layouts/keyboard',
                            'src/main/res/layouts/popup',
                            'src/main/res/layouts/view',
+                           'src/main/res/layouts/searchbar',
                            'src/main/res/layouts',
                            'src/main/res',
                            'src/main/res/drawables/icon',

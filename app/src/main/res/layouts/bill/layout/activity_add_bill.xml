@@ -17,24 +17,12 @@
             app:layout_constraintStart_toStartOf="parent">
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!--  编辑搜索框  -->
-    <com.mancj.materialsearchbar.MaterialSearchBar
-            android:id="@+id/UI_AddBillActivity_SearchBar"
+    <com.business.travel.app.view.SearchBar
+            android:elevation="8dp"
+            android:id="@+id/searchBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:lines="1"
-            android:background="@color/red_2"
-            android:animateLayoutChanges="false"
-            android:elevation="8dp"
-            app:mt_maxSuggestionsCount="10"
-            app:mt_searchIconDrawable="@drawable/ic_base_sort"
-            app:mt_backIconDrawable="@drawable/ic_base_right"
-            app:mt_searchBarColor="@color/red_2"
-            app:mt_textCursorTint="@color/white"
-            app:mt_textColor="@color/white"
             app:layout_constraintTop_toTopOf="@+id/UI_AddBillActivity_ConstraintLayout"
-            style="@style/MaterialSearchBarLight"
             />
 
     <!--  账单图标   -->
