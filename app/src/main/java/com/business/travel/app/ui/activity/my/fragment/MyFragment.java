@@ -16,12 +16,15 @@ import com.business.travel.app.ui.activity.my.AboutMeActivity;
 import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.ui.test.TestActivity;
 import com.business.travel.app.utils.MoneyUtil;
+import com.business.travel.utils.DateTimeUtil;
 
 /**
  * @author chenshang
  */
 public class MyFragment extends BaseFragment<FragmentMyBinding> {
 
+	private long time;
+	private long counter = 0;
 	private BillService billService;
 	private ProjectService projectService;
 
@@ -36,7 +39,20 @@ public class MyFragment extends BaseFragment<FragmentMyBinding> {
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		final View view = super.onCreateView(inflater, container, savedInstanceState);
 		viewBinding.aboutMe.contentBarLeftIcon.setOnClickListener(v -> startActivity(new Intent(this.getActivity(), ChangeLogActivity.class)));
-		viewBinding.topTitleBar.contentBarLeftIcon.setOnClickListener(v -> startActivity(new Intent(this.getActivity(), TestActivity.class)));
+
+		viewBinding.topTitleBar.contentBarLeftIcon.setOnClickListener(v -> {
+
+			if (DateTimeUtil.timestamp() - time < 2000) {
+				counter++;
+			} else {
+				time = DateTimeUtil.timestamp();
+				counter = 0;
+			}
+
+			if (counter == 5) {
+				startActivity(new Intent(this.getActivity(), TestActivity.class));
+			}
+		});
 
 		Intent goAboutMeActivityIntent = new Intent(this.requireActivity(), AboutMeActivity.class);
 		viewBinding.aboutMe.contentBarRightIcon.setOnClickListener(v -> this.requireActivity().startActivity(goAboutMeActivityIntent));
