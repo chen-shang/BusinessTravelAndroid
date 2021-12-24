@@ -23,6 +23,11 @@ public class ChangeLogActivity extends BaseActivity<ActivityChangeLogBinding> {
 			final String log = logFiles.stream().map(FileIOUtils::readFile2String).collect(Collectors.joining("\n"));
 			viewBinding.log.setText(log);
 		});
+
+		viewBinding.clearLog.setOnClickListener(v -> {
+			final List<File> logFiles = LogUtils.getLogFiles();
+			logFiles.forEach(File::delete);
+		});
 	}
 
 	@Override

@@ -7,16 +7,27 @@
         tools:context=".ui.activity.log.ChangeLogActivity"
         android:orientation="vertical">
 
-    <Button
-            android:id="@+id/showLog"
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="运行日志"/>
+            android:orientation="horizontal"
+            >
 
-    <TextView
-            android:id="@+id/versionHistory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+        <Button
+                android:id="@+id/showLog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="运行日志"/>
+
+        <Button
+                android:id="@+id/clearLog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="清空日志"/>
+    </LinearLayout>
+
 
     <TextView
             android:textIsSelectable="true"
@@ -24,4 +35,11 @@
             android:scrollbars="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
+    <TextView
+            android:id="@+id/versionHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
 </LinearLayout>
