@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.business.travel.app2",
+  "applicationId": "com.business.travel.app",
   "variantName": "release",
   "elements": [
     {
@@ -13,7 +13,7 @@
       "attributes": [],
       "versionCode": 1,
       "versionName": "2.0",
-      "outputFile": "app-release.apk"
+      "outputFile": "app-release2.0.apk"
     }
   ],
   "elementType": "File"
