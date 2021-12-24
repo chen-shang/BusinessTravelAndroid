@@ -25,6 +25,10 @@
     <string name="money_0">0.0</string>
     <string name="income">收入：</string>
     <string name="pay">支出：</string>
+
+    <string name="income2">收入</string>
+    <string name="paying2">支出</string>
+
     <string name="durationDay">差旅天数</string>
     <string name="endTime">结束时间：</string>
     <string name="timeHintDefault">--</string>

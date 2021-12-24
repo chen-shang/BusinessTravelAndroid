@@ -46,26 +46,26 @@
 
                     <TextView
                             android:id="@+id/UI_ConsumerItem_TextView_Expense"
-                            android:layout_width="120dp"
+                            android:layout_width="100dp"
                             android:layout_height="wrap_content"
                             android:textAlignment="center"
                             android:background="@drawable/corners_shape_border_left"
                             android:paddingTop="5dp"
                             android:paddingBottom="5dp"
-                            android:text="支出"
+                            android:text="@string/paying2"
                             android:textColor="@color/red_2"
                             >
                     </TextView>
 
                     <TextView
                             android:id="@+id/UI_ConsumerItem_TextView_Income"
-                            android:layout_width="120dp"
+                            android:layout_width="100dp"
                             android:layout_height="wrap_content"
                             android:textAlignment="center"
                             android:background="@drawable/corners_shape_border_right"
                             android:paddingTop="5dp"
                             android:paddingBottom="5dp"
-                            android:text="收入"
+                            android:text="@string/income2"
                             android:textColor="@color/white"
                             >
                     </TextView>
@@ -89,13 +89,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="25dp"
             android:clickable="true"
             android:src="@drawable/ic_base_bill_add"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             />

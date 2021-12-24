@@ -4,8 +4,8 @@
 
     <!-- 设置圆角弧度 -->
     <corners
-            android:topLeftRadius="30dp"
-            android:bottomLeftRadius="30dp"
+            android:topLeftRadius="10dp"
+            android:bottomLeftRadius="10dp"
             />
     <!-- 设置背景颜色 -->
     <solid android:color="@color/white"/>
