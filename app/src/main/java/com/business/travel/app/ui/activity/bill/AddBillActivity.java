@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager;
+import com.blankj.utilcode.util.ColorUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.db.AppDatabase;
@@ -167,7 +168,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	private GridViewPager registerPageViewCommonProperty(GridViewPager gridViewPager) {
 		return gridViewPager
 				// 设置背景色，默认白色
-				.setGridViewPagerBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.white))
+				.setGridViewPagerBackgroundColor(ColorUtils.getColor(R.color.white_1))
 				// 设置item的纵向间距 // 设置上边距 // 设置下边距
 				.setVerticalSpacing(10).setPagerMarginTop(10).setPagerMarginBottom(10)
 				// 设置图片宽度 // 设置图片高度
