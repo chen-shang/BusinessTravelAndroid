@@ -16,68 +16,79 @@
             app:layout_constraintTop_toTopOf="parent"
             />
 
-    <ScrollView
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/top_height">
+            android:orientation="vertical"
+            >
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_marginTop="@dimen/top_height"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_weight="1"
+                app:layout_constraintBottom_toTopOf="@+id/keyboard"
                 >
 
-            <!--  账单图标   -->
-            <androidx.cardview.widget.CardView
-                    android:id="@+id/UI_AddBillActivity_CardView_BillIcon"
+            <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    app:cardCornerRadius="5dp"
-                    app:cardElevation="5dp"
-                    android:padding="5dp"
-                    android:layout_margin="10dp"
-                    tools:layout_editor_absoluteX="10dp"
-                    app:layout_constraintTop_toBottomOf="@+id/UI_AddBillActivity_ConstraintLayout">
-                <!--  下面的项目列表数据   -->
-                <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
-                        android:id="@+id/GridViewPager_ConsumptionIconList"
-                        android:layout_marginTop="5dp"
-                        android:backgroundTint="@color/white"
+                    android:orientation="vertical"
+                    >
+
+                <!--  账单图标   -->
+                <androidx.cardview.widget.CardView
+                        android:id="@+id/UI_AddBillActivity_CardView_BillIcon"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                </cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager>
-            </androidx.cardview.widget.CardView>
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="5dp"
+                        android:padding="5dp"
+                        android:layout_margin="10dp"
+                        tools:layout_editor_absoluteX="10dp"
+                        app:layout_constraintTop_toBottomOf="@+id/UI_AddBillActivity_ConstraintLayout">
+                    <!--  下面的项目列表数据   -->
+                    <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
+                            android:id="@+id/GridViewPager_ConsumptionIconList"
+                            android:layout_marginTop="5dp"
+                            android:backgroundTint="@color/white"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                    </cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager>
+                </androidx.cardview.widget.CardView>
 
-            <!--  人员 列表  -->
-            <androidx.cardview.widget.CardView
-                    android:id="@+id/UI_AddBillActivity_CardView_Associate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    app:cardCornerRadius="5dp"
-                    app:cardElevation="5dp"
-                    android:padding="5dp"
-                    android:layout_margin="10dp"
-                    app:layout_constraintTop_toBottomOf="@+id/UI_AddBillActivity_CardView_BillIcon">
-
-                <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
-                        android:id="@+id/GridViewPager_MemberIconList"
-                        android:layout_marginTop="5dp"
-                        android:backgroundTint="@color/white"
+                <!--  人员 列表  -->
+                <androidx.cardview.widget.CardView
+                        android:id="@+id/UI_AddBillActivity_CardView_Associate"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                </cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager>
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="5dp"
+                        android:padding="5dp"
+                        android:layout_margin="10dp"
+                        app:layout_constraintTop_toBottomOf="@+id/UI_AddBillActivity_CardView_BillIcon">
 
-            </androidx.cardview.widget.CardView>
-        </androidx.appcompat.widget.LinearLayoutCompat>
-    </ScrollView>
+                    <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
+                            android:id="@+id/GridViewPager_MemberIconList"
+                            android:layout_marginTop="5dp"
+                            android:backgroundTint="@color/white"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                    </cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager>
 
-    <com.business.travel.app.view.Keyboard
-            android:id="@+id/keyboard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+                </androidx.cardview.widget.CardView>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </ScrollView>
+
+        <com.business.travel.app.view.Keyboard
+                android:id="@+id/keyboard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
