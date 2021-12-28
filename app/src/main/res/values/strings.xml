@@ -17,6 +17,9 @@
     <string name="num_1">1</string>
     <string name="num_2">2</string>
 
+
+    <string name="num_0_placeholder">0</string>
+
     <string name="text_add_project">添加项目</string>
 
 

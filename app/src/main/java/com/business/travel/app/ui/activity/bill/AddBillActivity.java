@@ -180,7 +180,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 				// 设置无限循环
 				.setPageLoop(false)
 				// 设置指示器与page的间距 // 设置指示器与底部的间距
-				.setPointMarginPage(5).setPointMarginBottom(5)
+				.setPointMarginPage(5).setPointMarginBottom(10)
 				// 设置指示器的item宽度 // 设置指示器的item高度
 				.setPointChildWidth(5).setPointChildHeight(5)
 				// 设置指示器的item的间距
