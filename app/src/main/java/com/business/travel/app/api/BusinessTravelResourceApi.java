@@ -54,16 +54,14 @@ public class BusinessTravelResourceApi {
 			return null;
 		}
 
-		if (!NetworkUtils.isAvailable()) {
-			return null;
-		}
-
 		try {
 			InputStream inputStream = getIconFromCache(iconFullName);
 			if (inputStream != null) {
+				LogUtils.d("命中图片缓存:" + iconFullName);
 				return inputStream;
 			}
 
+			LogUtils.d("图片缓存失效:" + iconFullName);
 			inputStream = getIconFromServer(iconFullName);
 			return addIconToCache(iconFullName, inputStream);
 		} catch (Exception e) {
@@ -101,6 +99,10 @@ public class BusinessTravelResourceApi {
 
 	private static InputStream getIconFromServer(String iconFullName) {
 		try {
+			if (!NetworkUtils.isAvailable()) {
+				return null;
+			}
+
 			ResponseBody body = getResponseBody(iconFullName);
 			return body.byteStream();
 		} catch (IOException e) {
