@@ -189,7 +189,7 @@ final def variants = project.android.applicationVariants
 
 variants.all { variant ->
     variant.outputs.all {
-        outputFileName = "app-release${versionName}.apk"
+        outputFileName = "${rootProject.name}_${versionName}.apk"
     }
     // 注意这里控制debug下生效，可以自行控制是否生效
     if (!variant.buildType.isDebuggable()) {
