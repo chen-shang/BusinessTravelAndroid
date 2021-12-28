@@ -23,8 +23,6 @@
             tools:ignore="RtlSymmetry"/>
 
     <!--  用来显示搜索框的  -->
-
-    <!--  用来显示搜索结果的  -->
     <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
             android:layout_width="match_parent"
@@ -40,6 +38,7 @@
             android:visibility="invisible"
             />
 
+    <!--  用来显示搜索结果的  -->
     <com.yanzhenjie.recyclerview.SwipeRecyclerView
             android:id="@+id/RecyclerView_SearchResultList"
             android:layout_width="match_parent"
