@@ -17,7 +17,7 @@
             app:layout_constraintHeight_max="@dimen/top_height"
             app:layout_constraintWidth_max="@dimen/top_height"
             android:clickable="true"
-            android:src="@drawable/ic_launcher_foreground"
+            android:src="@drawable/ic_base_placeholder"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
@@ -31,7 +31,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@+id/content_bar_left_icon"
-            android:layout_marginStart="5dp"/>
+            android:layout_marginStart="10dp"/>
 
     <ImageView
             android:id="@+id/content_bar_right_icon"

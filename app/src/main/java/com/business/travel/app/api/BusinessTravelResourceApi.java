@@ -92,7 +92,7 @@ public class BusinessTravelResourceApi {
 		Long iconTtl = Optional.ofNullable(AppConfig.getConfig()).map(Config::getIconTtl).orElse(5 * 60 * 1000L);
 		if (nowTimestamp - lastModified > iconTtl) {
 			boolean delete = file.delete();
-			LogUtils.i("清除缓存" + iconFullName + " :" + delete);
+			LogUtils.i("缓存超时失效" + iconFullName + " :" + delete);
 			return null;
 		}
 

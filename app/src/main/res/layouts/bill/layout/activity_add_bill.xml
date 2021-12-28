@@ -42,6 +42,7 @@
         <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
                 android:id="@+id/GridViewPager_ConsumptionIconList"
                 android:layout_marginTop="5dp"
+                android:backgroundTint="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
         </cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager>
@@ -63,6 +64,7 @@
         <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
                 android:id="@+id/GridViewPager_MemberIconList"
                 android:layout_marginTop="5dp"
+                android:backgroundTint="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
         </cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager>
