@@ -17,6 +17,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.blankj.utilcode.util.CollectionUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
@@ -158,6 +159,7 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 
 	private void goToBillFragment(Project project) {
 		//把选中的数据传递给 BillFragment 页面
+		LogUtils.i("点击 project:" + project.getId() + ":" + project.getName() + "跳转到账单列表页");
 		billFragment.setSelectedProjectId(project.getId());
 
 		ViewPager2 viewPager2 = activity.findViewById(R.id.UI_MasterActivity_ViewPager2);

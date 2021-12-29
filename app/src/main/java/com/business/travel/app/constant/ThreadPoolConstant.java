@@ -19,5 +19,5 @@ public class ThreadPoolConstant {
 	/**
 	 * 通用线程池
 	 */
-	public static final ExecutorService COMMON_THREAD_POOL = new ThreadPoolExecutor(15, 20, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), new ThreadFactoryBuilder().setNameFormat("commonThreadPool-%d").build(), DEFAULT_REJECTED_EXECUTION_HANDLER);
+	public static final ExecutorService COMMON_THREAD_POOL = new ThreadPoolExecutor(20, 25, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), new ThreadFactoryBuilder().setNameFormat("commonThreadPool-%d").build(), DEFAULT_REJECTED_EXECUTION_HANDLER);
 }

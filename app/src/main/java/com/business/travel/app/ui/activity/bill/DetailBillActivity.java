@@ -3,10 +3,10 @@ package com.business.travel.app.ui.activity.bill;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.core.content.ContextCompat;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.databinding.ActivityDetailBillBinding;
@@ -30,6 +30,10 @@ import com.business.travel.vo.enums.WeekEnum;
 public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBillBinding> {
 
 	/**
+	 * 默认展示6列
+	 */
+	private static final int COLUMN_COUNT = 6;
+	/**
 	 * 成员图标
 	 */
 	private final List<ImageIconInfo> memberIconList = new ArrayList<>();
@@ -37,12 +41,6 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 	 * 消费项图标列表
 	 */
 	private final List<ImageIconInfo> consumptionIconList = new ArrayList<>();
-
-	/**
-	 * 默认展示6列
-	 */
-	private static final int COLUMN_COUNT = 6;
-
 	/**
 	 * 当前被选中的账单信息
 	 */
@@ -65,7 +63,22 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//注册消费项列表
+		registerConsumptionPageView();
+		//注册人员列表
+		registerMemberPageView();
+	}
 
+	@Override
+	protected void onStart() {
+		super.onStart();
+		if (selectBillId == null || selectBillId <= 0) {
+			return;
+		}
+		Try.of(() -> showBill(billService.queryBillById(selectBillId)));
+	}
+
+	private void registerMemberPageView() {
 		GridViewPagerUtil.registerPageViewCommonProperty(viewBinding.GridViewPagerMemberIconList)
 		                 // 设置数据总数量
 		                 .setDataAllCount(memberIconList.size())
@@ -76,10 +89,12 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 			                 // 自己进行数据的绑定，灵活度更高，不受任何限制
 			                 bind(imageView, textView, memberIconList.get(position));
 		                 });
+	}
 
+	private void registerConsumptionPageView() {
 		GridViewPagerUtil.registerPageViewCommonProperty(viewBinding.GridViewPagerConsumptionIconList)
 		                 // 设置数据总数量
-		                 .setDataAllCount(memberIconList.size())
+		                 .setDataAllCount(consumptionIconList.size())
 		                 // 设置每页行数 // 设置每页列数
 		                 .setColumnCount(COLUMN_COUNT)
 		                 // 数据绑定
@@ -89,19 +104,10 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		                 });
 	}
 
-	@Override
-	protected void onStart() {
-		super.onStart();
-
-		if (selectBillId <= 0) {
-			return;
-		}
-
-		Try.of(() -> showBill(billService.queryBillById(selectBillId)));
-	}
-
+	@SuppressLint("SetTextI18n")
 	private void showBill(Bill bill) {
 
+		//消费项列表
 		String consumptionIds = bill.getConsumptionIds();
 		List<Long> consumptionIdList = SplitUtil.trimToLongList(consumptionIds);
 		List<ImageIconInfo> consumptions = consumptionService.queryByIds(consumptionIdList);
@@ -109,6 +115,7 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		consumptionIconList.addAll(consumptions);
 		viewBinding.GridViewPagerConsumptionIconList.setDataAllCount(consumptionIconList.size()).setRowCount((int)Math.ceil((consumptionIconList.size() / (double)COLUMN_COUNT))).show();
 
+		//人员列表
 		String memberIds = bill.getMemberIds();
 		List<Long> memberIdList = SplitUtil.trimToLongList(memberIds);
 		List<ImageIconInfo> imageIconInfos = memberService.queryAll(memberIdList);
@@ -116,26 +123,26 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		memberIconList.addAll(imageIconInfos);
 		viewBinding.GridViewPagerMemberIconList.setDataAllCount(memberIconList.size()).setRowCount((int)Math.ceil((memberIconList.size() / (double)COLUMN_COUNT))).show();
 
+		//消费金额
 		viewBinding.ammount.setText(MoneyUtil.toYuanString(bill.getAmount()));
 
-		int code = DateTimeUtil.toLocalDateTime(bill.getConsumeDate()).getDayOfWeek().getValue();
-		WeekEnum weekEnum = WeekEnum.ofCode(code);
-		viewBinding.time.setText(DateTimeUtil.format(bill.getConsumeDate(), "yyyy-MM-dd") + " " + weekEnum.getMsg());
-
-		viewBinding.remark.setText(bill.getRemark());
-
+		//消费时间
+		String date = DateTimeUtil.format(bill.getConsumeDate(), "yyyy-MM-dd");
+		WeekEnum weekEnum = WeekEnum.ofCode(DateTimeUtil.toLocalDateTime(bill.getConsumeDate()).getDayOfWeek().getValue());
+		viewBinding.time.setText(date + " " + weekEnum.getMsg());
+		//消费类型
 		String consumptionType = bill.getConsumptionType();
 		viewBinding.consumerType.setText(ConsumptionTypeEnum.valueOf(consumptionType).getMsg());
+
+		//备注
+		viewBinding.remark.setText(bill.getRemark());
 	}
 
 	private void bind(ImageView imageView, TextView textView, ImageIconInfo imageIconInfo) {
-		//默认未选中状态
 		imageView.setBackgroundResource(R.drawable.corners_shape_unselect);
 		imageView.setImageResource(R.drawable.ic_base_placeholder);
-
+		
 		textView.setText(imageIconInfo.getName());
-
-		int selectColor = ContextCompat.getColor(getApplicationContext(), R.color.red_2);
-		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView, imageIconInfo.isSelected() ? selectColor : null);
+		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView);
 	}
 }
