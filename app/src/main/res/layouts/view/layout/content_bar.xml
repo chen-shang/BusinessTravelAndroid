@@ -22,12 +22,16 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
-    <TextView
+    <EditText
             android:id="@+id/content_bar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/topTextSize"
             android:textColor="@color/black"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:background="@null"
+            android:enabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@+id/content_bar_left_icon"

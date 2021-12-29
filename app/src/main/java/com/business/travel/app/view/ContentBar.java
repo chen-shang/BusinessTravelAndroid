@@ -1,5 +1,7 @@
 package com.business.travel.app.view;
 
+import java.util.Objects;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -7,9 +9,9 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.blankj.utilcode.util.ActivityUtils;
@@ -23,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 public class ContentBar extends ConstraintLayout {
 
 	public final ImageView contentBarLeftIcon;
-	public final TextView contentBarTitle;
+	public final EditText contentBarTitle;
 	public final ImageView contentBarRightIcon;
 
 	public ContentBar(@NonNull @NotNull Context context, AttributeSet attrs) {
@@ -43,7 +45,7 @@ public class ContentBar extends ConstraintLayout {
 		}
 		String mode = typedArray.getString(R.styleable.ContentBar_content_bar_left_icon_mode);
 		if ("1".equals(mode)) {
-			contentBarLeftIcon.setOnClickListener(v -> ActivityUtils.getActivityByContext(context).finish());
+			contentBarLeftIcon.setOnClickListener(v -> Objects.requireNonNull(ActivityUtils.getActivityByContext(context)).finish());
 		}
 
 		//中间文字
