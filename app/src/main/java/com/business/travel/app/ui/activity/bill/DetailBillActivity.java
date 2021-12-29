@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
-import androidx.recyclerview.widget.GridLayoutManager;
+import android.widget.ImageView;
+import android.widget.TextView;
+import androidx.core.content.ContextCompat;
+import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.databinding.ActivityDetailBillBinding;
 import com.business.travel.app.model.ImageIconInfo;
@@ -12,12 +15,13 @@ import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.service.MemberService;
 import com.business.travel.app.ui.base.ColorStatusBarActivity;
+import com.business.travel.app.utils.GridViewPagerUtil;
+import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.app.utils.Try;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.SplitUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
-import com.business.travel.vo.enums.ItemTypeEnum;
 import com.business.travel.vo.enums.WeekEnum;
 
 /**
@@ -35,13 +39,9 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 	private final List<ImageIconInfo> consumptionIconList = new ArrayList<>();
 
 	/**
-	 * 成员列表适配器
+	 * 默认展示6列
 	 */
-	private ItemIconRecyclerViewAdapter memberIconRecyclerViewAdapter;
-	/**
-	 * 消费项图标适配器
-	 */
-	private ItemIconRecyclerViewAdapter consumptionIconRecyclerViewAdapter;
+	private static final int COLUMN_COUNT = 6;
 
 	/**
 	 * 当前被选中的账单信息
@@ -66,13 +66,27 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		viewBinding.UISwipeRecyclerViewMember.setLayoutManager(new GridLayoutManager(this, 6));
-		memberIconRecyclerViewAdapter = new ItemIconRecyclerViewAdapter(ItemTypeEnum.MEMBER, memberIconList, this);
-		viewBinding.UISwipeRecyclerViewMember.setAdapter(memberIconRecyclerViewAdapter);
+		GridViewPagerUtil.registerPageViewCommonProperty(viewBinding.GridViewPagerMemberIconList)
+		                 // 设置数据总数量
+		                 .setDataAllCount(memberIconList.size())
+		                 // 设置每页行数 // 设置每页列数
+		                 .setColumnCount(COLUMN_COUNT)
+		                 // 数据绑定
+		                 .setImageTextLoaderInterface((imageView, textView, position) -> {
+			                 // 自己进行数据的绑定，灵活度更高，不受任何限制
+			                 bind(imageView, textView, memberIconList.get(position));
+		                 });
 
-		viewBinding.UISwipeRecyclerViewConsuption.setLayoutManager(new GridLayoutManager(this, 6));
-		consumptionIconRecyclerViewAdapter = new ItemIconRecyclerViewAdapter(ItemTypeEnum.CONSUMPTION, consumptionIconList, this);
-		viewBinding.UISwipeRecyclerViewConsuption.setAdapter(consumptionIconRecyclerViewAdapter);
+		GridViewPagerUtil.registerPageViewCommonProperty(viewBinding.GridViewPagerConsumptionIconList)
+		                 // 设置数据总数量
+		                 .setDataAllCount(memberIconList.size())
+		                 // 设置每页行数 // 设置每页列数
+		                 .setColumnCount(COLUMN_COUNT)
+		                 // 数据绑定
+		                 .setImageTextLoaderInterface((imageView, textView, position) -> {
+			                 // 自己进行数据的绑定，灵活度更高，不受任何限制
+			                 bind(imageView, textView, consumptionIconList.get(position));
+		                 });
 	}
 
 	@Override
@@ -93,14 +107,14 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		List<ImageIconInfo> consumptions = consumptionService.queryByIds(consumptionIdList);
 		consumptionIconList.clear();
 		consumptionIconList.addAll(consumptions);
-		consumptionIconRecyclerViewAdapter.notifyDataSetChanged();
+		viewBinding.GridViewPagerConsumptionIconList.setDataAllCount(consumptionIconList.size()).setRowCount((int)Math.ceil((consumptionIconList.size() / (double)COLUMN_COUNT))).show();
 
 		String memberIds = bill.getMemberIds();
 		List<Long> memberIdList = SplitUtil.trimToLongList(memberIds);
 		List<ImageIconInfo> imageIconInfos = memberService.queryAll(memberIdList);
 		memberIconList.clear();
 		memberIconList.addAll(imageIconInfos);
-		memberIconRecyclerViewAdapter.notifyDataSetChanged();
+		viewBinding.GridViewPagerMemberIconList.setDataAllCount(memberIconList.size()).setRowCount((int)Math.ceil((memberIconList.size() / (double)COLUMN_COUNT))).show();
 
 		viewBinding.ammount.setText(MoneyUtil.toYuanString(bill.getAmount()));
 
@@ -114,4 +128,14 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		viewBinding.consumerType.setText(ConsumptionTypeEnum.valueOf(consumptionType).getMsg());
 	}
 
+	private void bind(ImageView imageView, TextView textView, ImageIconInfo imageIconInfo) {
+		//默认未选中状态
+		imageView.setBackgroundResource(R.drawable.corners_shape_unselect);
+		imageView.setImageResource(R.drawable.ic_base_placeholder);
+
+		textView.setText(imageIconInfo.getName());
+
+		int selectColor = ContextCompat.getColor(getApplicationContext(), R.color.red_2);
+		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView, imageIconInfo.isSelected() ? selectColor : null);
+	}
 }

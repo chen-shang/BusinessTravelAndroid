@@ -11,8 +11,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
-import cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager;
-import com.blankj.utilcode.util.ColorUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.business.travel.app.R;
@@ -31,6 +29,7 @@ import com.business.travel.app.ui.activity.bill.fragment.BillFragment;
 import com.business.travel.app.ui.activity.item.consumption.EditConsumptionActivity;
 import com.business.travel.app.ui.activity.item.member.EditMemberActivity;
 import com.business.travel.app.ui.base.ColorStatusBarActivity;
+import com.business.travel.app.utils.GridViewPagerUtil;
 import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.app.utils.LogToast;
 import com.business.travel.app.utils.MoneyUtil;
@@ -124,34 +123,34 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	}
 
 	private void registerConsumptionPageView() {
-		registerPageViewCommonProperty(viewBinding.GridViewPagerConsumptionIconList)
-				// 设置数据总数量
-				.setDataAllCount(consumptionImageIconList.size())
-				// 设置每页行数 // 设置每页列数
-				.setRowCount(4).setColumnCount(5)
-				// 设置是否显示指示器
-				.setPointIsShow(true)
-				// 设置背景图片(此时设置的背景色无效，以背景图片为主)
-				.setBackgroundImageLoader(bgImageView -> {
-				})
-				// 数据绑定
-				.setImageTextLoaderInterface((imageView, textView, position) -> {
-					// 自己进行数据的绑定，灵活度更高，不受任何限制
-					bind(imageView, textView, consumptionImageIconList.get(position), EditConsumptionActivity.class);
-				});
+		GridViewPagerUtil.registerPageViewCommonProperty(viewBinding.GridViewPagerConsumptionIconList)
+		                 // 设置数据总数量
+		                 .setDataAllCount(consumptionImageIconList.size())
+		                 // 设置每页行数 // 设置每页列数
+		                 .setRowCount(4).setColumnCount(5)
+		                 // 设置是否显示指示器
+		                 .setPointIsShow(true)
+		                 // 设置背景图片(此时设置的背景色无效，以背景图片为主)
+		                 .setBackgroundImageLoader(bgImageView -> {
+		                 })
+		                 // 数据绑定
+		                 .setImageTextLoaderInterface((imageView, textView, position) -> {
+			                 // 自己进行数据的绑定，灵活度更高，不受任何限制
+			                 bind(imageView, textView, consumptionImageIconList.get(position), EditConsumptionActivity.class);
+		                 });
 	}
 
 	private void registerMemberPageView() {
-		registerPageViewCommonProperty(viewBinding.GridViewPagerMemberIconList)
-				// 设置数据总数量
-				.setDataAllCount(memberIconList.size())
-				// 设置每页行数 // 设置每页列数
-				.setRowCount(2).setColumnCount(5)
-				// 数据绑定
-				.setImageTextLoaderInterface((imageView, textView, position) -> {
-					// 自己进行数据的绑定，灵活度更高，不受任何限制
-					bind(imageView, textView, memberIconList.get(position), EditMemberActivity.class);
-				});
+		GridViewPagerUtil.registerPageViewCommonProperty(viewBinding.GridViewPagerMemberIconList)
+		                 // 设置数据总数量
+		                 .setDataAllCount(memberIconList.size())
+		                 // 设置每页行数 // 设置每页列数
+		                 .setRowCount(2).setColumnCount(5)
+		                 // 数据绑定
+		                 .setImageTextLoaderInterface((imageView, textView, position) -> {
+			                 // 自己进行数据的绑定，灵活度更高，不受任何限制
+			                 bind(imageView, textView, memberIconList.get(position), EditMemberActivity.class);
+		                 });
 	}
 
 	private void registerKeyboard() {
@@ -172,50 +171,6 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 			((TextView)v).setText(consumptionType.getMsg());
 			refreshConsumptionIcon(consumptionType);
 		});
-	}
-
-	/**
-	 * 初始化PageView公共属性
-	 */
-	private GridViewPager registerPageViewCommonProperty(GridViewPager gridViewPager) {
-		return gridViewPager
-				// 设置背景色，默认白色
-				.setGridViewPagerBackgroundColor(ColorUtils.getColor(R.color.white_1))
-				// 设置item的纵向间距 // 设置上边距 // 设置下边距
-				.setVerticalSpacing(10).setPagerMarginTop(10).setPagerMarginBottom(10)
-				// 设置图片宽度 // 设置图片高度
-				.setImageWidth(35).setImageHeight(35)
-				// 设置文字与图片的间距
-				.setTextImgMargin(5)
-				// 设置文字大小
-				.setTextSize(12)
-				// 设置无限循环
-				.setPageLoop(false)
-				// 设置指示器与page的间距 // 设置指示器与底部的间距
-				.setPointMarginPage(5).setPointMarginBottom(10)
-				// 设置指示器的item宽度 // 设置指示器的item高度
-				.setPointChildWidth(5).setPointChildHeight(5)
-				// 设置指示器的item的间距
-				.setPointChildMargin(5)
-				// 指示器的item是否为圆形，默认圆形直径取宽高的最小值
-				.setPointIsCircle(true)
-				// 设置文字颜色
-				.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.black_100))
-				// 指示器item未选中的颜色
-				.setPointNormalColor(ContextCompat.getColor(getBaseContext(), R.color.black_100))
-				// 指示器item选中的颜色
-				.setPointSelectColor(ContextCompat.getColor(getBaseContext(), R.color.red_2))
-				// 设置背景图片(此时设置的背景色无效，以背景图片为主)
-				.setBackgroundImageLoader(bgImageView -> {
-				})
-				// Item点击
-				.setGridItemClickListener(position -> {
-
-				})
-				// 设置Item长按
-				.setGridItemLongClickListener(position -> {
-
-				});
 	}
 
 	private void bind(ImageView imageView, TextView textView, ImageIconInfo imageIconInfo, Class<?> cls) {

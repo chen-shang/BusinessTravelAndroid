@@ -36,10 +36,14 @@
                     android:gravity="left"
                     android:text="消费内容"/>
 
-            <com.yanzhenjie.recyclerview.SwipeRecyclerView
-                    android:id="@+id/UI_SwipeRecyclerView_Consuption"
+            <!--  下面的项目列表数据   -->
+            <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
+                    android:id="@+id/GridViewPager_ConsumptionIconList"
+                    android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content">
+            </cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager>
+
         </LinearLayout>
 
         <include layout="@layout/base_line"/>
@@ -55,10 +59,16 @@
                     android:gravity="left"
                     android:text="消费人员"/>
 
-            <com.yanzhenjie.recyclerview.SwipeRecyclerView
-                    android:id="@+id/UI_SwipeRecyclerView_Member"
+            <!--            <com.yanzhenjie.recyclerview.SwipeRecyclerView-->
+            <!--                    android:id="@+id/UI_SwipeRecyclerView_Member"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content"/>-->
+            <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
+                    android:id="@+id/GridViewPager_MemberIconList"
+                    android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content">
+            </cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager>
         </LinearLayout>
 
         <include layout="@layout/base_line"/>
