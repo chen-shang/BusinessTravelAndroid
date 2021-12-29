@@ -6,13 +6,19 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager;
+import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.ColorUtils;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ScreenUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Bill;
@@ -36,6 +42,10 @@ import com.business.travel.app.utils.Try;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.google.common.base.Preconditions;
+import com.lxj.xpopup.XPopup.Builder;
+import com.lxj.xpopup.enums.PopupAnimation;
+import com.lxj.xpopup.enums.PopupType;
+import com.lxj.xpopup.impl.AttachListPopupView;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -97,18 +107,43 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	}
 
 	private void registerMaterialSearchBar() {
-		viewBinding.searchBar.withQuerySearch(s -> {
-			List<Project> projects = projectService.queryAll();
-			List<String> projectNames = projects.stream().map(Project::getName).collect(Collectors.toList());
-			if (StringUtils.isBlank(s)) {
-				return projectNames;
-			}
-			return projectNames.stream().sorted((o1, o2) -> {
-				int o1S = o1.toLowerCase().contains(s.toLowerCase()) ? 0 : 1;
-				int o2S = o2.toLowerCase().contains(s.toLowerCase()) ? 0 : 1;
-				return o1S - o2S;
-			}).collect(Collectors.toList());
+		Builder builder = new Builder(this)
+				// 依附于所点击的View，内部会自动判断在上方或者下方显示
+				.atView(viewBinding.topTitleBar)
+				//不变暗
+				.hasShadowBg(false)
+				// 宽度
+				.popupWidth(ScreenUtils.getScreenWidth())
+				//动画
+				.popupAnimation(PopupAnimation.ScrollAlphaFromTop)
+				;
+
+		viewBinding.topTitleBar.setOnClickListener(v -> {
+			String[] list = list();
+			AttachListPopupView attachListPopupView = builder.asAttachList(list, null, (position, text) -> {
+			});
+			attachListPopupView.setContentGravity(Gravity.LEFT);
+			attachListPopupView.getPopupContentView().setBackgroundColor(Color.RED);
+			attachListPopupView.show();
 		});
+	}
+
+	private String[] list() {
+		List<Project> projects = projectService.queryAll();
+		if (CollectionUtils.isEmpty(projects)) {
+			return new String[] {};
+		}
+		return projects.stream().map(Project::getName).collect(Collectors.toList()).toArray(new String[] {});
+		//List<String> projectNames = projects.stream().map(Project::getName).collect(Collectors.toList());
+		//if (StringUtils.isBlank(s)) {
+		//	return projectNames;
+		//}
+		//return projectNames.stream().sorted((o1, o2) -> {
+		//	int o1S = o1.toLowerCase().contains(s.toLowerCase()) ? 0 : 1;
+		//	int o2S = o2.toLowerCase().contains(s.toLowerCase()) ? 0 : 1;
+		//	return o1S - o2S;
+		//}).collect(Collectors.toList());
+		//});
 	}
 
 	private void registerConsumptionPageView() {
@@ -235,7 +270,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		AppDatabase.getInstance(this).runInTransaction(() -> {
 			LogUtils.i("开启数据库事务");
 			//参数校验
-			String projectName = viewBinding.searchBar.selectedResultTextView.getText().toString();
+			String projectName = viewBinding.topTitleBar.contentBarTitle.getText().toString();
 			//如果不存在则新增项目
 			Project project = projectService.createIfNotExist(projectName);
 			if (project == null) {
@@ -335,7 +370,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		if (project == null) {
 			return;
 		}
-		viewBinding.searchBar.selectedResultTextView.setText(project.getName());
+		viewBinding.topTitleBar.contentBarTitle.setText(project.getName());
 	}
 
 	private ConsumptionTypeEnum refreshConsumptionType() {

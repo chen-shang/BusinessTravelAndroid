@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -8,12 +8,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <com.business.travel.app.view.SearchBar
-            android:elevation="8dp"
-            android:id="@+id/searchBar"
+    <com.business.travel.app.view.ContentBar
+            android:id="@+id/topTitleBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/corners_shape_change"
+            app:content_bar_right_icon="@drawable/ic_base_sort"
             />
 
     <LinearLayout
@@ -26,7 +26,6 @@
         <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="@dimen/top_height"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_weight="1"
                 app:layout_constraintBottom_toTopOf="@+id/keyboard"
@@ -97,4 +96,4 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"/>
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
