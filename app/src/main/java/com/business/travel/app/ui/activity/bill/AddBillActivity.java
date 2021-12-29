@@ -6,16 +6,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager;
-import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.ColorUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ScreenUtils;
@@ -44,7 +40,6 @@ import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.google.common.base.Preconditions;
 import com.lxj.xpopup.XPopup.Builder;
 import com.lxj.xpopup.enums.PopupAnimation;
-import com.lxj.xpopup.enums.PopupType;
 import com.lxj.xpopup.impl.AttachListPopupView;
 import org.apache.commons.lang3.StringUtils;
 
@@ -115,35 +110,17 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 				// 宽度
 				.popupWidth(ScreenUtils.getScreenWidth())
 				//动画
-				.popupAnimation(PopupAnimation.ScrollAlphaFromTop)
-				;
+				.popupAnimation(PopupAnimation.ScrollAlphaFromTop);
+
+		EditText contentBarTitle = viewBinding.topTitleBar.contentBarTitle;
+		contentBarTitle.setEnabled(true);
 
 		viewBinding.topTitleBar.setOnClickListener(v -> {
-			String[] list = list();
-			AttachListPopupView attachListPopupView = builder.asAttachList(list, null, (position, text) -> {
-			});
-			attachListPopupView.setContentGravity(Gravity.LEFT);
-			attachListPopupView.getPopupContentView().setBackgroundColor(Color.RED);
+			AttachListPopupView attachListPopupView = builder.asAttachList(projectService.queryAllProjectName(), null, (position, text) -> {
+				contentBarTitle.setText(text);
+			}, R.layout._xpopup_attach_impl_list, R.layout.base_list_item);
 			attachListPopupView.show();
 		});
-	}
-
-	private String[] list() {
-		List<Project> projects = projectService.queryAll();
-		if (CollectionUtils.isEmpty(projects)) {
-			return new String[] {};
-		}
-		return projects.stream().map(Project::getName).collect(Collectors.toList()).toArray(new String[] {});
-		//List<String> projectNames = projects.stream().map(Project::getName).collect(Collectors.toList());
-		//if (StringUtils.isBlank(s)) {
-		//	return projectNames;
-		//}
-		//return projectNames.stream().sorted((o1, o2) -> {
-		//	int o1S = o1.toLowerCase().contains(s.toLowerCase()) ? 0 : 1;
-		//	int o2S = o2.toLowerCase().contains(s.toLowerCase()) ? 0 : 1;
-		//	return o1S - o2S;
-		//}).collect(Collectors.toList());
-		//});
 	}
 
 	private void registerConsumptionPageView() {

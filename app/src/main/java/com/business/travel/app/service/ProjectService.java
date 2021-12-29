@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import android.content.Context;
 import androidx.annotation.Nullable;
@@ -175,6 +176,19 @@ public class ProjectService {
 	 */
 	public List<Project> queryAll() {
 		return projectDao.selectAll();
+	}
+
+	/**
+	 * 批量查询全部项目名称
+	 *
+	 * @return
+	 */
+	public String[] queryAllProjectName() {
+		List<Project> projects = queryAll();
+		if (CollectionUtils.isEmpty(projects)) {
+			return new String[] {};
+		}
+		return projects.stream().map(Project::getName).collect(Collectors.toList()).toArray(new String[] {});
 	}
 
 	/**
