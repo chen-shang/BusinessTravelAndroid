@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import com.blankj.utilcode.util.LogUtils;
 import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.dal.dao.ConsumptionDao;
 import com.business.travel.app.dal.dao.MemberDao;
@@ -99,6 +100,7 @@ public class AddItemActivity extends ColorStatusBarActivity<ActivityAddItemBindi
 		ImageView saveButton = viewBinding.topTitleBar.contentBarRightIcon;
 		registerSaveButton(saveButton);
 
+		LogUtils.i("进入到添加图标页面");
 	}
 
 	@Override
@@ -176,14 +178,18 @@ public class AddItemActivity extends ColorStatusBarActivity<ActivityAddItemBindi
 		try {
 			//如果5秒钟,拿不回数据,说明网络不好
 			String path = "/icon/" + itemTypeEnum.name();
-			FutureUtil.supplyAsync(() -> getIconTypeListFromCache(path)).thenApply(list -> list.stream().sorted(Comparator.comparing(GiteeContent::getItemSort)).collect(Collectors.toList())).thenAccept(list -> {
-				iconTypeList.clear();
-				iconTypeList.addAll(list);
-			}).get(5, TimeUnit.SECONDS);
+			FutureUtil.supplyAsync(() -> getIconTypeListFromCache(path))
+			          //排序
+			          .thenApplyAsync(list -> list.stream().sorted(Comparator.comparing(GiteeContent::getItemSort)).collect(Collectors.toList()))
+			          //刷新
+			          .thenAccept(list -> {
+				          iconTypeList.clear();
+				          iconTypeList.addAll(list);
+				          addItemRecyclerViewAdapter.notifyDataSetChanged();
+			          }).get(5, TimeUnit.SECONDS);
 		} catch (Exception e) {
 			LogToast.errorShow("网络环境较差,请稍后重试");
 		}
-		addItemRecyclerViewAdapter.notifyDataSetChanged();
 	}
 
 	private List<GiteeContent> getIconTypeListFromCache(String path) {

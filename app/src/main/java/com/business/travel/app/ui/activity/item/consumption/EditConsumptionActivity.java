@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.ColorUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Consumption;
 import com.business.travel.app.databinding.ActivityEditConsumptionBinding;
@@ -145,7 +146,8 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 		//长按移动排序
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setLongPressDragEnabled(true);
 		//当移动之后
-		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(consumptionImageIconList, editConsumptionRecyclerViewAdapter).onItemMove((consumptionItems, fromPosition, toPosition) -> IntStream.rangeClosed(fromPosition, toPosition).forEachOrdered(i -> consumptionService.updateMemberSort(consumptionImageIconList.get(i).getId(), (long)i))));
+		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(consumptionImageIconList, editConsumptionRecyclerViewAdapter).onItemMove(
+				(consumptionItems, fromPosition, toPosition) -> IntStream.rangeClosed(fromPosition, toPosition).forEachOrdered(i -> consumptionService.updateMemberSort(consumptionImageIconList.get(i).getId(), (long)i))));
 
 		//添加分隔线
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.addItemDecoration(new DefaultItemDecoration(ColorUtils.getColor(R.color.black_300)));
@@ -184,6 +186,7 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 	 */
 	private void registerConsumptionButtonAddItem() {
 		viewBinding.DragFloatActionButton.setOnClickListener(v -> {
+			LogUtils.i("跳转到添加图标页面 itemType:" + ItemTypeEnum.CONSUMPTION.name() + ",consumptionType:" + consumptionType.name());
 			Intent intent = new Intent(this, AddItemActivity.class);
 			intent.putExtra("itemType", ItemTypeEnum.CONSUMPTION.name());
 			intent.putExtra("consumptionType", consumptionType.name());
