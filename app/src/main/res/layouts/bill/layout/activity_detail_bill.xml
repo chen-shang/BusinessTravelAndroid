@@ -19,192 +19,191 @@
             app:content_bar_title_color="@color/white"
             />
 
-    <LinearLayout
+    <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
         <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="10dp"
                 android:orientation="vertical">
 
-            <TextView
+            <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:text="消费内容"/>
+                    android:orientation="vertical">
 
-            <!--  下面的项目列表数据   -->
-            <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
-                    android:id="@+id/GridViewPager_ConsumptionIconList"
-                    android:layout_marginTop="5dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-            </cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager>
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:text="消费内容"/>
 
-        </LinearLayout>
+                <!--  下面的项目列表数据   -->
+                <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
+                        android:id="@+id/GridViewPager_ConsumptionIconList"
+                        android:layout_marginTop="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                </cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager>
 
-        <include layout="@layout/base_line"/>
+            </LinearLayout>
 
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+            <include layout="@layout/base_line"/>
 
-            <TextView
+            <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:text="消费人员"/>
+                    android:orientation="vertical">
 
-            <!--            <com.yanzhenjie.recyclerview.SwipeRecyclerView-->
-            <!--                    android:id="@+id/UI_SwipeRecyclerView_Member"-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="wrap_content"/>-->
-            <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
-                    android:id="@+id/GridViewPager_MemberIconList"
-                    android:layout_marginTop="5dp"
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:text="消费人员"/>
+
+                <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
+                        android:id="@+id/GridViewPager_MemberIconList"
+                        android:layout_marginTop="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                </cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager>
+            </LinearLayout>
+
+            <include layout="@layout/base_line"/>
+
+            <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-            </cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager>
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="3"
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:text="消费类型"/>
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                            android:id="@+id/consumerType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:text="消费类型"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <include layout="@layout/base_line"/>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="3"
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:text="消费金额"/>
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                            android:id="@+id/ammount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:text="299.90"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <include layout="@layout/base_line"/>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="3"
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:text="消费日期"/>
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                            android:id="@+id/time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:text="xxxxx xxxx"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <include layout="@layout/base_line"/>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center"
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="left"
+                            android:text="备注"/>
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                            android:id="@+id/remark"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:text="xxxxx xxxx"/>
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-
-        <include layout="@layout/base_line"/>
-
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_weight="3"
-                    android:layout_height="wrap_content">
-
-                <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:text="消费类型"/>
-            </LinearLayout>
-
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content">
-
-                <TextView
-                        android:id="@+id/consumerType"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:text="消费类型"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <include layout="@layout/base_line"/>
-
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_weight="3"
-                    android:layout_height="wrap_content">
-
-                <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:text="消费金额"/>
-            </LinearLayout>
-
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content">
-
-                <TextView
-                        android:id="@+id/ammount"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:text="299.90"/>
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <include layout="@layout/base_line"/>
-
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_weight="3"
-                    android:layout_height="wrap_content">
-
-                <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:text="消费日期"/>
-            </LinearLayout>
-
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content">
-
-                <TextView
-                        android:id="@+id/time"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:text="xxxxx xxxx"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <include layout="@layout/base_line"/>
-
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:layout_height="wrap_content">
-
-                <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="left"
-                        android:text="备注"/>
-            </LinearLayout>
-
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content">
-
-                <TextView
-                        android:id="@+id/remark"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:text="xxxxx xxxx"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <include layout="@layout/base_line"/>
-    </LinearLayout>
+    </ScrollView>
 </LinearLayout>
