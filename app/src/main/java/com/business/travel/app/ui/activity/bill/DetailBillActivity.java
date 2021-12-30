@@ -14,6 +14,7 @@ import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.service.MemberService;
+import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.base.ColorStatusBarActivity;
 import com.business.travel.app.utils.GridViewPagerUtil;
 import com.business.travel.app.utils.ImageLoadUtil;
@@ -48,6 +49,7 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 
 	//注入service
 	private BillService billService;
+	private ProjectService projectService;
 	private MemberService memberService;
 	private ConsumptionService consumptionService;
 
@@ -56,7 +58,7 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		billService = new BillService(this);
 		memberService = new MemberService(this);
 		consumptionService = new ConsumptionService(this);
-
+		projectService = new ProjectService(this);
 		selectBillId = getIntent().getExtras().getLong("selectBillId");
 	}
 
@@ -136,12 +138,16 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 
 		//备注
 		viewBinding.remark.setText(bill.getRemark());
+
+		Long projectId = bill.getProjectId();
+		String projectName = projectService.queryById(projectId).getName();
+		viewBinding.projectName.setText(projectName);
 	}
 
 	private void bind(ImageView imageView, TextView textView, ImageIconInfo imageIconInfo) {
 		imageView.setBackgroundResource(R.drawable.corners_shape_unselect);
 		imageView.setImageResource(R.drawable.ic_base_placeholder);
-		
+
 		textView.setText(imageIconInfo.getName());
 		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView);
 	}

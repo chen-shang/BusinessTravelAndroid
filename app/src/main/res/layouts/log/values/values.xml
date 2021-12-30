@@ -3,6 +3,11 @@
 
     <!--  记录版本之间的功能变更,不宜太多,测试专用  -->
     <string-array name="change_log">
+        <item>2.6</item>
+        <item>1. 详情添加差旅项目</item>
+        <item>2. 页面底色变更</item>
+        <item>3. 部分页面边距变更</item>
+
         <item>2.5</item>
         <item>1. 人员图标自适应</item>
         <item>2. 消费图标4行</item>
