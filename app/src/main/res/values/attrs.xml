@@ -11,6 +11,7 @@
             <enum name="center" value="1"/>
             <enum name="left" value="2"/>
         </attr>
+        <attr name="content_bar_title_hint" format="string"/>
         <attr name="content_bar_right_icon" format="reference"/>
     </declare-styleable>
 </resources>

@@ -23,10 +23,9 @@ import com.business.travel.app.model.converter.ConsumptionConverter;
 import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.ui.activity.item.AddItemActivity;
 import com.business.travel.app.ui.activity.item.EditItemRecyclerViewAdapter;
-import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
+import com.business.travel.app.ui.base.ColorStatusBarActivity;
 import com.business.travel.app.utils.ImageIconUtil;
-import com.business.travel.app.utils.StatusBarUtil;
 import com.business.travel.app.view.HeaderView;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.ItemTypeEnum;
@@ -39,7 +38,7 @@ import static com.yanzhenjie.recyclerview.SwipeRecyclerView.RIGHT_DIRECTION;
 /**
  * @author chenshang
  */
-public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptionBinding> {
+public class EditConsumptionActivity extends ColorStatusBarActivity<ActivityEditConsumptionBinding> {
 	/**
 	 * 消费项图标信息列表
 	 */
@@ -68,8 +67,6 @@ public class EditConsumptionActivity extends BaseActivity<ActivityEditConsumptio
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//顶部渐变
-		StatusBarUtil.setStatusBarView(getWindow(), getResources(), R.drawable.corners_shape_change);
 		//获取当前是什么类型
 		registerConsumptionType();
 		//注册下拉列表事件

@@ -45,7 +45,7 @@ public class ContentBar extends ConstraintLayout {
 		}
 		String mode = typedArray.getString(R.styleable.ContentBar_content_bar_left_icon_mode);
 		if ("1".equals(mode)) {
-			contentBarLeftIcon.setOnClickListener(v -> Objects.requireNonNull(ActivityUtils.getActivityByContext(context)).finish());
+			contentBarLeftIcon.setOnClickListener(v -> ActivityUtils.getActivityByContext(context).finish());
 		}
 
 		//中间文字
@@ -53,6 +53,11 @@ public class ContentBar extends ConstraintLayout {
 		String title = typedArray.getString(R.styleable.ContentBar_content_bar_title);
 		if (StringUtils.isNotBlank(title)) {
 			contentBarTitle.setText(title);
+		}
+
+		String hint = typedArray.getString(R.styleable.ContentBar_content_bar_title_hint);
+		if (StringUtils.isNotBlank(hint)) {
+			contentBarTitle.setHint(hint);
 		}
 
 		int color = typedArray.getColor(R.styleable.ContentBar_content_bar_title_color, contentBarTitle.getCurrentTextColor());

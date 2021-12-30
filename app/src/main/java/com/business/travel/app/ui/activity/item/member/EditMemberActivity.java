@@ -18,10 +18,9 @@ import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.service.MemberService;
 import com.business.travel.app.ui.activity.item.AddItemActivity;
 import com.business.travel.app.ui.activity.item.EditItemRecyclerViewAdapter;
-import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
+import com.business.travel.app.ui.base.ColorStatusBarActivity;
 import com.business.travel.app.utils.ImageIconUtil;
-import com.business.travel.app.utils.StatusBarUtil;
 import com.business.travel.app.view.HeaderView;
 import com.business.travel.vo.enums.ItemTypeEnum;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
@@ -32,7 +31,7 @@ import static com.yanzhenjie.recyclerview.SwipeRecyclerView.RIGHT_DIRECTION;
 /**
  * 编辑人员页面
  */
-public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> {
+public class EditMemberActivity extends ColorStatusBarActivity<ActivityEditMemberBinding> {
 
 	/**
 	 * 人员图标列表
@@ -58,8 +57,6 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//顶部渐变
-		StatusBarUtil.setStatusBarView(getWindow(), getResources(), R.drawable.corners_shape_change);
 		/**
 		 * 注册列表
 		 */
@@ -75,7 +72,8 @@ public class EditMemberActivity extends BaseActivity<ActivityEditMemberBinding> 
 
 		//长按移动排序
 		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.setLongPressDragEnabled(true);
-		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(memberIconList, editConsumptionRecyclerViewAdapter).onItemMove((consumptionItems, fromPosition, toPosition) -> IntStream.range(fromPosition, toPosition).forEachOrdered(sortId -> memberService.updateMemberSort(consumptionItems.get(sortId).getId(), (long)sortId))));
+		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(memberIconList, editConsumptionRecyclerViewAdapter).onItemMove(
+				(consumptionItems, fromPosition, toPosition) -> IntStream.range(fromPosition, toPosition).forEachOrdered(sortId -> memberService.updateMemberSort(consumptionItems.get(sortId).getId(), (long)sortId))));
 
 		//添加分隔线
 		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.addItemDecoration(new DefaultItemDecoration(ColorUtils.getColor(R.color.black_300)));

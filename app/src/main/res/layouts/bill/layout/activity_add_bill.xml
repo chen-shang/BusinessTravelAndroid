@@ -14,6 +14,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/corners_shape_change"
             app:content_bar_right_icon="@drawable/ic_base_sort"
+            app:content_bar_title_hint="点击选择项目"
             />
 
     <LinearLayout
