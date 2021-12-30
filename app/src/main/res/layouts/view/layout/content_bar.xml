@@ -17,6 +17,7 @@
             app:layout_constraintHeight_max="@dimen/top_height"
             app:layout_constraintWidth_max="@dimen/top_height"
             android:clickable="true"
+            android:elevation="8dp"
             android:src="@drawable/ic_base_placeholder"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
