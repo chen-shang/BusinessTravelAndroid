@@ -33,6 +33,7 @@
             android:ellipsize="end"
             android:background="@null"
             android:enabled="false"
+            android:clickable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@+id/content_bar_left_icon"
