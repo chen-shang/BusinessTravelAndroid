@@ -84,11 +84,11 @@ public class BusinessTravelResourceApi {
 			return null;
 		}
 
-		//超过3分钟重新下载
+		//超过Config::getIconTtl 且网络良好 重新下载
 		long nowTimestamp = DateTimeUtil.timestamp();
 		long lastModified = file.lastModified();
 		Long iconTtl = Optional.ofNullable(AppConfig.getConfig()).map(Config::getIconTtl).orElse(5 * 60 * 1000L);
-		if (nowTimestamp - lastModified > iconTtl) {
+		if (nowTimestamp - lastModified > iconTtl && NetworkUtils.isAvailable()) {
 			boolean delete = file.delete();
 			LogUtils.i("缓存超时失效" + iconFullName + " :" + delete);
 			return null;
