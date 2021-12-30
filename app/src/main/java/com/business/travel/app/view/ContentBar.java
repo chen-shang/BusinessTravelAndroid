@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.business.travel.app.R;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +46,10 @@ public class ContentBar extends ConstraintLayout {
 		}
 		String mode = typedArray.getString(R.styleable.ContentBar_content_bar_left_icon_mode);
 		if ("1".equals(mode)) {
-			contentBarLeftIcon.setOnClickListener(v -> ActivityUtils.getActivityByContext(context).finish());
+			contentBarLeftIcon.setOnClickListener(v -> {
+				LogUtils.d("退出当前页面");
+				ActivityUtils.getActivityByContext(context).finish();
+			});
 		}
 
 		//中间文字
