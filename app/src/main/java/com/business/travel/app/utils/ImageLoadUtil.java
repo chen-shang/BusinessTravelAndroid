@@ -31,7 +31,7 @@ public class ImageLoadUtil {
 	}
 
 	/**
-	 * 加载突变,带颜色
+	 * 加载图片,带颜色
 	 *
 	 * @param iconDownloadUrl
 	 * @param uiImageViewIcon

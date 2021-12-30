@@ -70,12 +70,20 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	private MemberService memberService;
 	private ConsumptionService consumptionService;
 
+	/**
+	 * 如果是编辑
+	 */
+	private Long selectBillId;
+
 	@Override
 	protected void inject() {
 		memberService = new MemberService(this);
 		billService = new BillService(this);
 		projectService = new ProjectService(this);
 		consumptionService = new ConsumptionService(this);
+
+		//其他页面传递进来的billId,代表编辑
+		selectBillId = this.getIntent().getLongExtra("selectBillId", -1);
 	}
 
 	@Override
@@ -97,7 +105,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	protected void onResume() {
 		super.onResume();
 		//每次进来该页面的时候都需要刷新一下数据
-		refreshData();
+		refreshData(selectBillId);
 	}
 
 	private void registerMaterialSearchBar() {
@@ -282,7 +290,8 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		billService.creatBill(bill);
 	}
 
-	private void refreshData() {
+	private void refreshData(Long selectBillId) {
+		// TODO: 2021/12/30
 		//启动的时候刷新当前页面的标题
 		refreshProjectName();
 		//当前是支出还是收入

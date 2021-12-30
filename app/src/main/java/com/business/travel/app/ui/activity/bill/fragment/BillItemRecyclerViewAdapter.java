@@ -23,6 +23,7 @@ import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.ConsumptionService;
+import com.business.travel.app.ui.activity.bill.AddBillActivity;
 import com.business.travel.app.ui.activity.bill.DetailBillActivity;
 import com.business.travel.app.ui.activity.bill.fragment.BillItemRecyclerViewAdapter.BillItemRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.activity.bill.fragment.BillRecyclerViewAdapter.BillRecyclerViewAdapterViewHolder;
@@ -130,7 +131,9 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 	}
 
 	private void edit(int position, Bill bill) {
-		//todo
+		Intent intent = new Intent(activity, AddBillActivity.class);
+		intent.putExtra("selectBillId", bill.getId());
+		activity.startActivity(intent);
 	}
 
 	private void delete(int position, Bill bill) {
