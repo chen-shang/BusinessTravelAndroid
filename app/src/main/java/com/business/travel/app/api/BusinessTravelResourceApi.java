@@ -14,13 +14,13 @@ import java.util.StringJoiner;
 import androidx.annotation.Nullable;
 import com.blankj.utilcode.util.FileIOUtils;
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.PathUtils;
 import com.business.travel.app.constant.AppConfig;
 import com.business.travel.app.exceptions.ApiException;
 import com.business.travel.app.model.Config;
 import com.business.travel.app.model.GiteeContent;
 import com.business.travel.app.utils.HttpWrapper;
+import com.business.travel.app.utils.NetworkUtil;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.JacksonUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -88,7 +88,7 @@ public class BusinessTravelResourceApi {
 		long nowTimestamp = DateTimeUtil.timestamp();
 		long lastModified = file.lastModified();
 		Long iconTtl = Optional.ofNullable(AppConfig.getConfig()).map(Config::getIconTtl).orElse(24 * 60 * 60 * 1000L);
-		if (nowTimestamp - lastModified > iconTtl && NetworkUtils.isAvailable()) {
+		if (nowTimestamp - lastModified > iconTtl && NetworkUtil.isAvailable()) {
 			boolean delete = file.delete();
 			LogUtils.i("缓存超时失效" + iconFullName + " :" + delete);
 			return null;
@@ -99,7 +99,7 @@ public class BusinessTravelResourceApi {
 
 	private static InputStream getIconFromServer(String iconFullName) {
 		try {
-			if (!NetworkUtils.isAvailable()) {
+			if (!NetworkUtil.isAvailable()) {
 				return null;
 			}
 

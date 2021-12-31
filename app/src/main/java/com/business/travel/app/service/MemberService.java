@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import android.content.Context;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.NetworkUtils;
 import com.business.travel.app.dal.dao.MemberDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Member;
@@ -15,6 +14,7 @@ import com.business.travel.app.enums.ItemIconEnum;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.model.converter.MemberConverter;
 import com.business.travel.app.utils.LogToast;
+import com.business.travel.app.utils.NetworkUtil;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.vo.enums.ItemTypeEnum;
 
@@ -62,9 +62,9 @@ public class MemberService {
 			return;
 		}
 
-		if (!NetworkUtils.isAvailable()) {
+		if (!NetworkUtil.isAvailable()) {
 			LogUtils.e("网络不稳定,请稍后重试");
-			LogToast.infoShow("网络不稳定");
+			LogToast.infoShow("网络不稳定,请稍后重试");
 			return;
 		}
 

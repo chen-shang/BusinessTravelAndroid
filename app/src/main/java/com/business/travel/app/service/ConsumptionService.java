@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import android.content.Context;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.NetworkUtils;
 import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.constant.BusinessTravelResourceConstant;
 import com.business.travel.app.dal.dao.ConsumptionDao;
@@ -19,6 +18,7 @@ import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.model.converter.ConsumptionConverter;
 import com.business.travel.app.utils.FutureUtil;
 import com.business.travel.app.utils.LogToast;
+import com.business.travel.app.utils.NetworkUtil;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.DeleteEnum;
@@ -66,9 +66,9 @@ public class ConsumptionService {
 			return;
 		}
 
-		if (!NetworkUtils.isAvailable()) {
+		if (!NetworkUtil.isAvailable()) {
 			LogUtils.e("网络不稳定,请稍后重试");
-			LogToast.infoShow("网络不稳定");
+			LogToast.infoShow("网络不稳定,请稍后重试");
 			return;
 		}
 
