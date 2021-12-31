@@ -5,41 +5,50 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.activity.log.ChangeLogActivity"
-        android:orientation="vertical">
+        >
 
-    <LinearLayout
+    <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:layout_height="wrap_content">
 
-        <Button
-                android:id="@+id/showLog"
-                android:layout_width="wrap_content"
+        <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="运行日志"/>
+                android:orientation="vertical">
 
-        <Button
-                android:id="@+id/clearLog"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="清空日志"/>
-    </LinearLayout>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                <Button
+                        android:id="@+id/showLog"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="运行日志"/>
+
+                <Button
+                        android:id="@+id/clearLog"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="清空日志"/>
+            </LinearLayout>
 
 
-    <TextView
-            android:textIsSelectable="true"
-            android:id="@+id/log"
-            android:scrollbars="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <TextView
+                    android:id="@+id/log"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
-    <TextView
-            android:id="@+id/versionHistory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <include layout="@layout/base_line"/>
 
-
+            <TextView
+                    android:id="@+id/versionHistory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

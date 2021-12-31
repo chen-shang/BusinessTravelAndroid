@@ -7,6 +7,8 @@
         <item>1. 详情添加差旅项目</item>
         <item>2. 页面底色变更</item>
         <item>3. 部分页面边距变更</item>
+        <item>4. 去掉test activity</item>
+        <item>5. 超出页面的可以上下滑动</item>
 
         <item>2.5</item>
         <item>1. 人员图标自适应</item>
@@ -19,23 +21,6 @@
         <item>3. 没有网络的时候图标点击兜底逻辑</item>
         <item>4. 图标文件缓存</item>
         <item>5. 图标文件缓存时间可配置</item>
-
-        <item>2.3</item>
-        <item>1. 键盘实现抽象成键盘组件</item>
-        <item>2. 关于差旅记账页面布局更新</item>
-        <item>3. 用户协议页面实现</item>
-        <item>4. 布局文件目录移动</item>
-        <item>5. 组件id命名规范了一下</item>
-
-        <item>2.2</item>
-        <item>1. 修改我的页面布局</item>
-        <item>2. 新增关于差旅记账页面布局</item>
-        <item>3. 修改部分配色，顶部渐变</item>
-        <item>4. 抽取公共代码，精简布局</item>
-
-        <item>2.1</item>
-        <item>1. 优化新增账单页面布局,精简布局代码</item>
-        <item>2. 修改账单图标文字大小为13dp</item>
-        <item>3. 修改顶部title bar 为自定义控件</item>
+        
     </string-array>
 </resources>

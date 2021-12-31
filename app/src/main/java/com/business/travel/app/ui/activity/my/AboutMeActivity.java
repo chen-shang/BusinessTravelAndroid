@@ -8,7 +8,6 @@ import com.business.travel.app.databinding.ActivityAboutMeBinding;
 import com.business.travel.app.enums.WebTextTypeEnum;
 import com.business.travel.app.ui.activity.log.ChangeLogActivity;
 import com.business.travel.app.ui.base.ColorStatusBarActivity;
-import com.business.travel.app.ui.test.TestActivity;
 import com.business.travel.utils.DateTimeUtil;
 
 public class AboutMeActivity extends ColorStatusBarActivity<ActivityAboutMeBinding> {
@@ -18,11 +17,8 @@ public class AboutMeActivity extends ColorStatusBarActivity<ActivityAboutMeBindi
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		//进入测试页面
-		goTestActivityOnViewClick(viewBinding.icon);
 		//进入版本更新页面
-		goChangeLogOnViewClick(viewBinding.versionHistory);
+		goChangeLogOnViewClick(viewBinding.icon);
 
 		//注册用户协议点击事件
 		goWebTextActivityOnViewClick(viewBinding.aboutMeUserAgreement, WebTextTypeEnum.USER_AGREEMENT);
@@ -46,7 +42,7 @@ public class AboutMeActivity extends ColorStatusBarActivity<ActivityAboutMeBindi
 		});
 	}
 
-	private void goTestActivityOnViewClick(View view) {
+	private void goChangeLogOnViewClick(View view) {
 		view.setOnClickListener(v -> {
 			if (DateTimeUtil.timestamp() - time < 2000) {
 				counter++;
@@ -56,12 +52,8 @@ public class AboutMeActivity extends ColorStatusBarActivity<ActivityAboutMeBindi
 			}
 
 			if (counter == 5) {
-				startActivity(new Intent(this, TestActivity.class));
+				startActivity(new Intent(this, ChangeLogActivity.class));
 			}
 		});
-	}
-
-	private void goChangeLogOnViewClick(View view) {
-		view.setOnClickListener(v -> startActivity(new Intent(this, ChangeLogActivity.class)));
 	}
 }
