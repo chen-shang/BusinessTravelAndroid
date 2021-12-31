@@ -90,7 +90,7 @@ public class BillService {
 	 */
 	public Long sumTotalSpendingMoney(Long projectId) {
 		Long totalSpendingMoney = billDao.sumTotalSpendingMoney(projectId);
-		LogUtils.i("统计项目的总支出:" + projectId + "->" + totalSpendingMoney);
+		LogUtils.d("统计项目的总支出:" + projectId + "->" + totalSpendingMoney);
 		return totalSpendingMoney;
 	}
 
@@ -102,7 +102,7 @@ public class BillService {
 	 */
 	public Long sumTotalIncomeMoney(Long projectId) {
 		Long totalIncomeMoney = billDao.sumTotalIncomeMoney(projectId);
-		LogUtils.i("统计项目的总支出:" + projectId + "->" + totalIncomeMoney);
+		LogUtils.d("统计项目的总支出:" + projectId + "->" + totalIncomeMoney);
 		return totalIncomeMoney;
 	}
 
@@ -128,7 +128,7 @@ public class BillService {
 	 */
 	public Long sumTotalIncomeMoney(Long projectId, Long consumeDate) {
 		Long totalIncomeMoney = billDao.sumTotalIncomeMoney(projectId, consumeDate);
-		LogUtils.i("统计项目某天的总收入:" + projectId + "->" + totalIncomeMoney);
+		LogUtils.d("统计项目某天的总收入:" + projectId + "->" + totalIncomeMoney);
 		return totalIncomeMoney;
 	}
 
