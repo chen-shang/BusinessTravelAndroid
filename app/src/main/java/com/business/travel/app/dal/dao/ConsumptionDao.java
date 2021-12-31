@@ -58,6 +58,8 @@ public interface ConsumptionDao extends BaseDao<Consumption> {
 	/**
 	 * 按照主键id批量查询
 	 *
+	 * ps:这里会把删除的也查询出来,因为详情展示的时候还要展示的
+	 *
 	 * @param ids
 	 * @return
 	 */

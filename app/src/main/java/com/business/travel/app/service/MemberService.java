@@ -80,7 +80,7 @@ public class MemberService {
 		memberDao.insert(member);
 	}
 
-	public List<ImageIconInfo> queryAll(List<Long> ids) {
+	public List<ImageIconInfo> queryByIds(List<Long> ids) {
 		List<Member> members = memberDao.selectByPrimaryKeys(ids);
 		return convert(members);
 	}

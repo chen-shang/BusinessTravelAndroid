@@ -3,10 +3,15 @@ package com.business.travel.app.ui.activity.bill;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+import cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager;
+import com.blankj.utilcode.util.CollectionUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.databinding.ActivityDetailBillBinding;
@@ -24,6 +29,8 @@ import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.SplitUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.WeekEnum;
+import com.google.common.base.Preconditions;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 账单详情页面
@@ -59,77 +66,73 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		memberService = new MemberService(this);
 		consumptionService = new ConsumptionService(this);
 		projectService = new ProjectService(this);
-		selectBillId = getIntent().getExtras().getLong("selectBillId");
+		selectBillId = getIntent().getLongExtra("selectBillId", -1);
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//注册消费项列表
-		registerConsumptionPageView();
+		registerPageView(viewBinding.GridViewPagerConsumptionIconList, consumptionIconList);
 		//注册人员列表
-		registerMemberPageView();
+		registerPageView(viewBinding.GridViewPagerMemberIconList, memberIconList);
+
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		if (selectBillId == null || selectBillId <= 0) {
-			return;
-		}
-		Try.of(() -> showBill(billService.queryBillById(selectBillId)));
+		Try.of(() -> {
+			//参数检查
+			Preconditions.checkArgument(selectBillId > 0, "请选择账单");
+			Bill bill = billService.queryBillById(selectBillId);
+			Preconditions.checkArgument(bill != null, "未查询到账单 " + selectBillId);
+			//业务逻辑
+			showBillDetail(bill);
+			//结果处理
+		});
 	}
 
-	private void registerMemberPageView() {
-		GridViewPagerUtil.registerPageViewCommonProperty(viewBinding.GridViewPagerMemberIconList)
+	/**
+	 * 注册图标列表
+	 *
+	 * @param gridViewPager
+	 * @param dataList
+	 */
+	private void registerPageView(GridViewPager gridViewPager, List<ImageIconInfo> dataList) {
+		GridViewPagerUtil.registerPageViewCommonProperty(gridViewPager)
 		                 // 设置数据总数量
-		                 .setDataAllCount(memberIconList.size())
+		                 .setDataAllCount(dataList.size())
 		                 // 设置每页行数 // 设置每页列数
 		                 .setColumnCount(COLUMN_COUNT)
 		                 // 数据绑定
 		                 .setImageTextLoaderInterface((imageView, textView, position) -> {
 			                 // 自己进行数据的绑定，灵活度更高，不受任何限制
-			                 bind(imageView, textView, memberIconList.get(position));
+			                 bind(imageView, textView, dataList.get(position));
 		                 });
 	}
 
-	private void registerConsumptionPageView() {
-		GridViewPagerUtil.registerPageViewCommonProperty(viewBinding.GridViewPagerConsumptionIconList)
-		                 // 设置数据总数量
-		                 .setDataAllCount(consumptionIconList.size())
-		                 // 设置每页行数 // 设置每页列数
-		                 .setColumnCount(COLUMN_COUNT)
-		                 // 数据绑定
-		                 .setImageTextLoaderInterface((imageView, textView, position) -> {
-			                 // 自己进行数据的绑定，灵活度更高，不受任何限制
-			                 bind(imageView, textView, consumptionIconList.get(position));
-		                 });
-	}
-
+	/**
+	 * 展示账单详情
+	 *
+	 * @param bill
+	 */
 	@SuppressLint("SetTextI18n")
-	private void showBill(Bill bill) {
-
+	private void showBillDetail(@NotNull Bill bill) {
 		//消费项列表
 		String consumptionIds = bill.getConsumptionIds();
-		List<Long> consumptionIdList = SplitUtil.trimToLongList(consumptionIds);
-		List<ImageIconInfo> consumptions = consumptionService.queryByIds(consumptionIdList);
-		consumptionIconList.clear();
-		consumptionIconList.addAll(consumptions);
-		viewBinding.GridViewPagerConsumptionIconList.setDataAllCount(consumptionIconList.size()).setRowCount((int)Math.ceil((consumptionIconList.size() / (double)COLUMN_COUNT))).show();
+		showConsumption(consumptionIds);
 
 		//人员列表
 		String memberIds = bill.getMemberIds();
-		List<Long> memberIdList = SplitUtil.trimToLongList(memberIds);
-		List<ImageIconInfo> imageIconInfos = memberService.queryAll(memberIdList);
-		memberIconList.clear();
-		memberIconList.addAll(imageIconInfos);
-		viewBinding.GridViewPagerMemberIconList.setDataAllCount(memberIconList.size()).setRowCount((int)Math.ceil((memberIconList.size() / (double)COLUMN_COUNT))).show();
+		showMember(memberIds);
 
 		//消费金额
 		viewBinding.ammount.setText(MoneyUtil.toYuanString(bill.getAmount()));
 
 		//消费时间
 		String date = DateTimeUtil.format(bill.getConsumeDate(), "yyyy-MM-dd");
+		//周几
 		WeekEnum weekEnum = WeekEnum.ofCode(DateTimeUtil.toLocalDateTime(bill.getConsumeDate()).getDayOfWeek().getValue());
 		viewBinding.time.setText(date + " " + weekEnum.getMsg());
 		//消费类型
@@ -139,9 +142,78 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		//备注
 		viewBinding.remark.setText(bill.getRemark());
 
+		//项目名称
 		Long projectId = bill.getProjectId();
 		String projectName = projectService.queryById(projectId).getName();
 		viewBinding.projectName.setText(projectName);
+	}
+
+	/**
+	 * 显示列表
+	 *
+	 * @param consumptionIds
+	 */
+	private void showConsumption(String consumptionIds) {
+		if (StringUtils.isBlank(consumptionIds)) {
+			LogUtils.w("该账单没有消费项 id:" + selectBillId);
+			return;
+		}
+		List<Long> consumptionIdList = SplitUtil.trimToLongList(consumptionIds);
+		if (CollectionUtils.isEmpty(consumptionIdList)) {
+			return;
+		}
+		List<ImageIconInfo> consumptions = consumptionService.queryByIds(consumptionIdList);
+		if (CollectionUtils.isEmpty(consumptions)) {
+			LogUtils.w("没有查询到消费项 id:" + selectBillId + ",consumptionIdList:" + consumptionIdList);
+			return;
+		}
+
+		//更新消费项目图标数据列表
+		consumptionIconList.clear();
+		consumptionIconList.addAll(consumptions);
+		//更新数据显示
+		double row = Math.ceil((consumptionIconList.size() / (double)COLUMN_COUNT));
+		viewBinding.GridViewPagerConsumptionIconList
+				//图标总数量
+				.setDataAllCount(consumptionIconList.size())
+				//动态计算行数,达到自适应的目的
+				.setRowCount((int)row)
+				//更新展示
+				.show();
+	}
+
+	/**
+	 * 显示列表
+	 *
+	 * @param memberIds
+	 */
+	private void showMember(String memberIds) {
+		if (StringUtils.isBlank(memberIds)) {
+			LogUtils.w("该账单没有消费项 id:" + selectBillId);
+			return;
+		}
+		List<Long> memberIdList = SplitUtil.trimToLongList(memberIds);
+		if (CollectionUtils.isEmpty(memberIdList)) {
+			return;
+		}
+		List<ImageIconInfo> members = memberService.queryByIds(memberIdList);
+		if (CollectionUtils.isEmpty(members)) {
+			LogUtils.w("没有查询到消费项 id:" + selectBillId + ",memberIdList:" + memberIdList);
+			return;
+		}
+
+		//更新消费项目图标数据列表
+		memberIconList.clear();
+		memberIconList.addAll(members);
+		//更新数据显示
+		double row = Math.ceil((memberIconList.size() / (double)COLUMN_COUNT));
+		viewBinding.GridViewPagerMemberIconList
+				//图标总数量
+				.setDataAllCount(memberIconList.size())
+				//动态计算行数,达到自适应的目的
+				.setRowCount((int)row)
+				//更新展示
+				.show();
 	}
 
 	private void bind(ImageView imageView, TextView textView, ImageIconInfo imageIconInfo) {
