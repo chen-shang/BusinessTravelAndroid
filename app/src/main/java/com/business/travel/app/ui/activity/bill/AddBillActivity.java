@@ -35,6 +35,7 @@ import com.business.travel.app.utils.LogToast;
 import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.app.utils.Try;
 import com.business.travel.utils.DateTimeUtil;
+import com.business.travel.utils.SplitUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.google.common.base.Preconditions;
 import com.lxj.xpopup.XPopup.Builder;
@@ -57,9 +58,6 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	 */
 	private final List<ImageIconInfo> memberIconList = new ArrayList<>();
 	private final BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
-	/**
-	 * 可选项目列表
-	 */
 	/**
 	 * 当前被选中的是支出还是收入
 	 */
@@ -164,13 +162,67 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	private void registerKeyboard() {
 		viewBinding.keyboard.onSaveClick(v -> Try.of(() -> {
 			//当键盘保存按钮点击之后
-			saveBill();
+			if (selectBillId > 0) {
+				updateBill();
+			} else {
+				saveBill();
+			}
 			//6.账单创建完成后跳转到 DashboardFragment
 			this.finish();
 		})).onReRecordClick(v -> Try.of(() -> {
 			saveBill();
 			clear();
 		}));
+	}
+
+	private void updateBill() {
+		AppDatabase.getInstance(this).runInTransaction(() -> {
+			LogUtils.i("开启数据库事务");
+			//参数校验
+			String projectName = viewBinding.topTitleBar.contentBarTitle.getText().toString();
+			//如果不存在则新增项目
+			Project project = projectService.createIfNotExist(projectName);
+			if (project == null) {
+				throw new IllegalArgumentException("请输入合法的项目名称");
+			}
+			//如果存在则在当前项目下创建账单
+			updateBillWithProject(project);
+			//更新返回页的数据
+			BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
+			billFragment.setSelectedProjectId(project.getId());
+			LogToast.infoShow("记账成功");
+		});
+	}
+
+	private void updateBillWithProject(Project project) {
+		//3. 日期、备注、金额
+		String amount = viewBinding.keyboard.textViewAmount.getText().toString().trim();
+		Preconditions.checkArgument(StringUtils.isNotBlank(amount), "请输入消费金额");
+		//1. 选中的消费项 id 的列表
+		String consumerItemList = consumptionImageIconList.stream().filter(ImageIconInfo::isSelected).map(ImageIconInfo::getId).map(String::valueOf).filter(StringUtils::isNotBlank).collect(Collectors.joining(","));
+		Preconditions.checkArgument(StringUtils.isNotBlank(consumerItemList), "请选择消费项");
+		//2. 选中的人员 的列表
+		String memberItemList = memberIconList.stream().filter(ImageIconInfo::isSelected).map(ImageIconInfo::getId).map(String::valueOf).filter(StringUtils::isNotBlank).collect(Collectors.joining(","));
+		Preconditions.checkArgument(StringUtils.isNotBlank(memberItemList), "请选择消费人员");
+
+		String remark = viewBinding.keyboard.editTextRemark.getText().toString().trim();
+		Bill bill = new Bill();
+		bill.setConsumptionIds(consumerItemList);
+		bill.setProjectId(project.getId());
+		//消费金额
+		bill.setAmount(MoneyUtil.toFen(amount));
+		//消费日期
+		Long selectedDate = Optional.ofNullable(viewBinding.keyboard.getSelectedDate()).orElse(DateTimeUtil.timestamp(DateTimeUtil.now().toLocalDate()));
+		bill.setConsumeDate(selectedDate);
+
+		bill.setMemberIds(memberItemList);
+		bill.setCreateTime(DateTimeUtil.timestamp());
+		bill.setModifyTime(DateTimeUtil.timestamp());
+		bill.setConsumptionType(consumptionType.name());
+		bill.setRemark(remark);
+		String iconDownloadUrl = consumptionImageIconList.stream().filter(ImageIconInfo::isSelected).findFirst().map(ImageIconInfo::getIconDownloadUrl).orElse("");
+		bill.setIconDownloadUrl(iconDownloadUrl);
+		billService.updateBill(selectBillId, bill);
 	}
 
 	private void registerConsumptionType() {
@@ -291,15 +343,78 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	}
 
 	private void refreshData(Long selectBillId) {
-		// TODO: 2021/12/30
-		//启动的时候刷新当前页面的标题
-		refreshProjectName();
-		//当前是支出还是收入
-		consumptionType = refreshConsumptionType();
-		//刷新消费项列表
-		refreshConsumptionIcon(consumptionType);
-		//刷新人员列表
-		refreshMemberIcon();
+		if (selectBillId < 0) {
+			// TODO: 2021/12/30
+			//启动的时候刷新当前页面的标题
+			refreshProjectName();
+			//当前是支出还是收入
+			consumptionType = refreshConsumptionType();
+			//刷新消费项列表
+			refreshConsumptionIcon(consumptionType);
+			//刷新人员列表
+			refreshMemberIcon();
+		} else {
+			Bill bill = billService.queryBillById(selectBillId);
+			Project project = projectService.queryById(bill.getProjectId());
+			Optional.of(project).map(Project::getName).ifPresent(name -> {
+				viewBinding.topTitleBar.contentBarTitle.setText(name);
+			});
+
+			//键盘收入支出选择
+			consumptionType = ConsumptionTypeEnum.valueOf(bill.getConsumptionType());
+			viewBinding.keyboard.textViewPayType.setText(consumptionType.getMsg());
+
+			//金额显示
+			Long amount = bill.getAmount();
+			viewBinding.keyboard.textViewAmount.setText(MoneyUtil.toYuanString(amount));
+			//显示消费项目
+			//刷新消费项列表
+			refreshConsumptionIcon2(bill, consumptionType);
+
+			//显示消费人员
+			//刷新人员列表
+			refreshMemberIcon2(bill);
+			//日期显示
+			Long consumeDate = bill.getConsumeDate();
+			//viewBinding.keyboard.dateTimeTextView.setText(DateTimeUtil.format(consumeDate, "MM.dd"));
+		}
+	}
+
+	private void refreshMemberIcon2(Bill bill) {
+		List<ImageIconInfo> newLeastMemberIconList = memberService.queryAllMembersIconInfo();
+		String memberIds = bill.getMemberIds();
+		List<Long> memberIdList = SplitUtil.trimToLongList(memberIds);
+		newLeastMemberIconList.forEach(member -> member.setSelected(memberIdList.contains(member.getId())));
+
+		memberIconList.clear();
+		memberIconList.addAll(newLeastMemberIconList);
+
+		//最后在添加一个编辑按钮
+		ImageIconInfo editImageIcon = new ImageIconInfo();
+		editImageIcon.setName(ItemIconEnum.ItemIconEdit.getName());
+		editImageIcon.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
+		memberIconList.add(editImageIcon);
+		viewBinding.GridViewPagerMemberIconList.setDataAllCount(memberIconList.size()).setRowCount(memberIconList.size() > 5 ? 2 : 1).show();
+
+	}
+
+	private void refreshConsumptionIcon2(Bill bill, ConsumptionTypeEnum consumptionType) {
+		List<ImageIconInfo> imageIconInfos = consumptionService.queryAllConsumptionIconInfo(consumptionType);
+
+		String consumptionIds = bill.getConsumptionIds();
+		List<Long> ids = SplitUtil.trimToLongList(consumptionIds);
+		imageIconInfos.forEach(imageIconInfo -> imageIconInfo.setSelected(ids.contains(imageIconInfo.getId())));
+
+		//添加编辑按钮编辑按钮永远在最后
+		ImageIconInfo imageIconInfo = new ImageIconInfo();
+		imageIconInfo.setName(ItemIconEnum.ItemIconEdit.getName());
+		imageIconInfo.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
+		imageIconInfo.setSelected(false);
+		imageIconInfos.add(imageIconInfo);
+
+		consumptionImageIconList.clear();
+		consumptionImageIconList.addAll(imageIconInfos);
+		viewBinding.GridViewPagerConsumptionIconList.setDataAllCount(consumptionImageIconList.size()).show();
 	}
 
 	private void refreshProjectName() {
