@@ -5,7 +5,8 @@
         android:layout_width="match_parent"
         android:background="@color/white"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="2dp"
         android:orientation="vertical">
     <!--    键盘头部    -->
     <androidx.constraintlayout.widget.ConstraintLayout

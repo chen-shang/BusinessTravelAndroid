@@ -169,7 +169,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 			}
 			//6.账单创建完成后跳转到 DashboardFragment
 			this.finish();
-		})).onReRecordClick(v -> Try.of(() -> {
+		})).onSaveLongClick(v -> Try.of(() -> {
 			saveBill();
 			clear();
 		}));
@@ -196,7 +196,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 
 	private void updateBillWithProject(Project project) {
 		//3. 日期、备注、金额
-		String amount = viewBinding.keyboard.textViewAmount.getText().toString().trim();
+		String amount = viewBinding.keyboard.getAmount().trim();
 		Preconditions.checkArgument(StringUtils.isNotBlank(amount), "请输入消费金额");
 		//1. 选中的消费项 id 的列表
 		String consumerItemList = consumptionImageIconList.stream().filter(ImageIconInfo::isSelected).map(ImageIconInfo::getId).map(String::valueOf).filter(StringUtils::isNotBlank).collect(Collectors.joining(","));
@@ -205,14 +205,14 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		String memberItemList = memberIconList.stream().filter(ImageIconInfo::isSelected).map(ImageIconInfo::getId).map(String::valueOf).filter(StringUtils::isNotBlank).collect(Collectors.joining(","));
 		Preconditions.checkArgument(StringUtils.isNotBlank(memberItemList), "请选择消费人员");
 
-		String remark = viewBinding.keyboard.editTextRemark.getText().toString().trim();
+		String remark = viewBinding.keyboard.getRemark().trim();
 		Bill bill = new Bill();
 		bill.setConsumptionIds(consumerItemList);
 		bill.setProjectId(project.getId());
 		//消费金额
 		bill.setAmount(MoneyUtil.toFen(amount));
 		//消费日期
-		Long selectedDate = Optional.ofNullable(viewBinding.keyboard.getSelectedDate()).orElse(DateTimeUtil.timestamp(DateTimeUtil.now().toLocalDate()));
+		Long selectedDate = Optional.ofNullable(viewBinding.keyboard.getDate()).orElse(DateTimeUtil.timestamp(DateTimeUtil.now().toLocalDate()));
 		bill.setConsumeDate(selectedDate);
 
 		bill.setMemberIds(memberItemList);
@@ -226,7 +226,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	}
 
 	private void registerConsumptionType() {
-		viewBinding.keyboard.textViewPayType.setOnClickListener(v -> {
+		viewBinding.keyboard.textViewConsumptionType.setOnClickListener(v -> {
 			consumptionType = changeConsumptionType(consumptionType);
 			((TextView)v).setText(consumptionType.getMsg());
 			refreshConsumptionIcon(consumptionType);
@@ -282,8 +282,8 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		memberIconList.forEach(item -> item.setSelected(false));
 		viewBinding.GridViewPagerConsumptionIconList.setDataAllCount(consumptionImageIconList.size()).show();
 		viewBinding.GridViewPagerMemberIconList.setDataAllCount(memberIconList.size()).show();
-		viewBinding.keyboard.textViewAmount.setText(null);
-		viewBinding.keyboard.editTextRemark.setText(null);
+		viewBinding.keyboard.setAmount(null);
+		viewBinding.keyboard.setRemark(null);
 	}
 
 	private ConsumptionTypeEnum changeConsumptionType(ConsumptionTypeEnum consumptionType) {
@@ -313,7 +313,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 
 	private void createBillWithProject(Project project) {
 		//3. 日期、备注、金额
-		String amount = viewBinding.keyboard.textViewAmount.getText().toString().trim();
+		String amount = viewBinding.keyboard.getAmount().trim();
 		Preconditions.checkArgument(StringUtils.isNotBlank(amount), "请输入消费金额");
 		//1. 选中的消费项 id 的列表
 		String consumerItemList = consumptionImageIconList.stream().filter(ImageIconInfo::isSelected).map(ImageIconInfo::getId).map(String::valueOf).filter(StringUtils::isNotBlank).collect(Collectors.joining(","));
@@ -322,14 +322,14 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		String memberItemList = memberIconList.stream().filter(ImageIconInfo::isSelected).map(ImageIconInfo::getId).map(String::valueOf).filter(StringUtils::isNotBlank).collect(Collectors.joining(","));
 		Preconditions.checkArgument(StringUtils.isNotBlank(memberItemList), "请选择消费人员");
 
-		String remark = viewBinding.keyboard.editTextRemark.getText().toString().trim();
+		String remark = viewBinding.keyboard.getRemark().trim();
 		Bill bill = new Bill();
 		bill.setConsumptionIds(consumerItemList);
 		bill.setProjectId(project.getId());
 		//消费金额
 		bill.setAmount(MoneyUtil.toFen(amount));
 		//消费日期
-		Long selectedDate = Optional.ofNullable(viewBinding.keyboard.getSelectedDate()).orElse(DateTimeUtil.timestamp(DateTimeUtil.now().toLocalDate()));
+		Long selectedDate = Optional.ofNullable(viewBinding.keyboard.getDate()).orElse(DateTimeUtil.timestamp(DateTimeUtil.now().toLocalDate()));
 		bill.setConsumeDate(selectedDate);
 
 		bill.setMemberIds(memberItemList);
@@ -362,11 +362,12 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 
 			//键盘收入支出选择
 			consumptionType = ConsumptionTypeEnum.valueOf(bill.getConsumptionType());
-			viewBinding.keyboard.textViewPayType.setText(consumptionType.getMsg());
+			viewBinding.keyboard.setConsumptionType(consumptionType.getMsg());
 
 			//金额显示
 			Long amount = bill.getAmount();
-			viewBinding.keyboard.textViewAmount.setText(MoneyUtil.toYuanString(amount));
+
+			viewBinding.keyboard.setAmount(MoneyUtil.toYuanString(amount));
 			//显示消费项目
 			//刷新消费项列表
 			refreshConsumptionIcon2(bill, consumptionType);
@@ -376,7 +377,9 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 			refreshMemberIcon2(bill);
 			//日期显示
 			Long consumeDate = bill.getConsumeDate();
-			//viewBinding.keyboard.dateTimeTextView.setText(DateTimeUtil.format(consumeDate, "MM.dd"));
+			viewBinding.keyboard.setDate(consumeDate);
+			//备注显示
+			viewBinding.keyboard.setRemark(bill.getRemark());
 		}
 	}
 
@@ -430,7 +433,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	}
 
 	private ConsumptionTypeEnum refreshConsumptionType() {
-		String payType = viewBinding.keyboard.textViewPayType.getText().toString();
+		String payType = viewBinding.keyboard.getConsumptionType();
 		if (ConsumptionTypeEnum.INCOME.getMsg().equals(payType)) {
 			return ConsumptionTypeEnum.INCOME;
 		} else if (ConsumptionTypeEnum.SPENDING.getMsg().equals(payType)) {

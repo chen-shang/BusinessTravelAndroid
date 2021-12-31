@@ -8,10 +8,10 @@
     <TextView
             android:id="@+id/UI_KeyboardItem_TextView_Date"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="今天"
             android:gravity="center"
-            android:textSize="11sp"
+            android:textSize="12sp"
             style="?android:attr/borderlessButtonStyle"
             app:drawableStartCompat="@drawable/ic_calendar"
             app:layout_constraintEnd_toEndOf="parent"

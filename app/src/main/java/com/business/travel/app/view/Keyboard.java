@@ -2,6 +2,7 @@ package com.business.travel.app.view;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -14,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,76 +30,157 @@ import org.jetbrains.annotations.NotNull;
 public class Keyboard extends ConstraintLayout {
 
 	/**
+	 * 收入支出显示tag
+	 */
+	public final TextView textViewConsumptionType;
+	/**
+	 * 金额展示
+	 */
+	public final TextView textViewAmount;
+	/**
+	 * 备注编辑框
+	 */
+	public final EditText editTextRemark;
+	/**
 	 * 日历弹框
 	 */
 	private final DatePickerDialog datePickerDialog;
 	/**
+	 * 键盘适配器,可以通过这个控制键盘的行为
+	 */
+	private final KeyboardRecyclerViewAdapter keyboardRecyclerViewAdapter;
+	/**
 	 * 选中的时间
 	 */
-	private Long selectedDate;
+	private Long selectedDate = DateTimeUtil.timestamp();
 	/**
-	 * 备注编辑框
+	 * 点击保存的时候的动作行为
 	 */
-	public EditText editTextRemark;
-	/**
-	 * 收入支出显示tag
-	 */
-	public TextView textViewPayType;
-	/**
-	 * 金额展示
-	 */
-	public TextView textViewAmount;
 	private OnClickListener onSaveClick;
-	private OnClickListener onReRecordClick;
-	public Keyboard onSaveClick(OnClickListener onSaveClick) {
-		this.onSaveClick = onSaveClick;
-		return this;
-	}
+	/**
+	 * 长按保存时候的动作行为
+	 */
+	private OnClickListener onSaveLongClick;
 
-	public Keyboard onReRecordClick(OnClickListener onReRecordClick) {
-		this.onReRecordClick = onReRecordClick;
-		return this;
-	}
-
-	public Keyboard(@NonNull @NotNull Context context, @Nullable @org.jetbrains.annotations.Nullable AttributeSet attrs) {
+	public Keyboard(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		//键盘布局
 		View inflate = LayoutInflater.from(context).inflate(R.layout.layout_keyboard, this);
 		//备注编辑框
 		editTextRemark = inflate.findViewById(R.id.EditText_Remark);
 		//收入支出显示tag
-		textViewPayType = inflate.findViewById(R.id.TextView_PayType);
+		textViewConsumptionType = inflate.findViewById(R.id.TextView_PayType);
 		//金额展示
 		textViewAmount = inflate.findViewById(R.id.TextView_Amount);
-		//键盘布局
-		SwipeRecyclerView recyclerViewKeyboard = inflate.findViewById(R.id.RecyclerView_Keyboard);
 
 		LocalDateTime now = DateTimeUtil.now();
-		datePickerDialog = new DatePickerDialog(context, (view, year, month, dayOfMonth) -> {}, now.getYear(), now.getMonth().getValue() - 1, now.getDayOfMonth());
+		datePickerDialog = new DatePickerDialog(context, (view, year, month, dayOfMonth) -> {
+		}, now.getYear(), now.getMonth().getValue() - 1, now.getDayOfMonth());
+
+		//键盘数字布局
+		SwipeRecyclerView recyclerViewKeyboard = inflate.findViewById(R.id.RecyclerView_Keyboard);
 
 		//4*4 布局
-		GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 4) {
+		recyclerViewKeyboard.setLayoutManager(buildGridLayoutManager(context, 4));
+		keyboardRecyclerViewAdapter = new KeyboardRecyclerViewAdapter();
+		recyclerViewKeyboard.setAdapter(keyboardRecyclerViewAdapter);
+	}
+
+	/**
+	 * 设置 remark 显示
+	 */
+	public String getRemark() {
+		return editTextRemark.getText().toString();
+	}
+
+	/**
+	 * 设置 remark 显示
+	 */
+	public Keyboard setRemark(String remark) {
+		editTextRemark.setText(remark);
+		return this;
+	}
+
+	/**
+	 * 消费类型
+	 */
+	public String getConsumptionType() {
+		return textViewConsumptionType.getText().toString();
+	}
+
+	/**
+	 * 设置 消费类型
+	 */
+	public Keyboard setConsumptionType(String remark) {
+		textViewConsumptionType.setText(remark);
+		return this;
+	}
+
+	/**
+	 * 获取金额
+	 *
+	 * @return
+	 */
+	public String getAmount() {
+		return textViewAmount.getText().toString();
+	}
+
+	/**
+	 * 设置金额
+	 *
+	 * @param amount
+	 * @return
+	 */
+	public Keyboard setAmount(String amount) {
+		textViewAmount.setText(amount);
+		return this;
+	}
+
+	/**
+	 * 获取选择时间
+	 *
+	 * @return
+	 */
+	public Long getDate() {
+		return selectedDate;
+	}
+
+	/**
+	 * 设置时间
+	 *
+	 * @param date
+	 * @return
+	 */
+	public Keyboard setDate(Long date) {
+		selectedDate = date;
+		//三号为是日期框
+		keyboardRecyclerViewAdapter.notifyItemChanged(3);
+		return this;
+	}
+
+	public Keyboard onSaveClick(OnClickListener onSaveClick) {
+		this.onSaveClick = onSaveClick;
+		return this;
+	}
+
+	public Keyboard onSaveLongClick(OnClickListener onSaveLongClick) {
+		this.onSaveLongClick = onSaveLongClick;
+		return this;
+	}
+
+	private GridLayoutManager buildGridLayoutManager(Context context, int spanCount) {
+		return new GridLayoutManager(context, spanCount) {
 			@Override
 			public boolean canScrollVertically() {
 				return false;
 			}
 		};
-		recyclerViewKeyboard.setLayoutManager(gridLayoutManager);
-		recyclerViewKeyboard.setAdapter(new KeyboardRecyclerViewAdapter());
 	}
 
-	@Nullable
-	public Long getSelectedDate() {
-		return selectedDate;
-	}
-
-	public void setSelectedDate(Long selectedDate) {
-		this.selectedDate = selectedDate;
-		//todo show
-	}
-
+	/**
+	 * 键盘布局适配器
+	 */
 	class KeyboardRecyclerViewAdapter extends RecyclerView.Adapter<KeyboardRecyclerViewAdapterViewHolder> {
-
 		@NonNull
 		@NotNull
 		@Override
@@ -121,16 +202,20 @@ public class Keyboard extends ConstraintLayout {
 		public void onBindViewHolder(@NonNull @NotNull KeyboardRecyclerViewAdapterViewHolder holder, int position) {
 			switch (position) {
 				case 3:
-					//date 日期按钮样式
+					//键盘日期显示的值
+					Optional.ofNullable(selectedDate).map(date -> DateTimeUtil.format(date, "MM.dd")).ifPresent(holder.dateTextView::setText);
+
+					//键盘日期按钮事件
 					holder.dateTextView.setOnClickListener(v -> {
-						// TODO: 2021/11/30
+						//日期按钮点击后弹出日历
+						datePickerDialog.show();
+						//日历日期点击后更新选中的日期值并更新键盘日期显示
 						datePickerDialog.setOnDateSetListener((view, year, month, dayOfMonth) -> {
 							LocalDate localDate = LocalDate.of(year, month + 1, dayOfMonth);
 							//更新选中的日期
 							selectedDate = DateTimeUtil.timestamp(localDate);
 							((TextView)v).setText(DateTimeUtil.format(localDate, "MM.dd"));
 						});
-						datePickerDialog.show();
 					});
 					break;
 				case 14:
@@ -167,7 +252,7 @@ public class Keyboard extends ConstraintLayout {
 					holder.numButton.setText("保存");
 					holder.numButton.setOnClickListener(onSaveClick);
 					holder.numButton.setOnLongClickListener(v -> {
-						onReRecordClick.onClick(v);
+						onSaveLongClick.onClick(v);
 						return true;
 					});
 					break;
@@ -226,8 +311,11 @@ public class Keyboard extends ConstraintLayout {
 		}
 
 		class KeyboardRecyclerViewAdapterViewHolder extends ViewHolder {
+			//普通的数字按钮
 			public Button numButton;
+			//删除按钮
 			public ImageButton backImageButton;
+			//日期按钮
 			public TextView dateTextView;
 
 			public KeyboardRecyclerViewAdapterViewHolder(@NonNull @NotNull View itemView) {
