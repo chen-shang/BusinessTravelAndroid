@@ -13,7 +13,7 @@
             android:id="@+id/topTitleBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:content_bar_left_icon="@drawable/ic_launcher_foreground"
+            app:content_bar_left_icon="@drawable/ic_app_icon"
             />
 
     <com.yanzhenjie.recyclerview.SwipeRecyclerView

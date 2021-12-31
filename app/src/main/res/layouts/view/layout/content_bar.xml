@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="@dimen/top_height">
 
     <ImageView
             android:id="@+id/content_bar_left_icon"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:maxWidth="@dimen/top_height"
             android:maxHeight="@dimen/top_height"
             android:background="?android:attr/selectableItemBackgroundBorderless"
@@ -19,14 +20,12 @@
             android:clickable="true"
             android:elevation="8dp"
             android:src="@drawable/ic_base_placeholder"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            />
 
     <EditText
             android:id="@+id/content_bar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:textSize="@dimen/topTextSize"
             android:textColor="@color/black"
             android:maxLines="1"
@@ -34,23 +33,23 @@
             android:background="@null"
             android:enabled="false"
             android:clickable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/content_bar_left_icon"
-            android:layout_marginStart="10dp"/>
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:text="@string/app_name"
+            android:gravity="center_vertical"
+            />
 
     <ImageView
             android:id="@+id/content_bar_right_icon"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:maxWidth="@dimen/top_height"
             android:maxHeight="@dimen/top_height"
             app:layout_constraintHeight_max="@dimen/top_height"
             app:layout_constraintWidth_max="@dimen/top_height"
             android:clickable="true"
             android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_base_other"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:src="@drawable/ic_base_placeholder"
+            />
+</LinearLayout>
