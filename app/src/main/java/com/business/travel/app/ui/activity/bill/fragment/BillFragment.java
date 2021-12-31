@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.blankj.utilcode.util.CollectionUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.FragmentBillBinding;
@@ -36,7 +37,7 @@ import lombok.Setter;
  */
 public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	/**
-	 * 账单列表数据
+	 * 账单列表数据 消费日期列表
 	 */
 	private final List<Long> dateList = new ArrayList<>();
 	@Getter
@@ -130,6 +131,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		//默认显示最后一次访问过的项目
 		Project project = Optional.ofNullable(projectId).map(projectService::queryById).orElseGet(() -> projectService.queryLatestModify());
 		if (project == null) {
+			LogUtils.w("没有工作项");
 			//记得清空数据
 			viewBinding.topTitleBar.contentBarTitle.setText(null);
 			billListHeaderViewHolder.uIBillFragmentTextViewIncome.setText(null);
@@ -151,10 +153,10 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		viewBinding.topTitleBar.contentBarTitle.setText(project.getName());
 
 		//刷新顶部金额
-		refreshMoneyShow(this.selectedProjectId);
+		refreshMoneyShow(project.getId());
 
 		//消费日期,列表的最外层
-		List<Long> dateList = billService.queryConsumeDateByProjectId(this.selectedProjectId);
+		List<Long> dateList = billService.queryConsumeDateByProjectId(project.getId());
 		if (CollectionUtils.isEmpty(dateList)) {
 			HeaderView.of(billListEmptyHeaderView).addTo(viewBinding.RecyclerViewBillList);
 			dateList.clear();
@@ -169,6 +171,11 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		billRecyclerViewAdapter.notifyDataSetChanged();
 	}
 
+	/**
+	 * 刷新顶部金额
+	 *
+	 * @param projectId
+	 */
 	public void refreshMoneyShow(Long projectId) {
 		//统计一下总收入
 		Long sumTotalIncomeMoney = Optional.ofNullable(billService.sumTotalIncomeMoney(projectId)).orElse(0L);
@@ -196,6 +203,12 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		billListHeaderViewHolder.durationDay.setText(duration);
 	}
 
+	/**
+	 * 时间转换成年月日,如果为空就显示为 --
+	 *
+	 * @param startTime
+	 * @return
+	 */
 	private String parseTime(Long startTime) {
 		if (startTime == null || startTime <= 0) {
 			return "--";

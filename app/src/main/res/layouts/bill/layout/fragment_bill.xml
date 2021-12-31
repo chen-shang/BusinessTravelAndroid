@@ -15,7 +15,8 @@
             android:layout_height="wrap_content"
             app:content_bar_left_icon="@drawable/ic_app_icon"
             />
-
+    <!--账单列表-->
+    <!--  布局详见 src/main/res/layouts/bill/layout/fragment_bill_recyclerview.xml  -->
     <com.yanzhenjie.recyclerview.SwipeRecyclerView
             android:id="@+id/RecyclerView_BillList"
             android:layout_width="match_parent"
