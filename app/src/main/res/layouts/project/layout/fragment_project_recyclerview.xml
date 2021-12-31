@@ -64,21 +64,24 @@
                     android:background="@color/gray"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginTop="48dp"
-                    app:layout_constraintHorizontal_bias="0.45"/>
+                    app:layout_constraintHorizontal_bias="0.45"
+                    android:id="@+id/view"/>
 
             <TextView
                     android:id="@+id/UI_ProjectItem_TextView_ProjectName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="上海某公司考察"
+                    android:text="@string/app_name"
                     android:textSize="20sp"
                     android:textStyle="bold"
+                    android:maxLines="1"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintHorizontal_bias="0.065"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.75">
+                    app:layout_constraintTop_toBottomOf="@+id/view"
+                    app:layout_constraintStart_toStartOf="parent">
             </TextView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
