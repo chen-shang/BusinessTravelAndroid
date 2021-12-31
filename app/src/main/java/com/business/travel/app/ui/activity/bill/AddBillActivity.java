@@ -118,9 +118,17 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 				.popupAnimation(PopupAnimation.ScrollAlphaFromTop);
 
 		EditText contentBarTitle = viewBinding.topTitleBar.contentBarTitle;
-		contentBarTitle.setEnabled(true);
+		contentBarTitle.setFocusable(true);
+		contentBarTitle.setFocusableInTouchMode(true);
 
 		viewBinding.topTitleBar.setOnClickListener(v -> {
+			AttachListPopupView attachListPopupView = builder.asAttachList(projectService.queryAllProjectName(), null, (position, text) -> {
+				contentBarTitle.setText(text);
+			}, R.layout._xpopup_attach_impl_list, R.layout.base_list_item);
+			attachListPopupView.show();
+		});
+
+		viewBinding.topTitleBar.contentBarLeftIcon.setOnClickListener(v -> {
 			AttachListPopupView attachListPopupView = builder.asAttachList(projectService.queryAllProjectName(), null, (position, text) -> {
 				contentBarTitle.setText(text);
 			}, R.layout._xpopup_attach_impl_list, R.layout.base_list_item);
