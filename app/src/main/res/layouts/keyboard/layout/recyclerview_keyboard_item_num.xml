@@ -11,6 +11,7 @@
             android:layout_height="45dp"
             android:textColor="@color/black"
             android:text="@string/num_1"
+            android:textSize="20sp"
             style="?android:attr/borderlessButtonStyle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

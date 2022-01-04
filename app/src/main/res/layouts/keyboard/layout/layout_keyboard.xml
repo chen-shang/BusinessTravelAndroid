@@ -11,14 +11,14 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:layout_width="match_parent"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:layout_height="@dimen/top_height">
 
         <EditText
                 android:id="@+id/EditText_Remark"
                 android:layout_width="0dp"
                 android:layout_height="25dp"
-                app:drawableStartCompat="@drawable/icon_beizhu"
+                app:drawableStartCompat="@drawable/ic_keyboard_remark"
                 android:hint="备注"
                 android:drawablePadding="10dp"
                 android:maxLines="1"

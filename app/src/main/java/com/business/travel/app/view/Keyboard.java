@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.blankj.utilcode.util.ColorUtils;
+import com.blankj.utilcode.util.ResourceUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.view.Keyboard.KeyboardRecyclerViewAdapter.KeyboardRecyclerViewAdapterViewHolder;
 import com.business.travel.utils.DateTimeUtil;
@@ -254,8 +255,9 @@ public class Keyboard extends ConstraintLayout {
 					});
 					break;
 				case 15:
-					holder.itemView.setBackgroundColor(ColorUtils.getColor(R.color.red_2));
+					holder.itemView.setBackground(ResourceUtils.getDrawable(R.drawable.corners_shape_change));
 					holder.numButton.setText("保存");
+					holder.numButton.setTextColor(ColorUtils.getColor(R.color.white));
 					holder.numButton.setOnClickListener(onSaveClick);
 					holder.numButton.setOnLongClickListener(v -> {
 						onSaveLongClick.onClick(v);

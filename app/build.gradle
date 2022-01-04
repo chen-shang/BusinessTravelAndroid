@@ -81,6 +81,7 @@ android {
                            'src/main/res/drawables/corner',
                            'src/main/res/drawables/shape',
                            'src/main/res/drawables/icon/me',
+                           'src/main/res/drawables/calander',
                            'src/main/res/drawables']
         }
     }
