@@ -102,7 +102,7 @@ public class BillService {
 	 */
 	public Long sumTotalIncomeMoney(Long projectId) {
 		Long totalIncomeMoney = billDao.sumTotalIncomeMoney(projectId);
-		LogUtils.d("统计项目的总支出:" + projectId + "->" + totalIncomeMoney);
+		LogUtils.d("统计项目的总收入:" + projectId + "->" + totalIncomeMoney);
 		return totalIncomeMoney;
 	}
 

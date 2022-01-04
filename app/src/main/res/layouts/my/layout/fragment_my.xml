@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             app:content_bar_left_icon="@drawable/ic_me_top"
             app:content_bar_title="@string/title_my"
-            app:content_bar_title_color="@color/gray"
+            app:content_bar_title_color="@color/black"
             />
 
     <androidx.constraintlayout.widget.ConstraintLayout

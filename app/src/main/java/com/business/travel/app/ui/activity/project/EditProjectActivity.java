@@ -203,9 +203,9 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 
 	private Integer parseIcon(Long time) {
 		if (Objects.equals(DateTimeTagEnum.TobeDetermined.getCode(), time)) {
-			return R.drawable.ic_base_to_be_determined;
+			return R.drawable.ic_project_determined;
 		}
 
-		return R.drawable.ic_calendar;
+		return R.drawable.ic_keyboard_date;
 	}
 }

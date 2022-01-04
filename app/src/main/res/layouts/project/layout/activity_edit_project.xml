@@ -55,10 +55,10 @@
                         android:id="@+id/projectName"
                         android:layout_width="match_parent"
                         android:background="@null"
-                        android:drawableLeft="@drawable/ic_project_project"
+                        android:drawableStart="@drawable/ic_project_project"
                         android:layout_height="wrap_content"
                         android:hint="项目名称"
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:drawablePadding="10dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
@@ -98,7 +98,7 @@
                                 android:gravity="center"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:drawableLeftCompat="@drawable/ic_calendar"/>
+                                app:drawableLeftCompat="@drawable/ic_keyboard_date"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -133,7 +133,7 @@
                                 android:gravity="center"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:drawableLeftCompat="@drawable/ic_calendar"/>
+                                app:drawableLeftCompat="@drawable/ic_keyboard_date"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -158,10 +158,10 @@
                             android:id="@+id/projectRemark"
                             android:layout_width="match_parent"
                             android:background="@null"
-                            android:drawableLeft="@drawable/ic_project_mark"
+                            android:drawableStart="@drawable/ic_keyboard_remark"
                             android:layout_height="wrap_content"
                             android:hint="备注"
-                            android:textSize="15dp"
+                            android:textSize="15sp"
                             android:drawablePadding="10dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintTop_toTopOf="parent"/>
