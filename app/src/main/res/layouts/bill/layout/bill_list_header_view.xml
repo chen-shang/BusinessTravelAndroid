@@ -13,7 +13,6 @@
             android:layout_height="@dimen/listHeaderViewHeight"
             android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="5dp"
-            app:cardElevation="5dp"
             app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout

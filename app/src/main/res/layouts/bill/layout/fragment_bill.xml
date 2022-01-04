@@ -13,7 +13,7 @@
             android:id="@+id/topTitleBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:content_bar_left_icon="@drawable/ic_app_icon"
+            app:content_bar_left_icon="@drawable/ic_base_project_top"
             />
     <!--账单列表-->
     <!--  布局详见 src/main/res/layouts/bill/layout/fragment_bill_recyclerview.xml  -->

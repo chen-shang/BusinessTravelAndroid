@@ -12,7 +12,6 @@
             android:layout_height="wrap_content"
             android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="5dp"
-            app:cardElevation="5dp"
             android:layout_margin="10dp"
             >
 

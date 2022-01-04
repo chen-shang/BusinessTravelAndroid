@@ -13,9 +13,9 @@ public class GridViewPagerUtil {
 				// 设置背景色，默认白色
 				.setGridViewPagerBackgroundColor(ColorUtils.getColor(R.color.white_1))
 				// 设置item的纵向间距 // 设置上边距 // 设置下边距
-				.setVerticalSpacing(10).setPagerMarginTop(10).setPagerMarginBottom(10)
+				.setVerticalSpacing(5).setPagerMarginTop(5).setPagerMarginBottom(5)
 				// 设置图片宽度 // 设置图片高度
-				.setImageWidth(35).setImageHeight(35)
+				.setImageWidth(40).setImageHeight(40)
 				// 设置文字与图片的间距
 				.setTextImgMargin(5)
 				// 设置文字大小
@@ -23,7 +23,7 @@ public class GridViewPagerUtil {
 				// 设置无限循环
 				.setPageLoop(false)
 				// 设置指示器与page的间距 // 设置指示器与底部的间距
-				.setPointMarginPage(5).setPointMarginBottom(10)
+				.setPointMarginPage(5).setPointMarginBottom(5)
 				// 设置指示器的item宽度 // 设置指示器的item高度
 				.setPointChildWidth(5).setPointChildHeight(5)
 				// 设置指示器的item的间距

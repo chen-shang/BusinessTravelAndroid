@@ -11,11 +11,12 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
-            app:cardElevation="5dp">
+            >
 
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="@dimen/top_height"
+                android:layout_gravity="center"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:paddingTop="5dp"
@@ -24,8 +25,8 @@
 
             <ImageView
                     android:id="@+id/UI_EditItem_ImageView_Icon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:src="@drawable/ic_base_placeholder"
                     android:background="@drawable/corners_shape_unselect"
                     app:layout_constraintStart_toStartOf="parent"

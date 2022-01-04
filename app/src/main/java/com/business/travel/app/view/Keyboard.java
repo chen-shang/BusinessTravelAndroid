@@ -52,7 +52,7 @@ public class Keyboard extends ConstraintLayout {
 	/**
 	 * 选中的时间
 	 */
-	private Long selectedDate = DateTimeUtil.timestamp();
+	private Long selectedDate = DateTimeUtil.timestamp(LocalDate.now());
 	/**
 	 * 点击保存的时候的动作行为
 	 */
@@ -203,7 +203,13 @@ public class Keyboard extends ConstraintLayout {
 			switch (position) {
 				case 3:
 					//键盘日期显示的值
-					Optional.ofNullable(selectedDate).map(date -> DateTimeUtil.format(date, "MM.dd")).ifPresent(holder.dateTextView::setText);
+					Optional.ofNullable(selectedDate).map(date -> {
+						if (DateTimeUtil.toLocalDateTime(date).toLocalDate().equals(LocalDate.now())) {
+							return "今天";
+						} else {
+							return DateTimeUtil.format(date, "MM.dd");
+						}
+					}).ifPresent(holder.dateTextView::setText);
 
 					//键盘日期按钮事件
 					holder.dateTextView.setOnClickListener(v -> {
