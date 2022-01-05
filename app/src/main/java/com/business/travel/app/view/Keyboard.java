@@ -28,6 +28,9 @@ import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * 自定义键盘
+ */
 public class Keyboard extends ConstraintLayout {
 
 	/**

@@ -17,13 +17,7 @@ import com.business.travel.app.dal.entity.User;
 /**
  * @author chenshang
  */
-@Database(entities = {
-		Member.class,
-		Bill.class,
-		Consumption.class,
-		Project.class,
-		User.class
-}, version = 1)
+@Database(entities = {Member.class, Bill.class, Consumption.class, Project.class, User.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 	private static AppDatabase INSTANCE;
 

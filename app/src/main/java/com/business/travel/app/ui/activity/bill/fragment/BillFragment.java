@@ -85,7 +85,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		billListHeadView = HeaderView.newBillHeaderView(getLayoutInflater());
 		//初始化head view对应的view
 		billListHeaderViewHolder = ListHeaderViewHolder.init(billListHeadView);
-
+		//初始化列表为空的时候对应的view
 		billListEmptyHeaderView = HeaderView.newEmptyHeaderView(getLayoutInflater());
 
 		//初始化中间的加号
@@ -134,11 +134,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 			LogUtils.w("没有工作项");
 			//记得清空数据
 			viewBinding.topTitleBar.contentBarTitle.setText(null);
-			billListHeaderViewHolder.uIBillFragmentTextViewIncome.setText(null);
-			billListHeaderViewHolder.uIBillFragmentTextViewPay.setText(null);
-			billListHeaderViewHolder.startTime.setText(null);
-			billListHeaderViewHolder.endTime.setText(null);
-			billListHeaderViewHolder.durationDay.setText(null);
+			billListHeaderViewHolder.reset();
 
 			dateList.clear();
 			billRecyclerViewAdapter.notifyDataSetChanged();
@@ -232,5 +228,16 @@ class ListHeaderViewHolder {
 		holder.endTime = listHeadView.findViewById(R.id.endTime);
 		holder.durationDay = listHeadView.findViewById(R.id.durationDay);
 		return holder;
+	}
+
+	/**
+	 * 重置所有属性
+	 */
+	public void reset() {
+		uIBillFragmentTextViewIncome.setText(null);
+		uIBillFragmentTextViewPay.setText(null);
+		startTime.setText(null);
+		endTime.setText(null);
+		durationDay.setText(null);
 	}
 }

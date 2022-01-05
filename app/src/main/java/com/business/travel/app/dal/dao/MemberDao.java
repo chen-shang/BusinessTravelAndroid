@@ -53,7 +53,7 @@ public interface MemberDao extends BaseDao<Member> {
 	/**
 	 * 按照主键id批量查询
 	 *
-	 * @param ids
+	 * @param idList
 	 * @return
 	 */
 	@Query("SELECT * FROM member where id in (:idList)")

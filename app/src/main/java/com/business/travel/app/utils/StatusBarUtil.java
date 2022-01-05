@@ -13,7 +13,7 @@ public class StatusBarUtil {
 	 * 设置状态栏（渐变）
 	 */
 	public static void setStatusBarView(Window window, Resources resources, @DrawableRes int resid) {
-		//延时加载数据，保证Statusbar绘制完成后再findview。
+		//延时加载数据，保证Statusbar绘制完成后再find view。
 		Looper.myQueue().addIdleHandler(new MessageQueue.IdleHandler() {
 			@Override
 			public boolean queueIdle() {
@@ -21,7 +21,7 @@ public class StatusBarUtil {
 				View statusBarView = window.findViewById(identifier);
 				statusBarView.setBackgroundResource(resid);
 
-				//不加监听,也能实现改变statusbar颜色的效果。但是会出现问题：比如弹软键盘后,弹popwindow后,引起window状态改变时,statusbar的颜色就会复原.
+				//不加监听,也能实现改变statusbar颜色的效果。但是会出现问题：比如弹软键盘后,弹pop window后,引起window状态改变时,statusbar的颜色就会复原.
 				window.getDecorView().addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
 					@Override
 					public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {

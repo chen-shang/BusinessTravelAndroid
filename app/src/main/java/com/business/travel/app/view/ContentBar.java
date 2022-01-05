@@ -1,7 +1,5 @@
 package com.business.travel.app.view;
 
-import java.util.Objects;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -25,8 +23,17 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ContentBar extends ConstraintLayout {
 
+	/**
+	 * 左侧图标
+	 */
 	public final ImageView contentBarLeftIcon;
+	/**
+	 * 中间文字
+	 */
 	public final EditText contentBarTitle;
+	/**
+	 * 右侧图标
+	 */
 	public final ImageView contentBarRightIcon;
 
 	public ContentBar(@NonNull @NotNull Context context, AttributeSet attrs) {

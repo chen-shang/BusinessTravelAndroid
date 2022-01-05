@@ -10,6 +10,9 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * 网络剧是否通畅
+ */
 public class NetworkUtil {
 
 	/**
@@ -23,6 +26,18 @@ public class NetworkUtil {
 			return isAvailable(3);
 		}
 	});
+
+	/**
+	 * 当前网络是否通畅
+	 */
+	public static boolean isAvailable() {
+		try {
+			return CACHE.get("network");
+		} catch (ExecutionException e) {
+			LogUtils.e("测试网络是否畅通异常,从缓存获取失败", e);
+			return isAvailable(5);
+		}
+	}
 
 	/**
 	 * 当前网络是否通畅
@@ -40,13 +55,4 @@ public class NetworkUtil {
 		}
 	}
 
-	public static boolean isAvailable() {
-		try {
-			return CACHE.get("network");
-		} catch (ExecutionException e) {
-			LogUtils.e("测试网络是否畅通异常,从缓存获取失败");
-			e.printStackTrace();
-			return isAvailable(5);
-		}
-	}
 }

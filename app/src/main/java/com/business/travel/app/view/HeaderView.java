@@ -8,7 +8,7 @@ import com.business.travel.app.R;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 /**
- *
+ * 列表头
  */
 public class HeaderView {
 
@@ -61,12 +61,22 @@ public class HeaderView {
 		return headView;
 	}
 
+	/**
+	 * 把视图添加到对应的view
+	 *
+	 * @param swipeRecyclerView
+	 */
 	public void addTo(SwipeRecyclerView swipeRecyclerView) {
 		if (swipeRecyclerView.getHeaderCount() < 2) {
 			swipeRecyclerView.addHeaderView(headView);
 		}
 	}
 
+	/**
+	 * 移除对应的视图
+	 *
+	 * @param swipeRecyclerView
+	 */
 	public void removeFrom(SwipeRecyclerView swipeRecyclerView) {
 		swipeRecyclerView.removeHeaderView(headView);
 	}

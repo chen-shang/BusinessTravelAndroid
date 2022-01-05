@@ -62,7 +62,6 @@ public class ProjectService {
 	 *
 	 * @param projectId
 	 */
-
 	@Transaction
 	public void softDeleteProjectWithBill(Long projectId) {
 		LogUtils.i("删除项目 projectId:" + projectId);

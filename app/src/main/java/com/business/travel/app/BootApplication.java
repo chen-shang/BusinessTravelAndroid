@@ -39,8 +39,10 @@ public class BootApplication extends Application {
 			LogUtils.i("加载配置文件:" + config);
 			Config newConfig = JacksonUtil.toBean(config, Config.class);
 			AppConfig.setConfig(newConfig);
+
 			//开启日志记录写入文件,最大栈深度为1,最多保留一天
-			LogUtils.getConfig().setLog2FileSwitch(true).setSaveDays(1).setLogSwitch(Optional.of(newConfig.getLogSwitch()).orElse(true));
+			Boolean logSwitch = Optional.of(newConfig.getLogSwitch()).orElse(true);
+			LogUtils.getConfig().setLog2FileSwitch(true).setSaveDays(1).setLogSwitch(logSwitch);
 		});
 	}
 }
