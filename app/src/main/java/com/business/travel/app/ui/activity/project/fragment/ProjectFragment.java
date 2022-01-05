@@ -21,8 +21,9 @@ import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.activity.project.EditProjectActivity;
 import com.business.travel.app.ui.base.BaseFragment;
-import com.business.travel.app.view.HeaderView;
 import com.business.travel.app.utils.MoneyUtil;
+import com.business.travel.app.view.HeaderView;
+import com.business.travel.app.view.ProjectHeaderView;
 import com.lxj.xpopup.XPopup.Builder;
 import com.lxj.xpopup.impl.AttachListPopupView;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
@@ -43,7 +44,7 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 
 	private ProjectService projectService;
 	private View projectListHeaderView;
-	private ListHeaderViewHolder listHeaderViewHolder;
+	private ProjectHeaderView listHeaderViewHolder;
 	/**
 	 * 列表为空时候显示的内容,用headView实现该效果
 	 */
@@ -55,7 +56,7 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 		projectService = new ProjectService(requireActivity());
 
 		projectListHeaderView = HeaderView.newProjectHeaderView(getLayoutInflater());
-		listHeaderViewHolder = ListHeaderViewHolder.init(projectListHeaderView);
+		listHeaderViewHolder = ProjectHeaderView.init(projectListHeaderView);
 
 		projectListEmptyHeaderView = HeaderView.newEmptyHeaderView(getLayoutInflater());
 	}
@@ -152,27 +153,5 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 		//项目耗时
 		Long duration = projectService.countTotalTravelDayByYear(null);
 		listHeaderViewHolder.durationDay.setText(String.valueOf(duration));
-
-	}
-
-}
-
-class ListHeaderViewHolder {
-	TextView projectIncome;
-	TextView projectPay;
-	TextView projectCount;
-	TextView endTime;
-	TextView durationDay;
-
-	public static ListHeaderViewHolder init(View listHeadView) {
-		ListHeaderViewHolder holder = new ListHeaderViewHolder();
-		holder.projectIncome = listHeadView.findViewById(R.id.UIProjectFragmentTextViewIncome);
-		holder.projectPay = listHeadView.findViewById(R.id.UIProjectFragmentTextViewPay);
-		holder.projectCount = listHeadView.findViewById(R.id.projectCount);
-
-		//holder.startTime = listHeadView.findViewById(R.id.startTime);
-		//holder.endTime = listHeadView.findViewById(R.id.endTime);
-		holder.durationDay = listHeadView.findViewById(R.id.durationDay);
-		return holder;
 	}
 }

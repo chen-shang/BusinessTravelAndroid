@@ -25,6 +25,7 @@ import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.utils.AnimalUtil;
 import com.business.travel.app.utils.DurationUtil;
 import com.business.travel.app.utils.MoneyUtil;
+import com.business.travel.app.view.BillHeaderView;
 import com.business.travel.app.view.HeaderView;
 import com.business.travel.utils.DateTimeUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -57,7 +58,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	/**
 	 * 账单顶部view内的元素
 	 */
-	private ListHeaderViewHolder billListHeaderViewHolder;
+	private BillHeaderView billListHeaderViewHolder;
 	/**
 	 * 列表为空时候显示的内容,用headView实现该效果
 	 */
@@ -84,7 +85,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		//注入head view
 		billListHeadView = HeaderView.newBillHeaderView(getLayoutInflater());
 		//初始化head view对应的view
-		billListHeaderViewHolder = ListHeaderViewHolder.init(billListHeadView);
+		billListHeaderViewHolder = BillHeaderView.init(billListHeadView);
 		//初始化列表为空的时候对应的view
 		billListEmptyHeaderView = HeaderView.newEmptyHeaderView(getLayoutInflater());
 
@@ -210,34 +211,5 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 			return "--";
 		}
 		return DateTimeUtil.format(startTime, "yyyy-MM-dd");
-	}
-}
-
-class ListHeaderViewHolder {
-	TextView uIBillFragmentTextViewIncome;
-	TextView uIBillFragmentTextViewPay;
-	TextView startTime;
-	TextView endTime;
-	TextView durationDay;
-
-	public static ListHeaderViewHolder init(View listHeadView) {
-		ListHeaderViewHolder holder = new ListHeaderViewHolder();
-		holder.uIBillFragmentTextViewIncome = listHeadView.findViewById(R.id.UIBillFragmentTextViewIncome);
-		holder.uIBillFragmentTextViewPay = listHeadView.findViewById(R.id.UIBillFragmentTextViewPay);
-		holder.startTime = listHeadView.findViewById(R.id.startTime);
-		holder.endTime = listHeadView.findViewById(R.id.endTime);
-		holder.durationDay = listHeadView.findViewById(R.id.durationDay);
-		return holder;
-	}
-
-	/**
-	 * 重置所有属性
-	 */
-	public void reset() {
-		uIBillFragmentTextViewIncome.setText(null);
-		uIBillFragmentTextViewPay.setText(null);
-		startTime.setText(null);
-		endTime.setText(null);
-		durationDay.setText(null);
 	}
 }
