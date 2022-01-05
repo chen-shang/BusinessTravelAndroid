@@ -189,7 +189,7 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 	 */
 	private void showMember(String memberIds) {
 		if (StringUtils.isBlank(memberIds)) {
-			LogUtils.w("该账单没有消费项 id:" + selectBillId);
+			LogUtils.w("该账单没有消费成员 id:" + selectBillId);
 			return;
 		}
 		List<Long> memberIdList = SplitUtil.trimToLongList(memberIds);

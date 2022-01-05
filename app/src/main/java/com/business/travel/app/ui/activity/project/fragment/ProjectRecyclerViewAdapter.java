@@ -77,9 +77,6 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 		String productTime = project.getProductTime();
 		holder.dateTextView.setText(productTime);
 
-		//项目总支出
-		//项目总收入
-
 		//统计一下总收入
 		final Long sumTotalIncomeMoney = billService.sumTotalIncomeMoney(project.getId());
 		holder.incomeTextView.setVisibility(sumTotalIncomeMoney == null ? View.GONE : View.VISIBLE);
@@ -106,7 +103,6 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 			attachListPopupView.show();
 			return true;
 		});
-
 	}
 
 	private AttachListPopupView initAttachListPopView(@NotNull ProjectAdapterHolder holder, int position, Project project) {

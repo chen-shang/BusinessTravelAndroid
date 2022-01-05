@@ -40,8 +40,11 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 	@Override
 	protected void inject() {
 		projectService = new ProjectService(this);
+		LocalDateTime now = DateTimeUtil.now();
 		datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
-		}, DateTimeUtil.now().getYear(), DateTimeUtil.now().getMonth().getValue() - 1, DateTimeUtil.now().getDayOfMonth());
+		}, now.getYear(), now.getMonth().getValue() - 1, now.getDayOfMonth());
+
+		selectProjectId = getIntent().getLongExtra("projectId", -1L);
 	}
 
 	@Override
@@ -79,7 +82,7 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 			String remark = viewBinding.projectRemark.getText().toString();
 			project.setRemark(remark);
 
-			if (selectProjectId != null) {
+			if (selectProjectId > 0) {
 				projectService.updateProject(selectProjectId, project);
 			} else {
 				projectService.createProject(project);
@@ -104,7 +107,7 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 		if (time == null) {
 			return null;
 		}
-		if (DateTimeTagEnum.TobeDetermined.getCode() == time) {
+		if (DateTimeTagEnum.TobeDetermined.getCode().equals(time)) {
 			return DateTimeTagEnum.TobeDetermined.getMsg();
 		}
 		return DateTimeUtil.format(time, "yyyy-MM-dd");
@@ -155,12 +158,9 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 	}
 
 	private void initProject() {
-		long projectId = getIntent().getLongExtra("projectId", -1L);
-		if (projectId < 0) {
-			selectProjectId = null;
+		if (selectProjectId < 0) {
 			viewBinding.topTitleBar.contentBarTitle.setText("新增项目");
 		} else {
-			selectProjectId = projectId;
 			viewBinding.topTitleBar.contentBarTitle.setText("编辑项目");
 		}
 	}
