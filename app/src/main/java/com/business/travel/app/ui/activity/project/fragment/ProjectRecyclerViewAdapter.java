@@ -107,7 +107,7 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 
 	private AttachListPopupView initAttachListPopView(@NotNull ProjectAdapterHolder holder, int position, Project project) {
 		//删除、编辑弹框
-		return new Builder(activity).atView(holder.projectNameTextView).asAttachList(new String[] {"删除", "编辑"}, new int[] {R.drawable.ic_base_delete, R.drawable.ic_base_edit}, (pos, text) -> {
+		return new Builder(activity).watchView(holder.cardView).asAttachList(new String[] {"删除", "编辑"}, new int[] {R.drawable.ic_base_delete, R.drawable.ic_base_edit}, (pos, text) -> {
 			switch (pos) {
 				case 0:
 					delete(position, project);
