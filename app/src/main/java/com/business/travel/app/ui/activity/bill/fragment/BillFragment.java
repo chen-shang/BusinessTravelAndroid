@@ -156,10 +156,10 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		refreshMoneyShow(project.getId());
 
 		//消费日期,列表的最外层
-		List<Long> dateList = billService.queryConsumeDateByProjectId(project.getId());
-		if (CollectionUtils.isEmpty(dateList)) {
+		List<Long> newDateList = billService.queryConsumeDateByProjectId(project.getId());
+		if (CollectionUtils.isEmpty(newDateList)) {
 			HeaderView.of(billListEmptyHeaderView).addTo(viewBinding.RecyclerViewBillList);
-			dateList.clear();
+			this.dateList.clear();
 			billRecyclerViewAdapter.notifyDataSetChanged();
 			return;
 		}
@@ -167,7 +167,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		HeaderView.of(billListEmptyHeaderView).removeFrom(viewBinding.RecyclerViewBillList);
 
 		this.dateList.clear();
-		this.dateList.addAll(dateList);
+		this.dateList.addAll(newDateList);
 		billRecyclerViewAdapter.notifyDataSetChanged();
 	}
 

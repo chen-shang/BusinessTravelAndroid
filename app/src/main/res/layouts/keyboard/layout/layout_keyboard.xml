@@ -19,7 +19,7 @@
                 android:layout_width="0dp"
                 android:layout_height="25dp"
                 app:drawableStartCompat="@drawable/ic_keyboard_remark"
-                android:hint="备注"
+                android:hint="点击写备注"
                 android:drawablePadding="10dp"
                 android:maxLines="1"
                 android:ellipsize="end"
