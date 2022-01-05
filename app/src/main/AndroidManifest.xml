@@ -38,12 +38,14 @@
         <activity android:name=".ui.activity.login.LoginActivity"/>
         <activity
                 android:name=".ui.activity.bill.DetailBillActivity"
+                android:theme="@style/Theme.Main"
                 android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity
                 android:name=".ui.activity.item.member.EditMemberActivity"
                 />
         <activity
                 android:name=".ui.activity.item.AddItemActivity"
+                android:theme="@style/Theme.Main"
                 />
         <activity
                 android:name=".ui.activity.item.consumption.EditConsumptionActivity"

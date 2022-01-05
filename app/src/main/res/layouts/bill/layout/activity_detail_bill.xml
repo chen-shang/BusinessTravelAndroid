@@ -5,7 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.activity.item.member.EditMemberActivity"
+        tools:context=".ui.activity.bill.DetailBillActivity"
         android:orientation="vertical">
 
     <com.business.travel.app.view.ContentBar
@@ -22,10 +22,9 @@
     <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
         <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:orientation="vertical">
 
@@ -43,6 +42,7 @@
                 <!--  下面的项目列表数据   -->
                 <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
                         android:id="@+id/GridViewPager_ConsumptionIconList"
+                        android:backgroundTint="@color/white"
                         android:layout_marginTop="5dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -66,6 +66,7 @@
                 <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
                         android:id="@+id/GridViewPager_MemberIconList"
                         android:layout_marginTop="5dp"
+                        android:backgroundTint="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                 </cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager>
