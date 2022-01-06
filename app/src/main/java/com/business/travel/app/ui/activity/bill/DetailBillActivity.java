@@ -100,7 +100,6 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 
 	private void registerUpdateRemark(EditText remark) {
 		remark.setTextColor(viewBinding.projectName.getCurrentTextColor());
-		remark.setTextSize(viewBinding.projectName.getTextSize());
 		remark.setOnFocusChangeListener((v, hasFocus) -> {
 			//失去焦点的时候保存
 			if (!hasFocus) {
