@@ -8,7 +8,6 @@ import java.util.stream.IntStream;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
@@ -26,7 +25,7 @@ import com.business.travel.app.ui.activity.item.EditItemRecyclerViewAdapter;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
 import com.business.travel.app.ui.base.ColorStatusBarActivity;
 import com.business.travel.app.utils.ImageIconUtil;
-import com.business.travel.app.view.HeaderView;
+import com.business.travel.app.view.EmptyHeaderView;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.ItemTypeEnum;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
@@ -54,14 +53,14 @@ public class EditConsumptionActivity extends ColorStatusBarActivity<ActivityEdit
 	/**
 	 * 列表为空时候显示的内容,用headView实现该效果
 	 */
-	private View headView;
+	private EmptyHeaderView emptyHeaderView;
 	//注入service
 	private ConsumptionService consumptionService;
 
 	@Override
 	protected void inject() {
 		consumptionService = new ConsumptionService(this);
-		headView = HeaderView.newEmptyHeaderView(getLayoutInflater());
+		emptyHeaderView = new EmptyHeaderView(getLayoutInflater());
 	}
 
 	@Override
@@ -208,7 +207,7 @@ public class EditConsumptionActivity extends ColorStatusBarActivity<ActivityEdit
 			return;
 		}
 
-		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.removeHeaderView(headView);
+		emptyHeaderView.removeFrom(viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem);
 
 		List<ImageIconInfo> newImage = consumptionList.stream().map(consumptionItem -> {
 			ImageIconInfo imageIconInfo = ConsumptionConverter.INSTANCE.convertImageIconInfo(consumptionItem);
@@ -229,8 +228,6 @@ public class EditConsumptionActivity extends ColorStatusBarActivity<ActivityEdit
 	private void showEmptyHeader() {
 		consumptionImageIconList.clear();
 		editConsumptionRecyclerViewAdapter.notifyItemRangeChanged(0, consumptionImageIconList.size());
-		if (viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.getHeaderCount() == 0) {
-			viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.addHeaderView(headView);
-		}
+		emptyHeaderView.addTo(viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem);
 	}
 }

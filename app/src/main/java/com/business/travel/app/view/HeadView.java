@@ -20,4 +20,9 @@ public class HeadView {
 		swipeRecyclerView.addHeaderView(headView);
 		map.put(swipeRecyclerView, this);
 	}
+
+	public void removeFrom(SwipeRecyclerView swipeRecyclerView) {
+		swipeRecyclerView.removeHeaderView(headView);
+		map.remove(swipeRecyclerView);
+	}
 }

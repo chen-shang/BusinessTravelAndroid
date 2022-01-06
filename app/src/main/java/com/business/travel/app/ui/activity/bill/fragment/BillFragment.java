@@ -26,7 +26,7 @@ import com.business.travel.app.utils.AnimalUtil;
 import com.business.travel.app.utils.DurationUtil;
 import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.app.view.BillHeaderView;
-import com.business.travel.app.view.HeaderView;
+import com.business.travel.app.view.EmptyHeaderView;
 import com.business.travel.utils.DateTimeUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
@@ -58,7 +58,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	/**
 	 * 列表为空时候显示的内容,用headView实现该效果
 	 */
-	private View billListEmptyHeaderView;
+	private EmptyHeaderView billListEmptyHeaderView;
 
 	/**
 	 * 引入各种service
@@ -81,7 +81,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		//初始化head view对应的view
 		billListHeaderView = new BillHeaderView(getLayoutInflater());
 		//初始化列表为空的时候对应的view
-		billListEmptyHeaderView = HeaderView.newEmptyHeaderView(getLayoutInflater());
+		billListEmptyHeaderView = new EmptyHeaderView(getLayoutInflater());
 
 		//初始化中间的加号
 		floatingActionButton = requireActivity().findViewById(R.id.UI_MasterActivity_FloatingActionButton);
@@ -134,7 +134,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 			dateList.clear();
 			billRecyclerViewAdapter.notifyDataSetChanged();
 			//展示空的头部即可
-			HeaderView.of(billListEmptyHeaderView).addTo(viewBinding.RecyclerViewBillList);
+			billListEmptyHeaderView.addTo(viewBinding.RecyclerViewBillList);
 			return;
 		}
 
@@ -149,13 +149,13 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		//消费日期,列表的最外层
 		List<Long> newDateList = billService.queryConsumeDateByProjectId(project.getId());
 		if (CollectionUtils.isEmpty(newDateList)) {
-			HeaderView.of(billListEmptyHeaderView).addTo(viewBinding.RecyclerViewBillList);
+			billListEmptyHeaderView.addTo(viewBinding.RecyclerViewBillList);
 			this.dateList.clear();
 			billRecyclerViewAdapter.notifyDataSetChanged();
 			return;
 		}
 
-		HeaderView.of(billListEmptyHeaderView).removeFrom(viewBinding.RecyclerViewBillList);
+		billListEmptyHeaderView.removeFrom(viewBinding.RecyclerViewBillList);
 
 		this.dateList.clear();
 		this.dateList.addAll(newDateList);

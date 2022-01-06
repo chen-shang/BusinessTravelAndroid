@@ -6,7 +6,6 @@ import java.util.stream.IntStream;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
@@ -21,7 +20,7 @@ import com.business.travel.app.ui.activity.item.EditItemRecyclerViewAdapter;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
 import com.business.travel.app.ui.base.ColorStatusBarActivity;
 import com.business.travel.app.utils.ImageIconUtil;
-import com.business.travel.app.view.HeaderView;
+import com.business.travel.app.view.EmptyHeaderView;
 import com.business.travel.vo.enums.ItemTypeEnum;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
@@ -46,12 +45,12 @@ public class EditMemberActivity extends ColorStatusBarActivity<ActivityEditMembe
 	/**
 	 * 列表为空时候显示的内容,用headView实现该效果
 	 */
-	private View headView;
+	private EmptyHeaderView emptyHeaderView;
 
 	@Override
 	protected void inject() {
 		memberService = new MemberService(this);
-		headView = HeaderView.newEmptyHeaderView(getLayoutInflater());
+		emptyHeaderView = new EmptyHeaderView(getLayoutInflater());
 	}
 
 	@Override
@@ -63,6 +62,12 @@ public class EditMemberActivity extends ColorStatusBarActivity<ActivityEditMembe
 		registerSwipeRecyclerView();
 		//注册添加按钮操作事件
 		registerConsumerItemButtonAddItem();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		refresh();
 	}
 
 	private void registerSwipeRecyclerView() {
@@ -114,14 +119,12 @@ public class EditMemberActivity extends ColorStatusBarActivity<ActivityEditMembe
 		});
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		refresh();
-	}
-
 	private void refresh() {
 		List<ImageIconInfo> newLeastMemberIconList = memberService.queryAllMembersIconInfo();
+		if (CollectionUtils.isEmpty(newLeastMemberIconList)) {
+			emptyHeaderView.addTo(viewBinding.UIAssociateSwipeRecyclerViewConsumerItem);
+		}
+
 		//先尝试比较一下list 是否改变
 		if (!ImageIconUtil.dataChange(newLeastMemberIconList, memberIconList)) {
 			return;
@@ -138,11 +141,11 @@ public class EditMemberActivity extends ColorStatusBarActivity<ActivityEditMembe
 	 */
 	private void checkEmpty() {
 		if (CollectionUtils.isNotEmpty(memberIconList)) {
-			viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.removeHeaderView(headView);
+			emptyHeaderView.removeFrom(viewBinding.UIAssociateSwipeRecyclerViewConsumerItem);
 		}
 
 		if (CollectionUtils.isEmpty(memberIconList) && viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.getHeaderCount() == 0) {
-			viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.addHeaderView(headView);
+			emptyHeaderView.addTo(viewBinding.UIAssociateSwipeRecyclerViewConsumerItem);
 		}
 	}
 }
