@@ -28,7 +28,6 @@ import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.base.ColorStatusBarActivity;
 import com.business.travel.app.utils.GridViewPagerUtil;
 import com.business.travel.app.utils.ImageLoadUtil;
-import com.business.travel.app.utils.LogToast;
 import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.app.utils.Try;
 import com.business.travel.utils.DateTimeUtil;
@@ -101,6 +100,7 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 
 	private void registerUpdateRemark(EditText remark) {
 		remark.setTextColor(viewBinding.projectName.getCurrentTextColor());
+		remark.setTextSize(viewBinding.projectName.getTextSize());
 		remark.setOnFocusChangeListener((v, hasFocus) -> {
 			//失去焦点的时候保存
 			if (!hasFocus) {
@@ -108,7 +108,6 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 				Bill record = new Bill();
 				record.setRemark(s);
 				billService.updateBill(selectBillId, record);
-				LogToast.infoShow("更新备注成功");
 			}
 		});
 	}
@@ -122,7 +121,6 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 			Bill record = new Bill();
 			record.setConsumeDate(DateTimeUtil.timestamp(date, "yyyy-MM-dd"));
 			billService.updateBill(selectBillId, record);
-			LogToast.infoShow("更新消费时间成功");
 			//周几
 			WeekEnum weekEnum = WeekEnum.ofCode(localDate.getDayOfWeek().getValue());
 			viewBinding.time.setText(date + " " + weekEnum.getMsg());
