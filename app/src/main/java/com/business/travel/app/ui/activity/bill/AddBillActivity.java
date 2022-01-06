@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
+import com.blankj.utilcode.util.ColorUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.business.travel.app.R;
@@ -120,6 +121,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		EditText contentBarTitle = viewBinding.topTitleBar.contentBarTitle;
 		contentBarTitle.setFocusable(true);
 		contentBarTitle.setFocusableInTouchMode(true);
+		contentBarTitle.setTextColor(ColorUtils.getColor(R.color.white));
 
 		viewBinding.topTitleBar.setOnClickListener(v -> {
 			AttachListPopupView attachListPopupView = builder.asAttachList(projectService.queryAllProjectName(), null, (position, text) -> {
