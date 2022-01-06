@@ -49,19 +49,6 @@ public class HeaderView {
 	}
 
 	/**
-	 * 账单页面头部
-	 *
-	 * @param layoutInflater
-	 * @return
-	 */
-	@SuppressLint("InflateParams")
-	public static View newBillHeaderView(LayoutInflater layoutInflater) {
-		View headView = layoutInflater.inflate(R.layout.bill_list_header_view, null, false);
-		headView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-		return headView;
-	}
-
-	/**
 	 * 把视图添加到对应的view
 	 *
 	 * @param swipeRecyclerView

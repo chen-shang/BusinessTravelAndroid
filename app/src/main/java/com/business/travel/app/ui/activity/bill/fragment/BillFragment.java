@@ -52,13 +52,9 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	private Long selectedProjectId;
 
 	/**
-	 * 账单列表顶部
+	 * 账单顶部view
 	 */
-	private View billListHeadView;
-	/**
-	 * 账单顶部view内的元素
-	 */
-	private BillHeaderView billListHeaderViewHolder;
+	private BillHeaderView billListHeaderView;
 	/**
 	 * 列表为空时候显示的内容,用headView实现该效果
 	 */
@@ -82,10 +78,8 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		projectService = new ProjectService(requireActivity());
 		billService = new BillService(requireActivity());
 
-		//注入head view
-		billListHeadView = HeaderView.newBillHeaderView(getLayoutInflater());
 		//初始化head view对应的view
-		billListHeaderViewHolder = BillHeaderView.init(billListHeadView);
+		billListHeaderView = new BillHeaderView(getLayoutInflater());
 		//初始化列表为空的时候对应的view
 		billListEmptyHeaderView = HeaderView.newEmptyHeaderView(getLayoutInflater());
 
@@ -123,7 +117,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		//线性布局
 		swipeRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
 		billRecyclerViewAdapter = new BillRecyclerViewAdapter(dateList, (MasterActivity)requireActivity());
-		HeaderView.of(billListHeadView).addTo(swipeRecyclerView);
+		billListHeaderView.addTo(swipeRecyclerView);
 		swipeRecyclerView.setAdapter(billRecyclerViewAdapter);
 	}
 
@@ -135,7 +129,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 			LogUtils.w("没有工作项");
 			//记得清空数据
 			viewBinding.topTitleBar.contentBarTitle.setText(null);
-			billListHeaderViewHolder.reset();
+			billListHeaderView.reset();
 
 			dateList.clear();
 			billRecyclerViewAdapter.notifyDataSetChanged();
@@ -176,12 +170,12 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	public void refreshMoneyShow(Long projectId) {
 		//统计一下总收入
 		Long sumTotalIncomeMoney = Optional.ofNullable(billService.sumTotalIncomeMoney(projectId)).orElse(0L);
-		TextView uIBillFragmentTextViewIncome = billListHeaderViewHolder.uIBillFragmentTextViewIncome;
+		TextView uIBillFragmentTextViewIncome = billListHeaderView.uIBillFragmentTextViewIncome;
 		uIBillFragmentTextViewIncome.setText(MoneyUtil.toYuanString(sumTotalIncomeMoney));
 
 		//统计一下总支出
 		Long sumTotalSpendingMoney = Optional.ofNullable(billService.sumTotalSpendingMoney(projectId)).orElse(0L);
-		TextView UIBillFragmentTextViewPay = billListHeaderViewHolder.uIBillFragmentTextViewPay;
+		TextView UIBillFragmentTextViewPay = billListHeaderView.uIBillFragmentTextViewPay;
 		UIBillFragmentTextViewPay.setText(MoneyUtil.toYuanString((sumTotalSpendingMoney)));
 
 		//查询一下项目信息
@@ -189,15 +183,15 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 
 		//项目开始时间
 		String startTime = parseTime(project.getStartTime());
-		billListHeaderViewHolder.startTime.setText(startTime);
+		billListHeaderView.startTime.setText(startTime);
 
 		//项目结束时间
 		String endTime = parseTime(project.getEndTime());
-		billListHeaderViewHolder.endTime.setText(endTime);
+		billListHeaderView.endTime.setText(endTime);
 
 		//项目耗时
 		String duration = String.valueOf(DurationUtil.durationDay(DurationUtil.convertTimePeriod(project)));
-		billListHeaderViewHolder.durationDay.setText(duration);
+		billListHeaderView.durationDay.setText(duration);
 	}
 
 	/**
