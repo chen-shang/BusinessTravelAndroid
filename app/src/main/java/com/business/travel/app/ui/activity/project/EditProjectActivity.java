@@ -61,7 +61,7 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 	@Override
 	protected void onStart() {
 		super.onStart();
-		showSelectProjectInfo(selectProjectId);
+		Try.of(() -> showSelectProjectInfo(selectProjectId));
 	}
 
 	private void registerSaveButton(View saveButton) {

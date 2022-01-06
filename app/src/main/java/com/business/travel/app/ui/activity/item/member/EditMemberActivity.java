@@ -20,6 +20,7 @@ import com.business.travel.app.ui.activity.item.EditItemRecyclerViewAdapter;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
 import com.business.travel.app.ui.base.ColorStatusBarActivity;
 import com.business.travel.app.utils.ImageIconUtil;
+import com.business.travel.app.utils.Try;
 import com.business.travel.app.view.EmptyHeaderView;
 import com.business.travel.vo.enums.ItemTypeEnum;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
@@ -67,7 +68,7 @@ public class EditMemberActivity extends ColorStatusBarActivity<ActivityEditMembe
 	@Override
 	protected void onResume() {
 		super.onResume();
-		refresh();
+		Try.of(this::refresh);
 	}
 
 	private void registerSwipeRecyclerView() {

@@ -15,6 +15,7 @@ import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.activity.my.AboutMeActivity;
 import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.utils.MoneyUtil;
+import com.business.travel.app.utils.Try;
 
 /**
  * @author chenshang
@@ -47,15 +48,16 @@ public class MyFragment extends BaseFragment<FragmentMyBinding> {
 	@Override
 	public void onResume() {
 		super.onResume();
+		Try.of(() -> {
+			Long totalTravelDay = projectService.countTotalTravelDayByYear(null);
+			viewBinding.totalTravelDay.setText(String.valueOf(totalTravelDay));
 
-		Long totalTravelDay = projectService.countTotalTravelDayByYear(null);
-		viewBinding.totalTravelDay.setText(String.valueOf(totalTravelDay));
+			Long billCount = Optional.ofNullable(billService.countBill()).orElse(0L);
+			viewBinding.totalBillCount.setText(String.valueOf(billCount));
 
-		Long billCount = Optional.ofNullable(billService.countBill()).orElse(0L);
-		viewBinding.totalBillCount.setText(String.valueOf(billCount));
-
-		Long totalSpendingMoney = Optional.ofNullable(projectService.sumTotalSpendingMoney()).orElse(0L);
-		viewBinding.totalPay.setText(MoneyUtil.toYuanString(totalSpendingMoney));
+			Long totalSpendingMoney = Optional.ofNullable(projectService.sumTotalSpendingMoney()).orElse(0L);
+			viewBinding.totalPay.setText(MoneyUtil.toYuanString(totalSpendingMoney));
+		});
 	}
 
 	private void goAboutMeActivityOnViewClick(View view) {

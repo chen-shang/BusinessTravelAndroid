@@ -26,6 +26,7 @@ import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.ui.base.ColorStatusBarActivity;
 import com.business.travel.app.utils.FutureUtil;
 import com.business.travel.app.utils.LogToast;
+import com.business.travel.app.utils.Try;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.ItemTypeEnum;
@@ -106,7 +107,7 @@ public class AddItemActivity extends ColorStatusBarActivity<ActivityAddItemBindi
 	@Override
 	protected void onResume() {
 		super.onResume();
-		refreshData(itemTypeEnum);
+		Try.of(() -> refreshData(itemTypeEnum));
 	}
 
 	private void registerSaveButton(ImageView saveButton) {

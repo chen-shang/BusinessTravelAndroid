@@ -22,6 +22,7 @@ import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.activity.project.EditProjectActivity;
 import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.utils.MoneyUtil;
+import com.business.travel.app.utils.Try;
 import com.business.travel.app.view.EmptyHeaderView;
 import com.business.travel.app.view.ProjectHeaderView;
 import com.lxj.xpopup.XPopup.Builder;
@@ -72,9 +73,10 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 	public void onResume() {
 		super.onResume();
 		// 每次进来的时候,都要刷新一下项目列表
-		refreshProjectList();
-
-		refreshProjectHeader();
+		Try.of(() -> {
+			refreshProjectList();
+			refreshProjectHeader();
+		});
 	}
 
 	/**

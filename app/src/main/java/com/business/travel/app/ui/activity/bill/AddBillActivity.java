@@ -104,7 +104,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	protected void onResume() {
 		super.onResume();
 		//每次进来该页面的时候都需要刷新一下数据
-		refreshData(selectBillId);
+		Try.of(() -> refreshData(selectBillId));
 	}
 
 	private void registerMaterialSearchBar() {

@@ -104,6 +104,20 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		registerUpdateConsumerType(viewBinding.consumerType);
 	}
 
+	@Override
+	protected void onStart() {
+		super.onStart();
+		Try.of(() -> {
+			//参数检查
+			Preconditions.checkArgument(selectBillId > 0, "请选择账单");
+			Bill bill = billService.queryBillById(selectBillId);
+			Preconditions.checkArgument(bill != null, "未查询到账单 " + selectBillId);
+			//业务逻辑
+			showBillDetail(bill);
+			//结果处理
+		});
+	}
+
 	private void registerUpdateConsumerType(TextView textView) {
 		textView.setOnClickListener(v -> {
 			Bill record = new Bill();
@@ -173,20 +187,6 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		String date = SplitUtil.trimToStringList(time, " ").get(0);
 		LocalDate localDate = DateTimeUtil.parseLocalDate(date);
 		datePickerDialog.updateDate(localDate.getYear(), localDate.getMonth().ordinal(), localDate.getDayOfMonth());
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-		Try.of(() -> {
-			//参数检查
-			Preconditions.checkArgument(selectBillId > 0, "请选择账单");
-			Bill bill = billService.queryBillById(selectBillId);
-			Preconditions.checkArgument(bill != null, "未查询到账单 " + selectBillId);
-			//业务逻辑
-			showBillDetail(bill);
-			//结果处理
-		});
 	}
 
 	/**

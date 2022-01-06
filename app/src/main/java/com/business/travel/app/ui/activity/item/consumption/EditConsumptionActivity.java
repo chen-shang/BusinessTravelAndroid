@@ -25,6 +25,7 @@ import com.business.travel.app.ui.activity.item.EditItemRecyclerViewAdapter;
 import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
 import com.business.travel.app.ui.base.ColorStatusBarActivity;
 import com.business.travel.app.utils.ImageIconUtil;
+import com.business.travel.app.utils.Try;
 import com.business.travel.app.view.EmptyHeaderView;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.ItemTypeEnum;
@@ -74,7 +75,12 @@ public class EditConsumptionActivity extends ColorStatusBarActivity<ActivityEdit
 		registerButton();
 		//注册添加按钮操作事件
 		registerConsumptionButtonAddItem();
+	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Try.of(() -> refreshConsumptionItem(consumptionType));
 	}
 
 	private void registerConsumptionType() {
@@ -188,12 +194,6 @@ public class EditConsumptionActivity extends ColorStatusBarActivity<ActivityEdit
 			intent.putExtra("consumptionType", consumptionType.name());
 			startActivity(intent);
 		});
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		refreshConsumptionItem(consumptionType);
 	}
 
 	private void refreshConsumptionItem(ConsumptionTypeEnum consumptionTypeEnum) {
