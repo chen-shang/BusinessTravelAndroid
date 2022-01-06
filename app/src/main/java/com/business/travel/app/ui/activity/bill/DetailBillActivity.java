@@ -96,11 +96,27 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 
 		//注册更新备注事件
 		registerUpdateRemark(viewBinding.remark);
+
+		//注册更新消费金额事件
+		registerUpdateAmount(viewBinding.amount);
+	}
+
+	private void registerUpdateAmount(EditText amount) {
+		amount.setTextColor(viewBinding.projectName.getCurrentTextColor());
+		amount.setOnFocusChangeListener((v, hasFocus) -> Try.of(() -> {
+			//失去焦点的时候保存
+			if (!hasFocus) {
+				String s = ((EditText)v).getText().toString();
+				Bill record = new Bill();
+				record.setAmount(MoneyUtil.toFen(s));
+				billService.updateBill(selectBillId, record);
+			}
+		}));
 	}
 
 	private void registerUpdateRemark(EditText remark) {
 		remark.setTextColor(viewBinding.projectName.getCurrentTextColor());
-		remark.setOnFocusChangeListener((v, hasFocus) -> {
+		remark.setOnFocusChangeListener((v, hasFocus) -> Try.of(() -> {
 			//失去焦点的时候保存
 			if (!hasFocus) {
 				String s = ((EditText)v).getText().toString();
@@ -108,7 +124,7 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 				record.setRemark(s);
 				billService.updateBill(selectBillId, record);
 			}
-		});
+		}));
 	}
 
 	private void registerUpdateConsumeDate(View view) {
@@ -188,7 +204,7 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		showMember(memberIds);
 
 		//消费金额
-		viewBinding.ammount.setText(MoneyUtil.toYuanString(bill.getAmount()));
+		viewBinding.amount.setText(MoneyUtil.toYuanString(bill.getAmount()));
 
 		//消费时间
 		String date = DateTimeUtil.format(bill.getConsumeDate(), "yyyy-MM-dd");

@@ -162,14 +162,19 @@
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:layout_height="wrap_content">
 
-                    <TextView
-                            android:id="@+id/ammount"
+                    <EditText
+                            android:id="@+id/amount"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="left"
-                            android:text="299.90"/>
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textSize="15sp"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:background="@null"
+                            tools:ignore="RtlHardcoded"/>
                 </LinearLayout>
 
             </LinearLayout>
