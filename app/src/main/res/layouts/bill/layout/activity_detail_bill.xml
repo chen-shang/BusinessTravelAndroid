@@ -232,12 +232,15 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content">
 
-                    <TextView
+                    <EditText
                             android:id="@+id/remark"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="left"
-                            android:text="xxxxx xxxx"/>
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:background="@null"
+                            tools:ignore="RtlHardcoded"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

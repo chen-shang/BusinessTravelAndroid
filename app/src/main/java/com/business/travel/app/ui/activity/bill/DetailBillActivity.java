@@ -1,12 +1,17 @@
 package com.business.travel.app.ui.activity.bill;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager;
@@ -23,6 +28,7 @@ import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.base.ColorStatusBarActivity;
 import com.business.travel.app.utils.GridViewPagerUtil;
 import com.business.travel.app.utils.ImageLoadUtil;
+import com.business.travel.app.utils.LogToast;
 import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.app.utils.Try;
 import com.business.travel.utils.DateTimeUtil;
@@ -60,6 +66,11 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 	private MemberService memberService;
 	private ConsumptionService consumptionService;
 
+	/**
+	 * 日历选框
+	 */
+	private DatePickerDialog datePickerDialog;
+
 	@Override
 	protected void inject() {
 		billService = new BillService(this);
@@ -67,6 +78,10 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		consumptionService = new ConsumptionService(this);
 		projectService = new ProjectService(this);
 		selectBillId = getIntent().getLongExtra("selectBillId", -1);
+
+		LocalDateTime now = DateTimeUtil.now();
+		datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+		}, now.getYear(), now.getMonth().getValue() - 1, now.getDayOfMonth());
 	}
 
 	@Override
@@ -77,6 +92,54 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		//注册人员列表
 		registerPageView(viewBinding.GridViewPagerMemberIconList, memberIconList);
 
+		//注册更新消费时间事件
+		registerUpdateConsumeDate(viewBinding.time);
+
+		//注册更新备注事件
+		registerUpdateRemark(viewBinding.remark);
+	}
+
+	private void registerUpdateRemark(EditText remark) {
+		remark.setTextColor(viewBinding.projectName.getCurrentTextColor());
+		remark.setOnFocusChangeListener((v, hasFocus) -> {
+			//失去焦点的时候保存
+			if (!hasFocus) {
+				String s = ((EditText)v).getText().toString();
+				Bill record = new Bill();
+				record.setRemark(s);
+				billService.updateBill(selectBillId, record);
+				LogToast.infoShow("更新备注成功");
+			}
+		});
+	}
+
+	private void registerUpdateConsumeDate(View view) {
+		//日历弹框
+		datePickerDialog.setOnDateSetListener((v, year, month, dayOfMonth) -> {
+			LocalDate localDate = LocalDate.of(year, month + 1, dayOfMonth);
+			//消费时间
+			String date = DateTimeUtil.format(localDate, "yyyy-MM-dd");
+			Bill record = new Bill();
+			record.setConsumeDate(DateTimeUtil.timestamp(date, "yyyy-MM-dd"));
+			billService.updateBill(selectBillId, record);
+			LogToast.infoShow("更新消费时间成功");
+			//周几
+			WeekEnum weekEnum = WeekEnum.ofCode(localDate.getDayOfWeek().getValue());
+			viewBinding.time.setText(date + " " + weekEnum.getMsg());
+		});
+
+		//点击事件
+		view.setOnClickListener(v -> {
+			refreshDatePickerDialogDate((TextView)v);
+			datePickerDialog.show();
+		});
+	}
+
+	private void refreshDatePickerDialogDate(TextView v) {
+		String time = v.getText().toString();
+		String date = SplitUtil.trimToStringList(time, " ").get(0);
+		LocalDate localDate = DateTimeUtil.parseLocalDate(date);
+		datePickerDialog.updateDate(localDate.getYear(), localDate.getMonth().ordinal(), localDate.getDayOfMonth());
 	}
 
 	@Override

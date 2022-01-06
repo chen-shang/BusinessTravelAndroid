@@ -150,12 +150,14 @@ public class BillService {
 		boolean change = false;
 		if (StringUtils.isNotBlank(remark) && !remark.equals(record.getRemark())) {
 			record.setRemark(remark);
+			LogUtils.i("更新备注 remark:" + remark + "->" + record.getRemark());
 			change = true;
 		}
 
 		Long amount = bill.getAmount();
 		if (amount != null && amount != record.getAmount()) {
 			record.setAmount(amount);
+			LogUtils.i("更新消费金额 amount:" + amount + "->" + record.getAmount());
 			change = true;
 		}
 

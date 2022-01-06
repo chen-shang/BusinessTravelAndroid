@@ -41,8 +41,7 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 	protected void inject() {
 		projectService = new ProjectService(this);
 		LocalDateTime now = DateTimeUtil.now();
-		datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
-		}, now.getYear(), now.getMonth().getValue() - 1, now.getDayOfMonth());
+		datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {}, now.getYear(), now.getMonth().getValue() - 1, now.getDayOfMonth());
 
 		selectProjectId = getIntent().getLongExtra("projectId", -1L);
 	}
