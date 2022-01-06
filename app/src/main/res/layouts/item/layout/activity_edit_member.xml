@@ -32,20 +32,20 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-        <com.barnettwong.dragfloatactionbuttonlibrary.view.DragFloatActionButton
-                android:id="@+id/DragFloatActionButton"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                android:layout_marginEnd="25dp"
                 android:clickable="true"
+                app:maxImageSize="?attr/actionBarSize"
+                app:tint="@null"
                 android:src="@drawable/ic_base_bill_add"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
-                android:layout_marginBottom="30dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
+                android:id="@+id/DragFloatActionButton"
+                app:elevation="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="50dp"
                 />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
