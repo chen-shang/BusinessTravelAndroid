@@ -22,7 +22,7 @@ import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.activity.project.EditProjectActivity;
 import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.utils.MoneyUtil;
-import com.business.travel.app.view.HeaderView;
+import com.business.travel.app.view.EmptyHeaderView;
 import com.business.travel.app.view.ProjectHeaderView;
 import com.lxj.xpopup.XPopup.Builder;
 import com.lxj.xpopup.impl.AttachListPopupView;
@@ -47,7 +47,7 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 	/**
 	 * 列表为空时候显示的内容,用headView实现该效果
 	 */
-	private View projectListEmptyHeaderView;
+	private EmptyHeaderView emptyHeaderView;
 
 	@Override
 	protected void inject() {
@@ -55,7 +55,7 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 		projectService = new ProjectService(requireActivity());
 
 		projectListHeaderView = new ProjectHeaderView(getLayoutInflater());
-		projectListEmptyHeaderView = HeaderView.newEmptyHeaderView(getLayoutInflater());
+		emptyHeaderView = new EmptyHeaderView(getLayoutInflater());
 	}
 
 	@Override
@@ -111,12 +111,12 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 			//如果没有数据就展示空Header
 			notifyProjectDataClear();
 			//显示空的Header
-			HeaderView.of(projectListEmptyHeaderView).addTo(swipeRecyclerView);
+			emptyHeaderView.addTo(swipeRecyclerView);
 			return;
 		}
 
 		//移除空的Header
-		HeaderView.of(projectListEmptyHeaderView).removeFrom(swipeRecyclerView);
+		emptyHeaderView.removeFrom(swipeRecyclerView);
 		//通知adapter更新列表
 		notifyProjectListDataChange(projectList);
 	}
