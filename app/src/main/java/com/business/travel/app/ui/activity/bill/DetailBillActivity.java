@@ -99,11 +99,31 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 
 		//注册更新消费金额事件
 		registerUpdateAmount(viewBinding.amount);
+
+		//注册更新消费类型
+		registerUpdateConsumerType(viewBinding.consumerType);
 	}
 
-	private void registerUpdateAmount(EditText amount) {
-		amount.setTextColor(viewBinding.projectName.getCurrentTextColor());
-		amount.setOnFocusChangeListener((v, hasFocus) -> Try.of(() -> {
+	private void registerUpdateConsumerType(TextView textView) {
+		textView.setOnClickListener(v -> {
+			Bill record = new Bill();
+
+			String consumerType = ((TextView)v).getText().toString();
+			if (ConsumptionTypeEnum.SPENDING.getMsg().equals(consumerType)) {
+				((TextView)v).setText(ConsumptionTypeEnum.INCOME.getMsg());
+				record.setConsumptionType(ConsumptionTypeEnum.INCOME.name());
+			} else if (ConsumptionTypeEnum.INCOME.getMsg().equals(consumerType)) {
+				((TextView)v).setText(ConsumptionTypeEnum.SPENDING.getMsg());
+				record.setConsumptionType(ConsumptionTypeEnum.SPENDING.name());
+			}
+
+			billService.updateBill(selectBillId, record);
+		});
+	}
+
+	private void registerUpdateAmount(EditText editeText) {
+		editeText.setTextColor(viewBinding.projectName.getCurrentTextColor());
+		editeText.setOnFocusChangeListener((v, hasFocus) -> Try.of(() -> {
 			//失去焦点的时候保存
 			if (!hasFocus) {
 				String s = ((EditText)v).getText().toString();

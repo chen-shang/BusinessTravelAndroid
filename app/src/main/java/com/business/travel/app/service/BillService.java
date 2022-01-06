@@ -197,7 +197,7 @@ public class BillService {
 
 		String consumptionType = bill.getConsumptionType();
 		if (StringUtils.isNotBlank(consumptionType) && !consumptionType.equals(record.getConsumptionType())) {
-			record.setConsumptionIds(consumptionType);
+			record.setConsumptionType(consumptionType);
 			change = true;
 		}
 
