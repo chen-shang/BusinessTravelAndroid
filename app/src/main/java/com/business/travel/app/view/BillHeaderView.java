@@ -1,24 +1,19 @@
 package com.business.travel.app.view;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.TextView;
 import com.business.travel.app.R;
-import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
 /**
  * 账单顶部信息
  */
-public class BillHeaderView {
+public class BillHeaderView extends HeadView {
 	public TextView uIBillFragmentTextViewIncome;
 	public TextView uIBillFragmentTextViewPay;
 	public TextView startTime;
 	public TextView endTime;
 	public TextView durationDay;
-
-	//账单页面顶部视图
-	private final View headView;
 
 	public BillHeaderView(LayoutInflater layoutInflater) {
 		headView = layoutInflater.inflate(R.layout.bill_list_header_view, null, false);
@@ -29,12 +24,6 @@ public class BillHeaderView {
 		startTime = headView.findViewById(R.id.startTime);
 		endTime = headView.findViewById(R.id.endTime);
 		durationDay = headView.findViewById(R.id.durationDay);
-	}
-
-	public void addTo(SwipeRecyclerView swipeRecyclerView) {
-		if (swipeRecyclerView.getHeaderCount() < 2) {
-			swipeRecyclerView.addHeaderView(headView);
-		}
 	}
 
 	/**

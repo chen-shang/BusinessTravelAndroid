@@ -36,19 +36,6 @@ public class HeaderView {
 	}
 
 	/**
-	 * 项目页面头部
-	 *
-	 * @param layoutInflater
-	 * @return
-	 */
-	@SuppressLint("InflateParams")
-	public static View newProjectHeaderView(LayoutInflater layoutInflater) {
-		View headView = layoutInflater.inflate(R.layout.project_list_header_view, null);
-		headView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-		return headView;
-	}
-
-	/**
 	 * 把视图添加到对应的view
 	 *
 	 * @param swipeRecyclerView

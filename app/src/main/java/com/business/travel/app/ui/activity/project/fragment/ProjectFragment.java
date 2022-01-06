@@ -43,8 +43,7 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 	private ProjectRecyclerViewAdapter projectListRecyclerViewAdapter;
 
 	private ProjectService projectService;
-	private View projectListHeaderView;
-	private ProjectHeaderView listHeaderViewHolder;
+	private ProjectHeaderView projectListHeaderView;
 	/**
 	 * 列表为空时候显示的内容,用headView实现该效果
 	 */
@@ -55,9 +54,7 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 		super.inject();
 		projectService = new ProjectService(requireActivity());
 
-		projectListHeaderView = HeaderView.newProjectHeaderView(getLayoutInflater());
-		listHeaderViewHolder = ProjectHeaderView.init(projectListHeaderView);
-
+		projectListHeaderView = new ProjectHeaderView(getLayoutInflater());
 		projectListEmptyHeaderView = HeaderView.newEmptyHeaderView(getLayoutInflater());
 	}
 
@@ -96,7 +93,7 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 	private void registerSwipeRecyclerView(SwipeRecyclerView swipeRecyclerView) {
 		//采用线性布局
 		swipeRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
-		HeaderView.of(projectListHeaderView).addTo(viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList);
+		projectListHeaderView.addTo(viewBinding.UIProjectFragmentSwipeRecyclerViewProjectList);
 		//项目列表适配器,这里面有项目卡片的布局
 		projectListRecyclerViewAdapter = new ProjectRecyclerViewAdapter(projectList, (MasterActivity)requireActivity());
 		swipeRecyclerView.setAdapter(projectListRecyclerViewAdapter);
@@ -139,19 +136,19 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 	public void refreshProjectHeader() {
 		//统计一下总收入
 		Long sumTotalIncomeMoney = Optional.ofNullable(projectService.sumTotalIncomeMoney()).orElse(0L);
-		TextView uIBillFragmentTextViewIncome = listHeaderViewHolder.projectIncome;
+		TextView uIBillFragmentTextViewIncome = projectListHeaderView.projectIncome;
 		uIBillFragmentTextViewIncome.setText(MoneyUtil.toYuanString(sumTotalIncomeMoney));
 
 		//统计一下总支出
 		Long sumTotalSpendingMoney = Optional.ofNullable(projectService.sumTotalSpendingMoney()).orElse(0L);
-		TextView UIBillFragmentTextViewPay = listHeaderViewHolder.projectPay;
+		TextView UIBillFragmentTextViewPay = projectListHeaderView.projectPay;
 		UIBillFragmentTextViewPay.setText(MoneyUtil.toYuanString(sumTotalSpendingMoney));
 
 		Long countTotalProjectByYear = projectService.countTotalProjectByYear(null);
-		listHeaderViewHolder.projectCount.setText(String.valueOf(countTotalProjectByYear));
+		projectListHeaderView.projectCount.setText(String.valueOf(countTotalProjectByYear));
 
 		//项目耗时
 		Long duration = projectService.countTotalTravelDayByYear(null);
-		listHeaderViewHolder.durationDay.setText(String.valueOf(duration));
+		projectListHeaderView.durationDay.setText(String.valueOf(duration));
 	}
 }
