@@ -38,7 +38,7 @@
                 android:clickable="true"
                 app:maxImageSize="?attr/actionBarSize"
                 app:tint="@null"
-                android:src="@drawable/ic_base_bill_add"
+                android:src="@drawable/ic_base_item_add"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:id="@+id/DragFloatActionButton"
                 app:elevation="8dp"
