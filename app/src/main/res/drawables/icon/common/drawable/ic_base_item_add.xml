@@ -1,20 +1,20 @@
 <vector xmlns:aapt="http://schemas.android.com/aapt"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:width="45dp"
-        android:height="45dp"
-        android:viewportWidth="44"
-        android:viewportHeight="44">
+        android:width="33.02dp"
+        android:height="33.02dp"
+        android:viewportWidth="33.02"
+        android:viewportHeight="33.02">
     <path
-            android:pathData="M22,22m-22,0a22,22 0,1 1,44 0a22,22 0,1 1,-44 0"
+            android:pathData="M16.51,16.51m-16,0a16,16 0,1 1,32 0a16,16 0,1 1,-32 0"
             android:fillColor="#fff"/>
     <path
-            android:pathData="M22,22m-20.18,0a20.18,20.18 0,1 1,40.36 0a20.18,20.18 0,1 1,-40.36 0">
+            android:pathData="M16.51,16.51m-16.51,0a16.51,16.51 0,1 1,33.02 0a16.51,16.51 0,1 1,-33.02 0">
         <aapt:attr name="android:fillColor">
             <gradient
-                    android:startY="22"
-                    android:startX="1.82"
-                    android:endY="22"
-                    android:endX="42.18"
+                    android:startY="16.51"
+                    android:endY="16.51"
+                    android:startX="0"
+                    android:endX="33.02"
                     android:type="linear">
                 <item
                         android:offset="0"
@@ -32,13 +32,13 @@
         </aapt:attr>
     </path>
     <path
-            android:pathData="M22,22m-20.18,0a20.18,20.18 0,1 1,40.36 0a20.18,20.18 0,1 1,-40.36 0">
+            android:pathData="M16.51,16.51m-16.51,0a16.51,16.51 0,1 1,33.02 0a16.51,16.51 0,1 1,-33.02 0">
         <aapt:attr name="android:fillColor">
             <gradient
-                    android:startY="22"
-                    android:startX="1.82"
-                    android:endY="22"
-                    android:endX="42.18"
+                    android:startY="16.51"
+                    android:endY="16.51"
+                    android:startX="0"
+                    android:endX="33.02"
                     android:type="linear">
                 <item
                         android:offset="0"
@@ -56,12 +56,12 @@
         </aapt:attr>
     </path>
     <path
-            android:pathData="M22,22m-20.06,0a20.06,20.06 0,1 1,40.12 0a20.06,20.06 0,1 1,-40.12 0">
-    </path>
+            android:pathData="M16.51,16.51m-16.41,0a16.41,16.41 0,1 1,32.82 0a16.41,16.41 0,1 1,-32.82 0"
+            android:fillColor="#fd6d6b"/>
     <path
-            android:pathData="M11.65,21.03h20.71v1.94h-20.71z"
+            android:pathData="M8.04,15.71h16.94v1.59H8.04z"
             android:fillColor="#fff"/>
     <path
-            android:pathData="M21.03,11.65h1.94v20.71h-1.94z"
+            android:pathData="M15.71,8.04h1.59v16.94h-1.59z"
             android:fillColor="#fff"/>
 </vector>
