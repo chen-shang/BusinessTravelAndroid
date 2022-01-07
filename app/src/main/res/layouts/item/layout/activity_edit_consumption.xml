@@ -89,7 +89,7 @@
             android:layout_height="@dimen/top_height"
             android:src="@drawable/ic_base_item_add"
             android:elevation="8dp"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:background="@drawable/selector_button"
             android:clickable="true"
 
             app:layout_constraintBottom_toBottomOf="parent"
