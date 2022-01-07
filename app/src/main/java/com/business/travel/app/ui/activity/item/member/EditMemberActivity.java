@@ -36,11 +36,11 @@ public class EditMemberActivity extends ColorStatusBarActivity<ActivityEditMembe
 	/**
 	 * 人员图标列表
 	 */
-	private final List<ImageIconInfo> memberIconList = new ArrayList<>();
+	private final List<ImageIconInfo> imageIconInfoList = new ArrayList<>();
 	/**
 	 * 人员图标列表适配器
 	 */
-	private EditItemRecyclerViewAdapter editConsumptionRecyclerViewAdapter;
+	private EditItemRecyclerViewAdapter editItemRecyclerViewAdapter;
 	//注入service
 	private MemberService memberService;
 	/**
@@ -74,12 +74,13 @@ public class EditMemberActivity extends ColorStatusBarActivity<ActivityEditMembe
 	private void registerSwipeRecyclerView() {
 		LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.setLayoutManager(layoutManager);
-		editConsumptionRecyclerViewAdapter = new EditItemRecyclerViewAdapter(memberIconList, this);
+		editItemRecyclerViewAdapter = new EditItemRecyclerViewAdapter(imageIconInfoList, this);
 
 		//长按移动排序
 		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.setLongPressDragEnabled(true);
-		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(memberIconList, editConsumptionRecyclerViewAdapter).onItemMove(
-				(consumptionItems, fromPosition, toPosition) -> IntStream.range(fromPosition, toPosition).forEachOrdered(sortId -> memberService.updateMemberSort(consumptionItems.get(sortId).getId(), (long)sortId))));
+		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(imageIconInfoList, editItemRecyclerViewAdapter).onItemMove((itemList, fromPosition, toPosition) -> {
+			IntStream.range(0, itemList.size()).forEachOrdered(sortId -> memberService.updateMemberSort(itemList.get(sortId).getId(), (long)sortId));
+		}));
 
 		//添加分隔线
 		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.addItemDecoration(new DefaultItemDecoration(ColorUtils.getColor(R.color.black_300)));
@@ -96,12 +97,12 @@ public class EditMemberActivity extends ColorStatusBarActivity<ActivityEditMembe
 			// 菜单在Item中的Position：
 			int menuPosition = menuBridge.getPosition();
 			//被删除的item
-			ImageIconInfo imageIconInfo = memberIconList.get(adapterPosition);
+			ImageIconInfo imageIconInfo = imageIconInfoList.get(adapterPosition);
 			if (direction == RIGHT_DIRECTION && menuPosition == 0) {
 				//移除元素
-				memberIconList.remove(adapterPosition);
-				editConsumptionRecyclerViewAdapter.notifyItemRemoved(adapterPosition);
-				editConsumptionRecyclerViewAdapter.notifyItemRangeChanged(adapterPosition, memberIconList.size() - adapterPosition);
+				imageIconInfoList.remove(adapterPosition);
+				editItemRecyclerViewAdapter.notifyItemRemoved(adapterPosition);
+				editItemRecyclerViewAdapter.notifyItemRangeChanged(adapterPosition, imageIconInfoList.size() - adapterPosition);
 
 				//先删除该元素
 				memberService.softDeleteMember(imageIconInfo.getId());
@@ -109,7 +110,7 @@ public class EditMemberActivity extends ColorStatusBarActivity<ActivityEditMembe
 			}
 		});
 
-		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.setAdapter(editConsumptionRecyclerViewAdapter);
+		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.setAdapter(editItemRecyclerViewAdapter);
 	}
 
 	private void registerConsumerItemButtonAddItem() {
@@ -127,13 +128,13 @@ public class EditMemberActivity extends ColorStatusBarActivity<ActivityEditMembe
 		}
 
 		//先尝试比较一下list 是否改变
-		if (!ImageIconUtil.dataChange(newLeastMemberIconList, memberIconList)) {
+		if (!ImageIconUtil.dataChange(newLeastMemberIconList, imageIconInfoList)) {
 			return;
 		}
 
-		memberIconList.clear();
-		memberIconList.addAll(newLeastMemberIconList);
-		editConsumptionRecyclerViewAdapter.notifyDataSetChanged();
+		imageIconInfoList.clear();
+		imageIconInfoList.addAll(newLeastMemberIconList);
+		editItemRecyclerViewAdapter.notifyDataSetChanged();
 		checkEmpty();
 	}
 
@@ -141,11 +142,11 @@ public class EditMemberActivity extends ColorStatusBarActivity<ActivityEditMembe
 	 * 检查数据是否为空
 	 */
 	private void checkEmpty() {
-		if (CollectionUtils.isNotEmpty(memberIconList)) {
+		if (CollectionUtils.isNotEmpty(imageIconInfoList)) {
 			emptyHeaderView.removeFrom(viewBinding.UIAssociateSwipeRecyclerViewConsumerItem);
 		}
 
-		if (CollectionUtils.isEmpty(memberIconList) && viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.getHeaderCount() == 0) {
+		if (CollectionUtils.isEmpty(imageIconInfoList) && viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.getHeaderCount() == 0) {
 			emptyHeaderView.addTo(viewBinding.UIAssociateSwipeRecyclerViewConsumerItem);
 		}
 	}

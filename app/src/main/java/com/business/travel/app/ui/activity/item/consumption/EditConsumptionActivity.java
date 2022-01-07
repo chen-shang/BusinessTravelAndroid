@@ -42,11 +42,11 @@ public class EditConsumptionActivity extends ColorStatusBarActivity<ActivityEdit
 	/**
 	 * 消费项图标信息列表
 	 */
-	private final List<ImageIconInfo> consumptionImageIconList = new ArrayList<>();
+	private final List<ImageIconInfo> imageIconInfoList = new ArrayList<>();
 	/**
 	 * 消费项图标列表适配器
 	 */
-	private EditItemRecyclerViewAdapter editConsumptionRecyclerViewAdapter;
+	private EditItemRecyclerViewAdapter editItemRecyclerViewAdapter;
 	/**
 	 * 当前被选中的是支出还是收入
 	 */
@@ -139,7 +139,7 @@ public class EditConsumptionActivity extends ColorStatusBarActivity<ActivityEdit
 	}
 
 	private void registerSwipeRecyclerView() {
-		editConsumptionRecyclerViewAdapter = new EditItemRecyclerViewAdapter(consumptionImageIconList, this);
+		editItemRecyclerViewAdapter = new EditItemRecyclerViewAdapter(imageIconInfoList, this);
 
 		//设置布局
 		LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -148,8 +148,9 @@ public class EditConsumptionActivity extends ColorStatusBarActivity<ActivityEdit
 		//长按移动排序
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setLongPressDragEnabled(true);
 		//当移动之后
-		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(consumptionImageIconList, editConsumptionRecyclerViewAdapter).onItemMove(
-				(consumptionItems, fromPosition, toPosition) -> IntStream.rangeClosed(fromPosition, toPosition).forEachOrdered(i -> consumptionService.updateMemberSort(consumptionImageIconList.get(i).getId(), (long)i))));
+		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(imageIconInfoList, editItemRecyclerViewAdapter).onItemMove((itemList, fromPosition, toPosition) -> {
+			IntStream.rangeClosed(0, toPosition).forEachOrdered(i -> consumptionService.updateMemberSort(itemList.get(i).getId(), (long)i));
+		}));
 
 		//添加分隔线
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.addItemDecoration(new DefaultItemDecoration(ColorUtils.getColor(R.color.black_300)));
@@ -166,21 +167,21 @@ public class EditConsumptionActivity extends ColorStatusBarActivity<ActivityEdit
 			// 菜单在Item中的Position：
 			int menuPosition = menuBridge.getPosition();
 			//被删除的item
-			ImageIconInfo imageIconInfo = consumptionImageIconList.get(adapterPosition);
+			ImageIconInfo imageIconInfo = imageIconInfoList.get(adapterPosition);
 			if (direction == RIGHT_DIRECTION && menuPosition == 0) {
 				//移除元素
-				consumptionImageIconList.remove(adapterPosition);
-				editConsumptionRecyclerViewAdapter.notifyItemRemoved(adapterPosition);
-				editConsumptionRecyclerViewAdapter.notifyItemRangeChanged(adapterPosition, consumptionImageIconList.size() - adapterPosition);
+				imageIconInfoList.remove(adapterPosition);
+				editItemRecyclerViewAdapter.notifyItemRemoved(adapterPosition);
+				editItemRecyclerViewAdapter.notifyItemRangeChanged(adapterPosition, imageIconInfoList.size() - adapterPosition);
 
 				//先删除该元素
 				consumptionService.softDeleteConsumption(imageIconInfo.getId());
-				if (CollectionUtils.isEmpty(consumptionImageIconList)) {
+				if (CollectionUtils.isEmpty(imageIconInfoList)) {
 					showEmptyHeader();
 				}
 			}
 		});
-		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setAdapter(editConsumptionRecyclerViewAdapter);
+		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setAdapter(editItemRecyclerViewAdapter);
 	}
 
 	/**
@@ -216,18 +217,18 @@ public class EditConsumptionActivity extends ColorStatusBarActivity<ActivityEdit
 		}).collect(Collectors.toList());
 
 		//先尝试比较一下list 是否改变
-		if (!ImageIconUtil.dataChange(newImage, consumptionImageIconList)) {
+		if (!ImageIconUtil.dataChange(newImage, imageIconInfoList)) {
 			return;
 		}
 
-		this.consumptionImageIconList.clear();
-		this.consumptionImageIconList.addAll(newImage);
-		editConsumptionRecyclerViewAdapter.notifyDataSetChanged();
+		this.imageIconInfoList.clear();
+		this.imageIconInfoList.addAll(newImage);
+		editItemRecyclerViewAdapter.notifyDataSetChanged();
 	}
 
 	private void showEmptyHeader() {
-		consumptionImageIconList.clear();
-		editConsumptionRecyclerViewAdapter.notifyItemRangeChanged(0, consumptionImageIconList.size());
+		imageIconInfoList.clear();
+		editItemRecyclerViewAdapter.notifyItemRangeChanged(0, imageIconInfoList.size());
 		emptyHeaderView.addTo(viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem);
 	}
 }
