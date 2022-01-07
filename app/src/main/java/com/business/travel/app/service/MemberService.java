@@ -41,6 +41,7 @@ public class MemberService {
 	 * @param sortId
 	 */
 	public void updateMemberSort(Long id, Long sortId) {
+		LogUtils.i("更新id:" + id + "图标 to sortId:" + sortId);
 		memberDao.updateSort(id, sortId);
 	}
 

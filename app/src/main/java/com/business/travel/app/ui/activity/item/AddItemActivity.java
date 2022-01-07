@@ -131,7 +131,7 @@ public class AddItemActivity extends ColorStatusBarActivity<ActivityAddItemBindi
 		member.setIconDownloadUrl(lastSelectedImageIcon.getIconDownloadUrl());
 		member.setIconName(lastSelectedImageIcon.getName());
 		//先查询最大的sortId
-		Long maxSortId = Optional.ofNullable(memberDao.selectMaxSort()).orElse(0L);
+		Long maxSortId = Optional.ofNullable(memberDao.selectMaxSort()).map(sort -> sort + 1).orElse(0L);
 		member.setSortId(maxSortId);
 		member.setCreateTime(DateTimeUtil.timestamp());
 		memberDao.insert(member);

@@ -16,7 +16,7 @@ public interface MemberDao extends BaseDao<Member> {
 	/**
 	 * 查询全部
 	 */
-	@Query("SELECT * FROM Member where isDeleted=1")
+	@Query("SELECT * FROM Member where isDeleted=1 order by sortId asc")
 	List<Member> selectByPrimaryKeys();
 
 	/**
