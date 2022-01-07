@@ -24,6 +24,7 @@ import com.business.travel.app.utils.Try;
 import com.business.travel.app.view.EmptyHeaderView;
 import com.business.travel.vo.enums.ItemTypeEnum;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
+import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
 
 import static com.yanzhenjie.recyclerview.SwipeRecyclerView.RIGHT_DIRECTION;
@@ -68,7 +69,7 @@ public class EditMemberActivity extends ColorStatusBarActivity<ActivityEditMembe
 	@Override
 	protected void onResume() {
 		super.onResume();
-		Try.of(this::refresh);
+		Try.of(() -> this.refreshIconListRecyclerView(viewBinding.UIAssociateSwipeRecyclerViewConsumerItem));
 	}
 
 	private void registerSwipeRecyclerView() {
@@ -106,7 +107,10 @@ public class EditMemberActivity extends ColorStatusBarActivity<ActivityEditMembe
 
 				//先删除该元素
 				memberService.softDeleteMember(imageIconInfo.getId());
-				checkEmpty();
+
+				if (CollectionUtils.isEmpty(imageIconInfoList)) {
+					clear(viewBinding.UIAssociateSwipeRecyclerViewConsumerItem);
+				}
 			}
 		});
 
@@ -121,33 +125,40 @@ public class EditMemberActivity extends ColorStatusBarActivity<ActivityEditMembe
 		});
 	}
 
-	private void refresh() {
-		List<ImageIconInfo> newLeastMemberIconList = memberService.queryAllMembersIconInfo();
-		if (CollectionUtils.isEmpty(newLeastMemberIconList)) {
-			emptyHeaderView.addTo(viewBinding.UIAssociateSwipeRecyclerViewConsumerItem);
-		}
-
-		//先尝试比较一下list 是否改变
-		if (!ImageIconUtil.dataChange(newLeastMemberIconList, imageIconInfoList)) {
+	private void refreshIconListRecyclerView(SwipeRecyclerView iconListRecyclerView) {
+		List<ImageIconInfo> newIconList = memberService.queryAllMembersIconInfo();
+		if (CollectionUtils.isEmpty(newIconList)) {
+			clear(iconListRecyclerView);
 			return;
 		}
 
+		//先尝试比较一下list 是否改变
+		if (!ImageIconUtil.dataChange(newIconList, imageIconInfoList)) {
+			//如果数据没有改变直接返回,不在刷新
+			return;
+		}
+
+		//如果数据有变化
 		imageIconInfoList.clear();
-		imageIconInfoList.addAll(newLeastMemberIconList);
+		imageIconInfoList.addAll(newIconList);
+
+		if (CollectionUtils.isEmpty(imageIconInfoList)) {
+			clear(iconListRecyclerView);
+			return;
+		}
+		emptyHeaderView.removeFrom(iconListRecyclerView);
 		editItemRecyclerViewAdapter.notifyDataSetChanged();
-		checkEmpty();
 	}
 
 	/**
-	 * 检查数据是否为空
+	 * 清空列表展示并添加空页
+	 *
+	 * @param iconListRecyclerView
 	 */
-	private void checkEmpty() {
-		if (CollectionUtils.isNotEmpty(imageIconInfoList)) {
-			emptyHeaderView.removeFrom(viewBinding.UIAssociateSwipeRecyclerViewConsumerItem);
-		}
-
-		if (CollectionUtils.isEmpty(imageIconInfoList) && viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.getHeaderCount() == 0) {
-			emptyHeaderView.addTo(viewBinding.UIAssociateSwipeRecyclerViewConsumerItem);
-		}
+	private void clear(SwipeRecyclerView iconListRecyclerView) {
+		//如果没有数据就添加空页
+		imageIconInfoList.clear();
+		editItemRecyclerViewAdapter.notifyDataSetChanged();
+		emptyHeaderView.addTo(iconListRecyclerView);
 	}
 }

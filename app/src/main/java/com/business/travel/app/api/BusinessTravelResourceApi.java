@@ -61,7 +61,7 @@ public class BusinessTravelResourceApi {
 				return inputStream;
 			}
 
-			LogUtils.d("图片缓存失效:" + iconFullName);
+			LogUtils.d("图片未命中缓存:" + iconFullName);
 			inputStream = getIconFromServer(iconFullName);
 			return addIconToCache(iconFullName, inputStream);
 		} catch (Exception e) {

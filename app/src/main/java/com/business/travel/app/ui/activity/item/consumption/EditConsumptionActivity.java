@@ -2,7 +2,6 @@ package com.business.travel.app.ui.activity.item.consumption;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import android.content.Intent;
@@ -15,10 +14,8 @@ import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.ColorUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.business.travel.app.R;
-import com.business.travel.app.dal.entity.Consumption;
 import com.business.travel.app.databinding.ActivityEditConsumptionBinding;
 import com.business.travel.app.model.ImageIconInfo;
-import com.business.travel.app.model.converter.ConsumptionConverter;
 import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.ui.activity.item.AddItemActivity;
 import com.business.travel.app.ui.activity.item.EditItemRecyclerViewAdapter;
@@ -30,6 +27,7 @@ import com.business.travel.app.view.EmptyHeaderView;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.ItemTypeEnum;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;
+import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
 import org.apache.commons.lang3.StringUtils;
 
@@ -80,7 +78,7 @@ public class EditConsumptionActivity extends ColorStatusBarActivity<ActivityEdit
 	@Override
 	protected void onResume() {
 		super.onResume();
-		Try.of(() -> refreshConsumptionItem(consumptionType));
+		Try.of(() -> refreshConsumptionItem(viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem, consumptionType));
 	}
 
 	private void registerConsumptionType() {
@@ -99,16 +97,18 @@ public class EditConsumptionActivity extends ColorStatusBarActivity<ActivityEdit
 			highlightSpending();
 		}
 
+		SwipeRecyclerView iconListRecyclerView = viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem;
+		//切换当前是收入还是支出
 		viewBinding.UIConsumerItemTextViewExpense.setOnClickListener(v -> {
 			highlightSpending();
 			this.consumptionType = ConsumptionTypeEnum.SPENDING;
-			refreshConsumptionItem(ConsumptionTypeEnum.SPENDING);
+			refreshConsumptionItem(iconListRecyclerView, ConsumptionTypeEnum.SPENDING);
 		});
 
 		viewBinding.UIConsumerItemTextViewIncome.setOnClickListener(v -> {
 			highlightIncome();
 			this.consumptionType = ConsumptionTypeEnum.INCOME;
-			refreshConsumptionItem(ConsumptionTypeEnum.INCOME);
+			refreshConsumptionItem(iconListRecyclerView, ConsumptionTypeEnum.INCOME);
 		});
 	}
 
@@ -177,7 +177,7 @@ public class EditConsumptionActivity extends ColorStatusBarActivity<ActivityEdit
 				//先删除该元素
 				consumptionService.softDeleteConsumption(imageIconInfo.getId());
 				if (CollectionUtils.isEmpty(imageIconInfoList)) {
-					showEmptyHeader();
+					clear(viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem);
 				}
 			}
 		});
@@ -197,38 +197,44 @@ public class EditConsumptionActivity extends ColorStatusBarActivity<ActivityEdit
 		});
 	}
 
-	private void refreshConsumptionItem(ConsumptionTypeEnum consumptionTypeEnum) {
+	private void refreshConsumptionItem(SwipeRecyclerView iconListRecyclerView, ConsumptionTypeEnum consumptionTypeEnum) {
 		if (consumptionTypeEnum == null) {
 			return;
 		}
 
-		List<Consumption> consumptionList = consumptionService.queryConsumptionItemByType(consumptionTypeEnum);
-		if (CollectionUtils.isEmpty(consumptionList)) {
-			showEmptyHeader();
+		List<ImageIconInfo> newIconList = consumptionService.queryAllConsumptionIconInfo(consumptionTypeEnum);
+		if (CollectionUtils.isEmpty(newIconList)) {
+			clear(iconListRecyclerView);
 			return;
 		}
-
-		emptyHeaderView.removeFrom(viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem);
-
-		List<ImageIconInfo> newImage = consumptionList.stream().map(consumptionItem -> {
-			ImageIconInfo imageIconInfo = ConsumptionConverter.INSTANCE.convertImageIconInfo(consumptionItem);
-			imageIconInfo.setItemType(ItemTypeEnum.CONSUMPTION.name());
-			return imageIconInfo;
-		}).collect(Collectors.toList());
 
 		//先尝试比较一下list 是否改变
-		if (!ImageIconUtil.dataChange(newImage, imageIconInfoList)) {
+		if (!ImageIconUtil.dataChange(newIconList, imageIconInfoList)) {
+			//如果数据没有改变直接返回,不在刷新
 			return;
 		}
 
-		this.imageIconInfoList.clear();
-		this.imageIconInfoList.addAll(newImage);
+		//如果数据有变化
+		imageIconInfoList.clear();
+		imageIconInfoList.addAll(newIconList);
+		if (CollectionUtils.isEmpty(imageIconInfoList)) {
+			//如果没有数据就添加空页
+			clear(iconListRecyclerView);
+			return;
+		}
+		emptyHeaderView.removeFrom(iconListRecyclerView);
 		editItemRecyclerViewAdapter.notifyDataSetChanged();
 	}
 
-	private void showEmptyHeader() {
+	/**
+	 * 清空列表展示并添加空页
+	 *
+	 * @param iconListRecyclerView
+	 */
+	private void clear(SwipeRecyclerView iconListRecyclerView) {
+		//如果没有数据就添加空页
 		imageIconInfoList.clear();
-		editItemRecyclerViewAdapter.notifyItemRangeChanged(0, imageIconInfoList.size());
-		emptyHeaderView.addTo(viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem);
+		editItemRecyclerViewAdapter.notifyDataSetChanged();
+		emptyHeaderView.addTo(iconListRecyclerView);
 	}
 }

@@ -43,6 +43,10 @@ public class ConsumptionService {
 		return consumptionDao.selectByType(consumptionTypeEnum.name());
 	}
 
+	public List<ImageIconInfo> queryAllConsumptionIconInfoByType(ConsumptionTypeEnum consumptionTypeEnum) {
+		return convert(consumptionDao.selectByType(consumptionTypeEnum.name()));
+	}
+
 	/**
 	 * 更新顺序
 	 *
@@ -131,7 +135,7 @@ public class ConsumptionService {
 
 	private List<ImageIconInfo> convert(List<Consumption> consumptions) {
 		if (CollectionUtils.isEmpty(consumptions)) {
-			consumptions = new ArrayList<>();
+			return new ArrayList<>();
 		}
 
 		return consumptions.stream().map(consumptionItem -> {

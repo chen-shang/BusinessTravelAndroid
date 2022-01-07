@@ -49,7 +49,7 @@ public class AddItemActivity extends ColorStatusBarActivity<ActivityAddItemBindi
 	 * 缓存一下对应图标的目录信息
 	 * 前提用户倾向于在这个页面停留时间较长,且图标文件万年不变
 	 */
-	private static final LoadingCache<String, List<GiteeContent>> CACHE = CacheBuilder.newBuilder().maximumSize(5).expireAfterWrite(1, TimeUnit.MINUTES).build(new CacheLoader<String, List<GiteeContent>>() {
+	private static final LoadingCache<String, List<GiteeContent>> CACHE = CacheBuilder.newBuilder().maximumSize(5).expireAfterWrite(10, TimeUnit.MINUTES).build(new CacheLoader<String, List<GiteeContent>>() {
 		@Override
 		public List<GiteeContent> load(@NotNull String path) {
 			return BusinessTravelResourceApi.getRepoContents(path).stream().filter(item -> "dir".equals(item.getType())).collect(Collectors.toList());
