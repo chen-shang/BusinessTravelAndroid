@@ -83,16 +83,15 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
     </LinearLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            app:maxImageSize="?attr/actionBarSize"
-            app:tint="@null"
-            android:src="@drawable/ic_base_item_add"
+    <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/DragFloatActionButton"
-            app:elevation="8dp"
-            app:borderWidth="0dp"
+            android:layout_width="@dimen/top_height"
+            android:layout_height="@dimen/top_height"
+            android:src="@drawable/ic_base_item_add"
+            android:elevation="8dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="50dp"
