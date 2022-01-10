@@ -242,7 +242,13 @@ public class Keyboard extends ConstraintLayout {
 							LocalDate localDate = LocalDate.of(year, month + 1, dayOfMonth);
 							//更新选中的日期
 							selectedDate = DateTimeUtil.timestamp(localDate);
-							((TextView)v).setText(DateTimeUtil.format(localDate, "MM.dd"));
+							Optional.of(selectedDate).map(date -> {
+								if (DateTimeUtil.toLocalDateTime(date).toLocalDate().equals(LocalDate.now())) {
+									return "今天";
+								} else {
+									return DateTimeUtil.format(date, "MM.dd");
+								}
+							}).ifPresent(((TextView)v)::setText);
 						});
 					});
 					break;
