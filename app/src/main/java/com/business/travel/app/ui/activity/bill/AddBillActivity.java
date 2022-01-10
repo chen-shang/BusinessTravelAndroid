@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
+import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.ColorUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ScreenUtils;
@@ -166,7 +167,13 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	private void registerKeyboard() {
 		viewBinding.keyboard.onSwitchClick(v -> {
 			//注册支出/收入按钮点击事件
-			refreshConsumptionIcon(viewBinding.keyboard.getConsumptionType());
+			if (selectBillId < 0) {
+				refreshConsumptionIcon(viewBinding.keyboard.getConsumptionType(), null);
+			} else {
+				Bill bill = billService.queryBillById(selectBillId);
+				List<Long> selectedConsumptionIconList = SplitUtil.trimToLongList(bill.getConsumptionIds());
+				refreshConsumptionIcon(viewBinding.keyboard.getConsumptionType(), selectedConsumptionIconList);
+			}
 		}).onSaveClick(v -> Try.of(() -> {
 			//当键盘保存按钮点击之后
 			if (selectBillId > 0) {
@@ -285,21 +292,6 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		viewBinding.keyboard.setRemark(null);
 	}
 
-	public void refreshConsumptionIcon(ConsumptionTypeEnum consumptionType) {
-		List<ImageIconInfo> imageIconInfos = consumptionService.queryAllConsumptionIconInfo(consumptionType);
-
-		//添加编辑按钮编辑按钮永远在最后
-		ImageIconInfo imageIconInfo = new ImageIconInfo();
-		imageIconInfo.setName(ItemIconEnum.ItemIconEdit.getName());
-		imageIconInfo.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
-		imageIconInfo.setSelected(false);
-		imageIconInfos.add(imageIconInfo);
-
-		consumptionImageIconList.clear();
-		consumptionImageIconList.addAll(imageIconInfos);
-		viewBinding.GridViewPagerConsumptionIconList.setDataAllCount(consumptionImageIconList.size()).show();
-	}
-
 	private void createBillWithProject(Project project) {
 		//3. 日期、备注、金额
 		String amount = viewBinding.keyboard.getAmount().trim();
@@ -333,13 +325,12 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 
 	private void refreshData(Long selectBillId) {
 		if (selectBillId < 0) {
-			// TODO: 2021/12/30
 			//启动的时候刷新当前页面的标题
 			refreshProjectName();
 			//刷新消费项列表
-			refreshConsumptionIcon(viewBinding.keyboard.getConsumptionType());
+			refreshConsumptionIcon(viewBinding.keyboard.getConsumptionType(), null);
 			//刷新人员列表
-			refreshMemberIcon();
+			refreshMemberIcon(null);
 		} else {
 			Bill bill = billService.queryBillById(selectBillId);
 			Project project = projectService.queryById(bill.getProjectId());
@@ -357,11 +348,13 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 			viewBinding.keyboard.setAmount(MoneyUtil.toYuanString(amount));
 			//显示消费项目
 			//刷新消费项列表
-			refreshConsumptionIcon2(bill, consumptionType);
+			List<Long> selectedConsumptionIconList = SplitUtil.trimToLongList(bill.getConsumptionIds());
+			refreshConsumptionIcon(consumptionType, selectedConsumptionIconList);
 
 			//显示消费人员
 			//刷新人员列表
-			refreshMemberIcon2(bill);
+			List<Long> memberIds = SplitUtil.trimToLongList(bill.getMemberIds());
+			refreshMemberIcon(memberIds);
 			//日期显示
 			Long consumeDate = bill.getConsumeDate();
 			viewBinding.keyboard.setDate(consumeDate);
@@ -370,11 +363,11 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		}
 	}
 
-	private void refreshMemberIcon2(Bill bill) {
+	private void refreshMemberIcon(List<Long> selectedMemberIconList) {
 		List<ImageIconInfo> newLeastMemberIconList = memberService.queryAllMembersIconInfo();
-		String memberIds = bill.getMemberIds();
-		List<Long> memberIdList = SplitUtil.trimToLongList(memberIds);
-		newLeastMemberIconList.forEach(member -> member.setSelected(memberIdList.contains(member.getId())));
+		if (CollectionUtils.isNotEmpty(selectedMemberIconList)) {
+			newLeastMemberIconList.forEach(member -> member.setSelected(selectedMemberIconList.contains(member.getId())));
+		}
 
 		memberIconList.clear();
 		memberIconList.addAll(newLeastMemberIconList);
@@ -388,12 +381,12 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 
 	}
 
-	private void refreshConsumptionIcon2(Bill bill, ConsumptionTypeEnum consumptionType) {
+	private void refreshConsumptionIcon(ConsumptionTypeEnum consumptionType, List<Long> selectedConsumptionIconList) {
 		List<ImageIconInfo> imageIconInfos = consumptionService.queryAllConsumptionIconInfo(consumptionType);
 
-		String consumptionIds = bill.getConsumptionIds();
-		List<Long> ids = SplitUtil.trimToLongList(consumptionIds);
-		imageIconInfos.forEach(imageIconInfo -> imageIconInfo.setSelected(ids.contains(imageIconInfo.getId())));
+		if (CollectionUtils.isNotEmpty(selectedConsumptionIconList)) {
+			imageIconInfos.forEach(imageIconInfo -> imageIconInfo.setSelected(selectedConsumptionIconList.contains(imageIconInfo.getId())));
+		}
 
 		//添加编辑按钮编辑按钮永远在最后
 		ImageIconInfo imageIconInfo = new ImageIconInfo();
@@ -419,16 +412,4 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		viewBinding.topTitleBar.contentBarTitle.setText(project.getName());
 	}
 
-	private void refreshMemberIcon() {
-		List<ImageIconInfo> newLeastMemberIconList = memberService.queryAllMembersIconInfo();
-		memberIconList.clear();
-		memberIconList.addAll(newLeastMemberIconList);
-
-		//最后在添加一个编辑按钮
-		ImageIconInfo editImageIcon = new ImageIconInfo();
-		editImageIcon.setName(ItemIconEnum.ItemIconEdit.getName());
-		editImageIcon.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
-		memberIconList.add(editImageIcon);
-		viewBinding.GridViewPagerMemberIconList.setDataAllCount(memberIconList.size()).setRowCount(memberIconList.size() > 5 ? 2 : 1).show();
-	}
 }
