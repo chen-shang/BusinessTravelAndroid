@@ -1,9 +1,12 @@
 package com.business.travel.app.ui.activity.bill;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import javax.validation.constraints.NotNull;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -63,7 +66,6 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	 * 人员图标信息
 	 */
 	private final List<ImageIconInfo> memberIconList = new ArrayList<>();
-	private final BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
 	//各种service
 	private BillService billService;
 	private ProjectService projectService;
@@ -73,20 +75,18 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	/**
 	 * 新建的时候可以指定日期、类型
 	 */
+	@NotNull
 	private BillAddModel billAddModel;
 	/**
 	 * 更新的时候只需要指定一个账单id即可
 	 */
+	@NotNull
 	private BillEditeModel billEditeModel;
 	/**
 	 * 当前页面是新增还是更新
 	 */
+	@NotNull
 	private OperateTypeEnum operateTypeEnum = OperateTypeEnum.ADD;
-
-	/**
-	 * 如果是编辑
-	 */
-	private Long selectBillId;
 
 	@Override
 	protected void inject() {
@@ -95,23 +95,29 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		projectService = new ProjectService(this);
 		consumptionService = new ConsumptionService(this);
 
-		//其他页面传递进来的billId,代表编辑
-		selectBillId = this.getIntent().getLongExtra("selectBillId", -1);
-
 		//当前页面的操作模式,由跳转过来的页面控制
 		String operateType = this.getIntent().getStringExtra(AddBillActivity.IntentKey.operateType);
 		if (StringUtils.isNotBlank(operateType)) {
 			operateTypeEnum = OperateTypeEnum.valueOf(operateType);
+		} else {
+			//默认值
+			operateTypeEnum = OperateTypeEnum.ADD;
 		}
 
 		String billEdite = this.getIntent().getStringExtra(AddBillActivity.IntentKey.billEditeModel);
 		if (StringUtils.isNotBlank(billEdite)) {
 			billEditeModel = JacksonUtil.toBean(billEdite, BillEditeModel.class);
+		} else {
+			//默认值
+			billEditeModel = new BillEditeModel(-1L);
 		}
 
 		String billAdd = this.getIntent().getStringExtra(AddBillActivity.IntentKey.billAddModel);
 		if (StringUtils.isNotBlank(billAdd)) {
 			billAddModel = JacksonUtil.toBean(billAdd, BillAddModel.class);
+		} else {
+			//默认值
+			billAddModel = new BillAddModel("", DateTimeUtil.timestamp(LocalDate.now()), ConsumptionTypeEnum.SPENDING.name());
 		}
 	}
 
@@ -132,7 +138,16 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	protected void onResume() {
 		super.onResume();
 		//每次进来该页面的时候都需要刷新一下数据
-		Try.of(() -> refreshData(selectBillId));
+		Try.of(() -> {
+			switch (operateTypeEnum) {
+				case ADD:
+					refreshBillAdd(billAddModel);
+					break;
+				case EDITE:
+					refreshBillEdite(billEditeModel);
+					break;
+			}
+		});
 	}
 
 	private void registerMaterialSearchBar() {
@@ -200,19 +215,25 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	private void registerKeyboard() {
 		viewBinding.keyboard.onSwitchClick(v -> {
 			//注册支出/收入按钮点击事件
-			if (selectBillId < 0) {
-				refreshConsumptionIcon(viewBinding.keyboard.getConsumptionType(), null);
-			} else {
-				Bill bill = billService.queryBillById(selectBillId);
-				List<Long> selectedConsumptionIconList = SplitUtil.trimToLongList(bill.getConsumptionIds());
-				refreshConsumptionIcon(viewBinding.keyboard.getConsumptionType(), selectedConsumptionIconList);
+			switch (operateTypeEnum) {
+				case ADD:
+					refreshConsumptionIcon(viewBinding.keyboard.getConsumptionType(), null);
+					break;
+				case EDITE:
+					Bill bill = billService.queryBillById(billEditeModel.getBillId());
+					List<Long> selectedConsumptionIconList = SplitUtil.trimToLongList(bill.getConsumptionIds());
+					refreshConsumptionIcon(viewBinding.keyboard.getConsumptionType(), selectedConsumptionIconList);
+					break;
 			}
 		}).onSaveClick(v -> Try.of(() -> {
 			//当键盘保存按钮点击之后
-			if (selectBillId > 0) {
-				updateBill();
-			} else {
-				saveBill();
+			switch (operateTypeEnum) {
+				case ADD:
+					saveBill();
+					break;
+				case EDITE:
+					updateBill();
+					break;
 			}
 			//6.账单创建完成后跳转到 DashboardFragment
 			this.finish();
@@ -269,7 +290,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		bill.setRemark(remark);
 		String iconDownloadUrl = consumptionImageIconList.stream().filter(ImageIconInfo::isSelected).findFirst().map(ImageIconInfo::getIconDownloadUrl).orElse("");
 		bill.setIconDownloadUrl(iconDownloadUrl);
-		billService.updateBill(selectBillId, bill);
+		billService.updateBill(billEditeModel.getBillId(), bill);
 	}
 
 	private void bind(ImageView imageView, TextView textView, ImageIconInfo imageIconInfo, Class<?> cls) {
@@ -356,44 +377,46 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		billService.creatBill(bill);
 	}
 
-	private void refreshData(Long selectBillId) {
-		if (operateTypeEnum == OperateTypeEnum.ADD) {
-			//启动的时候刷新当前页面的标题
-			refreshProjectName();
-			//刷新消费项列表
-			refreshConsumptionIcon(viewBinding.keyboard.getConsumptionType(), null);
-			//刷新人员列表
-			refreshMemberIcon(null);
-		} else {
-			Bill bill = billService.queryBillById(billEditeModel.getBillId());
-			Project project = projectService.queryById(bill.getProjectId());
-			Optional.of(project).map(Project::getName).ifPresent(name -> {
-				viewBinding.topTitleBar.contentBarTitle.setText(name);
-			});
+	private void refreshBillAdd(BillAddModel billAddModel) {
+		//启动的时候刷新当前页面的标题
+		viewBinding.topTitleBar.contentBarTitle.setText(billAddModel.getProjectName());
+		viewBinding.keyboard.setDate(billAddModel.getConsumeDate());
+		viewBinding.keyboard.setConsumptionType(ConsumptionTypeEnum.valueOf(billAddModel.getConsumptionType()));
+		//刷新消费项列表
+		refreshConsumptionIcon(ConsumptionTypeEnum.valueOf(billAddModel.getConsumptionType()), null);
+		//刷新人员列表
+		refreshMemberIcon(null);
+	}
 
-			//键盘收入支出选择
-			ConsumptionTypeEnum consumptionType = ConsumptionTypeEnum.valueOf(bill.getConsumptionType());
-			viewBinding.keyboard.setConsumptionType(consumptionType);
+	private void refreshBillEdite(BillEditeModel billEditeModel) {
+		Bill bill = billService.queryBillById(billEditeModel.getBillId());
+		Project project = projectService.queryById(bill.getProjectId());
+		Optional.of(project).map(Project::getName).ifPresent(name -> {
+			viewBinding.topTitleBar.contentBarTitle.setText(name);
+		});
 
-			//金额显示
-			Long amount = bill.getAmount();
+		//键盘收入支出选择
+		ConsumptionTypeEnum consumptionType = ConsumptionTypeEnum.valueOf(bill.getConsumptionType());
+		viewBinding.keyboard.setConsumptionType(consumptionType);
 
-			viewBinding.keyboard.setAmount(MoneyUtil.toYuanString(amount));
-			//显示消费项目
-			//刷新消费项列表
-			List<Long> selectedConsumptionIconList = SplitUtil.trimToLongList(bill.getConsumptionIds());
-			refreshConsumptionIcon(consumptionType, selectedConsumptionIconList);
+		//金额显示
+		Long amount = bill.getAmount();
 
-			//显示消费人员
-			//刷新人员列表
-			List<Long> memberIds = SplitUtil.trimToLongList(bill.getMemberIds());
-			refreshMemberIcon(memberIds);
-			//日期显示
-			Long consumeDate = bill.getConsumeDate();
-			viewBinding.keyboard.setDate(consumeDate);
-			//备注显示
-			viewBinding.keyboard.setRemark(bill.getRemark());
-		}
+		viewBinding.keyboard.setAmount(MoneyUtil.toYuanString(amount));
+		//显示消费项目
+		//刷新消费项列表
+		List<Long> selectedConsumptionIconList = SplitUtil.trimToLongList(bill.getConsumptionIds());
+		refreshConsumptionIcon(consumptionType, selectedConsumptionIconList);
+
+		//显示消费人员
+		//刷新人员列表
+		List<Long> memberIds = SplitUtil.trimToLongList(bill.getMemberIds());
+		refreshMemberIcon(memberIds);
+		//日期显示
+		Long consumeDate = bill.getConsumeDate();
+		viewBinding.keyboard.setDate(consumeDate);
+		//备注显示
+		viewBinding.keyboard.setRemark(bill.getRemark());
 	}
 
 	private void refreshMemberIcon(List<Long> selectedMemberIconList) {
@@ -431,18 +454,6 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		consumptionImageIconList.clear();
 		consumptionImageIconList.addAll(imageIconInfos);
 		viewBinding.GridViewPagerConsumptionIconList.setDataAllCount(consumptionImageIconList.size()).show();
-	}
-
-	private void refreshProjectName() {
-		Long selectedProjectId = billFragment.getSelectedProjectId();
-		if (selectedProjectId == null) {
-			return;
-		}
-		Project project = projectService.queryById(selectedProjectId);
-		if (project == null) {
-			return;
-		}
-		viewBinding.topTitleBar.contentBarTitle.setText(project.getName());
 	}
 
 	public static final class IntentKey {

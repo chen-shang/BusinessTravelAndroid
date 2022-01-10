@@ -1,5 +1,8 @@
 package com.business.travel.app.ui.activity.master;
 
+import java.time.LocalDate;
+import java.util.Optional;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,11 +14,20 @@ import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback;
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.BarUtils;
 import com.business.travel.app.R;
+import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityMasterBinding;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
+import com.business.travel.app.enums.OperateTypeEnum;
+import com.business.travel.app.model.BillAddModel;
+import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.activity.bill.AddBillActivity;
+import com.business.travel.app.ui.activity.bill.AddBillActivity.IntentKey;
+import com.business.travel.app.ui.activity.bill.fragment.BillFragment;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.LogToast;
+import com.business.travel.utils.DateTimeUtil;
+import com.business.travel.utils.JacksonUtil;
+import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,6 +35,10 @@ import org.jetbrains.annotations.NotNull;
  * @author chenshang
  */
 public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
+
+	private final BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
+
+	private ProjectService projectService;
 
 	/**
 	 * 上一次有返回动作的时间
@@ -40,6 +56,12 @@ public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 			lastBackPressedTime = System.currentTimeMillis();
 			LogToast.infoShow("再按一次退出");
 		}
+	}
+
+	@Override
+	protected void inject() {
+		super.inject();
+		projectService = new ProjectService(this);
 	}
 
 	@Override
@@ -69,7 +91,14 @@ public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 				viewPager2.setCurrentItem(MasterFragmentPositionEnum.BILL_FRAGMENT.getPosition());
 			} else {
 				//如果是DASHBOARD_FRAGMENT页面,当点击的时候则跳转到新增账单页面
-				startActivity(new Intent(this, AddBillActivity.class));
+				Intent intent = new Intent(this, AddBillActivity.class);
+				intent.putExtra(IntentKey.operateType, OperateTypeEnum.ADD);
+
+				Project project = projectService.queryById(billFragment.getSelectedProjectId());
+				String name = Optional.ofNullable(project).map(Project::getName).orElse("");
+				BillAddModel billAddModel = new BillAddModel(name, DateTimeUtil.timestamp(LocalDate.now()), ConsumptionTypeEnum.SPENDING.name());
+				intent.putExtra(IntentKey.billAddModel, JacksonUtil.toString(billAddModel));
+				startActivity(intent);
 			}
 		});
 	}

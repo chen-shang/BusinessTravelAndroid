@@ -1,9 +1,11 @@
 package com.business.travel.app.ui.activity.bill.fragment;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +19,21 @@ import butterknife.ButterKnife;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Bill;
+import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
+import com.business.travel.app.enums.OperateTypeEnum;
+import com.business.travel.app.model.BillAddModel;
 import com.business.travel.app.service.BillService;
+import com.business.travel.app.service.ProjectService;
+import com.business.travel.app.ui.activity.bill.AddBillActivity;
+import com.business.travel.app.ui.activity.bill.AddBillActivity.IntentKey;
 import com.business.travel.app.ui.activity.bill.fragment.BillRecyclerViewAdapter.BillRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.utils.DateTimeUtil;
+import com.business.travel.utils.JacksonUtil;
+import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.WeekEnum;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +45,7 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 
 	private final BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
 	private BillService billService;
+	private ProjectService projectService;
 
 	public BillRecyclerViewAdapter(List<Long> dateList, BaseActivity<? extends ViewBinding> baseActivity) {
 		super(dateList, baseActivity);
@@ -43,6 +54,7 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 	@Override
 	protected void inject() {
 		billService = new BillService(activity);
+		projectService = new ProjectService(activity);
 	}
 
 	@NonNull
@@ -71,13 +83,48 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 			holder.billItemSwipeRecyclerView.setAdapter(new BillItemRecyclerViewAdapter(billList, activity, holder));
 		}
 
+		LocalDateTime localDateTime = DateTimeUtil.toLocalDateTime(date);
 		holder.consumerDateTextView.setText(DateTimeUtil.format(date, "yyyy-MM-dd"));
-		int code = DateTimeUtil.toLocalDateTime(date).getDayOfWeek().getValue();
+
+		int code = localDateTime.getDayOfWeek().getValue();
 		WeekEnum weekEnum = WeekEnum.ofCode(code);
 		holder.consumerWeekTextView.setText(weekEnum.getMsg());
 
+		Intent intent = genIntent(selectedProjectId, localDateTime, ConsumptionTypeEnum.SPENDING);
+		//时间点击跳转新增页面
+		holder.consumerDateTextView.setOnClickListener(v -> {
+			//如果是DASHBOARD_FRAGMENT页面,当点击的时候则跳转到新增账单页面
+			activity.startActivity(intent);
+		});
+
+		//时间点击跳转新增页面
+		Intent intent1 = genIntent(selectedProjectId, localDateTime, ConsumptionTypeEnum.INCOME);
+		holder.incomeTextView.setOnClickListener(v -> {
+			//如果是DASHBOARD_FRAGMENT页面,当点击的时候则跳转到新增账单页面
+			activity.startActivity(intent1);
+		});
+
+		//时间点击跳转新增页面
+		Intent intent2 = genIntent(selectedProjectId, localDateTime, ConsumptionTypeEnum.SPENDING);
+		holder.payTextView.setOnClickListener(v -> {
+			//如果是DASHBOARD_FRAGMENT页面,当点击的时候则跳转到新增账单页面
+			activity.startActivity(intent2);
+		});
+
 		//刷新金额显示
 		refreshMoneyShow(holder, selectedProjectId, date);
+	}
+
+	@NotNull
+	private Intent genIntent(Long selectedProjectId, LocalDateTime localDateTime, ConsumptionTypeEnum consumptionTypeEnum) {
+		Intent intent = new Intent(activity, AddBillActivity.class);
+		intent.putExtra(IntentKey.operateType, OperateTypeEnum.ADD);
+
+		Project project = projectService.queryById(selectedProjectId);
+
+		BillAddModel billAddModel = new BillAddModel(project.getName(), DateTimeUtil.timestamp(localDateTime), consumptionTypeEnum.name());
+		intent.putExtra(IntentKey.billAddModel, JacksonUtil.toString(billAddModel));
+		return intent;
 	}
 
 	public void refreshMoneyShow(BillRecyclerViewAdapterViewHolder viewHolder, Long projectId, Long date) {
