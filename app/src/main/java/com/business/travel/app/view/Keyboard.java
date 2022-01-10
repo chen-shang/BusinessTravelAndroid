@@ -24,6 +24,8 @@ import com.blankj.utilcode.util.ResourceUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.view.Keyboard.KeyboardRecyclerViewAdapter.KeyboardRecyclerViewAdapterViewHolder;
 import com.business.travel.utils.DateTimeUtil;
+import com.business.travel.vo.enums.ConsumptionTypeEnum;
+import com.kyleduo.switchbutton.SwitchButton;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +38,7 @@ public class Keyboard extends ConstraintLayout {
 	/**
 	 * 收入支出显示tag
 	 */
-	public final TextView textViewConsumptionType;
+	public final SwitchButton textViewConsumptionType;
 	/**
 	 * 金额展示
 	 */
@@ -109,14 +111,18 @@ public class Keyboard extends ConstraintLayout {
 	 * 消费类型
 	 */
 	public String getConsumptionType() {
-		return textViewConsumptionType.getText().toString();
+		if (textViewConsumptionType.isChecked()) {
+			return textViewConsumptionType.getTextOn().toString();
+		} else {
+			return textViewConsumptionType.getTextOff().toString();
+		}
 	}
 
 	/**
 	 * 设置 消费类型
 	 */
-	public Keyboard setConsumptionType(String remark) {
-		textViewConsumptionType.setText(remark);
+	public Keyboard setConsumptionType(String consumptionType) {
+		textViewConsumptionType.setChecked(ConsumptionTypeEnum.SPENDING.name().equals(consumptionType));
 		return this;
 	}
 

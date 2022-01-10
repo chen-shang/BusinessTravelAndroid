@@ -372,7 +372,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 
 			//键盘收入支出选择
 			consumptionType = ConsumptionTypeEnum.valueOf(bill.getConsumptionType());
-			viewBinding.keyboard.setConsumptionType(consumptionType.getMsg());
+			viewBinding.keyboard.setConsumptionType(consumptionType.name());
 
 			//金额显示
 			Long amount = bill.getAmount();
