@@ -166,19 +166,12 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		contentBarTitle.setFocusableInTouchMode(true);
 		contentBarTitle.setTextColor(ColorUtils.getColor(R.color.white));
 
-		viewBinding.topTitleBar.setOnClickListener(v -> {
-			AttachListPopupView attachListPopupView = builder.asAttachList(projectService.queryAllProjectName(), null, (position, text) -> {
-				contentBarTitle.setText(text);
-			}, R.layout._xpopup_attach_impl_list, R.layout.base_list_item);
-			attachListPopupView.show();
-		});
+		AttachListPopupView attachListPopupView = builder.asAttachList(projectService.queryAllProjectName(), null, (position, text) -> {
+			contentBarTitle.setText(text);
+		}, R.layout._xpopup_attach_impl_list, R.layout.base_list_item);
 
-		viewBinding.topTitleBar.contentBarLeftIcon.setOnClickListener(v -> {
-			AttachListPopupView attachListPopupView = builder.asAttachList(projectService.queryAllProjectName(), null, (position, text) -> {
-				contentBarTitle.setText(text);
-			}, R.layout._xpopup_attach_impl_list, R.layout.base_list_item);
-			attachListPopupView.show();
-		});
+		viewBinding.topTitleBar.setOnClickListener(v -> attachListPopupView.show());
+		viewBinding.topTitleBar.contentBarLeftIcon.setOnClickListener(v -> attachListPopupView.show());
 	}
 
 	private void registerConsumptionPageView() {

@@ -36,6 +36,10 @@ import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.WeekEnum;
 import com.google.common.base.Preconditions;
 import com.kyleduo.switchbutton.SwitchButton;
+import com.lxj.xpopup.XPopup.Builder;
+import com.lxj.xpopup.enums.PopupPosition;
+import com.lxj.xpopup.impl.BottomListPopupView;
+import com.lxj.xpopup.interfaces.OnSelectListener;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -103,6 +107,16 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 
 		//注册更新消费类型
 		registerUpdateConsumerType(viewBinding.consumerType);
+
+		BottomListPopupView bottomListPopupView = new Builder(this).atView(viewBinding.projectName).popupPosition(PopupPosition.Bottom).asBottomList("titel", new String[] {"1", "2"}, new OnSelectListener() {
+			@Override
+			public void onSelect(int position, String text) {
+
+			}
+		});
+		viewBinding.projectName.setOnClickListener(v -> {
+			bottomListPopupView.show();
+		});
 	}
 
 	@Override
