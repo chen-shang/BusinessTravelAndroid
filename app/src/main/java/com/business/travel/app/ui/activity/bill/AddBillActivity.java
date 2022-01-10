@@ -238,8 +238,12 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	private void registerConsumptionType() {
 		viewBinding.keyboard.textViewConsumptionType.setOnClickListener(v -> {
 			consumptionType = changeConsumptionType(consumptionType);
-			((TextView)v).setText(consumptionType.getMsg());
 			refreshConsumptionIcon(consumptionType);
+			if (ConsumptionTypeEnum.SPENDING == consumptionType) {
+				viewBinding.keyboard.textViewConsumptionType.setBackColorRes(R.color.red_2);
+			} else {
+				viewBinding.keyboard.textViewConsumptionType.setBackColorRes(R.color.black_200);
+			}
 		});
 	}
 
