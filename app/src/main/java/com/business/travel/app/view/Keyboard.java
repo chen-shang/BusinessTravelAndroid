@@ -68,11 +68,6 @@ public class Keyboard extends ConstraintLayout {
 	 */
 	private OnClickListener onSaveLongClick;
 
-	/**
-	 * 长按保存时候的动作行为
-	 */
-	private OnClickListener onSwitchClick;
-
 	public Keyboard(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		//键盘布局
@@ -85,8 +80,7 @@ public class Keyboard extends ConstraintLayout {
 		textViewAmount = inflate.findViewById(R.id.TextView_Amount);
 
 		LocalDateTime now = DateTimeUtil.now();
-		datePickerDialog = new DatePickerDialog(context, (view, year, month, dayOfMonth) -> {
-		}, now.getYear(), now.getMonth().getValue() - 1, now.getDayOfMonth());
+		datePickerDialog = new DatePickerDialog(context, (view, year, month, dayOfMonth) -> {}, now.getYear(), now.getMonth().getValue() - 1, now.getDayOfMonth());
 
 		//键盘数字布局
 		SwipeRecyclerView recyclerViewKeyboard = inflate.findViewById(R.id.RecyclerView_Keyboard);
@@ -191,8 +185,8 @@ public class Keyboard extends ConstraintLayout {
 		return this;
 	}
 
-	public Keyboard onSwitchClick(OnClickListener onSaveLongClick) {
-		this.onSwitchClick = onSaveLongClick;
+	public Keyboard onSwitchClick(OnClickListener onSwitchClick) {
+		switchButton.setOnClickListener(onSwitchClick);
 		return this;
 	}
 

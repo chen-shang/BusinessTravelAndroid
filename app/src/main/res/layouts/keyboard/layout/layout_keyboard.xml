@@ -47,7 +47,7 @@
                 android:textColor="@color/white"
                 android:textSize="15sp"
                 android:checked="true"
-                app:kswBackColor="@color/red_2"
+                app:kswBackColor="@color/selector_bottom"
                 app:kswTextAdjust="-2dp"
                 app:kswTextExtra="8dp"
                 app:kswTextOff="收入"

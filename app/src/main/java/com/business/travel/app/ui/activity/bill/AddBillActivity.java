@@ -166,13 +166,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	private void registerKeyboard() {
 		viewBinding.keyboard.onSwitchClick(v -> {
 			//注册支出/收入按钮点击事件
-			if (ConsumptionTypeEnum.SPENDING == viewBinding.keyboard.getConsumptionType()) {
-				viewBinding.keyboard.switchButton.setBackColorRes(R.color.red_2);
-				refreshConsumptionIcon(ConsumptionTypeEnum.SPENDING);
-			} else {
-				viewBinding.keyboard.switchButton.setBackColorRes(R.color.black_200);
-				refreshConsumptionIcon(ConsumptionTypeEnum.INCOME);
-			}
+			refreshConsumptionIcon(viewBinding.keyboard.getConsumptionType());
 		}).onSaveClick(v -> Try.of(() -> {
 			//当键盘保存按钮点击之后
 			if (selectBillId > 0) {
