@@ -17,8 +17,10 @@ import android.widget.TextView;
 import cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ScreenUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Bill;
+import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityDetailBillBinding;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.service.BillService;
@@ -37,9 +39,8 @@ import com.business.travel.vo.enums.WeekEnum;
 import com.google.common.base.Preconditions;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.lxj.xpopup.XPopup.Builder;
-import com.lxj.xpopup.enums.PopupPosition;
+import com.lxj.xpopup.enums.PopupAnimation;
 import com.lxj.xpopup.impl.BottomListPopupView;
-import com.lxj.xpopup.interfaces.OnSelectListener;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -108,15 +109,34 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		//注册更新消费类型
 		registerUpdateConsumerType(viewBinding.consumerType);
 
-		BottomListPopupView bottomListPopupView = new Builder(this).atView(viewBinding.projectName).popupPosition(PopupPosition.Bottom).asBottomList("titel", new String[] {"1", "2"}, new OnSelectListener() {
-			@Override
-			public void onSelect(int position, String text) {
+		//注册更新项目归属事件
+		registerUpdateProjectName();
+	}
 
-			}
+	private void registerUpdateProjectName() {
+		Builder builder = new Builder(this).maxHeight(ScreenUtils.getScreenHeight() / 2).popupAnimation(PopupAnimation.ScrollAlphaFromTop);
+		String[] data = projectService.queryAllProjectName();
+		BottomListPopupView bottomListPopupView = builder.asBottomList("差旅项目", data, null, -1, (position, text) -> {
+			viewBinding.projectName.setText(text);
+
+			Bill record = new Bill();
+			Project project = projectService.queryByName(text);
+			record.setProjectId(project.getId());
+			billService.updateBill(selectBillId, record);
 		});
 		viewBinding.projectName.setOnClickListener(v -> {
-			bottomListPopupView.show();
+			int checkedPosition = getIndexOf(data, viewBinding.projectName.getText().toString());
+			bottomListPopupView.setCheckedPosition(checkedPosition).show();
 		});
+	}
+
+	private int getIndexOf(String[] data, String targetName) {
+		for (int i = 0; i < data.length; i++) {
+			if (targetName.equals(data[i])) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	@Override

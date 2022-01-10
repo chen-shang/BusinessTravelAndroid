@@ -160,6 +160,16 @@ public class ProjectService {
 	}
 
 	/**
+	 * 根据主键id查询
+	 *
+	 * @param name
+	 * @return
+	 */
+	public Project queryByName(String name) {
+		return projectDao.selectByName(name);
+	}
+
+	/**
 	 * 查询最后更新过的项目
 	 *
 	 * @return
