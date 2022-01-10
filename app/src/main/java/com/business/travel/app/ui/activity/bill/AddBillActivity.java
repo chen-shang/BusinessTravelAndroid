@@ -59,10 +59,6 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	 */
 	private final List<ImageIconInfo> memberIconList = new ArrayList<>();
 	private final BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
-	/**
-	 * 当前被选中的是支出还是收入
-	 */
-	private ConsumptionTypeEnum consumptionType = ConsumptionTypeEnum.SPENDING;
 	//各种service
 	private BillService billService;
 	private ProjectService projectService;
@@ -96,8 +92,6 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		registerMemberPageView();
 		//注册键盘点击事件
 		registerKeyboard();
-		//注册支出/收入按钮点击事件
-		registerConsumptionType();
 	}
 
 	@Override
@@ -170,7 +164,16 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	}
 
 	private void registerKeyboard() {
-		viewBinding.keyboard.onSaveClick(v -> Try.of(() -> {
+		viewBinding.keyboard.onSwitchClick(v -> {
+			//注册支出/收入按钮点击事件
+			if (ConsumptionTypeEnum.SPENDING == viewBinding.keyboard.getConsumptionType()) {
+				viewBinding.keyboard.switchButton.setBackColorRes(R.color.red_2);
+				refreshConsumptionIcon(ConsumptionTypeEnum.SPENDING);
+			} else {
+				viewBinding.keyboard.switchButton.setBackColorRes(R.color.black_200);
+				refreshConsumptionIcon(ConsumptionTypeEnum.INCOME);
+			}
+		}).onSaveClick(v -> Try.of(() -> {
 			//当键盘保存按钮点击之后
 			if (selectBillId > 0) {
 				updateBill();
@@ -228,23 +231,11 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		bill.setMemberIds(memberItemList);
 		bill.setCreateTime(DateTimeUtil.timestamp());
 		bill.setModifyTime(DateTimeUtil.timestamp());
-		bill.setConsumptionType(consumptionType.name());
+		bill.setConsumptionType(viewBinding.keyboard.getConsumptionType().name());
 		bill.setRemark(remark);
 		String iconDownloadUrl = consumptionImageIconList.stream().filter(ImageIconInfo::isSelected).findFirst().map(ImageIconInfo::getIconDownloadUrl).orElse("");
 		bill.setIconDownloadUrl(iconDownloadUrl);
 		billService.updateBill(selectBillId, bill);
-	}
-
-	private void registerConsumptionType() {
-		viewBinding.keyboard.textViewConsumptionType.setOnClickListener(v -> {
-			consumptionType = changeConsumptionType(consumptionType);
-			refreshConsumptionIcon(consumptionType);
-			if (ConsumptionTypeEnum.SPENDING == consumptionType) {
-				viewBinding.keyboard.textViewConsumptionType.setBackColorRes(R.color.red_2);
-			} else {
-				viewBinding.keyboard.textViewConsumptionType.setBackColorRes(R.color.black_200);
-			}
-		});
 	}
 
 	private void bind(ImageView imageView, TextView textView, ImageIconInfo imageIconInfo, Class<?> cls) {
@@ -262,7 +253,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 			//如果是编辑按钮
 			if (isEditImageButton) {
 				Intent intent = new Intent(this, cls);
-				intent.putExtra("consumptionType", consumptionType.name());
+				intent.putExtra("consumptionType", viewBinding.keyboard.getConsumptionType().name());
 				this.startActivity(intent);
 				return;
 			}
@@ -298,16 +289,6 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		viewBinding.GridViewPagerMemberIconList.setDataAllCount(memberIconList.size()).show();
 		viewBinding.keyboard.setAmount(null);
 		viewBinding.keyboard.setRemark(null);
-	}
-
-	private ConsumptionTypeEnum changeConsumptionType(ConsumptionTypeEnum consumptionType) {
-		if (ConsumptionTypeEnum.SPENDING == consumptionType) {
-			return ConsumptionTypeEnum.INCOME;
-		} else if (ConsumptionTypeEnum.INCOME == consumptionType) {
-			return ConsumptionTypeEnum.SPENDING;
-		} else {
-			throw new IllegalArgumentException("未知的消费项类型标识");
-		}
 	}
 
 	public void refreshConsumptionIcon(ConsumptionTypeEnum consumptionType) {
@@ -349,7 +330,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		bill.setMemberIds(memberItemList);
 		bill.setCreateTime(DateTimeUtil.timestamp());
 		bill.setModifyTime(DateTimeUtil.timestamp());
-		bill.setConsumptionType(consumptionType.name());
+		bill.setConsumptionType(viewBinding.keyboard.getConsumptionType().name());
 		bill.setRemark(remark);
 		String iconDownloadUrl = consumptionImageIconList.stream().filter(ImageIconInfo::isSelected).findFirst().map(ImageIconInfo::getIconDownloadUrl).orElse("");
 		bill.setIconDownloadUrl(iconDownloadUrl);
@@ -361,10 +342,8 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 			// TODO: 2021/12/30
 			//启动的时候刷新当前页面的标题
 			refreshProjectName();
-			//当前是支出还是收入
-			consumptionType = refreshConsumptionType();
 			//刷新消费项列表
-			refreshConsumptionIcon(consumptionType);
+			refreshConsumptionIcon(viewBinding.keyboard.getConsumptionType());
 			//刷新人员列表
 			refreshMemberIcon();
 		} else {
@@ -375,8 +354,8 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 			});
 
 			//键盘收入支出选择
-			consumptionType = ConsumptionTypeEnum.valueOf(bill.getConsumptionType());
-			viewBinding.keyboard.setConsumptionType(consumptionType.name());
+			ConsumptionTypeEnum consumptionType = ConsumptionTypeEnum.valueOf(bill.getConsumptionType());
+			viewBinding.keyboard.setConsumptionType(consumptionType);
 
 			//金额显示
 			Long amount = bill.getAmount();
@@ -444,17 +423,6 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 			return;
 		}
 		viewBinding.topTitleBar.contentBarTitle.setText(project.getName());
-	}
-
-	private ConsumptionTypeEnum refreshConsumptionType() {
-		String payType = viewBinding.keyboard.getConsumptionType();
-		if (ConsumptionTypeEnum.INCOME.getMsg().equals(payType)) {
-			return ConsumptionTypeEnum.INCOME;
-		} else if (ConsumptionTypeEnum.SPENDING.getMsg().equals(payType)) {
-			return ConsumptionTypeEnum.SPENDING;
-		} else {
-			throw new IllegalArgumentException("未知的消费项类型标识:" + payType);
-		}
 	}
 
 	private void refreshMemberIcon() {

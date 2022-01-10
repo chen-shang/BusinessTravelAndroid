@@ -38,7 +38,7 @@ public class Keyboard extends ConstraintLayout {
 	/**
 	 * 收入支出显示tag
 	 */
-	public final SwitchButton textViewConsumptionType;
+	public final SwitchButton switchButton;
 	/**
 	 * 金额展示
 	 */
@@ -68,6 +68,11 @@ public class Keyboard extends ConstraintLayout {
 	 */
 	private OnClickListener onSaveLongClick;
 
+	/**
+	 * 长按保存时候的动作行为
+	 */
+	private OnClickListener onSwitchClick;
+
 	public Keyboard(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		//键盘布局
@@ -75,7 +80,7 @@ public class Keyboard extends ConstraintLayout {
 		//备注编辑框
 		editTextRemark = inflate.findViewById(R.id.EditText_Remark);
 		//收入支出显示tag
-		textViewConsumptionType = inflate.findViewById(R.id.TextView_PayType);
+		switchButton = inflate.findViewById(R.id.TextView_PayType);
 		//金额展示
 		textViewAmount = inflate.findViewById(R.id.TextView_Amount);
 
@@ -110,19 +115,27 @@ public class Keyboard extends ConstraintLayout {
 	/**
 	 * 消费类型
 	 */
-	public String getConsumptionType() {
-		if (textViewConsumptionType.isChecked()) {
-			return textViewConsumptionType.getTextOn().toString();
+	public ConsumptionTypeEnum getConsumptionType() {
+		if (switchButton.isChecked()) {
+			//选中展示支出
+			return ConsumptionTypeEnum.SPENDING;
 		} else {
-			return textViewConsumptionType.getTextOff().toString();
+			//没有选中展示收入
+			return ConsumptionTypeEnum.INCOME;
 		}
 	}
 
 	/**
 	 * 设置 消费类型
 	 */
-	public Keyboard setConsumptionType(String consumptionType) {
-		textViewConsumptionType.setChecked(ConsumptionTypeEnum.SPENDING.name().equals(consumptionType));
+	public Keyboard setConsumptionType(ConsumptionTypeEnum consumptionType) {
+		if (ConsumptionTypeEnum.SPENDING == consumptionType) {
+			//选中展示支出
+			switchButton.setChecked(true);
+		} else if (ConsumptionTypeEnum.INCOME == consumptionType) {
+			//没有选中展示收入
+			switchButton.setChecked(false);
+		}
 		return this;
 	}
 
@@ -175,6 +188,11 @@ public class Keyboard extends ConstraintLayout {
 
 	public Keyboard onSaveLongClick(OnClickListener onSaveLongClick) {
 		this.onSaveLongClick = onSaveLongClick;
+		return this;
+	}
+
+	public Keyboard onSwitchClick(OnClickListener onSaveLongClick) {
+		this.onSwitchClick = onSaveLongClick;
 		return this;
 	}
 
