@@ -186,7 +186,7 @@ public class Keyboard extends ConstraintLayout {
 	}
 
 	public Keyboard onSwitchClick(OnClickListener onSwitchClick) {
-		switchButton.setOnClickListener(onSwitchClick);
+		switchButton.setOnCheckedChangeListener((buttonView, isChecked) -> onSwitchClick.onClick(buttonView));
 		return this;
 	}
 

@@ -35,6 +35,7 @@ import com.business.travel.utils.SplitUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.WeekEnum;
 import com.google.common.base.Preconditions;
+import com.kyleduo.switchbutton.SwitchButton;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -118,17 +119,13 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		});
 	}
 
-	private void registerUpdateConsumerType(TextView textView) {
-		textView.setOnClickListener(v -> {
+	private void registerUpdateConsumerType(SwitchButton textView) {
+		textView.setOnCheckedChangeListener((buttonView, isChecked) -> {
 			Bill record = new Bill();
-
-			String consumerType = ((TextView)v).getText().toString();
-			if (ConsumptionTypeEnum.SPENDING.getMsg().equals(consumerType)) {
-				((TextView)v).setText(ConsumptionTypeEnum.INCOME.getMsg());
-				record.setConsumptionType(ConsumptionTypeEnum.INCOME.name());
-			} else if (ConsumptionTypeEnum.INCOME.getMsg().equals(consumerType)) {
-				((TextView)v).setText(ConsumptionTypeEnum.SPENDING.getMsg());
+			if (isChecked) {
 				record.setConsumptionType(ConsumptionTypeEnum.SPENDING.name());
+			} else {
+				record.setConsumptionType(ConsumptionTypeEnum.INCOME.name());
 			}
 
 			billService.updateBill(selectBillId, record);
@@ -233,7 +230,7 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		viewBinding.time.setText(date + " " + weekEnum.getMsg());
 		//消费类型
 		String consumptionType = bill.getConsumptionType();
-		viewBinding.consumerType.setText(ConsumptionTypeEnum.valueOf(consumptionType).getMsg());
+		viewBinding.consumerType.setChecked(ConsumptionTypeEnum.SPENDING.name().equals(consumptionType));
 
 		//备注
 		viewBinding.remark.setText(bill.getRemark());

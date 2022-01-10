@@ -36,8 +36,8 @@
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:text="消费内容"/>
+                        android:text="消费内容"
+                        app:drawableEndCompat="@drawable/ic_base_right_arrow"/>
 
                 <!--  下面的项目列表数据   -->
                 <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
@@ -60,8 +60,8 @@
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:text="消费人员"/>
+                        android:text="消费人员"
+                        app:drawableEndCompat="@drawable/ic_base_right_arrow"/>
 
                 <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
                         android:id="@+id/GridViewPager_MemberIconList"
@@ -112,6 +112,7 @@
             <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
+                    android:gravity="center"
                     android:layout_height="wrap_content">
 
                 <LinearLayout
@@ -131,12 +132,20 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content">
 
-                    <TextView
+                    <com.kyleduo.switchbutton.SwitchButton
                             android:id="@+id/consumerType"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="消费类型"
-                            />
+                            android:textColor="@color/white"
+                            android:textSize="15sp"
+                            android:checked="true"
+                            app:kswBackColor="@color/selector_bottom"
+                            app:kswTextAdjust="-2dp"
+                            app:kswTextExtra="8dp"
+                            app:kswTextOff="收入"
+                            app:kswTextOn="支出"
+                            android:layout_marginEnd="20dp"
+                            app:kswThumbColor="@color/white"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -154,7 +163,7 @@
 
                     <TextView
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:gravity="left"
                             android:text="消费金额"/>
                 </LinearLayout>
@@ -217,6 +226,7 @@
 
             <LinearLayout
                     android:orientation="horizontal"
+                    android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
