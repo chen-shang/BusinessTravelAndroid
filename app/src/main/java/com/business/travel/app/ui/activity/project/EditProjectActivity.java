@@ -3,6 +3,7 @@ package com.business.travel.app.ui.activity.project;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 
 import android.app.DatePickerDialog;
 import android.graphics.drawable.Drawable;
@@ -18,6 +19,7 @@ import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.base.ColorStatusBarActivity;
 import com.business.travel.app.utils.Try;
 import com.business.travel.utils.DateTimeUtil;
+import com.google.common.base.Preconditions;
 import com.lxj.xpopup.XPopup.Builder;
 import com.lxj.xpopup.impl.AttachListPopupView;
 import org.apache.commons.lang3.StringUtils;
@@ -52,8 +54,10 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 		//从别的页面传递过来的项目id
 		initProject();
 		//注册项目开始结束时间点击事件
+		//开始时间点击
+		viewBinding.projectStartTime.setOnClickListener(v -> whenChoseSelectTime((TextView)v));
+		//结束时间点击
 		registerDatePicker(viewBinding.projectEndTime);
-		registerDatePicker(viewBinding.projectStartTime);
 		//注册右上角对号保存按钮点击事件
 		registerSaveButton(viewBinding.topTitleBar.contentBarRightIcon);
 	}
@@ -71,12 +75,18 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 			//开始时间
 			String projectStartTime = viewBinding.projectStartTime.getText().toString();
 			Long startTime = getTime(projectStartTime);
+			//默认今天
+			startTime = Optional.ofNullable(startTime).orElse(DateTimeUtil.timestamp(LocalDate.now()));
 			project.setStartTime(startTime);
 
 			//结束时间
 			String projectEndTime = viewBinding.projectEndTime.getText().toString();
 			Long endTime = getTime(projectEndTime);
 			project.setEndTime(endTime);
+
+			if (endTime != null && !DateTimeTagEnum.TobeDetermined.getCode().equals(endTime)) {
+				Preconditions.checkArgument(startTime < endTime, "项目结束时间不能小于开始时间");
+			}
 
 			String remark = viewBinding.projectRemark.getText().toString();
 			project.setRemark(remark);
@@ -99,6 +109,11 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 		if (DateTimeTagEnum.TobeDetermined.getMsg().equals(startTime)) {
 			return DateTimeTagEnum.TobeDetermined.getCode();
 		}
+
+		if ("今天".equals(startTime)) {
+			return DateTimeUtil.timestamp(LocalDate.now());
+		}
+
 		return DateTimeUtil.timestamp(startTime, "yyyy-MM-dd");
 	}
 
@@ -109,6 +124,11 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 		if (DateTimeTagEnum.TobeDetermined.getCode().equals(time)) {
 			return DateTimeTagEnum.TobeDetermined.getMsg();
 		}
+
+		if (DateTimeUtil.toLocalDateTime(time).toLocalDate().equals(LocalDate.now())) {
+			return "今天";
+		}
+
 		return DateTimeUtil.format(time, "yyyy-MM-dd");
 	}
 
@@ -127,7 +147,14 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 			}
 		});
 		//点击的时候弹出待定、时间选框
-		textview.setOnClickListener(v -> attachListPopupView.show());
+		textview.setOnClickListener(v -> {
+			String s = ((TextView)v).getText().toString();
+			if (StringUtils.isNotBlank(s)) {
+				attachListPopupView.show();
+			} else {
+				whenChoseSelectTime((TextView)v);
+			}
+		});
 	}
 
 	private void whenChoseSelectTime(TextView textview) {
@@ -142,17 +169,13 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 	}
 
 	private void updatePickDialogDate(String nowDate) {
-		if (StringUtils.isBlank(nowDate)) {
-			return;
+		Long time = getTime(nowDate);
+		LocalDateTime localDateTime;
+		if (time == null || DateTimeTagEnum.TobeDetermined.getCode().equals(time)) {
+			localDateTime = LocalDateTime.now();
+		} else {
+			localDateTime = DateTimeUtil.toLocalDateTime(time);
 		}
-
-		if (DateTimeTagEnum.TobeDetermined.getMsg().equals(nowDate)) {
-			final LocalDateTime localDateTime = DateTimeUtil.now();
-			datePickerDialog.updateDate(localDateTime.getYear(), localDateTime.getMonth().ordinal(), localDateTime.getDayOfMonth());
-			return;
-		}
-
-		final LocalDateTime localDateTime = DateTimeUtil.parseLocalDateTime(nowDate, "yyyy-MM-dd");
 		datePickerDialog.updateDate(localDateTime.getYear(), localDateTime.getMonth().ordinal(), localDateTime.getDayOfMonth());
 	}
 
@@ -165,7 +188,7 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
 	}
 
 	private void showSelectProjectInfo(Long projectId) {
-		if (projectId == null || projectId < 0) {
+		if (projectId < 0) {
 			return;
 		}
 

@@ -8,6 +8,7 @@ import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import com.business.travel.app.dal.entity.base.BaseEntity;
+import com.business.travel.app.enums.DateTimeTagEnum;
 import com.business.travel.utils.DateTimeUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -76,7 +77,7 @@ public class Project extends BaseEntity {
 		String startTime = Optional.ofNullable(this.getStartTime()).map(DateTimeUtil::toDate).map(datetime -> DateTimeUtil.format(datetime, "MM月dd日")).orElse("");
 
 		//结束时间
-		String endTime = Optional.ofNullable(this.getEndTime()).map(DateTimeUtil::toDate).map(datetime -> DateTimeUtil.format(datetime, "MM月dd日")).orElse("");
+		String endTime = Optional.ofNullable(this.getEndTime()).filter(time -> !DateTimeTagEnum.TobeDetermined.getCode().equals(time)).map(DateTimeUtil::toDate).map(datetime -> DateTimeUtil.format(datetime, "MM月dd日")).orElse("");
 
 		//拼接
 		if (StringUtils.isBlank(endTime)) {

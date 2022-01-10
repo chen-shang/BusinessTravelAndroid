@@ -74,8 +74,8 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
 		super.onResume();
 		// 每次进来的时候,都要刷新一下项目列表
 		Try.of(() -> {
-			refreshProjectList();
 			refreshProjectHeader();
+			refreshProjectList();
 		});
 	}
 

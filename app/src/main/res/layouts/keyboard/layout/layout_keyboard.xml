@@ -12,7 +12,7 @@
             android:focusableInTouchMode="true"
             android:layout_width="match_parent"
             android:gravity="center"
-            android:layout_height="@dimen/top_height">
+            android:layout_height="45dp">
 
         <EditText
                 android:id="@+id/EditText_Remark"
