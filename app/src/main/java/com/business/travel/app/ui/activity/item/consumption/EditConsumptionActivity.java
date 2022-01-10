@@ -23,7 +23,7 @@ import com.business.travel.app.ui.base.BaseRecyclerViewOnItemMoveListener;
 import com.business.travel.app.ui.base.ColorStatusBarActivity;
 import com.business.travel.app.utils.ImageIconUtil;
 import com.business.travel.app.utils.Try;
-import com.business.travel.app.view.EmptyHeaderView;
+import com.business.travel.app.view.header.EmptyHeaderView;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.ItemTypeEnum;
 import com.yanzhenjie.recyclerview.SwipeMenuItem;

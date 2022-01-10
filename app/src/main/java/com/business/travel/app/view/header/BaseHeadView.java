@@ -1,4 +1,4 @@
-package com.business.travel.app.view;
+package com.business.travel.app.view.header;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,9 +6,9 @@ import java.util.Map;
 import android.view.View;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 
-public class HeadView {
+public abstract class BaseHeadView {
 	//判断当前视图是否已经添加过了
-	private static final Map<SwipeRecyclerView, HeadView> map = new HashMap<>();
+	private static final Map<SwipeRecyclerView, BaseHeadView> map = new HashMap<>();
 	//账单页面顶部视图
 	protected View headView;
 

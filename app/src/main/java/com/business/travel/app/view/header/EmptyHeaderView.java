@@ -1,11 +1,12 @@
-package com.business.travel.app.view;
+package com.business.travel.app.view.header;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup.LayoutParams;
 import com.business.travel.app.R;
+import com.business.travel.app.view.header.BaseHeadView;
 
-public class EmptyHeaderView extends HeadView {
+public class EmptyHeaderView extends BaseHeadView {
 
 	@SuppressLint("InflateParams")
 	public EmptyHeaderView(LayoutInflater layoutInflater) {

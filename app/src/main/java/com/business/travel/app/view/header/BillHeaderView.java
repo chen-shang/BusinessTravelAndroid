@@ -1,4 +1,4 @@
-package com.business.travel.app.view;
+package com.business.travel.app.view.header;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup.LayoutParams;
@@ -8,7 +8,7 @@ import com.business.travel.app.R;
 /**
  * 账单顶部信息
  */
-public class BillHeaderView extends HeadView {
+public class BillHeaderView extends BaseHeadView {
 	public TextView uIBillFragmentTextViewIncome;
 	public TextView uIBillFragmentTextViewPay;
 	public TextView startTime;

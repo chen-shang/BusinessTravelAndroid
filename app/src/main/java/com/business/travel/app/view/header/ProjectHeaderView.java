@@ -1,15 +1,16 @@
-package com.business.travel.app.view;
+package com.business.travel.app.view.header;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.TextView;
 import com.business.travel.app.R;
+import com.business.travel.app.view.header.BaseHeadView;
 
 /**
  * 项目顶部信息
  */
-public class ProjectHeaderView extends HeadView {
+public class ProjectHeaderView extends BaseHeadView {
 	public TextView projectIncome;
 	public TextView projectPay;
 	public TextView projectCount;
