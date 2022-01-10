@@ -22,6 +22,9 @@ import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityAddBillBinding;
 import com.business.travel.app.enums.ItemIconEnum;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
+import com.business.travel.app.enums.OperateTypeEnum;
+import com.business.travel.app.model.BillAddModel;
+import com.business.travel.app.model.BillEditeModel;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.ConsumptionService;
@@ -37,6 +40,7 @@ import com.business.travel.app.utils.LogToast;
 import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.app.utils.Try;
 import com.business.travel.utils.DateTimeUtil;
+import com.business.travel.utils.JacksonUtil;
 import com.business.travel.utils.SplitUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.google.common.base.Preconditions;
@@ -67,6 +71,19 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	private ConsumptionService consumptionService;
 
 	/**
+	 * 新建的时候可以指定日期、类型
+	 */
+	private BillAddModel billAddModel;
+	/**
+	 * 更新的时候只需要指定一个账单id即可
+	 */
+	private BillEditeModel billEditeModel;
+	/**
+	 * 当前页面是新增还是更新
+	 */
+	private OperateTypeEnum operateTypeEnum = OperateTypeEnum.ADD;
+
+	/**
 	 * 如果是编辑
 	 */
 	private Long selectBillId;
@@ -80,6 +97,22 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 
 		//其他页面传递进来的billId,代表编辑
 		selectBillId = this.getIntent().getLongExtra("selectBillId", -1);
+
+		//当前页面的操作模式,由跳转过来的页面控制
+		String operateType = this.getIntent().getStringExtra(AddBillActivity.IntentKey.operateType);
+		if (StringUtils.isNotBlank(operateType)) {
+			operateTypeEnum = OperateTypeEnum.valueOf(operateType);
+		}
+
+		String billEdite = this.getIntent().getStringExtra(AddBillActivity.IntentKey.billEditeModel);
+		if (StringUtils.isNotBlank(billEdite)) {
+			billEditeModel = JacksonUtil.toBean(billEdite, BillEditeModel.class);
+		}
+
+		String billAdd = this.getIntent().getStringExtra(AddBillActivity.IntentKey.billAddModel);
+		if (StringUtils.isNotBlank(billAdd)) {
+			billAddModel = JacksonUtil.toBean(billAdd, BillAddModel.class);
+		}
 	}
 
 	@Override
@@ -324,7 +357,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	}
 
 	private void refreshData(Long selectBillId) {
-		if (selectBillId < 0) {
+		if (operateTypeEnum == OperateTypeEnum.ADD) {
 			//启动的时候刷新当前页面的标题
 			refreshProjectName();
 			//刷新消费项列表
@@ -332,7 +365,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 			//刷新人员列表
 			refreshMemberIcon(null);
 		} else {
-			Bill bill = billService.queryBillById(selectBillId);
+			Bill bill = billService.queryBillById(billEditeModel.getBillId());
 			Project project = projectService.queryById(bill.getProjectId());
 			Optional.of(project).map(Project::getName).ifPresent(name -> {
 				viewBinding.topTitleBar.contentBarTitle.setText(name);
@@ -412,4 +445,9 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		viewBinding.topTitleBar.contentBarTitle.setText(project.getName());
 	}
 
+	public static final class IntentKey {
+		public static final String billEditeModel = "billEditeModel";
+		public static final String billAddModel = "billAddModel";
+		public static final String operateType = "operateType";
+	}
 }
