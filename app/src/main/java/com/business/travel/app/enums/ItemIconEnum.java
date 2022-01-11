@@ -10,7 +10,7 @@ import com.business.travel.app.R;
  * 本地图标映射
  */
 public enum ItemIconEnum {
-	ItemIconEdit("https://gitee.com/chen-shang/business-travel-resource/raw/master/基础/设置.svg", R.drawable.ic_base_setting, "编辑"),
+	ItemIconEdit("https://gitee.com/api/v5/repos/chen-shang/business-travel-resource/contents/icon/COMMON/设置.svg", R.drawable.ic_base_setting, "编辑"),
 	ItemIconMe("https://gitee.com/api/v5/repos/chen-shang/business-travel-resource/contents/icon/COMMON/我.svg", R.drawable.ic_me, "我"),
 	;
 
