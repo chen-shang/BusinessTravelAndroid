@@ -154,6 +154,8 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		Builder builder = new Builder(this)
 				// 依附于所点击的View，内部会自动判断在上方或者下方显示
 				.atView(viewBinding.topTitleBar)
+				//最大高度
+				.maxHeight(ScreenUtils.getScreenHeight() / 3)
 				//不变暗
 				.hasShadowBg(false)
 				// 宽度
