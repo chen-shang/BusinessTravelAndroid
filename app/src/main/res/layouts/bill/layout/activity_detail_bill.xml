@@ -133,20 +133,12 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content">
 
-                    <com.kyleduo.switchbutton.SwitchButton
+                    <TextView
                             android:id="@+id/consumerType"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/white"
-                            android:textSize="15sp"
-                            android:checked="true"
-                            app:kswBackColor="@color/selector_bottom"
-                            app:kswTextAdjust="-2dp"
-                            app:kswTextExtra="8dp"
-                            app:kswTextOff="收入"
-                            app:kswTextOn="支出"
-                            android:layout_marginEnd="20dp"
-                            app:kswThumbColor="@color/white"/>
+                            android:text="消费类型"
+                            />
                 </LinearLayout>
             </LinearLayout>
 

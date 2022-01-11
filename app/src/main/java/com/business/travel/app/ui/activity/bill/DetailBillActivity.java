@@ -37,7 +37,6 @@ import com.business.travel.utils.SplitUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.WeekEnum;
 import com.google.common.base.Preconditions;
-import com.kyleduo.switchbutton.SwitchButton;
 import com.lxj.xpopup.XPopup.Builder;
 import com.lxj.xpopup.enums.PopupAnimation;
 import com.lxj.xpopup.impl.BottomListPopupView;
@@ -106,9 +105,6 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		//注册更新消费金额事件
 		registerUpdateAmount(viewBinding.amount);
 
-		//注册更新消费类型
-		registerUpdateConsumerType(viewBinding.consumerType);
-
 		//注册更新项目归属事件
 		registerUpdateProjectName();
 	}
@@ -150,19 +146,6 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 			//业务逻辑
 			showBillDetail(bill);
 			//结果处理
-		});
-	}
-
-	private void registerUpdateConsumerType(SwitchButton textView) {
-		textView.setOnCheckedChangeListener((buttonView, isChecked) -> {
-			Bill record = new Bill();
-			if (isChecked) {
-				record.setConsumptionType(ConsumptionTypeEnum.SPENDING.name());
-			} else {
-				record.setConsumptionType(ConsumptionTypeEnum.INCOME.name());
-			}
-
-			billService.updateBill(selectBillId, record);
 		});
 	}
 
@@ -264,7 +247,7 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		viewBinding.time.setText(date + " " + weekEnum.getMsg());
 		//消费类型
 		String consumptionType = bill.getConsumptionType();
-		viewBinding.consumerType.setChecked(ConsumptionTypeEnum.SPENDING.name().equals(consumptionType));
+		viewBinding.consumerType.setText(ConsumptionTypeEnum.valueOf(consumptionType).getMsg());
 
 		//备注
 		viewBinding.remark.setText(bill.getRemark());
