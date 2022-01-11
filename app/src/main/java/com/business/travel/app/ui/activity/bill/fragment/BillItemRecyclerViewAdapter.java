@@ -33,6 +33,7 @@ import com.business.travel.app.ui.activity.bill.fragment.BillRecyclerViewAdapter
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.ImageLoadUtil;
+import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.utils.JacksonUtil;
 import com.business.travel.utils.SplitUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
@@ -87,9 +88,13 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 		ImageLoadUtil.loadImageToView(bill.getIconDownloadUrl(), holder.iconImageView);
 
 		String name = bill.getConsumptionIds();
-		if (StringUtils.isNotBlank(name)) {
-			List<Long> ids = SplitUtil.trimToLongList(name);
-			List<ImageIconInfo> consumptions = consumptionService.queryByIds(ids);
+		String remark = bill.getRemark();
+		if (StringUtils.isNotBlank(remark)) {
+			//备注不为空,消费项就显示备注
+			holder.consumptionItemTextView.setText(remark);
+			//否则就展示消费项的名称
+		} else if (StringUtils.isNotBlank(name)) {
+			List<ImageIconInfo> consumptions = consumptionService.queryByIds(SplitUtil.trimToLongList(name));
 			String names = consumptions.stream().map(ImageIconInfo::getName).collect(Collectors.joining(","));
 			holder.consumptionItemTextView.setText(names);
 		}
@@ -98,9 +103,9 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 		String type = bill.getConsumptionType();
 		String amountText = "";
 		if (ConsumptionTypeEnum.INCOME.name().equals(type)) {
-			amountText = "" + (double)amount / 100;
+			amountText = MoneyUtil.toYuanString(amount);
 		} else if (ConsumptionTypeEnum.SPENDING.name().equals(type)) {
-			amountText = "-" + (double)amount / 100;
+			amountText = "-" + MoneyUtil.toYuanString(amount);
 		}
 		holder.amountTextView.setText(amountText);
 
