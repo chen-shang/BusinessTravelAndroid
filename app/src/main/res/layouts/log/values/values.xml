@@ -3,24 +3,14 @@
 
     <!--  记录版本之间的功能变更,不宜太多,测试专用  -->
     <string-array name="change_log">
-        <item>2.6</item>
-        <item>1. 详情添加差旅项目</item>
-        <item>2. 页面底色变更</item>
-        <item>3. 部分页面边距变更</item>
-        <item>4. 去掉test activity</item>
-        <item>5. 超出页面的可以上下滑动</item>
+        <item>2022.01.11版</item>
+        <item>1. 当某账单有备注时，账单文字为备注，参考鲨鱼记账（图标是有限的，但消费种类是无限的，客户可以选择近似图标，账单文字还以客户备注为准）</item>
+        <item>2. 卡片合为一个，参考“一木记账”</item>
+        <item>3. 替换图标“编辑”</item>
+        <item>4. 替换图标“项目名称”</item>
 
-        <item>2.5</item>
-        <item>1. 人员图标自适应</item>
-        <item>2. 消费图标4行</item>
-        <item>3. 隐藏测试页面</item>
-
-        <item>2.4</item>
-        <item>1. 图标颜色优化</item>
-        <item>2. 图标站位符优化</item>
-        <item>3. 没有网络的时候图标点击兜底逻辑</item>
-        <item>4. 图标文件缓存</item>
-        <item>5. 图标文件缓存时间可配置</item>
-        
+        <item>2022.01.10版</item>
+        <item>1. 略微减小备注栏高度</item>
+        <item>2. 设置支出、收入切换按钮，置于备注栏右侧，详见产品原型“支出1”和“收入”界面</item>
     </string-array>
 </resources>
