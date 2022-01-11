@@ -80,7 +80,7 @@ public class EditMemberActivity extends ColorStatusBarActivity<ActivityEditMembe
 		//长按移动排序
 		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.setLongPressDragEnabled(true);
 		viewBinding.UIAssociateSwipeRecyclerViewConsumerItem.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(imageIconInfoList, editItemRecyclerViewAdapter).onItemMove((itemList, fromPosition, toPosition) -> {
-			IntStream.range(0, itemList.size()).forEachOrdered(sortId -> memberService.updateMemberSort(itemList.get(sortId).getId(), (long)sortId));
+			IntStream.range(0, Integer.max(fromPosition, toPosition)).forEachOrdered(sortId -> memberService.updateMemberSort(itemList.get(sortId).getId(), (long)sortId));
 		}));
 
 		//添加分隔线

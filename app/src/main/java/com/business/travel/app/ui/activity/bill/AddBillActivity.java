@@ -374,7 +374,8 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 
 	private void refreshBillAdd(BillAddModel billAddModel) {
 		//启动的时候刷新当前页面的标题
-		viewBinding.topTitleBar.contentBarTitle.setText(billAddModel.getProjectName());
+		Optional.ofNullable(billAddModel).map(BillAddModel::getProjectName).ifPresent(name -> viewBinding.topTitleBar.contentBarTitle.setText(name));
+
 		viewBinding.keyboard.setDate(billAddModel.getConsumeDate());
 		viewBinding.keyboard.setConsumptionType(ConsumptionTypeEnum.valueOf(billAddModel.getConsumptionType()));
 		//刷新消费项列表
@@ -386,9 +387,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 	private void refreshBillEdite(BillEditeModel billEditeModel) {
 		Bill bill = billService.queryBillById(billEditeModel.getBillId());
 		Project project = projectService.queryById(bill.getProjectId());
-		Optional.of(project).map(Project::getName).ifPresent(name -> {
-			viewBinding.topTitleBar.contentBarTitle.setText(name);
-		});
+		Optional.ofNullable(project).map(Project::getName).ifPresent(name -> viewBinding.topTitleBar.contentBarTitle.setText(name));
 
 		//键盘收入支出选择
 		ConsumptionTypeEnum consumptionType = ConsumptionTypeEnum.valueOf(bill.getConsumptionType());
@@ -429,7 +428,6 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		editImageIcon.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
 		memberIconList.add(editImageIcon);
 		viewBinding.GridViewPagerMemberIconList.setDataAllCount(memberIconList.size()).setRowCount(memberIconList.size() > 5 ? 2 : 1).show();
-
 	}
 
 	private void refreshConsumptionIcon(ConsumptionTypeEnum consumptionType, List<Long> selectedConsumptionIconList) {

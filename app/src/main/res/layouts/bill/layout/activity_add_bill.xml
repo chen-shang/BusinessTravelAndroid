@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/corners_shape_change"
             app:content_bar_left_icon="@drawable/ic_base_sort"
-            app:content_bar_title_hint="项目名称"
+            app:content_bar_title_hint="请输入项目名称"
             />
 
     <LinearLayout
