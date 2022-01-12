@@ -102,8 +102,6 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	@Override
 	public void onResume() {
 		super.onResume();
-		floatingActionButton.setImageResource(R.drawable.ic_base_bill_add);
-
 		int lastFragment = masterActivity.getLastFragment();
 		int currentFragment = masterActivity.getCurrentFragment();
 		//旋转上升动画显示中间的加号
@@ -126,8 +124,6 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		} else {
 			AnimalUtil.reset(floatingActionButton, Orientation.RIGHT_LEFT);
 		}
-
-		floatingActionButton.setImageResource(R.drawable.ic_base_bill_add_gray);
 	}
 
 	/**
