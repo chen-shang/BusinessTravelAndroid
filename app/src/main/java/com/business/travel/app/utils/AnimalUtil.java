@@ -51,7 +51,11 @@ public class AnimalUtil {
 		animatorSet.addListener(new AnimatorListenerAdapter() {
 			@Override
 			public void onAnimationStart(Animator animation) {
-				super.onAnimationResume(animation);
+				floatingActionButton.setImageResource(R.drawable.ic_base_bill_add);
+			}
+
+			@Override
+			public void onAnimationEnd(Animator animation) {
 				floatingActionButton.setImageResource(R.drawable.ic_base_bill_add);
 			}
 		});
@@ -79,7 +83,6 @@ public class AnimalUtil {
 		animatorSet.addListener(new AnimatorListenerAdapter() {
 			@Override
 			public void onAnimationEnd(Animator animation) {
-				super.onAnimationEnd(animation);
 				floatingActionButton.setImageResource(R.drawable.ic_base_bill_add_gray);
 			}
 		});
