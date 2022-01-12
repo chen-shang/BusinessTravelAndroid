@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import android.annotation.SuppressLint;
+import android.graphics.drawable.GradientDrawable.Orientation;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -99,7 +100,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	public void onResume() {
 		super.onResume();
 		//旋转上升动画显示中间的加号
-		AnimalUtil.show(floatingActionButton);
+		AnimalUtil.show(floatingActionButton, Orientation.LEFT_RIGHT);
 		//刷新当前项目的账单数据
 		refreshBillList(selectedProjectId);
 	}
@@ -107,7 +108,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	@Override
 	public void onPause() {
 		super.onPause();
-		AnimalUtil.reset(floatingActionButton);
+		AnimalUtil.reset(floatingActionButton, Orientation.LEFT_RIGHT);
 	}
 
 	/**
