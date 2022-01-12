@@ -21,8 +21,8 @@ public class AnimalUtil {
 	public static void show(View view, Orientation orientation) {
 		AnimatorSet animatorSet = new AnimatorSet();
 		ObjectAnimator rotation = genRotation(view, orientation);
-		ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.1f);
-		ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.1f);
+		ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 0.8f, 1.1f);
+		ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, "scaleY", 0.8f, 1.1f);
 		ObjectAnimator translationY = ObjectAnimator.ofFloat(view, "translationY", 0, -view.getHeight() * 0.45F);
 		//动画时间
 		animatorSet.setDuration(duration);
@@ -42,8 +42,8 @@ public class AnimalUtil {
 	public static void reset(View view, Orientation orientation) {
 		AnimatorSet animatorSet = new AnimatorSet();
 		ObjectAnimator rotation = genRotation(view, orientation);
-		ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 1.1f, 1f);
-		ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, "scaleY", 1.1f, 1f);
+		ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 1.1f, 0.8f);
+		ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, "scaleY", 1.1f, 0.8f);
 		ObjectAnimator translationY = ObjectAnimator.ofFloat(view, "translationY", -view.getHeight() * 0.45F, 0);
 
 		//动画时间

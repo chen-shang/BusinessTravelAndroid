@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable.Orientation;
 import android.os.Bundle;
 import android.view.MenuItem;
 import androidx.fragment.app.Fragment;
@@ -24,6 +25,7 @@ import com.business.travel.app.ui.activity.bill.AddBillActivity;
 import com.business.travel.app.ui.activity.bill.AddBillActivity.IntentKey;
 import com.business.travel.app.ui.activity.bill.fragment.BillFragment;
 import com.business.travel.app.ui.base.BaseActivity;
+import com.business.travel.app.utils.AnimalUtil;
 import com.business.travel.app.utils.LogToast;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.JacksonUtil;
@@ -120,6 +122,12 @@ public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 			public void onPageSelected(int position) {
 				super.onPageSelected(position);
 				viewBinding.UIMasterActivityBottomNavigationView.getMenu().getItem(position).setChecked(true);
+				if (position == 1) {
+					viewBinding.UIMasterActivityFloatingActionButton.setImageResource(R.drawable.ic_base_bill_add);
+				} else {
+					viewBinding.UIMasterActivityFloatingActionButton.setImageResource(R.drawable.ic_base_bill_add_gray);
+				}
+
 				lastFragment = currentFragment;
 				currentFragment = position;
 			}
