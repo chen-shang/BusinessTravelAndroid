@@ -29,6 +29,7 @@ import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.JacksonUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -44,6 +45,10 @@ public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 	 * 上一次有返回动作的时间
 	 */
 	private long lastBackPressedTime;
+	@Getter
+	private int lastFragment = -1;
+	@Getter
+	private int currentFragment = 0;
 
 	@Override
 	public void onBackPressed() {
@@ -115,6 +120,8 @@ public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 			public void onPageSelected(int position) {
 				super.onPageSelected(position);
 				viewBinding.UIMasterActivityBottomNavigationView.getMenu().getItem(position).setChecked(true);
+				lastFragment = currentFragment;
+				currentFragment = position;
 			}
 		});
 	}

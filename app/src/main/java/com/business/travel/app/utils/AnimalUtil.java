@@ -10,7 +10,7 @@ import android.view.animation.DecelerateInterpolator;
  * @author chenshang
  */
 public class AnimalUtil {
-	private static final float v = 90.0F;
+	private static final float v = 180.0F;
 	private static final long duration = 800;
 
 	/**
@@ -24,10 +24,10 @@ public class AnimalUtil {
 		if (Orientation.RIGHT_LEFT == orientation) {
 			rotation = ObjectAnimator.ofFloat(view, "rotation", 0.0F, v);
 		} else if (Orientation.LEFT_RIGHT == orientation) {
-			rotation = ObjectAnimator.ofFloat(view, "rotation", 0.0F, v);
+			rotation = ObjectAnimator.ofFloat(view, "rotation", v, 0.0F);
 		}
-		ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.2f);
-		ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.2f);
+		ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.1f);
+		ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.1f);
 		ObjectAnimator translationY = ObjectAnimator.ofFloat(view, "translationY", 0, -view.getHeight() * 0.45F);
 		//动画时间
 		animatorSet.setDuration(duration);
@@ -50,10 +50,10 @@ public class AnimalUtil {
 		if (Orientation.RIGHT_LEFT == orientation) {
 			rotation = ObjectAnimator.ofFloat(view, "rotation", 0.0F, v);
 		} else if (Orientation.LEFT_RIGHT == orientation) {
-			rotation = ObjectAnimator.ofFloat(view, "rotation", 0.0F, v);
+			rotation = ObjectAnimator.ofFloat(view, "rotation", v, 0.0F);
 		}
-		ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 1.2f, 1f);
-		ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, "scaleY", 1.2f, 1f);
+		ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 1.1f, 1f);
+		ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, "scaleY", 1.1f, 1f);
 		ObjectAnimator translationY = ObjectAnimator.ofFloat(view, "translationY", -view.getHeight() * 0.45F, 0);
 
 		//动画时间

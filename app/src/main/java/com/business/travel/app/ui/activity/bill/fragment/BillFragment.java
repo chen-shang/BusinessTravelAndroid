@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.business.travel.app.R;
@@ -25,6 +26,7 @@ import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.utils.AnimalUtil;
 import com.business.travel.app.utils.DurationUtil;
+import com.business.travel.app.utils.LogToast;
 import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.app.view.header.BillHeaderView;
 import com.business.travel.app.view.header.EmptyHeaderView;
@@ -99,8 +101,15 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	@Override
 	public void onResume() {
 		super.onResume();
+		int lastFragment = ((MasterActivity)ActivityUtils.getTopActivity()).getLastFragment();
+		int currentFragment = ((MasterActivity)ActivityUtils.getTopActivity()).getCurrentFragment();
+		LogToast.infoShow("lastFragment:" + lastFragment + "->currentFragment:" + currentFragment);
 		//旋转上升动画显示中间的加号
-		AnimalUtil.show(floatingActionButton, Orientation.LEFT_RIGHT);
+		if (lastFragment < currentFragment) {
+			AnimalUtil.show(floatingActionButton, Orientation.LEFT_RIGHT);
+		} else {
+			AnimalUtil.show(floatingActionButton, Orientation.RIGHT_LEFT);
+		}
 		//刷新当前项目的账单数据
 		refreshBillList(selectedProjectId);
 	}
@@ -108,7 +117,14 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	@Override
 	public void onPause() {
 		super.onPause();
-		AnimalUtil.reset(floatingActionButton, Orientation.LEFT_RIGHT);
+		int lastFragment = ((MasterActivity)ActivityUtils.getTopActivity()).getLastFragment();
+		int currentFragment = ((MasterActivity)ActivityUtils.getTopActivity()).getCurrentFragment();
+		LogToast.infoShow("lastFragment:" + lastFragment + "->currentFragment:" + currentFragment);
+		if (lastFragment < currentFragment) {
+			AnimalUtil.reset(floatingActionButton, Orientation.LEFT_RIGHT);
+		} else {
+			AnimalUtil.reset(floatingActionButton, Orientation.RIGHT_LEFT);
+		}
 	}
 
 	/**
