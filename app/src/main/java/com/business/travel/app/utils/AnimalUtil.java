@@ -20,12 +20,7 @@ public class AnimalUtil {
 	 */
 	public static void show(View view, Orientation orientation) {
 		AnimatorSet animatorSet = new AnimatorSet();
-		ObjectAnimator rotation = null;
-		if (Orientation.RIGHT_LEFT == orientation) {
-			rotation = ObjectAnimator.ofFloat(view, "rotation", 0.0F, v);
-		} else if (Orientation.LEFT_RIGHT == orientation) {
-			rotation = ObjectAnimator.ofFloat(view, "rotation", v, 0.0F);
-		}
+		ObjectAnimator rotation = genRotation(view, orientation);
 		ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.1f);
 		ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.1f);
 		ObjectAnimator translationY = ObjectAnimator.ofFloat(view, "translationY", 0, -view.getHeight() * 0.45F);
@@ -46,12 +41,7 @@ public class AnimalUtil {
 	 */
 	public static void reset(View view, Orientation orientation) {
 		AnimatorSet animatorSet = new AnimatorSet();
-		ObjectAnimator rotation = null;
-		if (Orientation.RIGHT_LEFT == orientation) {
-			rotation = ObjectAnimator.ofFloat(view, "rotation", 0.0F, v);
-		} else if (Orientation.LEFT_RIGHT == orientation) {
-			rotation = ObjectAnimator.ofFloat(view, "rotation", v, 0.0F);
-		}
+		ObjectAnimator rotation = genRotation(view, orientation);
 		ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 1.1f, 1f);
 		ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, "scaleY", 1.1f, 1f);
 		ObjectAnimator translationY = ObjectAnimator.ofFloat(view, "translationY", -view.getHeight() * 0.45F, 0);
@@ -64,5 +54,14 @@ public class AnimalUtil {
 		animatorSet.play(rotation).with(scaleX).with(scaleY).with(translationY);
 		//启动动画
 		animatorSet.start();
+	}
+
+	private static ObjectAnimator genRotation(View view, Orientation orientation) {
+		if (Orientation.RIGHT_LEFT == orientation) {
+			return ObjectAnimator.ofFloat(view, "rotation", 0.0F, v);
+		} else if (Orientation.LEFT_RIGHT == orientation) {
+			return ObjectAnimator.ofFloat(view, "rotation", v, 0.0F);
+		}
+		return ObjectAnimator.ofFloat(view, "rotation", 0.0F, v);
 	}
 }
