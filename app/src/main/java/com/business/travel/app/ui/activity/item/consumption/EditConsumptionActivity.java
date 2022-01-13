@@ -81,19 +81,26 @@ public class EditConsumptionActivity extends ColorStatusBarActivity<ActivityEdit
 		Try.of(() -> refreshConsumptionItem(viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem, consumptionType));
 	}
 
+	/**
+	 * 从其他页面传递过来的参数
+	 */
 	private void registerConsumptionType() {
-		String consumptionType = getIntent().getStringExtra("consumptionType");
+		String consumptionType = getIntent().getStringExtra(IntentKey.CONSUMPTION_TYPE);
 		if (StringUtils.isBlank(consumptionType)) {
 			return;
 		}
 		this.consumptionType = ConsumptionTypeEnum.valueOf(consumptionType);
 	}
 
+	/**
+	 * 注册收入支出按钮事件
+	 */
 	private void registerButton() {
-
 		if (ConsumptionTypeEnum.INCOME == consumptionType) {
+			//高亮收入
 			highlightIncome();
 		} else {
+			//高亮支出
 			highlightSpending();
 		}
 
@@ -102,12 +109,14 @@ public class EditConsumptionActivity extends ColorStatusBarActivity<ActivityEdit
 		viewBinding.UIConsumerItemTextViewExpense.setOnClickListener(v -> {
 			highlightSpending();
 			this.consumptionType = ConsumptionTypeEnum.SPENDING;
+			//切换完成后刷新对应的数据
 			refreshConsumptionItem(iconListRecyclerView, ConsumptionTypeEnum.SPENDING);
 		});
 
 		viewBinding.UIConsumerItemTextViewIncome.setOnClickListener(v -> {
 			highlightIncome();
 			this.consumptionType = ConsumptionTypeEnum.INCOME;
+			//切换完成后刷新对应的数据
 			refreshConsumptionItem(iconListRecyclerView, ConsumptionTypeEnum.INCOME);
 		});
 	}
