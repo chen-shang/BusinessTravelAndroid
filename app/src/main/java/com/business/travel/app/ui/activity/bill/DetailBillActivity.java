@@ -87,8 +87,7 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		selectBillId = getIntent().getLongExtra("selectBillId", -1);
 
 		LocalDateTime now = DateTimeUtil.now();
-		datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
-		}, now.getYear(), now.getMonth().getValue() - 1, now.getDayOfMonth());
+		datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {}, now.getYear(), now.getMonth().getValue() - 1, now.getDayOfMonth());
 	}
 
 	@Override
