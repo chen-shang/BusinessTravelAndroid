@@ -116,11 +116,30 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		});
 
 		viewBinding.consumerItem.setOnClickListener(v -> {
-			List<ImageIconInfo> imageIconInfos = consumptionService.queryAllConsumptionIconInfo(ConsumptionTypeEnum.SPENDING);
+			List<ImageIconInfo> imageIconInfos = new ArrayList<>();
+			if (ConsumptionTypeEnum.SPENDING.getMsg().equals(viewBinding.consumerType.toString())) {
+				imageIconInfos = consumptionService.queryAllConsumptionIconInfo(ConsumptionTypeEnum.SPENDING);
+			} else if (ConsumptionTypeEnum.INCOME.getMsg().equals(viewBinding.consumerType.toString())) {
+				imageIconInfos = consumptionService.queryAllConsumptionIconInfo(ConsumptionTypeEnum.INCOME);
+			}
 			Builder builder = new Builder(this).maxHeight(ScreenUtils.getScreenHeight() / 2).popupAnimation(PopupAnimation.ScrollAlphaFromTop);
 			BasePopupView basePopupView = builder.asCustom(new BottomIconListPopupView(this, imageIconInfos));
 			basePopupView.setEnabled(false);
 			basePopupView.show();
+		});
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		Try.of(() -> {
+			//参数检查
+			Preconditions.checkArgument(selectBillId > 0, "请选择账单");
+			Bill bill = billService.queryBillById(selectBillId);
+			Preconditions.checkArgument(bill != null, "未查询到账单 " + selectBillId);
+			//业务逻辑
+			showBillDetail(bill);
+			//结果处理
 		});
 	}
 
@@ -161,20 +180,6 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 			}
 		}
 		return -1;
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-		Try.of(() -> {
-			//参数检查
-			Preconditions.checkArgument(selectBillId > 0, "请选择账单");
-			Bill bill = billService.queryBillById(selectBillId);
-			Preconditions.checkArgument(bill != null, "未查询到账单 " + selectBillId);
-			//业务逻辑
-			showBillDetail(bill);
-			//结果处理
-		});
 	}
 
 	private void registerUpdateAmount(EditText editeText) {
