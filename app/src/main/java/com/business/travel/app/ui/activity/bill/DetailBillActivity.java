@@ -187,6 +187,11 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		Try.of(() -> refreshData(selectBillId));
 	}
 
+	/**
+	 * 刷新整体数据
+	 *
+	 * @param billId
+	 */
 	private void refreshData(Long billId) {
 		//参数检查
 		Preconditions.checkArgument(billId > 0, "请选择账单");
@@ -273,17 +278,21 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		});
 
 		//点击事件
-		view.setOnClickListener(v -> {
-			refreshDatePickerDialogDate((TextView)v);
-			datePickerDialog.show();
-		});
+		view.setOnClickListener(v -> refreshDatePickerDialogDate((TextView)v).show());
 	}
 
-	private void refreshDatePickerDialogDate(TextView v) {
+	/**
+	 * 更新日历
+	 *
+	 * @param v
+	 * @return
+	 */
+	private DatePickerDialog refreshDatePickerDialogDate(TextView v) {
 		String time = v.getText().toString();
 		String date = SplitUtil.trimToStringList(time, " ").get(0);
 		LocalDate localDate = DateTimeUtil.parseLocalDate(date);
 		datePickerDialog.updateDate(localDate.getYear(), localDate.getMonth().ordinal(), localDate.getDayOfMonth());
+		return datePickerDialog;
 	}
 
 	/**
@@ -393,6 +402,9 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 	private List<ImageIconInfo> genPopupMemberImageIcon() {
 		//先查询对应的图标
 		List<ImageIconInfo> imageIconInfos = memberService.queryAllMembersIconInfo();
+		if (CollectionUtils.isEmpty(imageIconInfos)) {
+			return memberIconList;
+		}
 		return mergeAndSort(imageIconInfos, memberIconList);
 
 	}
@@ -405,6 +417,9 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 	private List<ImageIconInfo> genPopupConsumptionImageIcon() {
 		//先查询对应的图标
 		List<ImageIconInfo> imageIconInfos = consumptionService.queryAllConsumptionIconInfo(consumptionTypeEnum);
+		if (CollectionUtils.isEmpty(imageIconInfos)) {
+			return consumptionIconList;
+		}
 		return mergeAndSort(imageIconInfos, consumptionIconList);
 	}
 
@@ -416,9 +431,19 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 	 * @return
 	 */
 	private List<ImageIconInfo> mergeAndSort(List<ImageIconInfo> source, List<ImageIconInfo> selected) {
+		//边界条件
+		if (CollectionUtils.isEmpty(source)) {
+			return selected;
+		}
+
+		if (CollectionUtils.isEmpty(selected)) {
+			return source;
+		}
+
 		//处理一下是否被选中
 		Map<Long, ImageIconInfo> collect = source.stream().collect(toMap(ImageIconInfo::getId, item -> item));
 
+		//merge
 		selected.forEach(iconInfo -> {
 			ImageIconInfo imageIconSelect = collect.get(iconInfo.getId());
 			if (imageIconSelect != null) {
@@ -428,12 +453,12 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 			}
 		});
 
+		//sort
+		//排序,选中的排前面
 		return source.stream().sorted((o1, o2) -> {
-			//排序,选中的排前面
 			int i1 = o1.isSelected() ? 0 : 1;
 			int i2 = o2.isSelected() ? 0 : 1;
 			return i1 - i2;
 		}).collect(Collectors.toList());
 	}
-
 }
