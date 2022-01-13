@@ -67,12 +67,6 @@
                         app:layout_constraintEnd_toStartOf="@+id/UI_BillFragment_BillAdapter_TextView_Pay"
                         android:layout_marginEnd="20dp"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
-            <!--横线-->
-            <include
-                    layout="@layout/base_line"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"/>
 
             <com.yanzhenjie.recyclerview.SwipeRecyclerView
                     android:id="@+id/UI_BillFragment_BillAdapter_SwipeRecyclerView_BillItem"
