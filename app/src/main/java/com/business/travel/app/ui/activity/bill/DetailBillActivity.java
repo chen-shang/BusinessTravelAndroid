@@ -93,7 +93,8 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		selectBillId = getIntent().getLongExtra("selectBillId", -1);
 
 		LocalDateTime now = DateTimeUtil.now();
-		datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {}, now.getYear(), now.getMonth().getValue() - 1, now.getDayOfMonth());
+		datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+		}, now.getYear(), now.getMonth().getValue() - 1, now.getDayOfMonth());
 	}
 
 	@Override
@@ -242,7 +243,7 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		                 // 数据绑定
 		                 .setImageTextLoaderInterface((imageView, textView, position) -> {
 			                 // 自己进行数据的绑定，灵活度更高，不受任何限制
-			                 bind(imageView, textView, dataList.get(position),itemType);
+			                 bind(imageView, textView, dataList.get(position), itemType);
 		                 });
 	}
 
@@ -384,49 +385,55 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		}
 	}
 
+	/**
+	 * 构造人员弹窗图标
+	 *
+	 * @return
+	 */
 	private List<ImageIconInfo> genPopupMemberImageIcon() {
 		//先查询对应的图标
 		List<ImageIconInfo> imageIconInfos = memberService.queryAllMembersIconInfo();
-		//处理一下是否被选中
-		Map<Long, ImageIconInfo> collect = imageIconInfos.stream().collect(toMap(ImageIconInfo::getId, item -> item));
+		return mergeAndSort(imageIconInfos, memberIconList);
 
-		memberIconList.forEach(iconInfo -> {
-			ImageIconInfo imageIconSelect = collect.get(iconInfo.getId());
-			if (imageIconSelect != null) {
-				imageIconSelect.setSelected(true);
-			} else {
-				imageIconInfos.add(iconInfo);
-			}
-		});
-
-		return imageIconInfos.stream().sorted((o1, o2) -> {
-			//排序,选中的排前面
-			int i1 = o1.isSelected() ? 0 : 1;
-			int i2 = o2.isSelected() ? 0 : 1;
-			return i1 - i2;
-		}).collect(Collectors.toList());
 	}
 
+	/**
+	 * 构造消费项弹窗图标
+	 *
+	 * @return
+	 */
 	private List<ImageIconInfo> genPopupConsumptionImageIcon() {
 		//先查询对应的图标
 		List<ImageIconInfo> imageIconInfos = consumptionService.queryAllConsumptionIconInfo(consumptionTypeEnum);
-		//处理一下是否被选中
-		Map<Long, ImageIconInfo> collect = imageIconInfos.stream().collect(toMap(ImageIconInfo::getId, item -> item));
+		return mergeAndSort(imageIconInfos, consumptionIconList);
+	}
 
-		consumptionIconList.forEach(iconInfo -> {
+	/**
+	 * 合并->去重->选中->排序
+	 *
+	 * @param source
+	 * @param selected
+	 * @return
+	 */
+	private List<ImageIconInfo> mergeAndSort(List<ImageIconInfo> source, List<ImageIconInfo> selected) {
+		//处理一下是否被选中
+		Map<Long, ImageIconInfo> collect = source.stream().collect(toMap(ImageIconInfo::getId, item -> item));
+
+		selected.forEach(iconInfo -> {
 			ImageIconInfo imageIconSelect = collect.get(iconInfo.getId());
 			if (imageIconSelect != null) {
 				imageIconSelect.setSelected(true);
 			} else {
-				imageIconInfos.add(iconInfo);
+				source.add(iconInfo);
 			}
 		});
 
-		return imageIconInfos.stream().sorted((o1, o2) -> {
+		return source.stream().sorted((o1, o2) -> {
 			//排序,选中的排前面
 			int i1 = o1.isSelected() ? 0 : 1;
 			int i2 = o2.isSelected() ? 0 : 1;
 			return i1 - i2;
 		}).collect(Collectors.toList());
 	}
+
 }
