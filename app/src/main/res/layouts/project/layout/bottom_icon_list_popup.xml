@@ -11,9 +11,11 @@
             app:content_bar_left_icon="@drawable/ic_base_delete"
             />
 
-    <com.yanzhenjie.recyclerview.SwipeRecyclerView
-            android:id="@+id/UI_AddItemRecyclerViewAdapter_SwipeRecyclerView"
+    <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
+            android:id="@+id/GridViewPager_MemberIconList"
+            android:layout_marginTop="5dp"
+            android:backgroundTint="@color/white"
             android:layout_width="match_parent"
-            android:nestedScrollingEnabled="false"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+    </cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager>
 </LinearLayout>
