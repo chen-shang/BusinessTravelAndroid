@@ -237,4 +237,8 @@ public class EditConsumptionActivity extends ColorStatusBarActivity<ActivityEdit
 		editItemRecyclerViewAdapter.notifyDataSetChanged();
 		emptyHeaderView.addTo(iconListRecyclerView);
 	}
+
+	public static class IntentKey {
+		public static final String CONSUMPTION_TYPE = "consumptionType";
+	}
 }

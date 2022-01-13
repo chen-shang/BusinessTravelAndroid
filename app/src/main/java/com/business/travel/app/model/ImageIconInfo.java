@@ -53,18 +53,40 @@ public class ImageIconInfo {
 		this.init(imageView, textView);
 
 		//加载新的图片和问题
-		textView.setText(name);
-		ImageLoadUtil.loadImageToView(iconDownloadUrl, imageView);
-		imageView.setBackgroundResource(isSelected() ? R.drawable.corners_shape_select : R.drawable.corners_shape_unselect);
+		this.refresh(imageView, textView);
 
+		//图标点击后的动作
 		imageView.setOnClickListener(this::changeColor);
 	}
 
+	/**
+	 * 初始化图标和文字展示
+	 *
+	 * @param imageView
+	 * @param textView
+	 */
 	public void init(ImageView imageView, TextView textView) {
 		textView.setText("");
 		imageView.setImageResource(R.drawable.ic_base_placeholder);
 	}
 
+	/**
+	 * 刷新图标和文字展示
+	 *
+	 * @param imageView
+	 * @param textView
+	 */
+	public void refresh(ImageView imageView, TextView textView) {
+		textView.setText(name);
+		ImageLoadUtil.loadImageToView(iconDownloadUrl, imageView);
+		imageView.setBackgroundResource(isSelected() ? R.drawable.corners_shape_select : R.drawable.corners_shape_unselect);
+	}
+
+	/**
+	 * 更新图标颜色
+	 *
+	 * @param imageView
+	 */
 	public void changeColor(View imageView) {
 		this.selected = !this.selected;
 		imageView.setBackgroundResource(isSelected() ? R.drawable.corners_shape_select : R.drawable.corners_shape_unselect);

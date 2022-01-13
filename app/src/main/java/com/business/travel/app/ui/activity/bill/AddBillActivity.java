@@ -11,9 +11,6 @@ import javax.validation.constraints.NotNull;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import androidx.core.content.ContextCompat;
 import com.blankj.utilcode.util.ColorUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ScreenUtils;
@@ -35,7 +32,6 @@ import com.business.travel.app.ui.activity.item.consumption.EditConsumptionActiv
 import com.business.travel.app.ui.activity.item.member.EditMemberActivity;
 import com.business.travel.app.ui.base.ColorStatusBarActivity;
 import com.business.travel.app.utils.GridViewPagerUtil;
-import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.app.utils.LogToast;
 import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.app.utils.Try;
@@ -150,7 +146,21 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		                 // 数据绑定
 		                 .setImageTextLoaderInterface((imageView, textView, position) -> {
 			                 // 自己进行数据的绑定，灵活度更高，不受任何限制
-			                 bind(imageView, textView, consumptionImageIconList.get(position), EditConsumptionActivity.class);
+			                 ImageIconInfo imageIconInfo = consumptionImageIconList.get(position);
+			                 //是否是编辑图标
+			                 boolean isEditButton = ItemIconEnum.ItemIconEdit.getIconDownloadUrl().equals(imageIconInfo.getIconDownloadUrl());
+			                 //如果不是编辑图标,有通用的行为
+			                 if (!isEditButton) {
+				                 imageIconInfo.bind(imageView, textView);
+				                 return;
+			                 }
+			                 //如果是编辑按钮,编辑图标有单独的行为
+			                 imageIconInfo.refresh(imageView, textView);
+			                 imageView.setOnClickListener(v -> {
+				                 Intent intent = new Intent(this, EditConsumptionActivity.class);
+				                 intent.putExtra(EditConsumptionActivity.IntentKey.CONSUMPTION_TYPE, viewBinding.keyboard.getConsumptionType().name());
+				                 this.startActivity(intent);
+			                 });
 		                 });
 	}
 
@@ -163,7 +173,20 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 		                 // 数据绑定
 		                 .setImageTextLoaderInterface((imageView, textView, position) -> {
 			                 // 自己进行数据的绑定，灵活度更高，不受任何限制
-			                 bind(imageView, textView, memberIconList.get(position), EditMemberActivity.class);
+			                 ImageIconInfo imageIconInfo = memberIconList.get(position);
+			                 //是否是编辑图标
+			                 boolean isEditButton = ItemIconEnum.ItemIconEdit.getIconDownloadUrl().equals(imageIconInfo.getIconDownloadUrl());
+			                 //如果不是编辑图标,有通用的行为
+			                 if (!isEditButton) {
+				                 imageIconInfo.bind(imageView, textView);
+				                 return;
+			                 }
+			                 //如果是编辑按钮,编辑图标有单独的行为
+			                 imageIconInfo.refresh(imageView, textView);
+			                 imageView.setOnClickListener(v -> {
+				                 Intent intent = new Intent(this, EditMemberActivity.class);
+				                 this.startActivity(intent);
+			                 });
 		                 });
 	}
 
@@ -180,31 +203,6 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 			saveBill();
 			clear();
 		}));
-	}
-
-	private void bind(ImageView imageView, TextView textView, ImageIconInfo imageIconInfo, Class<?> cls) {
-		boolean isEditImageButton = ItemIconEnum.ItemIconEdit.getIconDownloadUrl().equals(imageIconInfo.getIconDownloadUrl());
-		//默认未选中状态
-		imageView.setBackgroundResource(R.drawable.corners_shape_unselect);
-		imageView.setImageResource(R.drawable.ic_base_placeholder);
-
-		textView.setText(imageIconInfo.getName());
-
-		int selectColor = ContextCompat.getColor(getApplicationContext(), R.color.red_2);
-		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView, imageIconInfo.isSelected() ? selectColor : null);
-
-		imageView.setOnClickListener(v -> {
-			//如果是编辑按钮
-			if (isEditImageButton) {
-				Intent intent = new Intent(this, cls);
-				intent.putExtra("consumptionType", viewBinding.keyboard.getConsumptionType().name());
-				this.startActivity(intent);
-				return;
-			}
-			//否则,改变选中颜色
-			imageIconInfo.setSelected(!imageIconInfo.isSelected());
-			ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView, imageIconInfo.isSelected() ? selectColor : null);
-		});
 	}
 
 	public void saveBill() {
