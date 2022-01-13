@@ -20,13 +20,9 @@ import com.blankj.utilcode.util.CollectionUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
-import com.business.travel.app.enums.OperateTypeEnum;
-import com.business.travel.app.model.BillEditeModel;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.ConsumptionService;
-import com.business.travel.app.ui.activity.bill.AddBillActivity;
-import com.business.travel.app.ui.activity.bill.AddBillActivity.IntentKey;
 import com.business.travel.app.ui.activity.bill.DetailBillActivity;
 import com.business.travel.app.ui.activity.bill.fragment.BillItemRecyclerViewAdapter.BillItemRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.activity.bill.fragment.BillRecyclerViewAdapter.BillRecyclerViewAdapterViewHolder;
@@ -34,7 +30,6 @@ import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.app.utils.MoneyUtil;
-import com.business.travel.utils.JacksonUtil;
 import com.business.travel.utils.SplitUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.lxj.xpopup.XPopup;
@@ -125,30 +120,15 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 	}
 
 	private AttachListPopupView newAttachListPopupView(@NotNull BillItemRecyclerViewAdapterViewHolder holder, int position, Bill bill) {
-		return new Builder(activity).watchView(holder.cardView).asAttachList(new String[] {"删除", "编辑"}, new int[] {R.drawable.ic_base_delete, R.drawable.ic_base_edit}, (pos, text) -> {
+		return new Builder(activity).watchView(holder.cardView).asAttachList(new String[] {"删除"}, new int[] {R.drawable.ic_base_delete}, (pos, text) -> {
 			switch (pos) {
 				case 0:
 					delete(position, bill);
-					break;
-				case 1:
-					edit(position, bill);
 					break;
 				default:
 					//do nothing
 			}
 		});
-	}
-
-	private void edit(int position, Bill bill) {
-		Intent intent = new Intent(activity, AddBillActivity.class);
-
-		//更新账单信息
-		intent.putExtra(IntentKey.operateType, OperateTypeEnum.EDITE.name());
-		BillEditeModel billEditeModel = new BillEditeModel();
-		billEditeModel.setBillId(bill.getId());
-		intent.putExtra(IntentKey.billEditeModel, JacksonUtil.toString(billEditeModel));
-
-		activity.startActivity(intent);
 	}
 
 	private void delete(int position, Bill bill) {
