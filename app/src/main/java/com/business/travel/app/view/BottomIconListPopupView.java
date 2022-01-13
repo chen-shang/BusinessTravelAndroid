@@ -34,12 +34,14 @@ public class BottomIconListPopupView extends BottomPopupView {
 	@Override
 	protected void onCreate() {
 		super.onCreate();
+		ContentBar contentBar = findViewById(R.id.topTitleBar);
+		contentBar.contentBarTitle.setEnabled(false);
 		GridViewPager gridViewPager = findViewById(R.id.GridViewPager_MemberIconList);
 		GridViewPagerUtil.registerPageViewCommonProperty(gridViewPager)
 		                 // 设置数据总数量
 		                 .setDataAllCount(imageIconInfoList.size())
 		                 // 设置每页行数 // 设置每页列数
-		                 .setRowCount(4).setColumnCount(5)
+		                 .setRowCount((int)Math.ceil(imageIconInfoList.size() / 5d)).setColumnCount(5)
 		                 // 设置是否显示指示器
 		                 .setPointIsShow(true)
 		                 // 设置背景图片(此时设置的背景色无效，以背景图片为主)
@@ -49,8 +51,7 @@ public class BottomIconListPopupView extends BottomPopupView {
 		                 .setImageTextLoaderInterface((imageView, textView, position) -> {
 			                 // 自己进行数据的绑定，灵活度更高，不受任何限制
 			                 bind(imageView, textView, imageIconInfoList.get(position));
-		                 });
-
+		                 }).show();
 	}
 
 	private void bind(ImageView imageView, TextView textView, ImageIconInfo imageIconInfo) {

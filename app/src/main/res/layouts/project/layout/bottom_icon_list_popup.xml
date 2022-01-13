@@ -3,19 +3,25 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:background="@color/white"
               android:orientation="vertical">
 
     <com.business.travel.app.view.ContentBar
+            android:id="@+id/topTitleBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:content_bar_left_icon="@drawable/ic_base_delete"
+            app:content_bar_left_icon="@drawable/ic_base_return_gray"
+            app:content_bar_right_icon="@drawable/ic_base_right_gray"
             />
 
-    <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
-            android:id="@+id/GridViewPager_MemberIconList"
-            android:layout_marginTop="5dp"
-            android:backgroundTint="@color/white"
+    <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-    </cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager>
+
+        <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
+                android:id="@+id/GridViewPager_MemberIconList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+        </cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager>
+    </ScrollView>
 </LinearLayout>

@@ -32,6 +32,7 @@ import com.business.travel.app.utils.GridViewPagerUtil;
 import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.app.utils.Try;
+import com.business.travel.app.view.BottomIconListPopupView;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.SplitUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
@@ -39,6 +40,7 @@ import com.business.travel.vo.enums.WeekEnum;
 import com.google.common.base.Preconditions;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.XPopup.Builder;
+import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.enums.PopupAnimation;
 import com.lxj.xpopup.impl.BottomListPopupView;
 import org.apache.commons.lang3.StringUtils;
@@ -111,6 +113,14 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 
 		viewBinding.topTitleBar.contentBarRightIcon.setOnClickListener(v -> {
 			delete(selectBillId);
+		});
+
+		viewBinding.consumerItem.setOnClickListener(v -> {
+			List<ImageIconInfo> imageIconInfos = consumptionService.queryAllConsumptionIconInfo(ConsumptionTypeEnum.SPENDING);
+			Builder builder = new Builder(this).maxHeight(ScreenUtils.getScreenHeight() / 2).popupAnimation(PopupAnimation.ScrollAlphaFromTop);
+			BasePopupView basePopupView = builder.asCustom(new BottomIconListPopupView(this, imageIconInfos));
+			basePopupView.setEnabled(false);
+			basePopupView.show();
 		});
 	}
 
