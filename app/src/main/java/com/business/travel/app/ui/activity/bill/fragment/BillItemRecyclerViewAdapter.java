@@ -80,6 +80,7 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 			return;
 		}
 
+		holder.iconImageView.setBackgroundResource(R.drawable.corners_shape_select);
 		ImageLoadUtil.loadImageToView(bill.getIconDownloadUrl(), holder.iconImageView);
 
 		String name = bill.getConsumptionIds();

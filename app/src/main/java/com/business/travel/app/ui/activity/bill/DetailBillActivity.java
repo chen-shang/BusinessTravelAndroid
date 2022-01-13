@@ -110,31 +110,8 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		//注册更新项目归属事件
 		registerUpdateProjectName();
 
-		viewBinding.consumerItem.setOnClickListener(v -> {
-			List<ImageIconInfo> imageIconInfos = new ArrayList<>();
-			if (ConsumptionTypeEnum.SPENDING.getMsg().equals(viewBinding.consumerType.toString())) {
-				imageIconInfos = consumptionService.queryAllConsumptionIconInfo(ConsumptionTypeEnum.SPENDING);
-			} else if (ConsumptionTypeEnum.INCOME.getMsg().equals(viewBinding.consumerType.toString())) {
-				imageIconInfos = consumptionService.queryAllConsumptionIconInfo(ConsumptionTypeEnum.INCOME);
-			}
-			Builder builder = new Builder(this).maxHeight(ScreenUtils.getScreenHeight() / 2).popupAnimation(PopupAnimation.ScrollAlphaFromTop);
-			BasePopupView basePopupView = builder.asCustom(new BottomIconListPopupView(this, imageIconInfos));
-			basePopupView.setEnabled(false);
-			basePopupView.show();
-		});
-
 		//注册删除账单事件
 		registerDeleteBill();
-	}
-
-	private void registerDeleteBill() {
-		ConfirmPopupView confirmPopupView = new Builder(this).asConfirm("", "是否要删除该账目", () -> {
-			//1. 数据库删除
-			billService.deleteBillById(selectBillId);
-			//2. 关闭当前页面
-			this.finish();
-		});
-		viewBinding.topTitleBar.contentBarRightIcon.setOnClickListener(v -> confirmPopupView.show());
 	}
 
 	@Override
@@ -149,6 +126,16 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 			showBillDetail(bill);
 			//结果处理
 		});
+	}
+
+	private void registerDeleteBill() {
+		ConfirmPopupView confirmPopupView = new Builder(this).asConfirm("", "是否要删除该账目", () -> {
+			//1. 数据库删除
+			billService.deleteBillById(selectBillId);
+			//2. 关闭当前页面
+			this.finish();
+		});
+		viewBinding.topTitleBar.contentBarRightIcon.setOnClickListener(v -> confirmPopupView.show());
 	}
 
 	private void registerUpdateProjectName() {
@@ -241,7 +228,9 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		GridViewPagerUtil.registerPageViewCommonProperty(gridViewPager)
 		                 // 设置数据总数量
 		                 .setDataAllCount(dataList.size())
-		                 // 设置每页行数 // 设置每页列数
+		                 // 设置每页行数
+		                 .setRowCount(1)
+		                 // 设置每页列数
 		                 .setColumnCount(COLUMN_COUNT)
 		                 // 数据绑定
 		                 .setImageTextLoaderInterface((imageView, textView, position) -> {
@@ -310,12 +299,9 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		consumptionIconList.clear();
 		consumptionIconList.addAll(consumptions);
 		//更新数据显示
-		double row = Math.ceil((consumptionIconList.size() / (double)COLUMN_COUNT));
 		viewBinding.GridViewPagerConsumptionIconList
 				//图标总数量
 				.setDataAllCount(consumptionIconList.size())
-				//动态计算行数,达到自适应的目的
-				.setRowCount((int)row)
 				//更新展示
 				.show();
 	}
@@ -343,22 +329,32 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		//更新消费项目图标数据列表
 		memberIconList.clear();
 		memberIconList.addAll(members);
-		//更新数据显示
-		double row = Math.ceil((memberIconList.size() / (double)COLUMN_COUNT));
 		viewBinding.GridViewPagerMemberIconList
 				//图标总数量
 				.setDataAllCount(memberIconList.size())
-				//动态计算行数,达到自适应的目的
-				.setRowCount((int)row)
 				//更新展示
 				.show();
 	}
 
 	private void bind(ImageView imageView, TextView textView, ImageIconInfo imageIconInfo) {
-		imageView.setBackgroundResource(R.drawable.corners_shape_unselect);
+		imageView.setBackgroundResource(R.drawable.corners_shape_select);
 		imageView.setImageResource(R.drawable.ic_base_placeholder);
 
 		textView.setText(imageIconInfo.getName());
 		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView);
+
+		imageView.setOnClickListener(v -> {
+			List<ImageIconInfo> imageIconInfos = new ArrayList<>();
+			if (ConsumptionTypeEnum.SPENDING.getMsg().equals(viewBinding.consumerType.getText().toString())) {
+				imageIconInfos = consumptionService.queryAllConsumptionIconInfo(ConsumptionTypeEnum.SPENDING);
+			} else if (ConsumptionTypeEnum.INCOME.getMsg().equals(viewBinding.consumerType.getText().toString())) {
+				imageIconInfos = consumptionService.queryAllConsumptionIconInfo(ConsumptionTypeEnum.INCOME);
+			}
+
+			Builder builder = new Builder(this).maxHeight(ScreenUtils.getScreenHeight() * 2 / 3).popupAnimation(PopupAnimation.ScrollAlphaFromTop);
+			BasePopupView basePopupView = builder.asCustom(new BottomIconListPopupView(this, imageIconInfos));
+			basePopupView.setEnabled(false);
+			basePopupView.show();
+		});
 	}
 }
