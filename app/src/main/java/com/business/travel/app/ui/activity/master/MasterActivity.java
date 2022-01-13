@@ -117,9 +117,14 @@ public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 		viewPager2.setCurrentItem(MasterFragmentPositionEnum.BILL_FRAGMENT.getPosition());
 		viewPager2.registerOnPageChangeCallback(new OnPageChangeCallback() {
 			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+				super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+				viewBinding.UIMasterActivityBottomNavigationView.getMenu().getItem(position).setChecked(true);
+			}
+
+			@Override
 			public void onPageSelected(int position) {
 				super.onPageSelected(position);
-				viewBinding.UIMasterActivityBottomNavigationView.getMenu().getItem(position).setChecked(true);
 				lastFragment = currentFragment;
 				currentFragment = position;
 			}

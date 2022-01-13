@@ -15,6 +15,7 @@
             android:background="@drawable/corners_shape_change"
             app:content_bar_left_icon_mode="back"
             app:content_bar_left_icon="@drawable/ic_base_return"
+            app:content_bar_right_icon="@drawable/ic_base_delete_white"
             app:content_bar_title="账单明细"
             app:content_bar_title_color="@color/white"
             />

@@ -37,6 +37,7 @@ import com.business.travel.utils.SplitUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.WeekEnum;
 import com.google.common.base.Preconditions;
+import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.XPopup.Builder;
 import com.lxj.xpopup.enums.PopupAnimation;
 import com.lxj.xpopup.impl.BottomListPopupView;
@@ -107,6 +108,23 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 
 		//注册更新项目归属事件
 		registerUpdateProjectName();
+
+		viewBinding.topTitleBar.contentBarRightIcon.setOnClickListener(v -> {
+			delete(selectBillId);
+		});
+	}
+
+	private void delete(Long selectBillId) {
+		Bill bill = billService.queryBillById(selectBillId);
+		//弹出确认删除对话框
+		new XPopup.Builder(this).asConfirm("", "是否要删除该账目", () -> confirmDelete(bill)).show();
+	}
+
+	//确认删除
+	private void confirmDelete(Bill bill) {
+		//1. 数据库删除
+		billService.deleteBillById(bill.getId());
+		this.finish();
 	}
 
 	private void registerUpdateProjectName() {
