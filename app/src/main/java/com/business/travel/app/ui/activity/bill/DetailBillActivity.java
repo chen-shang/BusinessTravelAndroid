@@ -14,13 +14,11 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ScreenUtils;
-import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityDetailBillBinding;
@@ -31,14 +29,12 @@ import com.business.travel.app.service.MemberService;
 import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.base.ColorStatusBarActivity;
 import com.business.travel.app.utils.GridViewPagerUtil;
-import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.app.utils.Try;
 import com.business.travel.app.view.BottomIconListPopupView;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.SplitUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
-import com.business.travel.vo.enums.ItemTypeEnum;
 import com.business.travel.vo.enums.WeekEnum;
 import com.google.common.base.Preconditions;
 import com.lxj.xpopup.XPopup.Builder;
@@ -101,9 +97,9 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//注册消费项列表
-		registerPageView(viewBinding.GridViewPagerConsumptionIconList, consumptionIconList, ItemTypeEnum.CONSUMPTION);
+		registerConsumptionPageView(viewBinding.GridViewPagerConsumptionIconList, consumptionIconList);
 		//注册人员列表
-		registerPageView(viewBinding.GridViewPagerMemberIconList, memberIconList, ItemTypeEnum.MEMBER);
+		registerMemberPageView(viewBinding.GridViewPagerMemberIconList, memberIconList);
 
 		//注册更新消费时间事件
 		registerUpdateConsumeDate(viewBinding.time);
@@ -121,17 +117,81 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		registerDeleteBill();
 	}
 
+	private void registerMemberPageView(GridViewPager gridViewPager, List<ImageIconInfo> dataList) {
+		Builder builder = new Builder(this).maxHeight(ScreenUtils.getScreenHeight() * 2 / 3).popupAnimation(PopupAnimation.ScrollAlphaFromTop);
+
+		GridViewPagerUtil.registerPageViewCommonProperty(gridViewPager)
+		                 // 设置数据总数量
+		                 .setDataAllCount(dataList.size())
+		                 // 设置每页行数
+		                 .setRowCount(1)
+		                 // 设置每页列数
+		                 .setColumnCount(COLUMN_COUNT)
+		                 // 数据绑定
+		                 .setImageTextLoaderInterface((imageView, textView, position) -> {
+			                 // 自己进行数据的绑定，灵活度更高，不受任何限制
+			                 ImageIconInfo imageIconInfo = dataList.get(position);
+			                 imageIconInfo.setSelected(true);
+			                 imageIconInfo.refresh(imageView, textView);
+
+			                 imageView.setOnClickListener(v -> {
+				                 List<ImageIconInfo> result = genPopupMemberImageIcon();
+				                 //当点击确认按钮之后
+				                 builder.asCustom(new BottomIconListPopupView(this, result).onConfirm(() -> {
+					                 String collect = result.stream().filter(ImageIconInfo::isSelected).map(ImageIconInfo::getId).map(String::valueOf).collect(joining(","));
+					                 Bill bill = new Bill();
+					                 bill.setMemberIds(collect);
+					                 billService.updateBill(selectBillId, bill);
+					                 //更新图标
+					                 refreshData(selectBillId);
+				                 })).show();
+			                 });
+		                 });
+	}
+
+	private void registerConsumptionPageView(GridViewPager gridViewPager, List<ImageIconInfo> dataList) {
+		Builder builder = new Builder(this).maxHeight(ScreenUtils.getScreenHeight() * 2 / 3).popupAnimation(PopupAnimation.ScrollAlphaFromTop);
+
+		GridViewPagerUtil.registerPageViewCommonProperty(gridViewPager)
+		                 // 设置数据总数量
+		                 .setDataAllCount(dataList.size())
+		                 // 设置每页行数
+		                 .setRowCount(1)
+		                 // 设置每页列数
+		                 .setColumnCount(COLUMN_COUNT)
+		                 // 数据绑定
+		                 .setImageTextLoaderInterface((imageView, textView, position) -> {
+			                 // 自己进行数据的绑定，灵活度更高，不受任何限制
+			                 ImageIconInfo imageIconInfo = dataList.get(position);
+			                 imageIconInfo.setSelected(true);
+			                 imageIconInfo.refresh(imageView, textView);
+
+			                 imageView.setOnClickListener(v -> {
+				                 List<ImageIconInfo> result = genPopupConsumptionImageIcon();
+				                 //当点击确认按钮之后
+				                 builder.asCustom(new BottomIconListPopupView(this, result).onConfirm(() -> {
+					                 String collect = result.stream().filter(ImageIconInfo::isSelected).map(ImageIconInfo::getId).map(String::valueOf).collect(joining(","));
+					                 Bill bill = new Bill();
+					                 bill.setConsumptionIds(collect);
+					                 billService.updateBill(selectBillId, bill);
+					                 //更新图标
+					                 refreshData(selectBillId);
+				                 })).show();
+			                 });
+		                 });
+	}
+
 	@Override
 	protected void onStart() {
 		super.onStart();
-		Try.of(this::refreshData);
+		Try.of(() -> refreshData(selectBillId));
 	}
 
-	private void refreshData() {
+	private void refreshData(Long billId) {
 		//参数检查
-		Preconditions.checkArgument(selectBillId > 0, "请选择账单");
-		Bill bill = billService.queryBillById(selectBillId);
-		Preconditions.checkArgument(bill != null, "未查询到账单 " + selectBillId);
+		Preconditions.checkArgument(billId > 0, "请选择账单");
+		Bill bill = billService.queryBillById(billId);
+		Preconditions.checkArgument(bill != null, "未查询到账单 " + billId);
 		//业务逻辑
 		showBillDetail(bill);
 	}
@@ -224,27 +284,6 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		String date = SplitUtil.trimToStringList(time, " ").get(0);
 		LocalDate localDate = DateTimeUtil.parseLocalDate(date);
 		datePickerDialog.updateDate(localDate.getYear(), localDate.getMonth().ordinal(), localDate.getDayOfMonth());
-	}
-
-	/**
-	 * 注册图标列表
-	 *
-	 * @param gridViewPager
-	 * @param dataList
-	 */
-	private void registerPageView(GridViewPager gridViewPager, List<ImageIconInfo> dataList, ItemTypeEnum itemType) {
-		GridViewPagerUtil.registerPageViewCommonProperty(gridViewPager)
-		                 // 设置数据总数量
-		                 .setDataAllCount(dataList.size())
-		                 // 设置每页行数
-		                 .setRowCount(1)
-		                 // 设置每页列数
-		                 .setColumnCount(COLUMN_COUNT)
-		                 // 数据绑定
-		                 .setImageTextLoaderInterface((imageView, textView, position) -> {
-			                 // 自己进行数据的绑定，灵活度更高，不受任何限制
-			                 bind(imageView, textView, dataList.get(position), itemType);
-		                 });
 	}
 
 	/**
@@ -344,45 +383,6 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 				.setDataAllCount(memberIconList.size())
 				//更新展示
 				.show();
-	}
-
-	private void bind(ImageView imageView, TextView textView, ImageIconInfo imageIconInfo, ItemTypeEnum itemTypeEnum) {
-		textView.setText(imageIconInfo.getName());
-
-		imageView.setBackgroundResource(R.drawable.corners_shape_select);
-		imageView.setImageResource(R.drawable.ic_base_placeholder);
-		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView);
-
-		Builder builder = new Builder(this).maxHeight(ScreenUtils.getScreenHeight() * 2 / 3).popupAnimation(PopupAnimation.ScrollAlphaFromTop);
-		switch (itemTypeEnum) {
-			case CONSUMPTION:
-				imageView.setOnClickListener(v -> {
-					List<ImageIconInfo> result = genPopupConsumptionImageIcon();
-					builder.asCustom(new BottomIconListPopupView(this, result).onConfirm(() -> {
-						String collect = result.stream().filter(ImageIconInfo::isSelected).map(ImageIconInfo::getId).map(String::valueOf).collect(joining(","));
-						Bill bill = new Bill();
-						bill.setConsumptionIds(collect);
-						billService.updateBill(selectBillId, bill);
-
-						//跟新图标
-						refreshData();
-					})).show();
-				});
-				break;
-			case MEMBER:
-				imageView.setOnClickListener(v -> {
-					List<ImageIconInfo> result = genPopupMemberImageIcon();
-					builder.asCustom(new BottomIconListPopupView(this, result).onConfirm(() -> {
-						String collect = result.stream().filter(ImageIconInfo::isSelected).map(ImageIconInfo::getId).map(String::valueOf).collect(joining(","));
-						Bill bill = new Bill();
-						bill.setMemberIds(collect);
-						billService.updateBill(selectBillId, bill);
-
-						refreshData();
-					})).show();
-				});
-				break;
-		}
 	}
 
 	/**
