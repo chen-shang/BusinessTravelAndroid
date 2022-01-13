@@ -97,7 +97,6 @@ public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 			} else {
 				//如果是DASHBOARD_FRAGMENT页面,当点击的时候则跳转到新增账单页面
 				Intent intent = new Intent(this, AddBillActivity.class);
-				intent.putExtra(IntentKey.operateType, OperateTypeEnum.ADD);
 
 				Project project = projectService.queryById(billFragment.getSelectedProjectId());
 				String name = Optional.ofNullable(project).map(Project::getName).orElse("");

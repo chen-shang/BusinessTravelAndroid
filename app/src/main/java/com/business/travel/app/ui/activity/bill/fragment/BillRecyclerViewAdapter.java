@@ -118,8 +118,6 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
 	@NotNull
 	private Intent genIntent(Long selectedProjectId, LocalDateTime localDateTime, ConsumptionTypeEnum consumptionTypeEnum) {
 		Intent intent = new Intent(activity, AddBillActivity.class);
-		intent.putExtra(IntentKey.operateType, OperateTypeEnum.ADD);
-
 		Project project = projectService.queryById(selectedProjectId);
 		String name = Optional.ofNullable(project).map(Project::getName).orElse(null);
 		BillAddModel billAddModel = new BillAddModel(name, DateTimeUtil.timestamp(localDateTime), consumptionTypeEnum.name());
