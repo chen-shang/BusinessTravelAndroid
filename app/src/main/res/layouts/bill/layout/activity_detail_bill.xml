@@ -51,35 +51,52 @@
                         android:id="@+id/consumerType"
                         android:text="支出"
                         android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
+                        android:textColor="#02A7F0"
+                        android:textSize="15sp"
                         android:layout_marginBottom="5dp"
                         />
 
-                <EditText
-                        android:id="@+id/amount"
+                <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:textColor="@color/black"
-                        android:drawablePadding="10dp"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        android:background="@null"
-                        android:drawableEnd="@drawable/ic_base_edit"
                         android:layout_marginBottom="5dp"
-                        >
-                </EditText>
+                        android:layout_height="wrap_content">
+
+                    <EditText
+                            android:id="@+id/amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="25sp"
+                            android:textColor="@color/black"
+                            android:drawablePadding="10dp"
+                            android:maxLines="1"
+                            android:text="1234"
+                            android:ellipsize="end"
+                            android:background="@null"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent">
+                    </EditText>
+
+                    <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:src="@drawable/ic_base_edite_small"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/amount"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
-                        >
+                        android:orientation="horizontal">
 
                     <TextView
+                            android:id="@+id/remarkItem"
+                            android:gravity="center"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:text="备注"
                             />
 
@@ -87,13 +104,28 @@
                             android:id="@+id/remark"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="end"
+                            android:textColor="@color/black"
+                            android:drawablePadding="10dp"
                             android:maxLines="1"
+                            android:gravity="end"
+                            android:text="1234"
+                            android:layout_weight="1"
                             android:ellipsize="end"
                             android:background="@null"
-                            android:drawableEnd="@drawable/ic_base_edit"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/imageView2"
                             >
                     </EditText>
+
+                    <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:src="@drawable/ic_base_edite_small"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:id="@+id/imageView2"/>
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
