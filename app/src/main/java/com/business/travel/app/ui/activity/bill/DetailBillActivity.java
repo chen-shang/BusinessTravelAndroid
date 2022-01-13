@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
 
@@ -36,14 +38,17 @@ import com.business.travel.app.view.BottomIconListPopupView;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.SplitUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
+import com.business.travel.vo.enums.ItemTypeEnum;
 import com.business.travel.vo.enums.WeekEnum;
 import com.google.common.base.Preconditions;
 import com.lxj.xpopup.XPopup.Builder;
-import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.enums.PopupAnimation;
 import com.lxj.xpopup.impl.BottomListPopupView;
 import com.lxj.xpopup.impl.ConfirmPopupView;
+import lombok.var;
 import org.apache.commons.lang3.StringUtils;
+
+import static java.util.stream.Collectors.toMap;
 
 /**
  * 账单详情页面
@@ -66,6 +71,7 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 	 * 当前被选中的账单信息
 	 */
 	private Long selectBillId;
+	private ConsumptionTypeEnum consumptionTypeEnum;
 
 	//注入service
 	private BillService billService;
@@ -94,9 +100,9 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//注册消费项列表
-		registerPageView(viewBinding.GridViewPagerConsumptionIconList, consumptionIconList);
+		registerPageView(viewBinding.GridViewPagerConsumptionIconList, consumptionIconList, ItemTypeEnum.CONSUMPTION);
 		//注册人员列表
-		registerPageView(viewBinding.GridViewPagerMemberIconList, memberIconList);
+		registerPageView(viewBinding.GridViewPagerMemberIconList, memberIconList, ItemTypeEnum.MEMBER);
 
 		//注册更新消费时间事件
 		registerUpdateConsumeDate(viewBinding.time);
@@ -224,7 +230,7 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 	 * @param gridViewPager
 	 * @param dataList
 	 */
-	private void registerPageView(GridViewPager gridViewPager, List<ImageIconInfo> dataList) {
+	private void registerPageView(GridViewPager gridViewPager, List<ImageIconInfo> dataList, ItemTypeEnum itemType) {
 		GridViewPagerUtil.registerPageViewCommonProperty(gridViewPager)
 		                 // 设置数据总数量
 		                 .setDataAllCount(dataList.size())
@@ -235,7 +241,7 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		                 // 数据绑定
 		                 .setImageTextLoaderInterface((imageView, textView, position) -> {
 			                 // 自己进行数据的绑定，灵活度更高，不受任何限制
-			                 bind(imageView, textView, dataList.get(position));
+			                 bind(imageView, textView, dataList.get(position),itemType);
 		                 });
 	}
 
@@ -264,7 +270,9 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		viewBinding.time.setText(date + " " + weekEnum.getMsg());
 		//消费类型
 		String consumptionType = bill.getConsumptionType();
-		viewBinding.consumerType.setText(ConsumptionTypeEnum.valueOf(consumptionType).getMsg());
+		//全局
+		consumptionTypeEnum = ConsumptionTypeEnum.valueOf(consumptionType);
+		viewBinding.consumerType.setText(consumptionTypeEnum.getMsg());
 
 		//备注
 		viewBinding.remark.setText(bill.getRemark());
@@ -336,7 +344,7 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 				.show();
 	}
 
-	private void bind(ImageView imageView, TextView textView, ImageIconInfo imageIconInfo) {
+	private void bind(ImageView imageView, TextView textView, ImageIconInfo imageIconInfo, ItemTypeEnum itemTypeEnum) {
 		imageView.setBackgroundResource(R.drawable.corners_shape_select);
 		imageView.setImageResource(R.drawable.ic_base_placeholder);
 
@@ -344,17 +352,52 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView);
 
 		imageView.setOnClickListener(v -> {
-			List<ImageIconInfo> imageIconInfos = new ArrayList<>();
-			if (ConsumptionTypeEnum.SPENDING.getMsg().equals(viewBinding.consumerType.getText().toString())) {
-				imageIconInfos = consumptionService.queryAllConsumptionIconInfo(ConsumptionTypeEnum.SPENDING);
-			} else if (ConsumptionTypeEnum.INCOME.getMsg().equals(viewBinding.consumerType.getText().toString())) {
-				imageIconInfos = consumptionService.queryAllConsumptionIconInfo(ConsumptionTypeEnum.INCOME);
-			}
-
+			//构建弹框图标数据
+			List<ImageIconInfo> result = genPopupImageIconInfos(itemTypeEnum);
+			//弹出底部弹框
 			Builder builder = new Builder(this).maxHeight(ScreenUtils.getScreenHeight() * 2 / 3).popupAnimation(PopupAnimation.ScrollAlphaFromTop);
-			BasePopupView basePopupView = builder.asCustom(new BottomIconListPopupView(this, imageIconInfos));
-			basePopupView.setEnabled(false);
-			basePopupView.show();
+			builder.asCustom(new BottomIconListPopupView(this, result)).show();
 		});
 	}
+
+	/**
+	 * 构建弹框图标数据
+	 *
+	 * @param itemTypeEnum
+	 * @return
+	 */
+	@org.jetbrains.annotations.NotNull
+	private List<ImageIconInfo> genPopupImageIconInfos(ItemTypeEnum itemTypeEnum) {
+		//先查询对应的图标
+		List<ImageIconInfo> imageIconInfos = queryItemIcon(itemTypeEnum);
+		//处理一下是否被选中
+		Map<Long, ImageIconInfo> collect = imageIconInfos.stream().collect(toMap(ImageIconInfo::getId, item -> item));
+		consumptionIconList.forEach(iconInfo -> {
+			ImageIconInfo imageIconSelect = collect.get(iconInfo.getId());
+			if (imageIconSelect != null) {
+				imageIconSelect.setSelected(true);
+			} else {
+				imageIconInfos.add(iconInfo);
+			}
+		});
+
+		return imageIconInfos.stream().sorted((o1, o2) -> {
+			//排序,选中的排前面
+			var i1 = o1.isSelected() ? 0 : 1;
+			var i2 = o2.isSelected() ? 0 : 1;
+			return i1 - i2;
+		}).collect(Collectors.toList());
+	}
+
+	private List<ImageIconInfo> queryItemIcon(ItemTypeEnum itemTypeEnum) {
+		switch (itemTypeEnum) {
+			case CONSUMPTION:
+				return consumptionService.queryAllConsumptionIconInfo(consumptionTypeEnum);
+			case MEMBER:
+				return memberService.queryAllMembersIconInfo();
+			default:
+				return new ArrayList<>();
+		}
+	}
+
 }

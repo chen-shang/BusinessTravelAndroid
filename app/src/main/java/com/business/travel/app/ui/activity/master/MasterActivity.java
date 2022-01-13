@@ -17,7 +17,6 @@ import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityMasterBinding;
 import com.business.travel.app.enums.MasterFragmentPositionEnum;
-import com.business.travel.app.enums.OperateTypeEnum;
 import com.business.travel.app.model.BillAddModel;
 import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.activity.bill.AddBillActivity;

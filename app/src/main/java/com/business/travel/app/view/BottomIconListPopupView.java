@@ -6,7 +6,6 @@ import android.content.Context;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager;
 import com.business.travel.app.R;
 import com.business.travel.app.model.ImageIconInfo;
@@ -61,13 +60,19 @@ public class BottomIconListPopupView extends BottomPopupView {
 
 		textView.setText(imageIconInfo.getName());
 
-		int selectColor = ContextCompat.getColor(getContext(), R.color.red_2);
-		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView, imageIconInfo.isSelected() ? selectColor : null);
+		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView);
+		if (imageIconInfo.isSelected()) {
+			imageView.setBackgroundResource(R.drawable.corners_shape_select);
+		}
 
 		imageView.setOnClickListener(v -> {
 			//否则,改变选中颜色
 			imageIconInfo.setSelected(!imageIconInfo.isSelected());
-			ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView, imageIconInfo.isSelected() ? selectColor : null);
+			if (imageIconInfo.isSelected()) {
+				imageView.setBackgroundResource(R.drawable.corners_shape_select);
+			} else {
+				imageView.setBackgroundResource(R.drawable.corners_shape_unselect);
+			}
 		});
 	}
 }
