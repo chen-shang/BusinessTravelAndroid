@@ -149,7 +149,7 @@ public class EditConsumptionActivity extends ColorStatusBarActivity<ActivityEdit
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setLongPressDragEnabled(true);
 		//当移动之后
 		viewBinding.UIConsumerItemSwipeRecyclerViewConsumerItem.setOnItemMoveListener(new BaseRecyclerViewOnItemMoveListener<>(imageIconInfoList, editItemRecyclerViewAdapter).onItemMove((itemList, fromPosition, toPosition) -> {
-			IntStream.rangeClosed(0, Integer.max(fromPosition, toPosition)).forEachOrdered(i -> consumptionService.updateMemberSort(itemList.get(i).getId(), (long)i));
+			IntStream.rangeClosed(0, Integer.max(fromPosition, toPosition)).forEachOrdered(i -> consumptionService.updateConsumptionSort(itemList.get(i).getId(), (long)i));
 		}));
 
 		//添加分隔线

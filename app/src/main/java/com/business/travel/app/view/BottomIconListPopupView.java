@@ -30,6 +30,13 @@ public class BottomIconListPopupView extends BottomPopupView {
 		return R.layout.bottom_icon_list_popup;
 	}
 
+	public Runnable onConfirm;
+
+	public BottomIconListPopupView onConfirm(Runnable onConfirm) {
+		this.onConfirm = onConfirm;
+		return this;
+	}
+
 	@Override
 	protected void onCreate() {
 		super.onCreate();
@@ -52,7 +59,9 @@ public class BottomIconListPopupView extends BottomPopupView {
 			                 bind(imageView, textView, imageIconInfoList.get(position));
 		                 }).show();
 
-		contentBar.contentBarLeftIcon.setOnClickListener(v -> {
+		contentBar.contentBarLeftIcon.setOnClickListener(v -> this.dismiss());
+		contentBar.contentBarRightIcon.setOnClickListener(v -> {
+			onConfirm.run();
 			this.dismiss();
 		});
 	}

@@ -53,7 +53,7 @@ public class ConsumptionService {
 	 * @param id
 	 * @param sortId
 	 */
-	public void updateMemberSort(Long id, Long sortId) {
+	public void updateConsumptionSort(Long id, Long sortId) {
 		consumptionDao.updateSort(id, sortId);
 	}
 

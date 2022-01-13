@@ -131,76 +131,83 @@
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    >
+                    android:orientation="vertical">
 
                 <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="10dp"
                         >
 
-                    <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="日期"
-                            />
-
-                    <TextView
-                            android:id="@+id/time"
+                    <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="计费房间诶发"
-                            android:gravity="end"
-                            android:maxLines="1"
-                            android:ellipsize="end"
-                            android:background="@null"
-                            android:drawableEnd="@drawable/ic_base_right_arrow"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp"
+                            >
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="日期"
+                                />
+
+                        <TextView
+                                android:id="@+id/time"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="计费房间诶发"
+                                android:gravity="end"
+                                android:maxLines="1"
+                                android:ellipsize="end"
+                                android:background="@null"
+                                android:drawableEnd="@drawable/ic_base_right_arrow"
+                                android:drawablePadding="10dp"
+                                >
+                        </TextView>
+                    </LinearLayout>
+
+                    <include layout="@layout/base_dotted_line"/>
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp">
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="项目"
+                                />
+
+                        <TextView
+                                android:id="@+id/projectName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:maxLines="1"
+                                android:ellipsize="end"
+                                android:background="@null"
+                                android:drawableEnd="@drawable/ic_base_right_arrow"
+                                android:drawablePadding="10dp"
+                                >
+                        </TextView>
+                    </LinearLayout>
+
+                    <include layout="@layout/base_dotted_line"/>
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="消费人员"
                             >
                     </TextView>
                 </LinearLayout>
-
-                <include layout="@layout/base_dotted_line"/>
-
-                <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp">
-
-                    <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="项目"
-                            />
-
-                    <TextView
-                            android:id="@+id/projectName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="end"
-                            android:maxLines="1"
-                            android:ellipsize="end"
-                            android:background="@null"
-                            android:drawableEnd="@drawable/ic_base_right_arrow"
-                            >
-                    </TextView>
-                </LinearLayout>
-
-                <include layout="@layout/base_dotted_line"/>
-
-                <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="消费人员"
-                        >
-                </TextView>
                 <!--  下面的项目列表数据   -->
                 <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
                         android:id="@+id/GridViewPagerMemberIconList"
-                        android:layout_marginTop="5dp"
                         android:backgroundTint="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">

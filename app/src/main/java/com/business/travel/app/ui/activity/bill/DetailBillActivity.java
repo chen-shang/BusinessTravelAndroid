@@ -47,6 +47,7 @@ import com.lxj.xpopup.impl.BottomListPopupView;
 import com.lxj.xpopup.impl.ConfirmPopupView;
 import org.apache.commons.lang3.StringUtils;
 
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toMap;
 
 /**
@@ -122,15 +123,16 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 	@Override
 	protected void onStart() {
 		super.onStart();
-		Try.of(() -> {
-			//参数检查
-			Preconditions.checkArgument(selectBillId > 0, "请选择账单");
-			Bill bill = billService.queryBillById(selectBillId);
-			Preconditions.checkArgument(bill != null, "未查询到账单 " + selectBillId);
-			//业务逻辑
-			showBillDetail(bill);
-			//结果处理
-		});
+		Try.of(() -> refreshData());
+	}
+
+	private void refreshData() {
+		//参数检查
+		Preconditions.checkArgument(selectBillId > 0, "请选择账单");
+		Bill bill = billService.queryBillById(selectBillId);
+		Preconditions.checkArgument(bill != null, "未查询到账单 " + selectBillId);
+		//业务逻辑
+		showBillDetail(bill);
 	}
 
 	private void registerDeleteBill() {
@@ -344,34 +346,51 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 	}
 
 	private void bind(ImageView imageView, TextView textView, ImageIconInfo imageIconInfo, ItemTypeEnum itemTypeEnum) {
+		textView.setText(imageIconInfo.getName());
+
 		imageView.setBackgroundResource(R.drawable.corners_shape_select);
 		imageView.setImageResource(R.drawable.ic_base_placeholder);
-
-		textView.setText(imageIconInfo.getName());
 		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView);
 
-		imageView.setOnClickListener(v -> {
-			//构建弹框图标数据
-			List<ImageIconInfo> result = genPopupImageIconInfos(itemTypeEnum);
-			//弹出底部弹框
-			Builder builder = new Builder(this).maxHeight(ScreenUtils.getScreenHeight() * 2 / 3).popupAnimation(PopupAnimation.ScrollAlphaFromTop);
-			builder.asCustom(new BottomIconListPopupView(this, result)).show();
-		});
+		Builder builder = new Builder(this).maxHeight(ScreenUtils.getScreenHeight() * 2 / 3).popupAnimation(PopupAnimation.ScrollAlphaFromTop);
+		switch (itemTypeEnum) {
+			case CONSUMPTION:
+				imageView.setOnClickListener(v -> {
+					List<ImageIconInfo> result = genPopupConsumptionImageIcon();
+					builder.asCustom(new BottomIconListPopupView(this, result).onConfirm(() -> {
+						String collect = result.stream().filter(ImageIconInfo::isSelected).map(ImageIconInfo::getId).map(String::valueOf).collect(joining(","));
+						Bill bill = new Bill();
+						bill.setConsumptionIds(collect);
+						billService.updateBill(selectBillId, bill);
+
+						//跟新图标
+						refreshData();
+					})).show();
+				});
+				break;
+			case MEMBER:
+				imageView.setOnClickListener(v -> {
+					List<ImageIconInfo> result = genPopupMemberImageIcon();
+					builder.asCustom(new BottomIconListPopupView(this, result).onConfirm(() -> {
+						String collect = result.stream().filter(ImageIconInfo::isSelected).map(ImageIconInfo::getId).map(String::valueOf).collect(joining(","));
+						Bill bill = new Bill();
+						bill.setMemberIds(collect);
+						billService.updateBill(selectBillId, bill);
+
+						refreshData();
+					})).show();
+				});
+				break;
+		}
 	}
 
-	/**
-	 * 构建弹框图标数据
-	 *
-	 * @param itemTypeEnum
-	 * @return
-	 */
-	@org.jetbrains.annotations.NotNull
-	private List<ImageIconInfo> genPopupImageIconInfos(ItemTypeEnum itemTypeEnum) {
+	private List<ImageIconInfo> genPopupMemberImageIcon() {
 		//先查询对应的图标
-		List<ImageIconInfo> imageIconInfos = queryItemIcon(itemTypeEnum);
+		List<ImageIconInfo> imageIconInfos = memberService.queryAllMembersIconInfo();
 		//处理一下是否被选中
 		Map<Long, ImageIconInfo> collect = imageIconInfos.stream().collect(toMap(ImageIconInfo::getId, item -> item));
-		consumptionIconList.forEach(iconInfo -> {
+
+		memberIconList.forEach(iconInfo -> {
 			ImageIconInfo imageIconSelect = collect.get(iconInfo.getId());
 			if (imageIconSelect != null) {
 				imageIconSelect.setSelected(true);
@@ -388,15 +407,26 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 		}).collect(Collectors.toList());
 	}
 
-	private List<ImageIconInfo> queryItemIcon(ItemTypeEnum itemTypeEnum) {
-		switch (itemTypeEnum) {
-			case CONSUMPTION:
-				return consumptionService.queryAllConsumptionIconInfo(consumptionTypeEnum);
-			case MEMBER:
-				return memberService.queryAllMembersIconInfo();
-			default:
-				return new ArrayList<>();
-		}
-	}
+	private List<ImageIconInfo> genPopupConsumptionImageIcon() {
+		//先查询对应的图标
+		List<ImageIconInfo> imageIconInfos = consumptionService.queryAllConsumptionIconInfo(consumptionTypeEnum);
+		//处理一下是否被选中
+		Map<Long, ImageIconInfo> collect = imageIconInfos.stream().collect(toMap(ImageIconInfo::getId, item -> item));
 
+		consumptionIconList.forEach(iconInfo -> {
+			ImageIconInfo imageIconSelect = collect.get(iconInfo.getId());
+			if (imageIconSelect != null) {
+				imageIconSelect.setSelected(true);
+			} else {
+				imageIconInfos.add(iconInfo);
+			}
+		});
+
+		return imageIconInfos.stream().sorted((o1, o2) -> {
+			//排序,选中的排前面
+			int i1 = o1.isSelected() ? 0 : 1;
+			int i2 = o2.isSelected() ? 0 : 1;
+			return i1 - i2;
+		}).collect(Collectors.toList());
+	}
 }
