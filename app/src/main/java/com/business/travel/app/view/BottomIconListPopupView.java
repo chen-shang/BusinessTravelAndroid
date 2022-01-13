@@ -3,14 +3,11 @@ package com.business.travel.app.view;
 import java.util.List;
 
 import android.content.Context;
-import android.widget.ImageView;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager;
 import com.business.travel.app.R;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.utils.GridViewPagerUtil;
-import com.business.travel.app.utils.ImageLoadUtil;
 import com.lxj.xpopup.core.BottomPopupView;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,6 +16,10 @@ public class BottomIconListPopupView extends BottomPopupView {
 	 * 消费项图标信息列表
 	 */
 	private final List<ImageIconInfo> imageIconInfoList;
+	/**
+	 * 默认展示6列
+	 */
+	private static final int COLUMN_COUNT = 6;
 
 	public BottomIconListPopupView(@NonNull @NotNull Context context, List<ImageIconInfo> imageIconInfoList) {
 		super(context);
@@ -47,7 +48,7 @@ public class BottomIconListPopupView extends BottomPopupView {
 		                 // 设置数据总数量
 		                 .setDataAllCount(imageIconInfoList.size())
 		                 // 设置每页行数 // 设置每页列数
-		                 .setRowCount((int)Math.ceil(imageIconInfoList.size() / 5d)).setColumnCount(5)
+		                 .setRowCount((int)Math.ceil(imageIconInfoList.size() / (double)COLUMN_COUNT)).setColumnCount(COLUMN_COUNT)
 		                 // 设置是否显示指示器
 		                 .setPointIsShow(true)
 		                 // 设置背景图片(此时设置的背景色无效，以背景图片为主)
@@ -56,36 +57,15 @@ public class BottomIconListPopupView extends BottomPopupView {
 		                 // 数据绑定
 		                 .setImageTextLoaderInterface((imageView, textView, position) -> {
 			                 // 自己进行数据的绑定，灵活度更高，不受任何限制
-			                 bind(imageView, textView, imageIconInfoList.get(position));
+			                 ImageIconInfo imageIconInfo = imageIconInfoList.get(position);
+			                 // 绑定图标、文字和点击行为
+			                 imageIconInfo.bind(imageView, textView);
 		                 }).show();
 
 		contentBar.contentBarLeftIcon.setOnClickListener(v -> this.dismiss());
 		contentBar.contentBarRightIcon.setOnClickListener(v -> {
 			onConfirm.run();
 			this.dismiss();
-		});
-	}
-
-	private void bind(ImageView imageView, TextView textView, ImageIconInfo imageIconInfo) {
-		//默认未选中状态
-		imageView.setBackgroundResource(R.drawable.corners_shape_unselect);
-		imageView.setImageResource(R.drawable.ic_base_placeholder);
-
-		textView.setText(imageIconInfo.getName());
-
-		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), imageView);
-		if (imageIconInfo.isSelected()) {
-			imageView.setBackgroundResource(R.drawable.corners_shape_select);
-		}
-
-		imageView.setOnClickListener(v -> {
-			//否则,改变选中颜色
-			imageIconInfo.setSelected(!imageIconInfo.isSelected());
-			if (imageIconInfo.isSelected()) {
-				imageView.setBackgroundResource(R.drawable.corners_shape_select);
-			} else {
-				imageView.setBackgroundResource(R.drawable.corners_shape_unselect);
-			}
 		});
 	}
 }

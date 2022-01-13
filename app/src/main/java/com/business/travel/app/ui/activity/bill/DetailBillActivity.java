@@ -123,7 +123,7 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 	@Override
 	protected void onStart() {
 		super.onStart();
-		Try.of(() -> refreshData());
+		Try.of(this::refreshData);
 	}
 
 	private void refreshData() {
