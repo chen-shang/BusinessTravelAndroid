@@ -51,6 +51,10 @@ public class BottomIconListPopupView extends BottomPopupView {
 			                 // 自己进行数据的绑定，灵活度更高，不受任何限制
 			                 bind(imageView, textView, imageIconInfoList.get(position));
 		                 }).show();
+
+		contentBar.contentBarLeftIcon.setOnClickListener(v -> {
+			this.dismiss();
+		});
 	}
 
 	private void bind(ImageView imageView, TextView textView, ImageIconInfo imageIconInfo) {

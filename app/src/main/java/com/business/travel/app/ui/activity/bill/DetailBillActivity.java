@@ -45,7 +45,6 @@ import com.lxj.xpopup.XPopup.Builder;
 import com.lxj.xpopup.enums.PopupAnimation;
 import com.lxj.xpopup.impl.BottomListPopupView;
 import com.lxj.xpopup.impl.ConfirmPopupView;
-import lombok.var;
 import org.apache.commons.lang3.StringUtils;
 
 import static java.util.stream.Collectors.toMap;
@@ -383,8 +382,8 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 
 		return imageIconInfos.stream().sorted((o1, o2) -> {
 			//排序,选中的排前面
-			var i1 = o1.isSelected() ? 0 : 1;
-			var i2 = o2.isSelected() ? 0 : 1;
+			int i1 = o1.isSelected() ? 0 : 1;
+			int i2 = o2.isSelected() ? 0 : 1;
 			return i1 - i2;
 		}).collect(Collectors.toList());
 	}
