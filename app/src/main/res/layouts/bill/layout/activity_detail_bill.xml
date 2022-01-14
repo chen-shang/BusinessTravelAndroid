@@ -36,6 +36,7 @@
                 app:cardCornerRadius="5dp"
                 android:padding="5dp"
                 android:layout_marginBottom="5dp"
+                app:cardElevation="0dp"
                 >
 
             <LinearLayout
@@ -139,6 +140,7 @@
                 app:cardCornerRadius="5dp"
                 android:padding="5dp"
                 android:layout_marginBottom="5dp"
+                app:cardElevation="0dp"
                 >
             <!--  下面的项目列表数据   -->
             <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
@@ -158,6 +160,7 @@
                 app:cardCornerRadius="5dp"
                 android:padding="5dp"
                 android:layout_marginBottom="5dp"
+                app:cardElevation="0dp"
                 >
 
             <LinearLayout

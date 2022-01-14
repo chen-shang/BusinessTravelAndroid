@@ -11,6 +11,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
+            app:cardElevation="0dp"
             >
 
         <androidx.constraintlayout.widget.ConstraintLayout
