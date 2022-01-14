@@ -10,20 +10,11 @@
             android:id="@+id/topTitleBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:content_bar_title="选择分类"
             app:content_bar_left_icon="@drawable/ic_base_return_gray"
-            app:content_bar_right_icon="@drawable/ic_base_right_gray"
+            app:content_bar_title="选择项目"
             />
 
-    <ScrollView
+    <com.yanzhenjie.recyclerview.SwipeRecyclerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white">
-
-        <cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager
-                android:id="@+id/GridViewPager_MemberIconList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-        </cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager>
-    </ScrollView>
+            android:layout_height="wrap_content"/>
 </LinearLayout>
