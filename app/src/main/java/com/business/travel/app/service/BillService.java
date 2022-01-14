@@ -164,17 +164,20 @@ public class BillService {
 		Long consumeDate = bill.getConsumeDate();
 		if (consumeDate != null && consumeDate != record.getConsumeDate()) {
 			record.setConsumeDate(consumeDate);
+			LogUtils.i("更新消费时间 consumeDate:" + consumeDate + "->" + record.getConsumeDate());
 			change = true;
 		}
 		String consumptionIds = bill.getConsumptionIds();
 		if (StringUtils.isNotBlank(consumptionIds) && !consumptionIds.equals(record.getConsumptionIds())) {
 			record.setConsumptionIds(consumptionIds);
+			LogUtils.i("更新消费项目 consumptionIds:" + consumptionIds + "->" + record.getConsumptionIds());
 			change = true;
 		}
 
 		String memberIds = bill.getMemberIds();
 		if (StringUtils.isNotBlank(memberIds) && !memberIds.equals(record.getMemberIds())) {
 			record.setMemberIds(memberIds);
+			LogUtils.i("更新消费成员 memberIds:" + memberIds + "->" + record.getMemberIds());
 			change = true;
 		}
 		String iconDownloadUrl = bill.getIconDownloadUrl();

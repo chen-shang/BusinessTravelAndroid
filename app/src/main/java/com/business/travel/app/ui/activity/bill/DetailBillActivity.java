@@ -29,6 +29,7 @@ import com.business.travel.app.service.MemberService;
 import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.base.ColorStatusBarActivity;
 import com.business.travel.app.utils.GridViewPagerUtil;
+import com.business.travel.app.utils.LogToast;
 import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.app.utils.Try;
 import com.business.travel.app.view.BottomIconListPopupView;
@@ -136,9 +137,9 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 				                 //当点击确认按钮之后
 				                 builder.asCustom(new BottomIconListPopupView(this, result).onConfirm(() -> {
 					                 String collect = result.stream().filter(ImageIconInfo::isSelected).map(ImageIconInfo::getId).map(String::valueOf).collect(joining(","));
-					                 Bill bill = new Bill();
-					                 bill.setMemberIds(collect);
-					                 billService.updateBill(selectBillId, bill);
+					                 Bill record = new Bill();
+					                 record.setMemberIds(collect);
+					                 updateBill(record);
 					                 //更新图标
 					                 refreshData(selectBillId);
 				                 })).show();
@@ -168,12 +169,17 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 					                 String collect = result.stream().filter(ImageIconInfo::isSelected).map(ImageIconInfo::getId).map(String::valueOf).collect(joining(","));
 					                 Bill bill = new Bill();
 					                 bill.setConsumptionIds(collect);
-					                 billService.updateBill(selectBillId, bill);
+					                 updateBill(bill);
 					                 //更新图标
 					                 refreshData(selectBillId);
 				                 })).show();
 			                 });
 		                 });
+	}
+
+	private void updateBill(Bill bill) {
+		billService.updateBill(selectBillId, bill);
+		LogToast.infoShow("更新成功");
 	}
 
 	@Override
@@ -215,7 +221,7 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 			Bill record = new Bill();
 			Project project = projectService.queryByName(text);
 			record.setProjectId(project.getId());
-			billService.updateBill(selectBillId, record);
+			updateBill(record);
 		});
 		viewBinding.projectName.setOnClickListener(v -> {
 			int checkedPosition = getIndexOf(data, viewBinding.projectName.getText().toString());
@@ -240,20 +246,21 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 				String s = ((EditText)v).getText().toString();
 				Bill record = new Bill();
 				record.setAmount(MoneyUtil.toFen(s));
-				billService.updateBill(selectBillId, record);
+				updateBill(record);
 			}
 		}));
 	}
 
 	private void registerUpdateRemark(EditText remark) {
 		remark.setTextColor(viewBinding.projectName.getCurrentTextColor());
+		remark.setTextSize(20);
 		remark.setOnFocusChangeListener((v, hasFocus) -> Try.of(() -> {
 			//失去焦点的时候保存
 			if (!hasFocus) {
 				String s = ((EditText)v).getText().toString();
 				Bill record = new Bill();
 				record.setRemark(s);
-				billService.updateBill(selectBillId, record);
+				updateBill(record);
 			}
 		}));
 	}
@@ -266,7 +273,7 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 			String date = DateTimeUtil.format(localDate, "yyyy-MM-dd");
 			Bill record = new Bill();
 			record.setConsumeDate(DateTimeUtil.timestamp(date, "yyyy-MM-dd"));
-			billService.updateBill(selectBillId, record);
+			updateBill(record);
 			//周几
 			WeekEnum weekEnum = WeekEnum.ofCode(localDate.getDayOfWeek().getValue());
 			viewBinding.time.setText(date + " " + weekEnum.getMsg());
