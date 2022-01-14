@@ -81,6 +81,7 @@
                         android:layout_height="50dp"
                         android:layout_margin="10dp"
                         android:id="@+id/cardView4"
+                        app:cardElevation="0dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
@@ -116,6 +117,7 @@
                         android:layout_height="50dp"
                         android:layout_margin="10dp"
                         android:id="@+id/cardView3"
+                        app:cardElevation="0dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
