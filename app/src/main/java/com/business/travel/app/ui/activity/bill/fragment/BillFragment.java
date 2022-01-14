@@ -88,6 +88,9 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 
 		//初始化中间的加号
 		floatingActionButton = requireActivity().findViewById(R.id.UI_MasterActivity_FloatingActionButton);
+		masterActivity = (MasterActivity)ActivityUtils.getActivityByContext(this.getContext());
+		//初始化放到这里面
+		selectedProjectId = Optional.ofNullable(selectedProjectId).orElseGet(() -> Optional.ofNullable(projectService.queryLatestModify()).map(Project::getId).orElse(null));
 	}
 
 	@Override
@@ -95,21 +98,13 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 		View view = super.onCreateView(inflater, container, savedInstanceState);
 		//注册账单列表页
 		registerSwipeRecyclerView(viewBinding.RecyclerViewBillList);
-		masterActivity = (MasterActivity)ActivityUtils.getActivityByContext(this.getContext());
 		return view;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		int lastFragment = masterActivity.getLastFragment();
-		int currentFragment = masterActivity.getCurrentFragment();
-		//旋转上升动画显示中间的加号
-		if (lastFragment < currentFragment) {
-			AnimalUtil.show(floatingActionButton, Orientation.LEFT_RIGHT);
-		} else {
-			AnimalUtil.show(floatingActionButton, Orientation.RIGHT_LEFT);
-		}
+		AnimalUtil.show(floatingActionButton, masterActivity.getLastFragment() < masterActivity.getCurrentFragment() ? Orientation.LEFT_RIGHT : Orientation.RIGHT_LEFT);
 		//刷新当前项目的账单数据
 		refreshBillList(selectedProjectId);
 	}
@@ -117,13 +112,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	@Override
 	public void onPause() {
 		super.onPause();
-		int lastFragment = masterActivity.getLastFragment();
-		int currentFragment = masterActivity.getCurrentFragment();
-		if (lastFragment < currentFragment) {
-			AnimalUtil.reset(floatingActionButton, Orientation.LEFT_RIGHT);
-		} else {
-			AnimalUtil.reset(floatingActionButton, Orientation.RIGHT_LEFT);
-		}
+		AnimalUtil.reset(floatingActionButton, masterActivity.getLastFragment() < masterActivity.getCurrentFragment() ? Orientation.LEFT_RIGHT : Orientation.RIGHT_LEFT);
 	}
 
 	/**
