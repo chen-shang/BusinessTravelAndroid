@@ -5,6 +5,7 @@ import java.util.List;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import cn.mtjsoft.www.gridviewpager_recycleview.GridViewPager;
+import com.blankj.utilcode.util.ColorUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.utils.GridViewPagerUtil;
@@ -15,7 +16,7 @@ public class BottomIconListPopupView extends BottomPopupView {
 	/**
 	 * 默认展示6列
 	 */
-	private static final int COLUMN_COUNT = 6;
+	private static final int COLUMN_COUNT = 5;
 	/**
 	 * 消费项图标信息列表
 	 */
@@ -59,6 +60,8 @@ public class BottomIconListPopupView extends BottomPopupView {
 		//弹框图标初始化
 		GridViewPager gridViewPager = findViewById(R.id.GridViewPager_MemberIconList);
 		GridViewPagerUtil.registerPageViewCommonProperty(gridViewPager)
+		                 // 设置背景色，默认白色
+		                 .setGridViewPagerBackgroundColor(ColorUtils.getColor(R.color.white))
 		                 // 设置数据总数量
 		                 .setDataAllCount(imageIconInfoList.size())
 		                 // 设置每页行数

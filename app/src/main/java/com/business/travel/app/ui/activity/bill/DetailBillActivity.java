@@ -63,18 +63,17 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 	 * 消费项图标列表
 	 */
 	private final List<ImageIconInfo> consumptionIconList = new ArrayList<>();
+	private final Builder builder = new Builder(this).popupHeight(ScreenUtils.getScreenHeight() / 2).popupAnimation(PopupAnimation.ScrollAlphaFromTop);
 	/**
 	 * 当前被选中的账单信息
 	 */
 	private Long selectBillId;
 	private ConsumptionTypeEnum consumptionTypeEnum;
-
 	//注入service
 	private BillService billService;
 	private ProjectService projectService;
 	private MemberService memberService;
 	private ConsumptionService consumptionService;
-
 	/**
 	 * 日历选框
 	 */
@@ -118,8 +117,6 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 	}
 
 	private void registerMemberPageView(GridViewPager gridViewPager, List<ImageIconInfo> dataList) {
-		Builder builder = new Builder(this).maxHeight(ScreenUtils.getScreenHeight() * 2 / 3).popupAnimation(PopupAnimation.ScrollAlphaFromTop);
-
 		GridViewPagerUtil.registerPageViewCommonProperty(gridViewPager)
 		                 // 设置数据总数量
 		                 .setDataAllCount(dataList.size())
@@ -150,8 +147,6 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 	}
 
 	private void registerConsumptionPageView(GridViewPager gridViewPager, List<ImageIconInfo> dataList) {
-		Builder builder = new Builder(this).maxHeight(ScreenUtils.getScreenHeight() * 2 / 3).popupAnimation(PopupAnimation.ScrollAlphaFromTop);
-
 		GridViewPagerUtil.registerPageViewCommonProperty(gridViewPager)
 		                 // 设置数据总数量
 		                 .setDataAllCount(dataList.size())
