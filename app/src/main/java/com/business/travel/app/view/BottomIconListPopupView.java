@@ -60,6 +60,8 @@ public class BottomIconListPopupView extends BottomPopupView {
 		//弹框图标初始化
 		GridViewPager gridViewPager = findViewById(R.id.GridViewPager_MemberIconList);
 		GridViewPagerUtil.registerPageViewCommonProperty(gridViewPager)
+		                 // 设置图片宽度 // 设置图片高度
+		                 .setImageWidth(35).setImageHeight(35)
 		                 // 设置背景色，默认白色
 		                 .setGridViewPagerBackgroundColor(ColorUtils.getColor(R.color.white))
 		                 // 设置数据总数量
