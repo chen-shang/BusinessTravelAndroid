@@ -46,12 +46,12 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
 	@Getter
 	private BillRecyclerViewAdapter billRecyclerViewAdapter;
 
-	/**
-	 * 当前页面选中的项目
-	 */
-	@Setter
-	@Getter
-	private Long selectedProjectId;
+    /**
+     * 当前页面选中的项目
+     */
+    @Setter
+    @Getter
+    public static Long selectedProjectId;
 
 	/**
 	 * 账单顶部view

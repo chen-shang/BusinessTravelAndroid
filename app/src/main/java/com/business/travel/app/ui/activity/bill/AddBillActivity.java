@@ -218,8 +218,9 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 			//如果存在则在当前项目下创建账单
 			createBillWithProject(project);
 			//更新返回页的数据
-			BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
-			billFragment.setSelectedProjectId(project.getId());
+//			BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
+//			billFragment.setSelectedProjectId(project.getId());
+			BillFragment.selectedProjectId = project.getId();
 			LogToast.infoShow("记账成功");
 		});
 	}
