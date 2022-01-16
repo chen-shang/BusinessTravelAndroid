@@ -44,5 +44,5 @@ public abstract class AppDatabase extends RoomDatabase {
     /**
      * 用户信息
      */
-    public abstract UserDao UserDao();
+    public abstract UserDao userDao();
 }
