@@ -49,10 +49,14 @@
         <activity
                 android:name=".ui.activity.item.consumption.EditConsumptionActivity"
                 />
-        <activity android:name=".ui.activity.master.MasterActivity"/>
+        <activity
+                android:name=".ui.activity.master.MasterActivity"
+                android:launchMode="singleInstance"
+                />
         <activity
                 android:name=".ui.MainActivity"
                 android:theme="@style/Theme.Main"
+                android:launchMode="singleInstance"
                 >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
