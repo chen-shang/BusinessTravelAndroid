@@ -11,6 +11,7 @@ import com.business.travel.app.service.UserService;
 import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.FutureUtil;
+import com.lxj.xpopup.XPopup;
 
 import java.util.Timer;
 import java.util.TimerTask;
