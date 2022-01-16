@@ -3,6 +3,7 @@ package com.business.travel.app.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import com.blankj.utilcode.util.LogUtils;
+import com.business.travel.app.dal.entity.User;
 import com.business.travel.app.databinding.ActivityMainBinding;
 import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.service.MemberService;
@@ -39,7 +40,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     protected void onStart() {
         super.onStart();
         //用户必须同意用户协议才能进行下一步
-
+        User user = userService.queryUser();
+        //此时还没有用户
+        if (user == null || !user.getAgree()) {
+            //弹出同意弹框
+            return;
+        }
 
         //要充分利用启动页面的停顿时间,尽量做一些后台工作,比如检查网络,同步数据之类的,初始化数据之类
         //因为这个类只在启动的时候启动一次,不会重复做一些事情,可以提升其他页面的访问速度

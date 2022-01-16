@@ -24,4 +24,11 @@ public class UserService {
     public User queryUser() {
         return userDao.selectOne();
     }
+
+    /**
+     * 初始化本机用户
+     */
+    public void initUser() {
+
+    }
 }
