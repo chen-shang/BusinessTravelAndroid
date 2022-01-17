@@ -1,14 +1,5 @@
 package com.business.travel.app.ui.activity.bill;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.validation.constraints.NotNull;
-
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -43,6 +34,14 @@ import com.lxj.xpopup.enums.PopupAnimation;
 import com.lxj.xpopup.impl.BottomListPopupView;
 import com.lxj.xpopup.impl.ConfirmPopupView;
 import org.apache.commons.lang3.StringUtils;
+
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toMap;
@@ -249,15 +248,11 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
                 updateBill(record);
             }
         }));
-
-        viewBinding.remarkEdit.setOnClickListener(v -> {
-            editeText.setFocusable(true);
-        });
     }
 
     private void registerUpdateRemark(EditText remark) {
         remark.setTextColor(viewBinding.projectName.getCurrentTextColor());
-        remark.setTextSize(13);
+        remark.setTextSize(15);
         remark.setOnFocusChangeListener((v, hasFocus) -> Try.of(() -> {
             //失去焦点的时候保存
             if (!hasFocus) {
@@ -267,10 +262,6 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
                 updateBill(record);
             }
         }));
-
-        viewBinding.remarkEdit.setOnClickListener(v -> {
-            remark.setFocusable(true);
-        });
     }
 
     private void registerUpdateConsumeDate(View view) {
