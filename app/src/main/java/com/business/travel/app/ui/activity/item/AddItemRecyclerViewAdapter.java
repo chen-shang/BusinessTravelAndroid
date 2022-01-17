@@ -1,12 +1,5 @@
 package com.business.travel.app.ui.activity.item;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,93 +28,110 @@ import com.google.common.cache.LoadingCache;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
 public class AddItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<AddItemRecyclerViewAdapterViewAdapterViewHolder, GiteeContent> {
-	private static final LoadingCache<String, List<GiteeContent>> cache =
-			CacheBuilder.newBuilder().maximumSize(5).expireAfterWrite(5, TimeUnit.MINUTES).build(new CacheLoader<String, List<GiteeContent>>() {
-				@Override
-				public List<GiteeContent> load(String path) {
-					return BusinessTravelResourceApi.getRepoContents(path).stream()
-					                                .filter(item -> "file".equals(item.getType()))
-					                                .filter(item -> item.getName().endsWith("svg"))
-					                                .collect(Collectors.toList());
-				}
-			});
+    private static final LoadingCache<String, List<GiteeContent>> cache = CacheBuilder.newBuilder()
+            //缓存100个
+            .maximumSize(100)
+            //最多5分钟
+            .expireAfterWrite(5, TimeUnit.MINUTES)
+            //超时更新
+            .build(new CacheLoader<String, List<GiteeContent>>() {
+                @Override
+                public List<GiteeContent> load(@NotNull String path) {
+                    //通过网络加载
+                    return BusinessTravelResourceApi.getRepoContents(path).stream()
+                            //只取文件夹
+                            .filter(item -> "file".equals(item.getType()))
+                            //支取svg图标
+                            .filter(item -> item.getName().endsWith("svg"))
+                            //集合
+                            .collect(Collectors.toList());
+                }
+            });
 
-	public AddItemRecyclerViewAdapter(List<GiteeContent> itemIconInfos, BaseActivity<? extends ViewBinding> baseActivity) {
-		super(itemIconInfos, baseActivity);
-	}
+    public AddItemRecyclerViewAdapter(List<GiteeContent> itemIconInfos, BaseActivity<? extends ViewBinding> baseActivity) {
+        super(itemIconInfos, baseActivity);
+    }
 
-	private List<GiteeContent> getFromCache(String path) {
-		try {
-			return cache.get(path);
-		} catch (ExecutionException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    /**
+     * 从缓存中获取路径下对应的图标信息
+     *
+     * @param path
+     * @return
+     */
+    private List<GiteeContent> getFromCache(String path) {
+        try {
+            return cache.get(path);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	@NonNull
-	@NotNull
-	@Override
-	public AddItemRecyclerViewAdapterViewAdapterViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_add_item_recycler_view_adapter, parent, false);
-		return new AddItemRecyclerViewAdapterViewAdapterViewHolder(view);
-	}
+    @NonNull
+    @NotNull
+    @Override
+    public AddItemRecyclerViewAdapterViewAdapterViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_add_item_recycler_view_adapter, parent, false);
+        return new AddItemRecyclerViewAdapterViewAdapterViewHolder(view);
+    }
 
-	@Override
-	public void onBindViewHolder(@NonNull @NotNull AddItemRecyclerViewAdapterViewAdapterViewHolder holder, int position) {
-		if (CollectionUtils.isEmpty(dataList)) {
-			return;
-		}
-		//先获取到类型,也就是文件夹的名字
-		GiteeContent giteeContent = dataList.get(position);
-		final String name = giteeContent.getName();
-		holder.iconPathTextView.setText(name);
+    @Override
+    public void onBindViewHolder(@NonNull @NotNull AddItemRecyclerViewAdapterViewAdapterViewHolder holder, int position) {
+        if (CollectionUtils.isEmpty(dataList)) {
+            return;
+        }
+        //先获取到类型,也就是文件夹的名字
+        GiteeContent giteeContent = dataList.get(position);
+        final String name = giteeContent.getName();
+        holder.iconPathTextView.setText(name);
 
-		//然后开始处理每一项下面的图标
-		List<ImageIconInfo> imageIconInfoList = new ArrayList<>();
-		String path = giteeContent.getPath();
-		//接下来是对icon的处理
-		LayoutManager layoutManager = new GridLayoutManager(activity, 5);
-		holder.imageIconInfoRecyclerView.setLayoutManager(layoutManager);
-		AddItemRecyclerViewInnerAdapter billRecyclerViewAdapter = new AddItemRecyclerViewInnerAdapter(imageIconInfoList, activity);
-		holder.imageIconInfoRecyclerView.setAdapter(billRecyclerViewAdapter);
+        //然后开始处理每一项下面的图标
+        List<ImageIconInfo> imageIconInfoList = new ArrayList<>();
+        String path = giteeContent.getPath();
+        //接下来是对icon的处理
+        LayoutManager layoutManager = new GridLayoutManager(activity, 5);
+        holder.imageIconInfoRecyclerView.setLayoutManager(layoutManager);
+        AddItemRecyclerViewInnerAdapter billRecyclerViewAdapter = new AddItemRecyclerViewInnerAdapter(imageIconInfoList, activity);
+        holder.imageIconInfoRecyclerView.setAdapter(billRecyclerViewAdapter);
 
-		try {
-			FutureUtil.supplyAsync(() -> getFromCache(path))
-					.thenApply(giteeContents -> giteeContents.stream()
-							.sorted(Comparator.comparingInt(GiteeContent::getItemSort))
-							.map(this::convertImageIconInfo)
-							.collect(Collectors.toList())
-					).thenAccept(item -> {
-						imageIconInfoList.clear();
-						imageIconInfoList.addAll(item);
-					}).get(5, TimeUnit.SECONDS);
-		} catch (Exception e) {
-			LogToast.errorShow("网络环境较差,请稍后重试");
-		}
-		billRecyclerViewAdapter.notifyDataSetChanged();
-	}
+        try {
+            FutureUtil.supplyAsync(() -> getFromCache(path)).thenApply(giteeContents -> giteeContents.stream().sorted(Comparator.comparingInt(GiteeContent::getItemSort)).map(this::convertImageIconInfo).collect(Collectors.toList())).thenAccept(item -> {
+                imageIconInfoList.clear();
+                imageIconInfoList.addAll(item);
+            }).get(5, TimeUnit.SECONDS);
+            billRecyclerViewAdapter.notifyDataSetChanged();
+        } catch (Exception e) {
+            LogToast.errorShow("网络环境较差,请稍后重试");
+        }
+    }
 
-	@NotNull
-	private ImageIconInfo convertImageIconInfo(GiteeContent item) {
-		ImageIconInfo itemIconInfo = new ImageIconInfo();
-		itemIconInfo.setName(item.getName());
-		itemIconInfo.setIconDownloadUrl(item.getDownloadUrl());
-		itemIconInfo.setSelected(false);
-		return itemIconInfo;
-	}
+    @NotNull
+    private ImageIconInfo convertImageIconInfo(GiteeContent item) {
+        ImageIconInfo itemIconInfo = new ImageIconInfo();
+        itemIconInfo.setName(item.getName());
+        itemIconInfo.setIconDownloadUrl(item.getDownloadUrl());
+        itemIconInfo.setSelected(false);
+        return itemIconInfo;
+    }
 
-	@SuppressLint("NonConstantResourceId")
-	static class AddItemRecyclerViewAdapterViewAdapterViewHolder extends ViewHolder {
+    @SuppressLint("NonConstantResourceId")
+    static class AddItemRecyclerViewAdapterViewAdapterViewHolder extends ViewHolder {
 
-		@BindView(R.id.UI_AddItemRecyclerViewAdapter_TextView_IconPath)
-		public TextView iconPathTextView;
-		@BindView(R.id.UI_AddItemRecyclerViewAdapter_SwipeRecyclerView)
-		public SwipeRecyclerView imageIconInfoRecyclerView;
+        @BindView(R.id.UI_AddItemRecyclerViewAdapter_TextView_IconPath)
+        public TextView iconPathTextView;
+        @BindView(R.id.UI_AddItemRecyclerViewAdapter_SwipeRecyclerView)
+        public SwipeRecyclerView imageIconInfoRecyclerView;
 
-		public AddItemRecyclerViewAdapterViewAdapterViewHolder(@NonNull @NotNull View itemView) {
-			super(itemView);
-			ButterKnife.bind(this, itemView);
-		}
-	}
+        public AddItemRecyclerViewAdapterViewAdapterViewHolder(@NonNull @NotNull View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
 }
