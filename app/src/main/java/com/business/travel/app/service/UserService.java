@@ -26,9 +26,28 @@ public class UserService {
     }
 
     /**
-     * 初始化本机用户
+     * 更新用户信息
      */
-    public void initUser() {
+    public void upsertUser(User record) {
+        User user = userDao.selectOne();
+        //不存在则新增
+        if (user == null) {
+            initUser(record);
+            return;
+        }
+        boolean update = false;
+        //存在则更新
+        if (record.getAgree() != null) {
+            user.setAgree(record.getAgree());
+            update = true;
+        }
 
+        if (update) {
+            userDao.update(user);
+        }
+    }
+
+    private void initUser(User record) {
+        userDao.insert(record);
     }
 }

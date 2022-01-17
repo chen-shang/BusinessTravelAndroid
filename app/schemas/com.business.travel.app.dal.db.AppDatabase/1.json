@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0be77bd46e226274b0056fd97188aa7d",
+    "identityHash": "c780cca250528803bcb28b8461a0d115",
     "entities": [
       {
         "tableName": "Member",
@@ -346,7 +346,7 @@
       },
       {
         "tableName": "User",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `icon` TEXT, `code` TEXT, `name` TEXT, `phone` TEXT, `age` TEXT, `createTime` INTEGER, `modifyTime` INTEGER DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `icon` TEXT, `code` TEXT, `name` TEXT, `phone` TEXT, `age` TEXT, `agree` INTEGER, `createTime` INTEGER, `modifyTime` INTEGER DEFAULT CURRENT_TIMESTAMP, `isDeleted` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -385,6 +385,12 @@
             "notNull": false
           },
           {
+            "fieldPath": "agree",
+            "columnName": "agree",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
             "fieldPath": "createTime",
             "columnName": "createTime",
             "affinity": "INTEGER",
@@ -417,7 +423,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0be77bd46e226274b0056fd97188aa7d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c780cca250528803bcb28b8461a0d115')"
     ]
   }
 }

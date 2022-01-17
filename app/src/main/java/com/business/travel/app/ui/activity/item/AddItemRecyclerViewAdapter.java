@@ -37,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class AddItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<AddItemRecyclerViewAdapterViewAdapterViewHolder, GiteeContent> {
 	private static final LoadingCache<String, List<GiteeContent>> cache =
-			CacheBuilder.newBuilder().maximumSize(5).expireAfterWrite(1, TimeUnit.MINUTES).build(new CacheLoader<String, List<GiteeContent>>() {
+			CacheBuilder.newBuilder().maximumSize(5).expireAfterWrite(5, TimeUnit.MINUTES).build(new CacheLoader<String, List<GiteeContent>>() {
 				@Override
 				public List<GiteeContent> load(String path) {
 					return BusinessTravelResourceApi.getRepoContents(path).stream()
