@@ -80,6 +80,7 @@
                     </EditText>
 
                     <ImageView
+                            android:id="@+id/moneyEdit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
@@ -113,6 +114,7 @@
                             android:text="1234"
                             android:layout_weight="1"
                             android:ellipsize="end"
+                            android:textSize="12sp"
                             android:background="@null"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -127,7 +129,7 @@
                             android:src="@drawable/ic_base_edite_small"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            android:id="@+id/imageView2"/>
+                            android:id="@+id/remarkEdit"/>
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
