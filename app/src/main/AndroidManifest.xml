@@ -24,6 +24,7 @@
             android:theme="@style/Theme.Application">
         <activity
                 android:name=".ui.activity.my.WebTextActivity"
+                android:launchMode="singleInstance"
                 android:exported="true"/>
         <activity
                 android:name=".ui.activity.my.AboutMeActivity"

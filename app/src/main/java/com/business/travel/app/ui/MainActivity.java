@@ -14,6 +14,7 @@ import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.FutureUtil;
 import com.business.travel.app.view.BottomAgreementPopupView;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.SimpleCallback;
 
 import java.util.Timer;
 import java.util.TimerTask;
