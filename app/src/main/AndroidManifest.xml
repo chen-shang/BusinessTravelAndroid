@@ -67,7 +67,7 @@
         </activity>
         <activity
                 android:name=".ui.activity.bill.AddBillActivity"
-                android:windowSoftInputMode="stateHidden|adjustPan"/>
+                android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
     </application>
 
 </manifest>
