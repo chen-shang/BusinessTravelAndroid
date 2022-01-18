@@ -93,7 +93,7 @@ public class Keyboard extends ConstraintLayout {
         keyboardRecyclerViewAdapter = new KeyboardRecyclerViewAdapter();
         recyclerViewKeyboard.setAdapter(keyboardRecyclerViewAdapter);
 
-        BasePopupView basePopupView = new XPopup.Builder(context).asCustom(new BottomRemarkEditPopupView(context));
+        BasePopupView basePopupView = new XPopup.Builder(context).asCustom(new BottomRemarkEditPopupView(context, this));
         editTextRemark.setFocusable(false);
         editTextRemark.setOnClickListener(v -> basePopupView.show());
 
