@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:gravity="center"
+        android:background="@color/white"
+        android:orientation="horizontal">
+    <!--    键盘头部    -->
+    <EditText
+            android:id="@+id/EditText_Remark"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:drawableStartCompat="@drawable/ic_keyboard_remark"
+            android:hint="@string/remark"
+            android:drawablePadding="10dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:background="@null"
+            android:layout_marginStart="20dp"
+            android:layout_weight="1"
+            >
+    </EditText>
+
+    <TextView
+            android:id="@+id/TextView_Amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/_0_00"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textAlignment="textEnd"
+            android:layout_marginEnd="20dp"
+            />
+
+    <com.kyleduo.switchbutton.SwitchButton
+            android:id="@+id/TextView_PayType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:checked="true"
+            app:kswBackColor="@color/selector_bottom"
+            app:kswTextAdjust="-2dp"
+            app:kswTextExtra="8dp"
+            app:kswTextOff="收入"
+            app:kswTextOn="支出"
+            android:layout_marginEnd="20dp"
+            app:kswThumbColor="@color/white"/>
+</LinearLayout>
