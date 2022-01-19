@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.ScreenUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.constant.BusinessTravelResourceConstant;
@@ -131,11 +130,6 @@ public class BottomAgreementPopupView extends BottomPopupView {
             LogToast.errorShow("网络不好,请稍后重试:" + e.getMessage());
         }
         return null;
-    }
-
-    @Override
-    protected int getPopupHeight() {
-        return ScreenUtils.getScreenHeight() / 3;
     }
 
     private void goWebTextActivity(WebTextTypeEnum webTextType) {

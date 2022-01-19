@@ -77,7 +77,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
         consumptionService = new ConsumptionService(this);
 
         //默认值
-        billAddModel = new BillAddModel("", DateTimeUtil.timestamp(LocalDate.now()), ConsumptionTypeEnum.SPENDING.name());
+        billAddModel = new BillAddModel(null, DateTimeUtil.timestamp(LocalDate.now()), ConsumptionTypeEnum.SPENDING.name());
         String billAdd = this.getIntent().getStringExtra(AddBillActivity.IntentKey.billAddModel);
         if (StringUtils.isNotBlank(billAdd)) {
             billAddModel = JacksonUtil.toBean(billAdd, BillAddModel.class);
@@ -267,7 +267,10 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
      */
     private void refreshBillAdd(BillAddModel billAddModel) {
         //启动的时候刷新当前页面的标题
-        String projectName = Optional.ofNullable(billAddModel).map(BillAddModel::getProjectName).orElse("默认项目");
+        String projectName = Optional.ofNullable(billAddModel).map(BillAddModel::getProjectName).orElse("");
+        if (StringUtils.isBlank(projectName)) {
+            projectName = "默认项目";
+        }
         viewBinding.topTitleBar.contentBarTitle.setText(projectName);
 
         Optional.ofNullable(billAddModel).map(BillAddModel::getConsumeDate).ifPresent(viewBinding.keyboard::setDate);

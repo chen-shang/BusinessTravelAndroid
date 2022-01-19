@@ -69,6 +69,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                 .dismissOnBackPressed(false)
                 // 退出即回收
                 .isDestroyOnDismiss(true)
+                .enableDrag(false)
                 // 自定义弹框
                 .asCustom(new BottomAgreementPopupView(this,
                         //如果选择同意
