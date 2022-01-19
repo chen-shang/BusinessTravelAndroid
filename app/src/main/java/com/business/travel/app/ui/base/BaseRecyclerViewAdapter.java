@@ -25,6 +25,9 @@ public abstract class BaseRecyclerViewAdapter<VH extends ViewHolder, DATA> exten
         inject();
     }
 
+    /**
+     * 注入实例化，在构造方法之后
+     */
     protected void inject() {
     }
 

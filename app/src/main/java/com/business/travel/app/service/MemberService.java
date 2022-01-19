@@ -101,4 +101,13 @@ public class MemberService {
             return imageIconInfo;
         }).collect(Collectors.toList());
     }
+
+
+    public Long selectMaxSort() {
+        return memberDao.selectMaxSort();
+    }
+
+    public Long creatMember(Member member) {
+        return memberDao.insert(member);
+    }
 }

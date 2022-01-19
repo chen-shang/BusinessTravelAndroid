@@ -3,6 +3,7 @@ package com.business.travel.app.view;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -10,6 +11,8 @@ import com.business.travel.app.R;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.lxj.xpopup.core.BottomPopupView;
 import org.jetbrains.annotations.NotNull;
+
+import static android.view.KeyEvent.KEYCODE_BACK;
 
 public class BottomRemarkEditPopupView extends BottomPopupView {
     /**

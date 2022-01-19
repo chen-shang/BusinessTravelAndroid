@@ -148,4 +148,12 @@ public class ConsumptionService {
             return imageIconInfo;
         }).collect(Collectors.toList());
     }
+
+    public Long selectMaxSortIdByType(String consumptionType) {
+        return consumptionDao.selectMaxSortIdByType(consumptionType);
+    }
+
+    public Long createConsumption(Consumption consumption) {
+        return consumptionDao.insert(consumption);
+    }
 }

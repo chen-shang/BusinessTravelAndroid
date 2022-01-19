@@ -5,9 +5,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.business.travel.app.api.BusinessTravelResourceApi;
-import com.business.travel.app.dal.dao.ConsumptionDao;
-import com.business.travel.app.dal.dao.MemberDao;
-import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Consumption;
 import com.business.travel.app.dal.entity.Member;
 import com.business.travel.app.databinding.ActivityAddItemBinding;
@@ -23,6 +20,7 @@ import com.business.travel.app.utils.Try;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.ItemTypeEnum;
+import com.google.common.base.Preconditions;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -37,21 +35,25 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static com.business.travel.app.ui.activity.item.AddItemActivity.IntentKey.CONSUMPTION_TYPE;
+import static com.business.travel.app.ui.activity.item.AddItemActivity.IntentKey.ITEM_TYPE;
+
 /**
  * @author chenshang
  * 添加消费项页 或 添加人员页面
  */
 public class AddItemActivity extends ColorStatusBarActivity<ActivityAddItemBinding> {
 
+    //各种service
     private ConsumptionService consumptionService;
     private MemberService memberService;
-
 
     /**
      * 缓存一下对应图标的目录信息
      * 前提用户倾向于在这个页面停留时间较长,且图标文件万年不变
      */
-    private static final LoadingCache<String, List<GiteeContent>> CACHE = CacheBuilder.newBuilder().maximumSize(5).expireAfterWrite(10, TimeUnit.MINUTES).build(new CacheLoader<String, List<GiteeContent>>() {
+    private static final LoadingCache<String, List<GiteeContent>> CACHE = CacheBuilder.newBuilder().maximumSize(100).expireAfterWrite(10, TimeUnit.MINUTES).build(new CacheLoader<String, List<GiteeContent>>() {
+        @NotNull
         @Override
         public List<GiteeContent> load(@NotNull String path) {
             return BusinessTravelResourceApi.getRepoContents(path).stream().filter(item -> "dir".equals(item.getType())).collect(Collectors.toList());
@@ -83,6 +85,13 @@ public class AddItemActivity extends ColorStatusBarActivity<ActivityAddItemBindi
     protected void inject() {
         consumptionService = new ConsumptionService(this);
         memberService = new MemberService(this);
+
+        //itemTypeEnum 跳过来的是什么类型
+        String itemType = getIntent().getStringExtra(ITEM_TYPE);
+        if (StringUtils.isNotBlank(itemType)) {
+            itemTypeEnum = ItemTypeEnum.valueOf(itemType);
+        }
+
     }
 
     @Override
@@ -90,12 +99,6 @@ public class AddItemActivity extends ColorStatusBarActivity<ActivityAddItemBindi
         super.onCreate(savedInstanceState);
         //icon分类和列表
         registerSwipeRecyclerView(viewBinding.UIAddItemActivitySwipeRecyclerView);
-
-        //itemTypeEnum 跳过来的是什么类型
-        final String itemType = getIntent().getStringExtra("itemType");
-        if (StringUtils.isNotBlank(itemType)) {
-            itemTypeEnum = ItemTypeEnum.valueOf(itemType);
-        }
 
         //是添加人员还是添加消费项
         TextView headerText = viewBinding.topTitleBar.contentBarTitle;
@@ -123,13 +126,10 @@ public class AddItemActivity extends ColorStatusBarActivity<ActivityAddItemBindi
     }
 
     private void saveMember() {
-        MemberDao memberDao = AppDatabase.getInstance(this).memberDao();
-        Member member = new Member();
-
         String name = viewBinding.UIAddItemActivityEditTextName.getText().toString();
-        if (StringUtils.isBlank(name)) {
-            throw new IllegalArgumentException("请输入名称");
-        }
+        Preconditions.checkArgument(StringUtils.isNotBlank(name), "请输入名称");
+
+        Member member = new Member();
         member.setName(name);
         member.setGender(0);
         String iconDownloadUrl = Optional.ofNullable(this.lastSelectedImageIcon).map(ImageIconInfo::getIconDownloadUrl).orElse(ItemIconEnum.ItemIconPlaceholder.getIconDownloadUrl());
@@ -137,25 +137,21 @@ public class AddItemActivity extends ColorStatusBarActivity<ActivityAddItemBindi
         String iconName = Optional.ofNullable(this.lastSelectedImageIcon).map(ImageIconInfo::getIconName).orElse(ItemIconEnum.ItemIconPlaceholder.getName());
         member.setIconName(iconName);
         //先查询最大的sortId
-        Long maxSortId = Optional.ofNullable(memberDao.selectMaxSort()).map(sort -> sort + 1).orElse(0L);
+        Long maxSortId = Optional.ofNullable(memberService.selectMaxSort()).map(sort -> sort + 1).orElse(0L);
         member.setSortId(maxSortId);
         member.setCreateTime(DateTimeUtil.timestamp());
-        memberDao.insert(member);
+        memberService.creatMember(member);
     }
 
     private void saveConsumption() {
-        String consumptionType = getIntent().getStringExtra("consumptionType");
-        if (StringUtils.isBlank(consumptionType)) {
-            throw new IllegalArgumentException("未知消费项类型");
-        }
+        String consumptionType = getIntent().getStringExtra(CONSUMPTION_TYPE);
+        Preconditions.checkArgument(StringUtils.isNotBlank(consumptionType), "未知消费项类型");
+
         ConsumptionTypeEnum consumptionTypeEnum = ConsumptionTypeEnum.valueOf(consumptionType);
 
-        ConsumptionDao consumptionDao = AppDatabase.getInstance(this).consumptionDao();
-
         String name = viewBinding.UIAddItemActivityEditTextName.getText().toString();
-        if (StringUtils.isBlank(name)) {
-            throw new IllegalArgumentException("请输入名称");
-        }
+        Preconditions.checkArgument(StringUtils.isNotBlank(name), "请输入名称");
+
         Consumption consumption = new Consumption();
         consumption.setName(name);
         String iconDownloadUrl = Optional.ofNullable(this.lastSelectedImageIcon).map(ImageIconInfo::getIconDownloadUrl).orElse(ItemIconEnum.ItemIconPlaceholder.getIconDownloadUrl());
@@ -166,9 +162,9 @@ public class AddItemActivity extends ColorStatusBarActivity<ActivityAddItemBindi
         consumption.setCreateTime(DateTimeUtil.timestamp());
         consumption.setModifyTime(DateTimeUtil.timestamp());
         //先查询最大的sortId
-        Long maxSortId = Optional.ofNullable(consumptionDao.selectMaxSortIdByType(consumptionType)).orElse(0L);
+        Long maxSortId = Optional.ofNullable(consumptionService.selectMaxSortIdByType(consumptionType)).orElse(0L);
         consumption.setSortId(maxSortId);
-        consumptionDao.insert(consumption);
+        consumptionService.createConsumption(consumption);
     }
 
     private void registerHeaderText(TextView headerText) {
@@ -211,5 +207,11 @@ public class AddItemActivity extends ColorStatusBarActivity<ActivityAddItemBindi
             LogToast.errorShow("网络环境较差,请稍后重试");
         }
         return Collections.emptyList();
+    }
+
+    public static class IntentKey {
+        public static final String ITEM_TYPE = "itemType";
+
+        public static final String CONSUMPTION_TYPE = "consumptionType";
     }
 }

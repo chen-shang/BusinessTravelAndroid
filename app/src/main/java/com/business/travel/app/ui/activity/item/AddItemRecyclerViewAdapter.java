@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
-import androidx.viewbinding.ViewBinding;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.blankj.utilcode.util.CollectionUtils;
@@ -18,8 +17,8 @@ import com.business.travel.app.R;
 import com.business.travel.app.api.BusinessTravelResourceApi;
 import com.business.travel.app.model.GiteeContent;
 import com.business.travel.app.model.ImageIconInfo;
+import com.business.travel.app.model.converter.ImageIconInfoConverter;
 import com.business.travel.app.ui.activity.item.AddItemRecyclerViewAdapter.AddItemRecyclerViewAdapterViewAdapterViewHolder;
-import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.FutureUtil;
 import com.business.travel.app.utils.LogToast;
@@ -103,7 +102,7 @@ public class AddItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<AddItemR
         holder.imageIconInfoRecyclerView.setAdapter(billRecyclerViewAdapter);
 
         try {
-            FutureUtil.supplyAsync(() -> getFromCache(path)).thenApply(giteeContents -> giteeContents.stream().sorted(Comparator.comparingInt(GiteeContent::getItemSort)).map(this::convertImageIconInfo).collect(Collectors.toList())).thenAccept(item -> {
+            FutureUtil.supplyAsync(() -> getFromCache(path)).thenApply(giteeContents -> giteeContents.stream().sorted(Comparator.comparingInt(GiteeContent::getItemSort)).map(ImageIconInfoConverter.INSTANCE::convertImageIconInfo).collect(Collectors.toList())).thenAccept(item -> {
                 imageIconInfoList.clear();
                 imageIconInfoList.addAll(item);
             }).get(5, TimeUnit.SECONDS);
@@ -111,15 +110,6 @@ public class AddItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<AddItemR
         } catch (Exception e) {
             LogToast.errorShow("网络环境较差,请稍后重试");
         }
-    }
-
-    @NotNull
-    private ImageIconInfo convertImageIconInfo(GiteeContent item) {
-        ImageIconInfo itemIconInfo = new ImageIconInfo();
-        itemIconInfo.setName(item.getName());
-        itemIconInfo.setIconDownloadUrl(item.getDownloadUrl());
-        itemIconInfo.setSelected(false);
-        return itemIconInfo;
     }
 
     @SuppressLint("NonConstantResourceId")
