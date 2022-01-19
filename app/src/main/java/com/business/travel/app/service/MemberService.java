@@ -1,9 +1,5 @@
 package com.business.travel.app.service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import android.content.Context;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.LogUtils;
@@ -17,6 +13,10 @@ import com.business.travel.app.utils.LogToast;
 import com.business.travel.app.utils.NetworkUtil;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.vo.enums.ItemTypeEnum;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 人员相关的业务逻辑
@@ -77,7 +77,7 @@ public class MemberService {
         Member member = new Member();
         member.setName("我");
         member.setIconDownloadUrl(ItemIconEnum.ItemIconMe.getIconDownloadUrl());
-        member.setIconName("我");
+        member.setIconName(ItemIconEnum.ItemIconMe.getName());
         member.setSortId(0L);
         member.setCreateTime(DateTimeUtil.timestamp());
         member.setModifyTime(DateTimeUtil.timestamp());

@@ -3,7 +3,6 @@ package com.business.travel.app.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.LogUtils;
 import com.business.travel.app.dal.entity.User;
 import com.business.travel.app.databinding.ActivityMainBinding;
 import com.business.travel.app.service.ConsumptionService;
@@ -12,6 +11,7 @@ import com.business.travel.app.service.UserService;
 import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.FutureUtil;
+import com.business.travel.app.utils.Try;
 import com.business.travel.app.view.BottomAgreementPopupView;
 import com.lxj.xpopup.XPopup;
 
@@ -49,27 +49,51 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         //此时还没有用户
         if (user == null || !user.getAgree()) {
             //弹出是否同意弹框
-            new XPopup.Builder(this)
-                    .dismissOnTouchOutside(false) // 点击外部是否关闭弹窗，默认为true
-                    .dismissOnBackPressed(false) // 按返回键是否关闭弹窗，默认为true
-                    .asCustom(new BottomAgreementPopupView(this,
-                            //如果选择同意
-                            () -> {
-                                //更新为同意
-                                User record = new User();
-                                record.setAgree(true);
-                                userService.upsertUser(record);
-
-                                //进入主界面
-                                start();
-                            },
-                            //如果选择不同意,关闭所有页面
-                            ActivityUtils::finishAllActivities)).show();
+            showAgreementPopupView();
             return;
         }
 
         //要充分利用启动页面的停顿时间,尽量做一些后台工作,比如检查网络,同步数据之类的,初始化数据之类
         //因为这个类只在启动的时候启动一次,不会重复做一些事情,可以提升其他页面的访问速度
+        start();
+    }
+
+    /**
+     * 弹出是否同意弹框
+     */
+    private void showAgreementPopupView() {
+        new XPopup.Builder(this)
+                // 点击外部是否关闭弹窗
+                .dismissOnTouchOutside(false)
+                // 按返回键是否关闭弹窗
+                .dismissOnBackPressed(false)
+                // 退出即回收
+                .isDestroyOnDismiss(true)
+                // 自定义弹框
+                .asCustom(new BottomAgreementPopupView(this,
+                        //如果选择同意
+                        this::whenAgree,
+                        //如果选择不同意,关闭所有页面
+                        this::whenCancel)).show();
+    }
+
+    /**
+     * 如果选择不同意,关闭所有页面
+     */
+    private void whenCancel() {
+        ActivityUtils.finishAllActivities();
+    }
+
+    /**
+     * 如果选择同意
+     */
+    private void whenAgree() {
+        //更新为同意
+        User record = new User();
+        record.setAgree(true);
+        userService.upsertUser(record);
+
+        //进入主界面
         start();
     }
 
@@ -84,17 +108,15 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                LogUtils.i("开始启动主界面");
                 startActivity(goMasterActivityIntent);
             }
         }, 1000);
 
-        FutureUtil.runAsync(() -> {
-            LogUtils.i("应用启动的时候,异步初始化消费项和人员图标数据");
+        FutureUtil.runAsync(() -> Try.of(() -> {
             //初次使用app的时候,数据库中是没有消费项图标数据的,因此需要初始化一些默认的图标
             consumptionService.initConsumption();
             //初次使用app的时候,数据库中是没有人员图标数据的,因此需要初始化一些默认的图标
             memberService.initMember();
-        });
+        }));
     }
 }

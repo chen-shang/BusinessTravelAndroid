@@ -14,6 +14,7 @@ import com.business.travel.app.model.converter.ConsumptionConverter;
 import com.business.travel.app.utils.FutureUtil;
 import com.business.travel.app.utils.LogToast;
 import com.business.travel.app.utils.NetworkUtil;
+import com.business.travel.app.utils.Try;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.DeleteEnum;
@@ -84,7 +85,7 @@ public class ConsumptionService {
         //先获取远程的默认消费项列表,然后插入数据库,注意sortId
         List<Consumption> consumptions = new ArrayList<>();
 
-        FutureUtil.supplyAsync(() -> {
+        FutureUtil.supplyAsync(() -> Try.of(() -> {
             List<GiteeContent> v5ReposOwnerRepoContentsIncome = BusinessTravelResourceApi.getRepoContents(BusinessTravelResourceConstant.INCOME_ICON_PATH);
             LogUtils.i("开始初始化默认图标: 收入图标共计:" + v5ReposOwnerRepoContentsIncome.size());
             if (CollectionUtils.isNotEmpty(v5ReposOwnerRepoContentsIncome)) {
@@ -98,7 +99,7 @@ public class ConsumptionService {
                 consumptions.addAll(IncomeConsumptionList);
             }
             return consumptions;
-        }).thenAccept(consumptionDao::batchInsert);
+        })).thenAccept(consumptionDao::batchInsert);
     }
 
     @NotNull

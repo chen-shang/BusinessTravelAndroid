@@ -12,7 +12,7 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_launcher_foreground"
             android:background="@drawable/corners_shape"
-            android:id="@+id/UI_MainActivity_ImageView_Icon"
+            android:id="@+id/ImageView_Icon"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -43,7 +43,7 @@
             android:textSize="25sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/UI_MainActivity_ImageView_Icon"
+            app:layout_constraintTop_toBottomOf="@+id/ImageView_Icon"
             android:layout_marginTop="28dp"/>
 
     <TextView

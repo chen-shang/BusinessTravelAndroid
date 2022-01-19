@@ -2,4 +2,7 @@
 <resources>
     <string name="remark">点击写备注</string>
     <string name="_0_00">0.00</string>
+    <string name="userNotice">用户须知</string>
+    <string name="not_agree">不同意并退出</string>
+    <string name="agree">同意</string>
 </resources>
