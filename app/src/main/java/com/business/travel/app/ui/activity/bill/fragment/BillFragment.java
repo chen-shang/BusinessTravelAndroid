@@ -121,7 +121,7 @@ public class BillFragment extends BaseFragment<FragmentBillBinding> {
     private void registerSwipeRecyclerView(SwipeRecyclerView swipeRecyclerView) {
         //线性布局
         swipeRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
-        billRecyclerViewAdapter = new BillRecyclerViewAdapter(dateList, (MasterActivity) requireActivity());
+        billRecyclerViewAdapter = new BillRecyclerViewAdapter(dateList, requireActivity());
         billListHeaderView.addTo(swipeRecyclerView);
         swipeRecyclerView.setAdapter(billRecyclerViewAdapter);
     }

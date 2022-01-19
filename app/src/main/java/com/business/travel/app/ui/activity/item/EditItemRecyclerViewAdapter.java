@@ -3,6 +3,7 @@ package com.business.travel.app.ui.activity.item;
 import java.util.List;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,38 +25,38 @@ import org.jetbrains.annotations.NotNull;
 
 public class EditItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<EditItemRecyclerViewAdapterViewHolder, ImageIconInfo> {
 
-	public EditItemRecyclerViewAdapter(List<ImageIconInfo> imageIconInfos, BaseActivity<? extends ViewBinding> baseActivity) {
-		super(imageIconInfos, baseActivity);
-	}
+    public EditItemRecyclerViewAdapter(List<ImageIconInfo> imageIconInfos, Context context) {
+        super(imageIconInfos, context);
+    }
 
-	@NonNull
-	@NotNull
-	@Override
-	public EditItemRecyclerViewAdapterViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.edit_item, parent, false);
-		return new EditItemRecyclerViewAdapterViewHolder(view);
-	}
+    @NonNull
+    @NotNull
+    @Override
+    public EditItemRecyclerViewAdapterViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.edit_item, parent, false);
+        return new EditItemRecyclerViewAdapterViewHolder(view);
+    }
 
-	@Override
-	public void onBindViewHolder(@NonNull @NotNull EditItemRecyclerViewAdapterViewHolder holder, int position) {
-		if (CollectionUtils.isEmpty(dataList)) {
-			return;
-		}
-		final ImageIconInfo imageIconInfo = dataList.get(position);
-		ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), holder.iconImageView);
-		holder.nameTextView.setText(imageIconInfo.getName());
-	}
+    @Override
+    public void onBindViewHolder(@NonNull @NotNull EditItemRecyclerViewAdapterViewHolder holder, int position) {
+        if (CollectionUtils.isEmpty(dataList)) {
+            return;
+        }
+        final ImageIconInfo imageIconInfo = dataList.get(position);
+        ImageLoadUtil.loadImageToView(imageIconInfo.getIconDownloadUrl(), holder.iconImageView);
+        holder.nameTextView.setText(imageIconInfo.getName());
+    }
 
-	@SuppressLint("NonConstantResourceId")
-	static class EditItemRecyclerViewAdapterViewHolder extends ViewHolder {
-		@BindView(R.id.UI_EditItem_ImageView_Icon)
-		ImageView iconImageView;
-		@BindView(R.id.UI_EditItem_TextView_Name)
-		TextView nameTextView;
+    @SuppressLint("NonConstantResourceId")
+    static class EditItemRecyclerViewAdapterViewHolder extends ViewHolder {
+        @BindView(R.id.UI_EditItem_ImageView_Icon)
+        ImageView iconImageView;
+        @BindView(R.id.UI_EditItem_TextView_Name)
+        TextView nameTextView;
 
-		public EditItemRecyclerViewAdapterViewHolder(@NonNull @NotNull View itemView) {
-			super(itemView);
-			ButterKnife.bind(this, itemView);
-		}
-	}
+        public EditItemRecyclerViewAdapterViewHolder(@NonNull @NotNull View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
 }

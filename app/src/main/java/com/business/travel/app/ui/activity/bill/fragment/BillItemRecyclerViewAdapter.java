@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,134 +44,134 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillItemRecyclerViewAdapterViewHolder, Bill> {
 
-	private final BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
-	//这个是父类 viewHolder
-	private final BillRecyclerViewAdapterViewHolder viewHolder;
-	//注入service
-	private BillService billService;
-	private ConsumptionService consumptionService;
+    private final BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
+    //这个是父类 viewHolder
+    private final BillRecyclerViewAdapterViewHolder viewHolder;
+    //注入service
+    private BillService billService;
+    private ConsumptionService consumptionService;
 
-	public BillItemRecyclerViewAdapter(List<Bill> bills, BaseActivity<? extends ViewBinding> baseActivity, BillRecyclerViewAdapterViewHolder holder) {
-		super(bills, baseActivity);
-		this.viewHolder = holder;
-	}
+    public BillItemRecyclerViewAdapter(List<Bill> bills, Context context, BillRecyclerViewAdapterViewHolder holder) {
+        super(bills, context);
+        this.viewHolder = holder;
+    }
 
-	@Override
-	protected void inject() {
-		billService = new BillService(activity.getApplicationContext());
-		consumptionService = new ConsumptionService(activity.getApplicationContext());
-	}
+    @Override
+    protected void inject() {
+        billService = new BillService(context.getApplicationContext());
+        consumptionService = new ConsumptionService(context.getApplicationContext());
+    }
 
-	@NonNull
-	@NotNull
-	@Override
-	public BillItemRecyclerViewAdapterViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bill_item, parent, false);
-		return new BillItemRecyclerViewAdapterViewHolder(view) {
-		};
-	}
+    @NonNull
+    @NotNull
+    @Override
+    public BillItemRecyclerViewAdapterViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bill_item, parent, false);
+        return new BillItemRecyclerViewAdapterViewHolder(view) {
+        };
+    }
 
-	@Override
-	public void onBindViewHolder(@NonNull @NotNull BillItemRecyclerViewAdapterViewHolder holder, int position) {
-		if (CollectionUtils.isEmpty(dataList)) {
-			return;
-		}
-		Bill bill = dataList.get(position);
-		if (bill == null) {
-			return;
-		}
+    @Override
+    public void onBindViewHolder(@NonNull @NotNull BillItemRecyclerViewAdapterViewHolder holder, int position) {
+        if (CollectionUtils.isEmpty(dataList)) {
+            return;
+        }
+        Bill bill = dataList.get(position);
+        if (bill == null) {
+            return;
+        }
 
-		holder.iconImageView.setBackgroundResource(R.drawable.corners_shape_select);
-		ImageLoadUtil.loadImageToView(bill.getIconDownloadUrl(), holder.iconImageView);
+        holder.iconImageView.setBackgroundResource(R.drawable.corners_shape_select);
+        ImageLoadUtil.loadImageToView(bill.getIconDownloadUrl(), holder.iconImageView);
 
-		String name = bill.getConsumptionIds();
-		String remark = bill.getRemark();
-		if (StringUtils.isNotBlank(remark)) {
-			//备注不为空,消费项就显示备注
-			holder.consumptionItemTextView.setText(remark);
-			//否则就展示消费项的名称
-		} else if (StringUtils.isNotBlank(name)) {
-			List<ImageIconInfo> consumptions = consumptionService.queryByIds(SplitUtil.trimToLongList(name));
-			String names = consumptions.stream().map(ImageIconInfo::getName).collect(Collectors.joining(","));
-			holder.consumptionItemTextView.setText(names);
-		}
+        String name = bill.getConsumptionIds();
+        String remark = bill.getRemark();
+        if (StringUtils.isNotBlank(remark)) {
+            //备注不为空,消费项就显示备注
+            holder.consumptionItemTextView.setText(remark);
+            //否则就展示消费项的名称
+        } else if (StringUtils.isNotBlank(name)) {
+            List<ImageIconInfo> consumptions = consumptionService.queryByIds(SplitUtil.trimToLongList(name));
+            String names = consumptions.stream().map(ImageIconInfo::getName).collect(Collectors.joining(","));
+            holder.consumptionItemTextView.setText(names);
+        }
 
-		Long amount = bill.getAmount();
-		String type = bill.getConsumptionType();
-		String amountText = "";
-		if (ConsumptionTypeEnum.INCOME.name().equals(type)) {
-			amountText = MoneyUtil.toYuanString(amount);
-		} else if (ConsumptionTypeEnum.SPENDING.name().equals(type)) {
-			amountText = "-" + MoneyUtil.toYuanString(amount);
-		}
-		holder.amountTextView.setText(amountText);
+        Long amount = bill.getAmount();
+        String type = bill.getConsumptionType();
+        String amountText = "";
+        if (ConsumptionTypeEnum.INCOME.name().equals(type)) {
+            amountText = MoneyUtil.toYuanString(amount);
+        } else if (ConsumptionTypeEnum.SPENDING.name().equals(type)) {
+            amountText = "-" + MoneyUtil.toYuanString(amount);
+        }
+        holder.amountTextView.setText(amountText);
 
-		holder.cardView.setOnClickListener(v -> {
-			Intent intent = new Intent(activity, DetailBillActivity.class);
-			intent.putExtra("selectBillId", bill.getId());
-			activity.startActivity(intent);
-		});
+        holder.cardView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, DetailBillActivity.class);
+            intent.putExtra("selectBillId", bill.getId());
+            context.startActivity(intent);
+        });
 
-		//长按弹出删除、编辑按钮
-		AttachListPopupView attachListPopupView = newAttachListPopupView(holder, position, bill);
-		//长按弹出删除、编辑按钮
-		holder.cardView.setOnLongClickListener(v -> {
-			attachListPopupView.show();
-			return true;
-		});
-	}
+        //长按弹出删除、编辑按钮
+        AttachListPopupView attachListPopupView = newAttachListPopupView(holder, position, bill);
+        //长按弹出删除、编辑按钮
+        holder.cardView.setOnLongClickListener(v -> {
+            attachListPopupView.show();
+            return true;
+        });
+    }
 
-	private AttachListPopupView newAttachListPopupView(@NotNull BillItemRecyclerViewAdapterViewHolder holder, int position, Bill bill) {
-		return new Builder(activity).watchView(holder.cardView).asAttachList(new String[] {"删除"}, new int[] {R.drawable.ic_base_delete}, (pos, text) -> {
-			switch (pos) {
-				case 0:
-					delete(position, bill);
-					break;
-				default:
-					//do nothing
-			}
-		});
-	}
+    private AttachListPopupView newAttachListPopupView(@NotNull BillItemRecyclerViewAdapterViewHolder holder, int position, Bill bill) {
+        return new Builder(context).watchView(holder.cardView).asAttachList(new String[]{"删除"}, new int[]{R.drawable.ic_base_delete}, (pos, text) -> {
+            switch (pos) {
+                case 0:
+                    delete(position, bill);
+                    break;
+                default:
+                    //do nothing
+            }
+        });
+    }
 
-	private void delete(int position, Bill bill) {
-		//弹出确认删除对话框
-		new XPopup.Builder(activity).asConfirm("", "是否要删除该账目", () -> confirmDelete(position, bill)).show();
-	}
+    private void delete(int position, Bill bill) {
+        //弹出确认删除对话框
+        new XPopup.Builder(context).asConfirm("", "是否要删除该账目", () -> confirmDelete(position, bill)).show();
+    }
 
-	//确认删除
-	private void confirmDelete(int position, Bill bill) {
-		//1. 数据库删除
-		billService.deleteBillById(bill.getId());
-		//2. 列表移除
-		dataList.remove(bill);
-		this.notifyItemRemoved(position);
-		notifyItemRangeChanged(position, dataList.size() - position);
-		//刷新右上角金额
-		billFragment.refreshMoneyShow(bill.getProjectId());
-		//如果当前数据list没有了
-		if (CollectionUtils.isEmpty(dataList)) {
-			//刷新整个列表
-			billFragment.refreshBillList(bill.getProjectId());
-		}
-		//刷新对应的天的金额
-		billFragment.getBillRecyclerViewAdapter().refreshMoneyShow(viewHolder, bill.getProjectId(), bill.getConsumeDate());
-	}
+    //确认删除
+    private void confirmDelete(int position, Bill bill) {
+        //1. 数据库删除
+        billService.deleteBillById(bill.getId());
+        //2. 列表移除
+        dataList.remove(bill);
+        this.notifyItemRemoved(position);
+        notifyItemRangeChanged(position, dataList.size() - position);
+        //刷新右上角金额
+        billFragment.refreshMoneyShow(bill.getProjectId());
+        //如果当前数据list没有了
+        if (CollectionUtils.isEmpty(dataList)) {
+            //刷新整个列表
+            billFragment.refreshBillList(bill.getProjectId());
+        }
+        //刷新对应的天的金额
+        billFragment.getBillRecyclerViewAdapter().refreshMoneyShow(viewHolder, bill.getProjectId(), bill.getConsumeDate());
+    }
 
-	@SuppressLint("NonConstantResourceId")
-	static class BillItemRecyclerViewAdapterViewHolder extends ViewHolder {
+    @SuppressLint("NonConstantResourceId")
+    static class BillItemRecyclerViewAdapterViewHolder extends ViewHolder {
 
-		@BindView(R.id.UI_BillFragment_BillItemAdapter_Icon)
-		public ImageView iconImageView;
-		@BindView(R.id.UI_BillFragment_BillItemAdapter_Amount)
-		public TextView amountTextView;
-		@BindView(R.id.UI_BillFragment_BillItemAdapter_ConsumptionItem)
-		public TextView consumptionItemTextView;
-		@BindView(R.id.card)
-		public CardView cardView;
+        @BindView(R.id.UI_BillFragment_BillItemAdapter_Icon)
+        public ImageView iconImageView;
+        @BindView(R.id.UI_BillFragment_BillItemAdapter_Amount)
+        public TextView amountTextView;
+        @BindView(R.id.UI_BillFragment_BillItemAdapter_ConsumptionItem)
+        public TextView consumptionItemTextView;
+        @BindView(R.id.card)
+        public CardView cardView;
 
-		public BillItemRecyclerViewAdapterViewHolder(@NonNull @NotNull View itemView) {
-			super(itemView);
-			ButterKnife.bind(this, itemView);
-		}
-	}
+        public BillItemRecyclerViewAdapterViewHolder(@NonNull @NotNull View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
 }

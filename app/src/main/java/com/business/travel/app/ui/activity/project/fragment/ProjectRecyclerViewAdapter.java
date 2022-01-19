@@ -1,6 +1,8 @@
 package com.business.travel.app.ui.activity.project.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
-import androidx.viewbinding.ViewBinding;
 import androidx.viewpager2.widget.ViewPager2;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,7 +24,6 @@ import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.activity.bill.fragment.BillFragment;
 import com.business.travel.app.ui.activity.project.EditProjectActivity;
 import com.business.travel.app.ui.activity.project.fragment.ProjectRecyclerViewAdapter.ProjectAdapterHolder;
-import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.utils.DateTimeUtil;
@@ -45,14 +45,14 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
     public ProjectService projectService;
     public BillService billService;
 
-    public ProjectRecyclerViewAdapter(List<Project> dataList, BaseActivity<? extends ViewBinding> baseActivity) {
-        super(dataList, baseActivity);
+    public ProjectRecyclerViewAdapter(List<Project> projects, Context context) {
+        super(projects, context);
     }
 
     @Override
     protected void inject() {
-        projectService = new ProjectService(activity);
-        billService = new BillService(activity);
+        projectService = new ProjectService(context);
+        billService = new BillService(context);
     }
 
     @NonNull
@@ -107,7 +107,7 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
 
     private AttachListPopupView initAttachListPopView(@NotNull ProjectAdapterHolder holder, int position, Project project) {
         //删除、编辑弹框
-        return new Builder(activity).watchView(holder.cardView).asAttachList(new String[]{"删除", "编辑"}, new int[]{R.drawable.ic_base_delete, R.drawable.ic_base_edit}, (pos, text) -> {
+        return new Builder(context).watchView(holder.cardView).asAttachList(new String[]{"删除", "编辑"}, new int[]{R.drawable.ic_base_delete, R.drawable.ic_base_edit}, (pos, text) -> {
             switch (pos) {
                 case 0:
                     delete(position, project);
@@ -129,9 +129,9 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
      * @param project
      */
     private void edit(int position, Project project) {
-        final Intent intent = new Intent(activity, EditProjectActivity.class);
+        final Intent intent = new Intent(context, EditProjectActivity.class);
         intent.putExtra(EditProjectActivity.IntentKey.PROJECT_ID, project.getId());
-        activity.startActivity(intent);
+        context.startActivity(intent);
     }
 
     /**
@@ -142,7 +142,7 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
      */
     private void delete(int position, Project project) {
         //确认删除弹框
-        new Builder(activity).asConfirm("是否要删除", project.getName(), () -> confirmDelete(position, project)).show();
+        new Builder(context).asConfirm("是否要删除", project.getName(), () -> confirmDelete(position, project)).show();
     }
 
     /**
@@ -170,7 +170,7 @@ public class ProjectRecyclerViewAdapter extends BaseRecyclerViewAdapter<ProjectA
         LogUtils.i("点击 project:" + project.getId() + ":" + project.getName() + "跳转到账单列表页");
         billFragment.setSelectedProjectId(project.getId());
 
-        ViewPager2 viewPager2 = activity.findViewById(R.id.UI_MasterActivity_ViewPager2);
+        ViewPager2 viewPager2 = ((Activity) context).findViewById(R.id.UI_MasterActivity_ViewPager2);
         viewPager2.setCurrentItem(MasterFragmentPositionEnum.BILL_FRAGMENT.getPosition());
     }
 

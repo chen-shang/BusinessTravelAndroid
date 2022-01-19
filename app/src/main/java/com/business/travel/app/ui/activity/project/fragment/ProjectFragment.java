@@ -97,7 +97,7 @@ public class ProjectFragment extends BaseFragment<FragmentProjectBinding> {
         swipeRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
         projectListHeaderView.addTo(viewBinding.SwipeRecyclerViewProjectList);
         //项目列表适配器,这里面有项目卡片的布局
-        projectListRecyclerViewAdapter = new ProjectRecyclerViewAdapter(projectList, (MasterActivity) requireActivity());
+        projectListRecyclerViewAdapter = new ProjectRecyclerViewAdapter(projectList, requireActivity());
         swipeRecyclerView.setAdapter(projectListRecyclerViewAdapter);
     }
 

@@ -1,6 +1,7 @@
 package com.business.travel.app.ui.activity.item;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,8 +57,8 @@ public class AddItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<AddItemR
                 }
             });
 
-    public AddItemRecyclerViewAdapter(List<GiteeContent> itemIconInfos, BaseActivity<? extends ViewBinding> baseActivity) {
-        super(itemIconInfos, baseActivity);
+    public AddItemRecyclerViewAdapter(List<GiteeContent> giteeContents, Context context) {
+        super(giteeContents, context);
     }
 
     /**
@@ -96,9 +97,9 @@ public class AddItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<AddItemR
         List<ImageIconInfo> imageIconInfoList = new ArrayList<>();
         String path = giteeContent.getPath();
         //接下来是对icon的处理
-        LayoutManager layoutManager = new GridLayoutManager(activity, 5);
+        LayoutManager layoutManager = new GridLayoutManager(context, 5);
         holder.imageIconInfoRecyclerView.setLayoutManager(layoutManager);
-        AddItemRecyclerViewInnerAdapter billRecyclerViewAdapter = new AddItemRecyclerViewInnerAdapter(imageIconInfoList, activity);
+        AddItemRecyclerViewInnerAdapter billRecyclerViewAdapter = new AddItemRecyclerViewInnerAdapter(imageIconInfoList, context);
         holder.imageIconInfoRecyclerView.setAdapter(billRecyclerViewAdapter);
 
         try {
