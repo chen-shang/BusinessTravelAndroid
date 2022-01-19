@@ -93,7 +93,9 @@ public class Keyboard extends ConstraintLayout {
         keyboardRecyclerViewAdapter = new KeyboardRecyclerViewAdapter();
         recyclerViewKeyboard.setAdapter(keyboardRecyclerViewAdapter);
 
-        BasePopupView basePopupView = new XPopup.Builder(context).asCustom(new BottomRemarkEditPopupView(context, this));
+        BasePopupView basePopupView = new XPopup.Builder(context)
+                .autoOpenSoftInput(true) //是否弹窗显示的同时打开输入法，只在包含输入框的弹窗内才有效，默认为false
+                .asCustom(new BottomRemarkEditPopupView(context, this));
         editTextRemark.setFocusable(false);
         editTextRemark.setOnClickListener(v -> basePopupView.show());
 
