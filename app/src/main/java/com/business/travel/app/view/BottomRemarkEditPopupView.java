@@ -1,6 +1,8 @@
 package com.business.travel.app.view;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -41,6 +43,28 @@ public class BottomRemarkEditPopupView extends BottomPopupView {
         editTextRemark = findViewById(R.id.EditText_Remark);
         textViewAmount = findViewById(R.id.TextView_Amount);
         switchButton = findViewById(R.id.TextView_PayType);
+
+        //实时更新
+        switchButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            keyboard.switchButton.setChecked(isChecked);
+        });
+
+        editTextRemark.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                keyboard.setRemark(s.toString());
+            }
+        });
     }
 
     //在展示之前进行数据更新
@@ -50,16 +74,5 @@ public class BottomRemarkEditPopupView extends BottomPopupView {
         editTextRemark.setText(keyboard.getRemark());
         textViewAmount.setText(keyboard.getAmount());
         switchButton.setChecked(keyboard.switchButton.isChecked());
-    }
-
-    /**
-     * 消失之后
-     */
-    @Override
-    protected void doAfterDismiss() {
-        super.doAfterDismiss();
-        keyboard.setRemark(editTextRemark.getText().toString());
-        keyboard.setAmount(textViewAmount.getText().toString());
-        keyboard.switchButton.setChecked(switchButton.isChecked());
     }
 }
