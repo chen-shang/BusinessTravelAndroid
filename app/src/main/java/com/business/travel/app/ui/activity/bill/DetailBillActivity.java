@@ -228,8 +228,8 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
 
         viewBinding.projectName.setOnClickListener(v -> {
             int checkedPosition = getIndexOf(data, viewBinding.projectName.getText().toString());
-            BasePopupView basePopupView = builder.asCustom(new BottomProjectListPopupView(this, Arrays.asList(data), checkedPosition));
-            basePopupView.show();
+            bottomListPopupView.setCheckedPosition(checkedPosition).show();
+            bottomListPopupView.show();
         });
     }
 
