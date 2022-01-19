@@ -24,12 +24,14 @@ import com.business.travel.app.utils.LogToast;
 import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.app.utils.Try;
 import com.business.travel.app.view.BottomIconListPopupView;
+import com.business.travel.app.view.BottomProjectListPopupView;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.SplitUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.business.travel.vo.enums.WeekEnum;
 import com.google.common.base.Preconditions;
 import com.lxj.xpopup.XPopup.Builder;
+import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.enums.PopupAnimation;
 import com.lxj.xpopup.impl.BottomListPopupView;
 import com.lxj.xpopup.impl.ConfirmPopupView;
@@ -39,6 +41,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -222,9 +225,11 @@ public class DetailBillActivity extends ColorStatusBarActivity<ActivityDetailBil
             record.setProjectId(project.getId());
             updateBill(record);
         });
+
         viewBinding.projectName.setOnClickListener(v -> {
             int checkedPosition = getIndexOf(data, viewBinding.projectName.getText().toString());
-            bottomListPopupView.setCheckedPosition(checkedPosition).show();
+            BasePopupView basePopupView = builder.asCustom(new BottomProjectListPopupView(this, Arrays.asList(data), checkedPosition));
+            basePopupView.show();
         });
     }
 
