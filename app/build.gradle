@@ -189,9 +189,13 @@ import org.aspectj.tools.ajc.Main
 final def log = project.logger
 final def variants = project.android.applicationVariants
 
+static def releaseTime() {
+    return new Date().format("yyyyMMddHHmm", TimeZone.getTimeZone("GMT+08:00"))
+}
+
 variants.all { variant ->
     variant.outputs.all {
-        outputFileName = "${rootProject.name}_${versionName}.apk"
+        outputFileName = "relase_${versionName}_${releaseTime()}.apk"
     }
     // 注意这里控制debug下生效，可以自行控制是否生效
     if (!variant.buildType.isDebuggable()) {
