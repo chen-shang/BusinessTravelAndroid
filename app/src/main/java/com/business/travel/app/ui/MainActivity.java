@@ -50,7 +50,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         if (user == null || !user.getAgree()) {
             //弹出是否同意弹框
             new XPopup.Builder(this)
-                    .dismissOnTouchOutside(true) // 点击外部是否关闭弹窗，默认为true
+                    .dismissOnTouchOutside(false) // 点击外部是否关闭弹窗，默认为true
+                    .dismissOnBackPressed(false) // 按返回键是否关闭弹窗，默认为true
                     .asCustom(new BottomAgreementPopupView(this,
                             //如果选择同意
                             () -> {
