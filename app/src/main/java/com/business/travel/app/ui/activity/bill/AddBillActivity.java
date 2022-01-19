@@ -12,6 +12,7 @@ import com.business.travel.app.dal.entity.Bill;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityAddBillBinding;
 import com.business.travel.app.enums.ItemIconEnum;
+import com.business.travel.app.enums.MasterFragmentPositionEnum;
 import com.business.travel.app.model.BillAddModel;
 import com.business.travel.app.model.ImageIconInfo;
 import com.business.travel.app.service.BillService;
@@ -47,7 +48,7 @@ import java.util.stream.Collectors;
  * 添加账单
  */
 public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBinding> {
-
+    private static final BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
     /**
      * 消费项图标信息
      */
@@ -75,19 +76,18 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
         projectService = new ProjectService(this);
         consumptionService = new ConsumptionService(this);
 
+        //默认值
+        billAddModel = new BillAddModel("", DateTimeUtil.timestamp(LocalDate.now()), ConsumptionTypeEnum.SPENDING.name());
         String billAdd = this.getIntent().getStringExtra(AddBillActivity.IntentKey.billAddModel);
         if (StringUtils.isNotBlank(billAdd)) {
             billAddModel = JacksonUtil.toBean(billAdd, BillAddModel.class);
-        } else {
-            //默认值
-            billAddModel = new BillAddModel("", DateTimeUtil.timestamp(LocalDate.now()), ConsumptionTypeEnum.SPENDING.name());
         }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //注册消费项列表分页、点击事件
+        //切换项目展示事件
         registerMaterialSearchBar();
         //注册消费项列表分页、点击事件
         registerConsumptionPageView();
@@ -215,9 +215,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
             //如果存在则在当前项目下创建账单
             createBillWithProject(project);
             //更新返回页的数据
-//			BillFragment billFragment = MasterFragmentPositionEnum.BILL_FRAGMENT.getFragment();
-//			billFragment.setSelectedProjectId(project.getId());
-            BillFragment.selectedProjectId = project.getId();
+            billFragment.setSelectedProjectId(project.getId());
             LogToast.infoShow("记账成功");
         });
     }
@@ -262,14 +260,16 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
         billService.creatBill(bill);
     }
 
+    /**
+     * 刷新添加账单页面数据
+     *
+     * @param billAddModel
+     */
     private void refreshBillAdd(BillAddModel billAddModel) {
         //启动的时候刷新当前页面的标题
-        String projectName = Optional.ofNullable(billAddModel).map(BillAddModel::getProjectName).orElse("");
-        if (StringUtils.isBlank(projectName)) {
-            viewBinding.topTitleBar.contentBarTitle.setText("默认项目");
-        } else {
-            viewBinding.topTitleBar.contentBarTitle.setText(projectName);
-        }
+        String projectName = Optional.ofNullable(billAddModel).map(BillAddModel::getProjectName).orElse("默认项目");
+        viewBinding.topTitleBar.contentBarTitle.setText(projectName);
+
         Optional.ofNullable(billAddModel).map(BillAddModel::getConsumeDate).ifPresent(viewBinding.keyboard::setDate);
         Optional.ofNullable(billAddModel).map(BillAddModel::getConsumptionType).map(ConsumptionTypeEnum::valueOf).ifPresent(viewBinding.keyboard::setConsumptionType);
         //刷新消费项列表
@@ -279,31 +279,42 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
         refreshMemberIcon();
     }
 
+    /**
+     * 刷新人员列表
+     */
     private void refreshMemberIcon() {
         List<ImageIconInfo> newLeastMemberIconList = memberService.queryAllMembersIconInfo();
+        //最后在添加一个编辑按钮
+        ImageIconInfo editImageIcon = newEditImageIcon();
+        newLeastMemberIconList.add(editImageIcon);
+
         memberIconList.clear();
         memberIconList.addAll(newLeastMemberIconList);
-
-        //最后在添加一个编辑按钮
-        ImageIconInfo editImageIcon = new ImageIconInfo();
-        editImageIcon.setName(ItemIconEnum.ItemIconEdit.getName());
-        editImageIcon.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
-        memberIconList.add(editImageIcon);
         viewBinding.GridViewPagerMemberIconList.setDataAllCount(memberIconList.size()).setRowCount(memberIconList.size() > 5 ? 2 : 1).show();
     }
 
+    /**
+     * 刷新消费项列表
+     *
+     * @param consumptionType
+     */
     private void refreshConsumptionIcon(ConsumptionTypeEnum consumptionType) {
         List<ImageIconInfo> imageIconInfos = consumptionService.queryAllConsumptionIconInfo(consumptionType);
         //添加编辑按钮编辑按钮永远在最后
-        ImageIconInfo imageIconInfo = new ImageIconInfo();
-        imageIconInfo.setName(ItemIconEnum.ItemIconEdit.getName());
-        imageIconInfo.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
-        imageIconInfo.setSelected(false);
+        ImageIconInfo imageIconInfo = newEditImageIcon();
         imageIconInfos.add(imageIconInfo);
 
         consumptionImageIconList.clear();
         consumptionImageIconList.addAll(imageIconInfos);
         viewBinding.GridViewPagerConsumptionIconList.setDataAllCount(consumptionImageIconList.size()).show();
+    }
+
+    private ImageIconInfo newEditImageIcon() {
+        ImageIconInfo editImageIcon = new ImageIconInfo();
+        editImageIcon.setName(ItemIconEnum.ItemIconEdit.getName());
+        editImageIcon.setIconDownloadUrl(ItemIconEnum.ItemIconEdit.getIconDownloadUrl());
+        editImageIcon.setSelected(false);
+        return editImageIcon;
     }
 
     public static final class IntentKey {

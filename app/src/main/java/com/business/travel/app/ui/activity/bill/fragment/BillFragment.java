@@ -1,9 +1,5 @@
 package com.business.travel.app.ui.activity.bill.fragment;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import android.annotation.SuppressLint;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.os.Bundle;
@@ -35,180 +31,184 @@ import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 /**
  * @author chenshang
  */
 public class BillFragment extends BaseFragment<FragmentBillBinding> {
-	/**
-	 * 账单列表数据 消费日期列表
-	 */
-	private final List<Long> dateList = new ArrayList<>();
-	@Getter
-	private BillRecyclerViewAdapter billRecyclerViewAdapter;
+    /**
+     * 账单列表数据 消费日期列表
+     */
+    private final List<Long> dateList = new ArrayList<>();
+    @Getter
+    private BillRecyclerViewAdapter billRecyclerViewAdapter;
 
     /**
      * 当前页面选中的项目
      */
     @Setter
     @Getter
-    public static Long selectedProjectId;
+    private Long selectedProjectId;
 
-	/**
-	 * 账单顶部view
-	 */
-	private BillHeaderView billListHeaderView;
-	/**
-	 * 列表为空时候显示的内容,用headView实现该效果
-	 */
-	private EmptyHeaderView billListEmptyHeaderView;
+    /**
+     * 账单顶部view
+     */
+    private BillHeaderView billListHeaderView;
+    /**
+     * 列表为空时候显示的内容,用headView实现该效果
+     */
+    private EmptyHeaderView billListEmptyHeaderView;
 
-	/**
-	 * 引入各种service
-	 */
-	private ProjectService projectService;
-	private BillService billService;
+    /**
+     * 引入各种service
+     */
+    private ProjectService projectService;
+    private BillService billService;
 
-	/**
-	 * 中间的加号
-	 */
-	private FloatingActionButton floatingActionButton;
-	private MasterActivity masterActivity;
+    /**
+     * 中间的加号
+     */
+    private FloatingActionButton floatingActionButton;
+    private MasterActivity masterActivity;
 
-	@Override
-	protected void inject() {
-		super.inject();
-		//注入service
-		projectService = new ProjectService(requireActivity());
-		billService = new BillService(requireActivity());
+    @Override
+    protected void inject() {
+        super.inject();
+        //注入service
+        projectService = new ProjectService(requireActivity());
+        billService = new BillService(requireActivity());
 
-		//初始化head view对应的view
-		billListHeaderView = new BillHeaderView(getLayoutInflater());
-		//初始化列表为空的时候对应的view
-		billListEmptyHeaderView = new EmptyHeaderView(getLayoutInflater());
+        //初始化head view对应的view
+        billListHeaderView = new BillHeaderView(getLayoutInflater());
+        //初始化列表为空的时候对应的view
+        billListEmptyHeaderView = new EmptyHeaderView(getLayoutInflater());
 
-		//初始化中间的加号
-		floatingActionButton = requireActivity().findViewById(R.id.UI_MasterActivity_FloatingActionButton);
-		masterActivity = (MasterActivity)ActivityUtils.getActivityByContext(this.getContext());
-		//初始化放到这里面
-		selectedProjectId = Optional.ofNullable(selectedProjectId).orElseGet(() -> Optional.ofNullable(projectService.queryLatestModify()).map(Project::getId).orElse(null));
-	}
+        //初始化中间的加号
+        floatingActionButton = requireActivity().findViewById(R.id.UI_MasterActivity_FloatingActionButton);
+        masterActivity = (MasterActivity) ActivityUtils.getActivityByContext(this.getContext());
+        //初始化放到这里面
+        selectedProjectId = Optional.ofNullable(selectedProjectId).orElseGet(() -> Optional.ofNullable(projectService.queryLatestModify()).map(Project::getId).orElse(null));
+    }
 
-	@Override
-	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = super.onCreateView(inflater, container, savedInstanceState);
-		//注册账单列表页
-		registerSwipeRecyclerView(viewBinding.RecyclerViewBillList);
-		return view;
-	}
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        //注册账单列表页
+        registerSwipeRecyclerView(viewBinding.RecyclerViewBillList);
+        return view;
+    }
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		AnimalUtil.show(floatingActionButton, masterActivity.getLastFragment() < masterActivity.getCurrentFragment() ? Orientation.LEFT_RIGHT : Orientation.RIGHT_LEFT);
-		//刷新当前项目的账单数据
-		refreshBillList(selectedProjectId);
-	}
+    @Override
+    public void onResume() {
+        super.onResume();
+        AnimalUtil.show(floatingActionButton, masterActivity.getLastFragment() < masterActivity.getCurrentFragment() ? Orientation.LEFT_RIGHT : Orientation.RIGHT_LEFT);
+        //刷新当前项目的账单数据
+        refreshBillList(selectedProjectId);
+    }
 
-	@Override
-	public void onPause() {
-		super.onPause();
-		AnimalUtil.reset(floatingActionButton, masterActivity.getLastFragment() < masterActivity.getCurrentFragment() ? Orientation.LEFT_RIGHT : Orientation.RIGHT_LEFT);
-	}
+    @Override
+    public void onPause() {
+        super.onPause();
+        AnimalUtil.reset(floatingActionButton, masterActivity.getLastFragment() < masterActivity.getCurrentFragment() ? Orientation.LEFT_RIGHT : Orientation.RIGHT_LEFT);
+    }
 
-	/**
-	 * 注册账单列表页
-	 */
-	private void registerSwipeRecyclerView(SwipeRecyclerView swipeRecyclerView) {
-		//线性布局
-		swipeRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
-		billRecyclerViewAdapter = new BillRecyclerViewAdapter(dateList, (MasterActivity)requireActivity());
-		billListHeaderView.addTo(swipeRecyclerView);
-		swipeRecyclerView.setAdapter(billRecyclerViewAdapter);
-	}
+    /**
+     * 注册账单列表页
+     */
+    private void registerSwipeRecyclerView(SwipeRecyclerView swipeRecyclerView) {
+        //线性布局
+        swipeRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
+        billRecyclerViewAdapter = new BillRecyclerViewAdapter(dateList, (MasterActivity) requireActivity());
+        billListHeaderView.addTo(swipeRecyclerView);
+        swipeRecyclerView.setAdapter(billRecyclerViewAdapter);
+    }
 
-	@SuppressLint({"SetTextI18n", "NotifyDataSetChanged"})
-	public void refreshBillList(Long projectId) {
-		//默认显示最后一次访问过的项目
-		Project project = Optional.ofNullable(projectId).map(projectService::queryById).orElseGet(() -> projectService.queryLatestModify());
-		if (project == null) {
-			LogUtils.w("没有工作项");
-			//记得清空数据
-			viewBinding.topTitleBar.contentBarTitle.setText(null);
-			billListHeaderView.reset();
+    @SuppressLint({"SetTextI18n", "NotifyDataSetChanged"})
+    public void refreshBillList(Long projectId) {
+        //默认显示最后一次访问过的项目
+        Project project = Optional.ofNullable(projectId).map(projectService::queryById).orElseGet(() -> projectService.queryLatestModify());
+        if (project == null) {
+            LogUtils.w("没有工作项");
+            //记得清空数据
+            viewBinding.topTitleBar.contentBarTitle.setText(null);
+            billListHeaderView.reset();
 
-			dateList.clear();
-			billRecyclerViewAdapter.notifyDataSetChanged();
-			//展示空的头部即可
-			billListEmptyHeaderView.addTo(viewBinding.RecyclerViewBillList);
-			return;
-		}
+            dateList.clear();
+            billRecyclerViewAdapter.notifyDataSetChanged();
+            //展示空的头部即可
+            billListEmptyHeaderView.addTo(viewBinding.RecyclerViewBillList);
+            return;
+        }
 
-		this.selectedProjectId = project.getId();
+        this.selectedProjectId = project.getId();
 
-		//先刷新头部
-		viewBinding.topTitleBar.contentBarTitle.setText(project.getName());
+        //先刷新头部
+        viewBinding.topTitleBar.contentBarTitle.setText(project.getName());
 
-		//刷新顶部金额
-		refreshMoneyShow(project.getId());
+        //刷新顶部金额
+        refreshMoneyShow(project.getId());
 
-		//消费日期,列表的最外层
-		List<Long> newDateList = billService.queryConsumeDateByProjectId(project.getId());
-		if (CollectionUtils.isEmpty(newDateList)) {
-			billListEmptyHeaderView.addTo(viewBinding.RecyclerViewBillList);
-			this.dateList.clear();
-			billRecyclerViewAdapter.notifyDataSetChanged();
-			return;
-		}
+        //消费日期,列表的最外层
+        List<Long> newDateList = billService.queryConsumeDateByProjectId(project.getId());
+        if (CollectionUtils.isEmpty(newDateList)) {
+            billListEmptyHeaderView.addTo(viewBinding.RecyclerViewBillList);
+            this.dateList.clear();
+            billRecyclerViewAdapter.notifyDataSetChanged();
+            return;
+        }
 
-		billListEmptyHeaderView.removeFrom(viewBinding.RecyclerViewBillList);
+        billListEmptyHeaderView.removeFrom(viewBinding.RecyclerViewBillList);
 
-		this.dateList.clear();
-		this.dateList.addAll(newDateList);
-		billRecyclerViewAdapter.notifyDataSetChanged();
-	}
+        this.dateList.clear();
+        this.dateList.addAll(newDateList);
+        billRecyclerViewAdapter.notifyDataSetChanged();
+    }
 
-	/**
-	 * 刷新顶部金额
-	 *
-	 * @param projectId
-	 */
-	public void refreshMoneyShow(Long projectId) {
-		//统计一下总收入
-		Long sumTotalIncomeMoney = Optional.ofNullable(billService.sumTotalIncomeMoney(projectId)).orElse(0L);
-		TextView uIBillFragmentTextViewIncome = billListHeaderView.uIBillFragmentTextViewIncome;
-		uIBillFragmentTextViewIncome.setText(MoneyUtil.toYuanString(sumTotalIncomeMoney));
+    /**
+     * 刷新顶部金额
+     *
+     * @param projectId
+     */
+    public void refreshMoneyShow(Long projectId) {
+        //统计一下总收入
+        Long sumTotalIncomeMoney = Optional.ofNullable(billService.sumTotalIncomeMoney(projectId)).orElse(0L);
+        TextView uIBillFragmentTextViewIncome = billListHeaderView.uIBillFragmentTextViewIncome;
+        uIBillFragmentTextViewIncome.setText(MoneyUtil.toYuanString(sumTotalIncomeMoney));
 
-		//统计一下总支出
-		Long sumTotalSpendingMoney = Optional.ofNullable(billService.sumTotalSpendingMoney(projectId)).orElse(0L);
-		TextView UIBillFragmentTextViewPay = billListHeaderView.uIBillFragmentTextViewPay;
-		UIBillFragmentTextViewPay.setText(MoneyUtil.toYuanString((sumTotalSpendingMoney)));
+        //统计一下总支出
+        Long sumTotalSpendingMoney = Optional.ofNullable(billService.sumTotalSpendingMoney(projectId)).orElse(0L);
+        TextView UIBillFragmentTextViewPay = billListHeaderView.uIBillFragmentTextViewPay;
+        UIBillFragmentTextViewPay.setText(MoneyUtil.toYuanString((sumTotalSpendingMoney)));
 
-		//查询一下项目信息
-		Project project = projectService.queryById(projectId);
+        //查询一下项目信息
+        Project project = projectService.queryById(projectId);
 
-		//项目开始时间
-		String startTime = parseTime(project.getStartTime());
-		billListHeaderView.startTime.setText(startTime);
+        //项目开始时间
+        String startTime = parseTime(project.getStartTime());
+        billListHeaderView.startTime.setText(startTime);
 
-		//项目结束时间
-		String endTime = parseTime(project.getEndTime());
-		billListHeaderView.endTime.setText(endTime);
+        //项目结束时间
+        String endTime = parseTime(project.getEndTime());
+        billListHeaderView.endTime.setText(endTime);
 
-		//项目耗时
-		String duration = String.valueOf(DurationUtil.durationDay(DurationUtil.convertTimePeriod(project)));
-		billListHeaderView.durationDay.setText(duration);
-	}
+        //项目耗时
+        String duration = String.valueOf(DurationUtil.durationDay(DurationUtil.convertTimePeriod(project)));
+        billListHeaderView.durationDay.setText(duration);
+    }
 
-	/**
-	 * 时间转换成年月日,如果为空就显示为 --
-	 *
-	 * @param startTime
-	 * @return
-	 */
-	private String parseTime(Long startTime) {
-		if (startTime == null || startTime <= 0) {
-			return "--";
-		}
-		return DateTimeUtil.format(startTime, "yyyy-MM-dd");
-	}
+    /**
+     * 时间转换成年月日,如果为空就显示为 --
+     *
+     * @param startTime
+     * @return
+     */
+    private String parseTime(Long startTime) {
+        if (startTime == null || startTime <= 0) {
+            return "--";
+        }
+        return DateTimeUtil.format(startTime, "yyyy-MM-dd");
+    }
 }

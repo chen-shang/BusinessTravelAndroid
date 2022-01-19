@@ -18,7 +18,7 @@
             />
 
     <com.yanzhenjie.recyclerview.SwipeRecyclerView
-            android:id="@+id/UI_ProjectFragment_SwipeRecyclerView_ProjectList"
+            android:id="@+id/SwipeRecyclerView_ProjectList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 </LinearLayout>

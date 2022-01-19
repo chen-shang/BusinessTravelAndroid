@@ -14,7 +14,7 @@ import com.business.travel.app.utils.NetworkUtil;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.vo.enums.ItemTypeEnum;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -91,7 +91,7 @@ public class MemberService {
 
     private List<ImageIconInfo> convert(List<Member> members) {
         if (CollectionUtils.isEmpty(members)) {
-            return Collections.emptyList();
+            return new ArrayList<>();
         }
 
         return members.stream().map(member -> {

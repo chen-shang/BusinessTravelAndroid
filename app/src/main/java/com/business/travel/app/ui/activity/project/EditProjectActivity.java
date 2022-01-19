@@ -1,10 +1,5 @@
 package com.business.travel.app.ui.activity.project;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.Optional;
-
 import android.app.DatePickerDialog;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -24,210 +19,223 @@ import com.lxj.xpopup.XPopup.Builder;
 import com.lxj.xpopup.impl.AttachListPopupView;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.Optional;
+
+/**
+ * 编辑项目 | 新增项目页面
+ */
 public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProjectBinding> {
 
-	/**
-	 * 当前编辑的项目信息,如果存在则是更新,否则就是新增
-	 */
-	private Long selectProjectId;
-	/**
-	 * 日历选框
-	 */
-	private DatePickerDialog datePickerDialog;
-	/**
-	 * 各种service
-	 */
-	private ProjectService projectService;
+    /**
+     * 当前编辑的项目信息,如果存在则是更新,否则就是新增
+     */
+    private Long selectProjectId;
+    /**
+     * 日历选框
+     */
+    private DatePickerDialog datePickerDialog;
+    /**
+     * 各种service
+     */
+    private ProjectService projectService;
 
-	@Override
-	protected void inject() {
-		projectService = new ProjectService(this);
-		LocalDateTime now = DateTimeUtil.now();
-		datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {}, now.getYear(), now.getMonth().getValue() - 1, now.getDayOfMonth());
+    @Override
+    protected void inject() {
+        projectService = new ProjectService(this);
 
-		selectProjectId = getIntent().getLongExtra("projectId", -1L);
-	}
+        LocalDateTime now = DateTimeUtil.now();
+        datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+        }, now.getYear(), now.getMonth().getValue() - 1, now.getDayOfMonth());
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		//从别的页面传递过来的项目id
-		initProject();
-		//注册项目开始结束时间点击事件
-		//开始时间点击
-		viewBinding.projectStartTime.setOnClickListener(v -> whenChoseSelectTime((TextView)v));
-		//结束时间点击
-		registerDatePicker(viewBinding.projectEndTime);
-		//注册右上角对号保存按钮点击事件
-		registerSaveButton(viewBinding.topTitleBar.contentBarRightIcon);
-	}
+        selectProjectId = getIntent().getLongExtra(IntentKey.PROJECT_ID, -1L);
+    }
 
-	@Override
-	protected void onStart() {
-		super.onStart();
-		Try.of(() -> showSelectProjectInfo(selectProjectId));
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initProject();
+        //注册项目开始结束时间点击事件
+        //开始时间点击
+        viewBinding.projectStartTime.setOnClickListener(v -> whenChoseSelectTime((TextView) v));
+        //结束时间点击
+        registerDatePicker(viewBinding.projectEndTime);
+        //注册右上角对号保存按钮点击事件
+        registerSaveButton(viewBinding.topTitleBar.contentBarRightIcon);
+    }
 
-	private void registerSaveButton(View saveButton) {
-		saveButton.setOnClickListener(v -> Try.of(() -> {
-			Project project = new Project();
-			project.setName(viewBinding.projectName.getText().toString());
-			//开始时间
-			String projectStartTime = viewBinding.projectStartTime.getText().toString();
-			Long startTime = getTime(projectStartTime);
-			//默认今天
-			startTime = Optional.ofNullable(startTime).orElse(DateTimeUtil.timestamp(LocalDate.now()));
-			project.setStartTime(startTime);
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Try.of(() -> showSelectProjectInfo(selectProjectId));
+    }
 
-			//结束时间
-			String projectEndTime = viewBinding.projectEndTime.getText().toString();
-			Long endTime = getTime(projectEndTime);
-			project.setEndTime(endTime);
+    private void registerSaveButton(View saveButton) {
+        saveButton.setOnClickListener(v -> Try.of(() -> {
+            Project project = new Project();
+            project.setName(viewBinding.projectName.getText().toString());
+            //开始时间
+            String projectStartTime = viewBinding.projectStartTime.getText().toString();
+            Long startTime = getTime(projectStartTime);
+            //默认今天
+            startTime = Optional.ofNullable(startTime).orElse(DateTimeUtil.timestamp(LocalDate.now()));
+            project.setStartTime(startTime);
 
-			if (endTime != null && !DateTimeTagEnum.TobeDetermined.getCode().equals(endTime)) {
-				Preconditions.checkArgument(startTime < endTime, "项目结束时间不能小于开始时间");
-			}
+            //结束时间
+            String projectEndTime = viewBinding.projectEndTime.getText().toString();
+            Long endTime = getTime(projectEndTime);
+            project.setEndTime(endTime);
 
-			String remark = viewBinding.projectRemark.getText().toString();
-			project.setRemark(remark);
+            if (endTime != null && !DateTimeTagEnum.TobeDetermined.getCode().equals(endTime)) {
+                Preconditions.checkArgument(startTime < endTime, "项目结束时间不能小于开始时间");
+            }
 
-			if (selectProjectId > 0) {
-				projectService.updateProject(selectProjectId, project);
-			} else {
-				projectService.createProject(project);
-			}
+            String remark = viewBinding.projectRemark.getText().toString();
+            project.setRemark(remark);
 
-			//退出
-			this.finish();
-		}));
-	}
+            if (selectProjectId > 0) {
+                projectService.updateProject(selectProjectId, project);
+            } else {
+                projectService.createProject(project);
+            }
 
-	private Long getTime(String startTime) {
-		if (StringUtils.isBlank(startTime)) {
-			return null;
-		}
-		if (DateTimeTagEnum.TobeDetermined.getMsg().equals(startTime)) {
-			return DateTimeTagEnum.TobeDetermined.getCode();
-		}
+            //退出
+            this.finish();
+        }));
+    }
 
-		if ("今天".equals(startTime)) {
-			return DateTimeUtil.timestamp(LocalDate.now());
-		}
+    private Long getTime(String startTime) {
+        if (StringUtils.isBlank(startTime)) {
+            return null;
+        }
+        if (DateTimeTagEnum.TobeDetermined.getMsg().equals(startTime)) {
+            return DateTimeTagEnum.TobeDetermined.getCode();
+        }
 
-		return DateTimeUtil.timestamp(startTime, "yyyy-MM-dd");
-	}
+        if ("今天".equals(startTime)) {
+            return DateTimeUtil.timestamp(LocalDate.now());
+        }
 
-	private String parseTime(Long time) {
-		if (time == null) {
-			return null;
-		}
-		if (DateTimeTagEnum.TobeDetermined.getCode().equals(time)) {
-			return DateTimeTagEnum.TobeDetermined.getMsg();
-		}
+        return DateTimeUtil.timestamp(startTime, "yyyy-MM-dd");
+    }
 
-		if (DateTimeUtil.toLocalDateTime(time).toLocalDate().equals(LocalDate.now())) {
-			return "今天";
-		}
+    private String parseTime(Long time) {
+        if (time == null) {
+            return null;
+        }
+        if (DateTimeTagEnum.TobeDetermined.getCode().equals(time)) {
+            return DateTimeTagEnum.TobeDetermined.getMsg();
+        }
 
-		return DateTimeUtil.format(time, "yyyy-MM-dd");
-	}
+        if (DateTimeUtil.toLocalDateTime(time).toLocalDate().equals(LocalDate.now())) {
+            return "今天";
+        }
 
-	private void registerDatePicker(TextView textview) {
-		//这个是添加新项目时候弹出的
-		//这个是点击右上角三个小圆点弹出的
-		AttachListPopupView attachListPopupView = new Builder(this).atView(textview).asAttachList(new String[] {"待定", "日期"}, new int[] {R.drawable.ic_base_to_be_determined, R.drawable.ic_calendar}, (position, text) -> {
-			if (position == 0) {
-				//如果选择了待定
-				refreshTimeShow(DateTimeTagEnum.TobeDetermined.getCode(), textview);
-				return;
-			}
+        return DateTimeUtil.format(time, "yyyy-MM-dd");
+    }
 
-			if (position == 1) {
-				whenChoseSelectTime(textview);
-			}
-		});
-		//点击的时候弹出待定、时间选框
-		textview.setOnClickListener(v -> {
-			String s = ((TextView)v).getText().toString();
-			if (StringUtils.isNotBlank(s)) {
-				attachListPopupView.show();
-			} else {
-				whenChoseSelectTime((TextView)v);
-			}
-		});
-	}
+    private void registerDatePicker(TextView textview) {
+        //这个是添加新项目时候弹出的
+        //这个是点击右上角三个小圆点弹出的
+        AttachListPopupView attachListPopupView = new Builder(this).atView(textview).asAttachList(new String[]{"待定", "日期"}, new int[]{R.drawable.ic_base_to_be_determined, R.drawable.ic_calendar}, (position, text) -> {
+            if (position == 0) {
+                //如果选择了待定
+                refreshTimeShow(DateTimeTagEnum.TobeDetermined.getCode(), textview);
+                return;
+            }
 
-	private void whenChoseSelectTime(TextView textview) {
-		final String nowDate = textview.getText().toString();
-		updatePickDialogDate(nowDate);
-		datePickerDialog.setOnDateSetListener((view, year, month, dayOfMonth) -> {
-			LocalDate localDate = LocalDate.of(year, month + 1, dayOfMonth);
-			refreshTimeShow(DateTimeUtil.timestamp(localDate), textview);
-		});
+            if (position == 1) {
+                whenChoseSelectTime(textview);
+            }
+        });
+        //点击的时候弹出待定、时间选框
+        textview.setOnClickListener(v -> {
+            String s = ((TextView) v).getText().toString();
+            if (StringUtils.isNotBlank(s)) {
+                attachListPopupView.show();
+            } else {
+                whenChoseSelectTime((TextView) v);
+            }
+        });
+    }
 
-		datePickerDialog.show();
-	}
+    private void whenChoseSelectTime(TextView textview) {
+        final String nowDate = textview.getText().toString();
+        updatePickDialogDate(nowDate);
+        datePickerDialog.setOnDateSetListener((view, year, month, dayOfMonth) -> {
+            LocalDate localDate = LocalDate.of(year, month + 1, dayOfMonth);
+            refreshTimeShow(DateTimeUtil.timestamp(localDate), textview);
+        });
 
-	private void updatePickDialogDate(String nowDate) {
-		Long time = getTime(nowDate);
-		LocalDateTime localDateTime;
-		if (time == null || DateTimeTagEnum.TobeDetermined.getCode().equals(time)) {
-			localDateTime = LocalDateTime.now();
-		} else {
-			localDateTime = DateTimeUtil.toLocalDateTime(time);
-		}
-		datePickerDialog.updateDate(localDateTime.getYear(), localDateTime.getMonth().ordinal(), localDateTime.getDayOfMonth());
-	}
+        datePickerDialog.show();
+    }
 
-	private void initProject() {
-		if (selectProjectId < 0) {
-			viewBinding.topTitleBar.contentBarTitle.setText("新增项目");
-		} else {
-			viewBinding.topTitleBar.contentBarTitle.setText("编辑项目");
-		}
-	}
+    private void updatePickDialogDate(String nowDate) {
+        Long time = getTime(nowDate);
+        LocalDateTime localDateTime;
+        if (time == null || DateTimeTagEnum.TobeDetermined.getCode().equals(time)) {
+            localDateTime = LocalDateTime.now();
+        } else {
+            localDateTime = DateTimeUtil.toLocalDateTime(time);
+        }
+        datePickerDialog.updateDate(localDateTime.getYear(), localDateTime.getMonth().ordinal(), localDateTime.getDayOfMonth());
+    }
 
-	private void showSelectProjectInfo(Long projectId) {
-		if (projectId < 0) {
-			return;
-		}
+    private void initProject() {
+        if (selectProjectId < 0) {
+            viewBinding.topTitleBar.contentBarTitle.setText("新增项目");
+        } else {
+            viewBinding.topTitleBar.contentBarTitle.setText("编辑项目");
+        }
+    }
 
-		Project project = projectService.queryById(projectId);
-		if (project == null) {
-			return;
-		}
+    private void showSelectProjectInfo(Long projectId) {
+        if (projectId < 0) {
+            return;
+        }
 
-		final String name = project.getName();
-		if (StringUtils.isNotBlank(name)) {
-			viewBinding.projectName.setText(name);
-		}
+        Project project = projectService.queryById(projectId);
+        if (project == null) {
+            return;
+        }
 
-		final Long startTime = project.getStartTime();
-		refreshTimeShow(startTime, viewBinding.projectStartTime);
+        final String name = project.getName();
+        if (StringUtils.isNotBlank(name)) {
+            viewBinding.projectName.setText(name);
+        }
 
-		final Long endTime = project.getEndTime();
-		refreshTimeShow(endTime, viewBinding.projectEndTime);
+        final Long startTime = project.getStartTime();
+        refreshTimeShow(startTime, viewBinding.projectStartTime);
 
-		final String remark = project.getRemark();
-		if (StringUtils.isNotBlank(remark)) {
-			viewBinding.projectRemark.setText(remark);
-		}
-	}
+        final Long endTime = project.getEndTime();
+        refreshTimeShow(endTime, viewBinding.projectEndTime);
 
-	public void refreshTimeShow(Long time, TextView textView) {
-		String projectStartTime = parseTime(time);
-		textView.setText(projectStartTime);
+        final String remark = project.getRemark();
+        if (StringUtils.isNotBlank(remark)) {
+            viewBinding.projectRemark.setText(remark);
+        }
+    }
 
-		Integer icon = parseIcon(time);
-		Drawable drawable = ResourceUtils.getDrawable(icon);
-		textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
-	}
+    public void refreshTimeShow(Long time, TextView textView) {
+        String projectStartTime = parseTime(time);
+        textView.setText(projectStartTime);
 
-	private Integer parseIcon(Long time) {
-		if (Objects.equals(DateTimeTagEnum.TobeDetermined.getCode(), time)) {
-			return R.drawable.ic_project_determined;
-		}
+        Integer icon = parseIcon(time);
+        Drawable drawable = ResourceUtils.getDrawable(icon);
+        textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+    }
 
-		return R.drawable.ic_keyboard_date;
-	}
+    private Integer parseIcon(Long time) {
+        if (Objects.equals(DateTimeTagEnum.TobeDetermined.getCode(), time)) {
+            return R.drawable.ic_project_determined;
+        }
+
+        return R.drawable.ic_keyboard_date;
+    }
+
+    public static class IntentKey {
+        public static final String PROJECT_ID = "projectId";
+    }
 }
