@@ -14,7 +14,6 @@ import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.FutureUtil;
 import com.business.travel.app.view.BottomAgreementPopupView;
 import com.lxj.xpopup.XPopup;
-import com.lxj.xpopup.interfaces.SimpleCallback;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -50,19 +49,21 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         //此时还没有用户
         if (user == null || !user.getAgree()) {
             //弹出是否同意弹框
-            new XPopup.Builder(this).asCustom(new BottomAgreementPopupView(this,
-                    //如果选择同意
-                    () -> {
-                        //更新为同意
-                        User record = new User();
-                        record.setAgree(true);
-                        userService.upsertUser(record);
+            new XPopup.Builder(this)
+                    .dismissOnTouchOutside(true) // 点击外部是否关闭弹窗，默认为true
+                    .asCustom(new BottomAgreementPopupView(this,
+                            //如果选择同意
+                            () -> {
+                                //更新为同意
+                                User record = new User();
+                                record.setAgree(true);
+                                userService.upsertUser(record);
 
-                        //进入主界面
-                        start();
-                    },
-                    //如果选择不同意,关闭所有页面
-                    ActivityUtils::finishAllActivities)).show();
+                                //进入主界面
+                                start();
+                            },
+                            //如果选择不同意,关闭所有页面
+                            ActivityUtils::finishAllActivities)).show();
             return;
         }
 

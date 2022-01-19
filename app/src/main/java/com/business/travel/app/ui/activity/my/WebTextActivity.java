@@ -7,18 +7,22 @@ import com.business.travel.app.ui.base.ColorStatusBarActivity;
 
 public class WebTextActivity extends ColorStatusBarActivity<ActivityWebTextBinding> {
 
-	private String webTextType;
+    private String webTextType;
 
-	@Override
-	protected void inject() {
-		webTextType = this.getIntent().getStringExtra("WebTextType");
-	}
+    @Override
+    protected void inject() {
+        webTextType = this.getIntent().getStringExtra(IntentKey.WEB_TEXT_TYPE);
+    }
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		WebTextTypeEnum webTextTypeEnum = WebTextTypeEnum.valueOf(webTextType);
-		viewBinding.topTitleBar.contentBarTitle.setText(webTextTypeEnum.getMsg());
-		viewBinding.webContent.loadUrl(webTextTypeEnum.getUrl());
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        WebTextTypeEnum webTextTypeEnum = WebTextTypeEnum.valueOf(webTextType);
+        viewBinding.topTitleBar.contentBarTitle.setText(webTextTypeEnum.getMsg());
+        viewBinding.webContent.loadUrl(webTextTypeEnum.getUrl());
+    }
+
+    public static class IntentKey {
+        public static final String WEB_TEXT_TYPE = "WebTextType";
+    }
 }

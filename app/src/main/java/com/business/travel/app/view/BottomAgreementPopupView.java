@@ -57,30 +57,28 @@ public class BottomAgreementPopupView extends BottomPopupView {
 
         //同意按钮点击行为
         TextView textView = findViewById(R.id.agree);
-        textView.setOnClickListener(view -> {
-            this.dismiss();
-            onConfirm.run();
-        });
+        textView.setOnClickListener(view -> this.dismissWith(onConfirm));
 
         //取消按钮点击行为
-        TextView textView2 = findViewById(R.id.un_agree);
-        textView2.setOnClickListener(view -> {
-            this.dismiss();
-            onCancel.run();
-        });
+        TextView textView2 = findViewById(R.id.cancel);
+        textView2.setOnClickListener(view -> this.dismissWith(onCancel));
 
+        //用户须知内容
         TextView content = findViewById(R.id.content);
-        String userNotice = getUserNotice();
-        if (StringUtils.isBlank(userNotice)) {
+        //从服务器获取用户须知
+        String userNotice = getUserNoticeFormServer();
+        //如果获取失败，兜底
+        //验证是否有值，是否包含关键字
+        if (!verify(userNotice)) {
             userNotice = "在使用前,请认真阅读并同意我们的《用户协议》和《隐私政策》";
         }
         SpannableString sp = new SpannableString(userNotice);
-
         // 找到用户协议位置，加点击事件
         int start = userNotice.indexOf("《用户协议》");
         sp.setSpan(new TextViewSpan() {
             @Override
             public void onClick(@NonNull View widget) {
+                //跳转到用户协议页面
                 goWebTextActivity(WebTextTypeEnum.USER_AGREEMENT);
             }
         }, start, start + 6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -90,16 +88,33 @@ public class BottomAgreementPopupView extends BottomPopupView {
         sp.setSpan(new TextViewSpan() {
             @Override
             public void onClick(@NonNull View widget) {
+                //跳转到隐私政策页面
                 goWebTextActivity(WebTextTypeEnum.PRIVACY_POLICY);
             }
         }, start1, start1 + 6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         content.setText(sp);
-
         content.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-    private String getUserNotice() {
+    private boolean verify(String userNotice) {
+        if (StringUtils.isBlank(userNotice)) {
+            return false;
+        }
+
+        if (!userNotice.contains("《用户协议》")) {
+            return false;
+        }
+
+        return userNotice.contains("《隐私政策》");
+    }
+
+    /**
+     * 从服务器获取用户须知
+     *
+     * @return
+     */
+    private String getUserNoticeFormServer() {
         try {
             return FutureUtil.supplyAsync(() -> {
                 if (!NetworkUtil.isAvailable()) {
@@ -127,7 +142,7 @@ public class BottomAgreementPopupView extends BottomPopupView {
         this.dismiss();
 
         Intent intent = new Intent(getContext(), WebTextActivity.class);
-        intent.putExtra("WebTextType", webTextType.name());
+        intent.putExtra(WebTextActivity.IntentKey.WEB_TEXT_TYPE, webTextType.name());
         getContext().startActivity(intent);
     }
 }

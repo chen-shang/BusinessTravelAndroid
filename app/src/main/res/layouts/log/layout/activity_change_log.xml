@@ -16,7 +16,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-            <LinearLayout
+            <com.nex3z.togglebuttongroup.FlowLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -49,7 +49,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:text="agree"/>
-            </LinearLayout>
+            </com.nex3z.togglebuttongroup.FlowLayout>
 
 
             <TextView
