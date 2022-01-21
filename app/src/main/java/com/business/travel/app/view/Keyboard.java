@@ -19,10 +19,8 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.blankj.utilcode.util.ColorUtils;
 import com.blankj.utilcode.util.ResourceUtils;
 import com.business.travel.app.R;
-import com.business.travel.app.utils.LogToast;
 import com.business.travel.app.view.Keyboard.KeyboardRecyclerViewAdapter.KeyboardRecyclerViewAdapterViewHolder;
 import com.business.travel.utils.DateTimeUtil;
-import com.business.travel.utils.JacksonUtil;
 import com.business.travel.utils.SplitUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.kyleduo.switchbutton.SwitchButton;
@@ -222,10 +220,13 @@ public class Keyboard extends ConstraintLayout {
      */
     class KeyboardRecyclerViewAdapter extends RecyclerView.Adapter<KeyboardRecyclerViewAdapterViewHolder> {
 
-        private String text = "保存";
+        /**
+         * 保存按钮展示的是等号还是保存
+         */
+        private String saveButtonText = "保存";
 
-        public void setText(String text) {
-            this.text = text;
+        public void refreshSaveButtonText(String saveButtonText) {
+            this.saveButtonText = saveButtonText;
             notifyItemChanged(15);
         }
 
@@ -244,6 +245,11 @@ public class Keyboard extends ConstraintLayout {
             this.point = false;
         }
 
+        /**
+         * 刷新当前值
+         *
+         * @param num
+         */
         private void refreshCurrNum(double num) {
             if (!point) {
                 currNum = currNum * 10 + num;
@@ -257,11 +263,19 @@ public class Keyboard extends ConstraintLayout {
                     currNum = currNum + num * pow;
                 }
             }
-            if (!stack.isEmpty() && currNum != 0) {
-                setText("=");
+
+            if (!stack.isEmpty() && currNum != 0 && !"=".equals(saveButtonText)) {
+                refreshSaveButtonText("=");
             }
         }
 
+
+        /**
+         * 根据栈顶的操作符计算当前值和上一个值的结果并入栈
+         *
+         * @param currOpt
+         * @return
+         */
         public Double calculate(String currOpt) {
             //如果栈空,说明又初始化了
             if (stack.isEmpty()) {
@@ -271,7 +285,6 @@ public class Keyboard extends ConstraintLayout {
                 stack.push(currOpt);
                 //当前值变成0
                 clearCurrNum();
-                LogToast.infoShow(JacksonUtil.toPrettyString(stack));
                 return null;
             }
             //若果栈不为空，则要计算，然后在入栈
@@ -282,6 +295,7 @@ public class Keyboard extends ConstraintLayout {
             double result = 0.0;
             switch (prevOpt) {
                 case "+":
+                    //todo 解决浮点数问题
                     result = BigDecimal.valueOf(Double.parseDouble(prevNum)).add(BigDecimal.valueOf(currNum)).doubleValue();
                     break;
                 case "-":
@@ -348,27 +362,26 @@ public class Keyboard extends ConstraintLayout {
                     //回退按钮
                     holder.backImageButton.setOnClickListener(v -> {
                         String amount = textViewAmount.getText().toString();
-                        if (!stack.isEmpty() && currNum != 0 && !"保存".equals(text)) {
-                            setText("=");
-                        } else {
-                            setText("保存");
+                        if (!stack.isEmpty() && currNum != 0 && !"=".equals(saveButtonText)) {
+                            refreshSaveButtonText("=");
+                        } else if (!"保存".equals(saveButtonText)) {
+                            refreshSaveButtonText("保存");
                         }
+
                         if (StringUtils.isBlank(amount)) {
                             clearCurrNum();
                             stack.empty();
                             return;
                         }
+
                         char c = amount.trim().charAt(amount.trim().length() - 1);
                         String newAmount = amount.trim().substring(0, amount.trim().length() - 1);
                         textViewAmount.setText(newAmount);
 
-                        if ('+' == c || '-' == c) {
-                            if (!stack.isEmpty()) {
-                                stack.pop();
-                                currNum = Double.parseDouble(stack.pop());
-                                point = ((int) currNum) == currNum;
-                            }
-                            LogToast.infoShow(currNum + "");
+                        if (('+' == c || '-' == c) && !stack.isEmpty()) {
+                            stack.pop();
+                            currNum = Double.parseDouble(stack.pop());
+                            point = ((int) currNum) == currNum;
                             return;
                         }
 
@@ -378,19 +391,20 @@ public class Keyboard extends ConstraintLayout {
                             return;
                         }
 
-
                         if (!point) {
                             currNum = (int) (currNum / 10);
-                        } else {
-                            if (currNum == 0) {
-                                currNum = 0;
-                            } else {
-                                //小数位数
-                                String s1 = String.valueOf(currNum);
-                                String substring = s1.substring(0, s1.length() - 1);
-                                currNum = Double.parseDouble(substring);
-                            }
+                            return;
                         }
+
+                        //当前值为0了，不做任何操作
+                        if (currNum == 0) {
+                            return;
+                        }
+
+                        //小数位数
+                        String s1 = String.valueOf(currNum);
+                        String substring = s1.substring(0, s1.length() - 1);
+                        currNum = Double.parseDouble(substring);
                     });
                     break;
                 case 7:
@@ -417,11 +431,14 @@ public class Keyboard extends ConstraintLayout {
                     break;
                 case 15:
                     holder.itemView.setBackground(ResourceUtils.getDrawable(R.drawable.corners_shape_change));
-                    holder.numButton.setText(text);
+                    holder.numButton.setText(saveButtonText);
                     holder.numButton.setTextColor(ColorUtils.getColor(R.color.white));
                     holder.numButton.setOnClickListener(onSaveClick);
                     holder.numButton.setOnLongClickListener(v -> {
-                        onSaveLongClick.onClick(v);
+                        if ("保存".equals(saveButtonText)) {
+                            onSaveLongClick.onClick(v);
+                        } else if ("=".equals(saveButtonText)) {
+                        }
                         return true;
                     });
                     break;
