@@ -20,7 +20,6 @@ import com.blankj.utilcode.util.ColorUtils;
 import com.blankj.utilcode.util.ResourceUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.utils.LogToast;
-import com.business.travel.app.utils.MoneyUtil;
 import com.business.travel.app.view.Keyboard.KeyboardRecyclerViewAdapter.KeyboardRecyclerViewAdapterViewHolder;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.JacksonUtil;
@@ -100,7 +99,10 @@ public class Keyboard extends ConstraintLayout {
         keyboardRecyclerViewAdapter = new KeyboardRecyclerViewAdapter();
         recyclerViewKeyboard.setAdapter(keyboardRecyclerViewAdapter);
 
-        BasePopupView basePopupView = new XPopup.Builder(context).autoOpenSoftInput(true) //是否弹窗显示的同时打开输入法，只在包含输入框的弹窗内才有效，默认为false
+        BasePopupView basePopupView = new XPopup.Builder(context)
+                //是否弹窗显示的同时打开输入法，只在包含输入框的弹窗内才有效，默认为false
+                .autoOpenSoftInput(true)
+                //自定义
                 .asCustom(new BottomRemarkEditPopupView(context, this));
         editTextRemark.setFocusable(false);
         editTextRemark.setOnClickListener(v -> basePopupView.show());
@@ -220,7 +222,14 @@ public class Keyboard extends ConstraintLayout {
      */
     class KeyboardRecyclerViewAdapter extends RecyclerView.Adapter<KeyboardRecyclerViewAdapterViewHolder> {
 
-        private Stack<String> stack = new Stack<>();
+        private String text = "保存";
+
+        public void setText(String text) {
+            this.text = text;
+            notifyItemChanged(15);
+        }
+
+        private final Stack<String> stack = new Stack<>();
         /**
          * 用于记录当前数值，不代表页面上看到的值
          */
@@ -230,12 +239,10 @@ public class Keyboard extends ConstraintLayout {
          */
         private boolean point = false;
 
-
         private void clearCurrNum() {
             this.currNum = 0;
             this.point = false;
         }
-
 
         private void refreshCurrNum(double num) {
             if (!point) {
@@ -249,6 +256,9 @@ public class Keyboard extends ConstraintLayout {
                     double pow = Math.pow(0.1, s.length());
                     currNum = currNum + num * pow;
                 }
+            }
+            if (!stack.isEmpty() && currNum != 0) {
+                setText("=");
             }
         }
 
@@ -338,11 +348,49 @@ public class Keyboard extends ConstraintLayout {
                     //回退按钮
                     holder.backImageButton.setOnClickListener(v -> {
                         String amount = textViewAmount.getText().toString();
+                        if (!stack.isEmpty() && currNum != 0 && !"保存".equals(text)) {
+                            setText("=");
+                        } else {
+                            setText("保存");
+                        }
                         if (StringUtils.isBlank(amount)) {
+                            clearCurrNum();
+                            stack.empty();
                             return;
                         }
+                        char c = amount.trim().charAt(amount.trim().length() - 1);
                         String newAmount = amount.trim().substring(0, amount.trim().length() - 1);
                         textViewAmount.setText(newAmount);
+
+                        if ('+' == c || '-' == c) {
+                            if (!stack.isEmpty()) {
+                                stack.pop();
+                                currNum = Double.parseDouble(stack.pop());
+                                point = ((int) currNum) == currNum;
+                            }
+                            LogToast.infoShow(currNum + "");
+                            return;
+                        }
+
+                        //删除的是小数点
+                        if ('.' == c) {
+                            this.point = false;
+                            return;
+                        }
+
+
+                        if (!point) {
+                            currNum = (int) (currNum / 10);
+                        } else {
+                            if (currNum == 0) {
+                                currNum = 0;
+                            } else {
+                                //小数位数
+                                String s1 = String.valueOf(currNum);
+                                String substring = s1.substring(0, s1.length() - 1);
+                                currNum = Double.parseDouble(substring);
+                            }
+                        }
                     });
                     break;
                 case 7:
@@ -369,7 +417,7 @@ public class Keyboard extends ConstraintLayout {
                     break;
                 case 15:
                     holder.itemView.setBackground(ResourceUtils.getDrawable(R.drawable.corners_shape_change));
-                    holder.numButton.setText("保存");
+                    holder.numButton.setText(text);
                     holder.numButton.setTextColor(ColorUtils.getColor(R.color.white));
                     holder.numButton.setOnClickListener(onSaveClick);
                     holder.numButton.setOnLongClickListener(v -> {
