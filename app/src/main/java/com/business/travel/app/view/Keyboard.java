@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.blankj.utilcode.util.ColorUtils;
 import com.blankj.utilcode.util.ResourceUtils;
 import com.business.travel.app.R;
+import com.business.travel.app.utils.LogToast;
 import com.business.travel.app.view.Keyboard.KeyboardRecyclerViewAdapter.KeyboardRecyclerViewAdapterViewHolder;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.utils.SplitUtil;
@@ -285,6 +286,7 @@ public class Keyboard extends ConstraintLayout {
                 stack.push(currOpt);
                 //当前值变成0
                 clearCurrNum();
+                LogToast.infoShow(stack + " " + currNum);
                 return null;
             }
             //若果栈不为空，则要计算，然后在入栈
@@ -292,7 +294,7 @@ public class Keyboard extends ConstraintLayout {
             String prevOpt = stack.pop();
             //上一次计算的结果
             String prevNum = stack.pop();
-            double result = 0.0;
+            double result = Double.parseDouble(prevNum);
             switch (prevOpt) {
                 case "+":
                     //todo 解决浮点数问题
@@ -305,6 +307,7 @@ public class Keyboard extends ConstraintLayout {
             stack.push(String.valueOf(result));
             stack.push(currOpt);
             clearCurrNum();
+            LogToast.infoShow(stack + " " + currNum);
             return result;
         }
 
@@ -370,7 +373,10 @@ public class Keyboard extends ConstraintLayout {
 
                         if (StringUtils.isBlank(amount)) {
                             clearCurrNum();
-                            stack.empty();
+                            if (!stack.isEmpty()) {
+                                stack.clear();
+                            }
+                            LogToast.infoShow(stack + " " + currNum);
                             return;
                         }
 
@@ -378,26 +384,39 @@ public class Keyboard extends ConstraintLayout {
                         String newAmount = amount.trim().substring(0, amount.trim().length() - 1);
                         textViewAmount.setText(newAmount);
 
+                        if (StringUtils.isBlank(newAmount)) {
+                            clearCurrNum();
+                            if (!stack.isEmpty()) {
+                                stack.clear();
+                            }
+                            LogToast.infoShow(stack + " " + currNum);
+                            return;
+                        }
+
                         if (('+' == c || '-' == c) && !stack.isEmpty()) {
                             stack.pop();
                             currNum = Double.parseDouble(stack.pop());
                             point = ((int) currNum) == currNum;
+                            LogToast.infoShow(stack + " " + currNum);
                             return;
                         }
 
                         //删除的是小数点
                         if ('.' == c) {
                             this.point = false;
+                            LogToast.infoShow(stack + " " + currNum);
                             return;
                         }
 
                         if (!point) {
                             currNum = (int) (currNum / 10);
+                            LogToast.infoShow(stack + " " + currNum);
                             return;
                         }
 
                         //当前值为0了，不做任何操作
                         if (currNum == 0) {
+                            LogToast.infoShow(stack + " " + currNum);
                             return;
                         }
 
@@ -405,6 +424,7 @@ public class Keyboard extends ConstraintLayout {
                         String s1 = String.valueOf(currNum);
                         String substring = s1.substring(0, s1.length() - 1);
                         currNum = Double.parseDouble(substring);
+                        LogToast.infoShow(stack + " " + currNum);
                     });
                     break;
                 case 7:
@@ -433,12 +453,23 @@ public class Keyboard extends ConstraintLayout {
                     holder.itemView.setBackground(ResourceUtils.getDrawable(R.drawable.corners_shape_change));
                     holder.numButton.setText(saveButtonText);
                     holder.numButton.setTextColor(ColorUtils.getColor(R.color.white));
-                    holder.numButton.setOnClickListener(onSaveClick);
-                    holder.numButton.setOnLongClickListener(v -> {
+                    holder.numButton.setOnClickListener(v -> {
                         if ("保存".equals(saveButtonText)) {
-                            onSaveLongClick.onClick(v);
+                            onSaveClick.onClick(v);
                         } else if ("=".equals(saveButtonText)) {
+                            Double calculate = calculate("=");
+                            currNum = calculate;
+                            point = true;
+                            if (calculate != 0) {
+                                textViewAmount.setText(String.valueOf(calculate));
+                            } else {
+                                textViewAmount.setText(null);
+                            }
+                            refreshSaveButtonText("保存");
                         }
+                    });
+                    holder.numButton.setOnLongClickListener(v -> {
+                        onSaveLongClick.onClick(v);
                         return true;
                     });
                     break;
@@ -501,6 +532,7 @@ public class Keyboard extends ConstraintLayout {
                         point = true;
                         //如果已经包含点了,再点击没有效果
                         textViewAmount.append(".");
+                        LogToast.infoShow(stack + " " + currNum);
                     });
                     break;
                 default:
