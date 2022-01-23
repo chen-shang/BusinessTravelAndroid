@@ -173,7 +173,7 @@ public class Keyboard extends ConstraintLayout {
      * @return
      */
     public Keyboard setAmount(String amount) {
-        textViewAmount.setText(amount.trim());
+        textViewAmount.setText(amount == null ? null : amount.trim());
         return this;
     }
 
@@ -236,10 +236,10 @@ public class Keyboard extends ConstraintLayout {
          *
          * @return
          */
-        private Double calculate() {
+        private String calculate() {
             String amount = getAmount();
             if (StringUtils.isBlank(amount)) {
-                return null;
+                return "";
             }
 
             if (amount.startsWith("+") || amount.startsWith("-")) {
@@ -279,7 +279,7 @@ public class Keyboard extends ConstraintLayout {
                     resBig = resBig.subtract(nextBig);
                 }
             }
-            return resBig.doubleValue();
+            return resBig.toString();
         }
 
         @NonNull
@@ -340,10 +340,7 @@ public class Keyboard extends ConstraintLayout {
                     //正号
                     holder.numButton.setText("+");
                     holder.numButton.setOnClickListener(v -> {
-                        Double calculate = calculate();
-                        if (calculate != null) {
-                            textViewAmount.setText(calculate + "+");
-                        }
+                        setAmount(calculate() + "+");
                         showEqualsOrSave();
                     });
                     break;
@@ -351,10 +348,7 @@ public class Keyboard extends ConstraintLayout {
                     //负号
                     holder.numButton.setText("-");
                     holder.numButton.setOnClickListener(v -> {
-                        Double calculate = calculate();
-                        if (calculate != null) {
-                            textViewAmount.setText(calculate + "-");
-                        }
+                        setAmount(calculate() + "-");
                         showEqualsOrSave();
                     });
                     break;
@@ -369,77 +363,17 @@ public class Keyboard extends ConstraintLayout {
                         }
 
                         if ("=".equals(saveButtonText)) {
-                            Double calculate = calculate();
-                            if (calculate != null) {
-                                setAmount(String.valueOf((calculate)));
-                            }
+                            setAmount(calculate());
                         }
                         showEqualsOrSave();
                     });
                     holder.numButton.setOnLongClickListener(v -> {
-                        if ("保存".equals(saveButtonText)) {
-                            onSaveLongClick.onClick(v);
-                            return true;
-                        }
-
                         if ("=".equals(saveButtonText)) {
-                            Double calculate = calculate();
-                            if (calculate != null) {
-                                setAmount(String.valueOf((calculate)));
-                            }
+                            setAmount(calculate());
                         }
-                        showEqualsOrSave();
                         onSaveLongClick.onClick(v);
+                        showEqualsOrSave();
                         return true;
-                    });
-                    break;
-                case 0:
-                    holder.numButton.setText("1");
-                    holder.numButton.setOnClickListener(v -> {
-                        textViewAmount.append("1");
-                        showEqualsOrSave();
-                    });
-                    break;
-                case 1:
-                    holder.numButton.setText("2");
-                    holder.numButton.setOnClickListener(v -> {
-                        textViewAmount.append("2");
-                        showEqualsOrSave();
-                    });
-                    break;
-                case 2:
-                    holder.numButton.setText("3");
-                    holder.numButton.setOnClickListener(v -> {
-                        textViewAmount.append("3");
-                        showEqualsOrSave();
-                    });
-                    break;
-                case 8:
-                    holder.numButton.setText("7");
-                    holder.numButton.setOnClickListener(v -> {
-                        textViewAmount.append("7");
-                        showEqualsOrSave();
-                    });
-                    break;
-                case 9:
-                    holder.numButton.setText("8");
-                    holder.numButton.setOnClickListener(v -> {
-                        textViewAmount.append("8");
-                        showEqualsOrSave();
-                    });
-                    break;
-                case 10:
-                    holder.numButton.setText("9");
-                    holder.numButton.setOnClickListener(v -> {
-                        textViewAmount.append("9");
-                        showEqualsOrSave();
-                    });
-                    break;
-                case 13:
-                    holder.numButton.setText("0");
-                    holder.numButton.setOnClickListener(v -> {
-                        textViewAmount.append("0");
-                        showEqualsOrSave();
                     });
                     break;
                 case 12:
@@ -460,13 +394,119 @@ public class Keyboard extends ConstraintLayout {
                         textViewAmount.append(".");
                     });
                     break;
+                case 0:
+                    holder.numButton.setText("1");
+                    holder.numButton.setOnClickListener(v -> {
+                        if (!canAppend()) {
+                            return;
+                        }
+                        textViewAmount.append("1");
+                        showEqualsOrSave();
+                    });
+                    break;
+                case 1:
+                    holder.numButton.setText("2");
+                    holder.numButton.setOnClickListener(v -> {
+                        if (!canAppend()) {
+                            return;
+                        }
+                        textViewAmount.append("2");
+                        showEqualsOrSave();
+                    });
+                    break;
+                case 2:
+                    holder.numButton.setText("3");
+                    holder.numButton.setOnClickListener(v -> {
+                        if (!canAppend()) {
+                            return;
+                        }
+                        textViewAmount.append("3");
+                        showEqualsOrSave();
+                    });
+                    break;
+                case 8:
+                    holder.numButton.setText("7");
+                    holder.numButton.setOnClickListener(v -> {
+                        if (!canAppend()) {
+                            return;
+                        }
+                        textViewAmount.append("7");
+                        showEqualsOrSave();
+                    });
+                    break;
+                case 9:
+                    holder.numButton.setText("8");
+                    holder.numButton.setOnClickListener(v -> {
+                        if (!canAppend()) {
+                            return;
+                        }
+                        textViewAmount.append("8");
+                        showEqualsOrSave();
+                    });
+                    break;
+                case 10:
+                    holder.numButton.setText("9");
+                    holder.numButton.setOnClickListener(v -> {
+                        if (!canAppend()) {
+                            return;
+                        }
+                        textViewAmount.append("9");
+                        showEqualsOrSave();
+                    });
+                    break;
+                case 13:
+                    holder.numButton.setText("0");
+                    holder.numButton.setOnClickListener(v -> {
+                        if (!canAppend()) {
+                            return;
+                        }
+                        textViewAmount.append("0");
+                        showEqualsOrSave();
+                    });
+                    break;
                 default:
                     holder.numButton.setText(String.valueOf(position));
                     holder.numButton.setOnClickListener(v -> {
+                        if (!canAppend()) {
+                            return;
+                        }
                         textViewAmount.append(String.valueOf(position));
                         showEqualsOrSave();
                     });
             }
+        }
+
+        private boolean canAppend() {
+            String amount = getAmount();
+            if (StringUtils.isBlank(amount)) {
+                return true;
+            }
+            if (amount.endsWith("-") || amount.endsWith("+")) {
+                return true;
+            }
+
+            //最大8位整数
+            if (!amount.contains("+") && !amount.contains("-") && !amount.contains(".") && amount.length() < 8) {
+                return true;
+            }
+
+            if (!amount.contains("+") && !amount.contains("-") && amount.contains(".") && amount.length() < 11) {
+                return true;
+            }
+
+            if (amount.contains("+") || amount.contains("-")) {
+                String[] split = amount.split("[+\\-]");
+                String s = split[1];
+                if (!s.contains(".") && s.length() < 8) {
+                    return true;
+                }
+
+                if (s.contains(".") && s.length() < 11) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void showEqualsOrSave() {
