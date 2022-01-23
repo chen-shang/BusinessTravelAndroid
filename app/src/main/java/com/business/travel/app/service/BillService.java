@@ -148,7 +148,7 @@ public class BillService {
         //业务逻辑
         String remark = bill.getRemark();
         boolean change = false;
-        if (StringUtils.isNotBlank(remark) && !remark.equals(record.getRemark())) {
+        if (remark != null && !remark.equals(record.getRemark())) {
             record.setRemark(remark);
             LogUtils.i("更新备注 remark:" + remark + "->" + record.getRemark());
             change = true;
