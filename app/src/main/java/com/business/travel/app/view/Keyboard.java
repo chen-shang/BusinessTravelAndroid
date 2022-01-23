@@ -96,7 +96,12 @@ public class Keyboard extends ConstraintLayout {
         SwipeRecyclerView recyclerViewKeyboard = inflate.findViewById(R.id.RecyclerView_Keyboard);
 
         //4*4 布局
-        recyclerViewKeyboard.setLayoutManager(buildGridLayoutManager(context, 4));
+        recyclerViewKeyboard.setLayoutManager(new GridLayoutManager(context, 4) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
         keyboardRecyclerViewAdapter = new KeyboardRecyclerViewAdapter();
         recyclerViewKeyboard.setAdapter(keyboardRecyclerViewAdapter);
 
@@ -158,7 +163,7 @@ public class Keyboard extends ConstraintLayout {
      * @return
      */
     public String getAmount() {
-        return textViewAmount.getText().toString();
+        return textViewAmount.getText().toString().trim();
     }
 
     /**
@@ -168,7 +173,7 @@ public class Keyboard extends ConstraintLayout {
      * @return
      */
     public Keyboard setAmount(String amount) {
-        textViewAmount.setText(amount);
+        textViewAmount.setText(amount.trim());
         return this;
     }
 
@@ -189,7 +194,6 @@ public class Keyboard extends ConstraintLayout {
      */
     public Keyboard setDate(Long date) {
         selectedDate = date;
-        //三号为是日期框
         keyboardRecyclerViewAdapter.notifyItemChanged(3);
         return this;
     }
@@ -207,15 +211,6 @@ public class Keyboard extends ConstraintLayout {
     public Keyboard onSwitchClick(OnClickListener onSwitchClick) {
         switchButton.setOnCheckedChangeListener((buttonView, isChecked) -> onSwitchClick.onClick(buttonView));
         return this;
-    }
-
-    private GridLayoutManager buildGridLayoutManager(Context context, int spanCount) {
-        return new GridLayoutManager(context, spanCount) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
     }
 
     /**
@@ -313,29 +308,21 @@ public class Keyboard extends ConstraintLayout {
                     Optional.ofNullable(selectedDate).map(date -> {
                         if (DateTimeUtil.toLocalDateTime(date).toLocalDate().equals(LocalDate.now())) {
                             return "今天";
-                        } else {
-                            return DateTimeUtil.format(date, "MM.dd");
                         }
+                        return DateTimeUtil.format(date, "MM.dd");
                     }).ifPresent(holder.dateTextView::setText);
 
-                    //键盘日期按钮事件
-                    holder.dateTextView.setOnClickListener(v -> {
-                        //日期按钮点击后弹出日历
-                        datePickerDialog.show();
-                        //日历日期点击后更新选中的日期值并更新键盘日期显示
-                        datePickerDialog.setOnDateSetListener((view, year, month, dayOfMonth) -> {
-                            LocalDate localDate = LocalDate.of(year, month + 1, dayOfMonth);
-                            //更新选中的日期
-                            selectedDate = DateTimeUtil.timestamp(localDate);
-                            Optional.of(selectedDate).map(date -> {
-                                if (DateTimeUtil.toLocalDateTime(date).toLocalDate().equals(LocalDate.now())) {
-                                    return "今天";
-                                } else {
-                                    return DateTimeUtil.format(date, "MM.dd");
-                                }
-                            }).ifPresent(((TextView) v)::setText);
-                        });
+                    //日历日期点击后更新选中的日期值并更新键盘日期显示
+                    datePickerDialog.setOnDateSetListener((view, year, month, dayOfMonth) -> {
+                        LocalDate localDate = LocalDate.of(year, month + 1, dayOfMonth);
+                        //更新选中的日期
+                        selectedDate = DateTimeUtil.timestamp(localDate);
+                        notifyItemChanged(3);
                     });
+
+                    //键盘日期按钮事件
+                    //日期按钮点击后弹出日历
+                    holder.dateTextView.setOnClickListener(v -> datePickerDialog.show());
                     break;
                 case 14:
                     //回退按钮
