@@ -5,6 +5,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.business.travel.app.dal.dao.BillDao;
 import com.business.travel.app.dal.db.AppDatabase;
 import com.business.travel.app.dal.entity.Bill;
+import com.business.travel.app.model.ConsumeDatePeriod;
 import com.business.travel.utils.JacksonUtil;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
@@ -217,5 +218,15 @@ public class BillService {
      */
     public Long countBill() {
         return billDao.count();
+    }
+
+    /**
+     * 获取一个项目当前账单的时间段
+     *
+     * @param projectId
+     * @return
+     */
+    public ConsumeDatePeriod selectMaxAndMinConsumeDate(Long projectId) {
+        return billDao.selectMaxAndMinConsumeDate(projectId);
     }
 }

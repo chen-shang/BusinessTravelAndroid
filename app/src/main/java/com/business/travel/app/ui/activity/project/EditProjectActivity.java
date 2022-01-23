@@ -10,6 +10,8 @@ import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.ActivityEditProjectBinding;
 import com.business.travel.app.enums.DateTimeTagEnum;
+import com.business.travel.app.model.ConsumeDatePeriod;
+import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.base.ColorStatusBarActivity;
 import com.business.travel.app.utils.Try;
@@ -41,11 +43,12 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
      * 各种service
      */
     private ProjectService projectService;
+    private BillService billService;
 
     @Override
     protected void inject() {
         projectService = new ProjectService(this);
-
+        billService = new BillService(this);
         LocalDateTime now = DateTimeUtil.now();
         datePickerDialog = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
         }, now.getYear(), now.getMonth().getValue() - 1, now.getDayOfMonth());
@@ -92,10 +95,25 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
                 Preconditions.checkArgument(startTime < endTime, "项目结束时间不能小于开始时间");
             }
 
+            ConsumeDatePeriod consumeDatePeriod = billService.selectMaxAndMinConsumeDate(selectProjectId);
+            Long min = consumeDatePeriod.getMin();
+            if (min != null && startTime > min) {
+                throw new IllegalArgumentException("起止时间范围外有该项目账单");
+            }
+
+            Long max = consumeDatePeriod.getMax();
+            if (endTime != null && max != null && endTime < max) {
+                throw new IllegalArgumentException("起止时间范围外有该项目账单");
+            }
+
             String remark = viewBinding.projectRemark.getText().toString();
             project.setRemark(remark);
 
             if (selectProjectId > 0) {
+                if (consumeDatePeriod.getMax() != null) {
+
+                }
+
                 projectService.updateProject(selectProjectId, project);
             } else {
                 projectService.createProject(project);

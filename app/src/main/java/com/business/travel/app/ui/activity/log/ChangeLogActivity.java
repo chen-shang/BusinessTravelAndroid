@@ -8,6 +8,8 @@ import com.business.travel.app.R;
 import com.business.travel.app.constant.AppConfig;
 import com.business.travel.app.dal.entity.User;
 import com.business.travel.app.databinding.ActivityChangeLogBinding;
+import com.business.travel.app.model.ConsumeDatePeriod;
+import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.UserService;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.LogToast;
@@ -19,11 +21,13 @@ import java.util.stream.Collectors;
 public class ChangeLogActivity extends BaseActivity<ActivityChangeLogBinding> {
 
     private UserService userService;
+    private BillService billService;
 
     @Override
     protected void inject() {
         super.inject();
         userService = new UserService(this);
+        billService = new BillService(this);
     }
 
     @Override
