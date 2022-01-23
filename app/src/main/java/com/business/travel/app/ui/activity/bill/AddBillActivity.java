@@ -23,6 +23,7 @@ import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.activity.bill.fragment.BillFragment;
 import com.business.travel.app.ui.activity.item.consumption.EditConsumptionActivity;
 import com.business.travel.app.ui.activity.item.member.EditMemberActivity;
+import com.business.travel.app.ui.activity.project.EditProjectActivity;
 import com.business.travel.app.ui.base.ColorStatusBarActivity;
 import com.business.travel.app.utils.GridViewPagerUtil;
 import com.business.travel.app.utils.LogToast;
@@ -33,8 +34,10 @@ import com.business.travel.utils.JacksonUtil;
 import com.business.travel.vo.enums.ConsumptionTypeEnum;
 import com.google.common.base.Preconditions;
 import com.lxj.xpopup.XPopup.Builder;
+import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.enums.PopupAnimation;
 import com.lxj.xpopup.impl.AttachListPopupView;
+import com.lxj.xpopup.interfaces.SimpleCallback;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.validation.constraints.NotNull;
@@ -125,7 +128,16 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
         collect.add(0, "添加项目");
         data = collect.toArray(new String[]{});
 
-        AttachListPopupView attachListPopupView = builder.asAttachList(data, new int[]{R.drawable.ic_project_add}, (position, text) -> {
+        AttachListPopupView attachListPopupView = builder.setPopupCallback(new SimpleCallback() {
+            @Override
+            public void beforeShow(BasePopupView popupView) {
+                super.beforeShow(popupView);
+            }
+        }).asAttachList(data, new int[]{R.drawable.ic_project_add}, (position, text) -> {
+            if (position == 0) {
+                startActivity(new Intent(this, EditProjectActivity.class));
+                return;
+            }
             contentBarTitle.setText(text);
         }, 0, 0, Gravity.LEFT);
 
