@@ -249,6 +249,14 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
         //消费日期
         Long selectedDate = Optional.ofNullable(viewBinding.keyboard.getDate()).orElse(DateTimeUtil.timestamp(DateTimeUtil.now().toLocalDate()));
         bill.setConsumeDate(selectedDate);
+        Long startTime = project.getStartTime();
+        Long endTime = project.getEndTime();
+        if (startTime != null && DateTimeUtil.toLocalDateTime(selectedDate).toLocalDate().isBefore(DateTimeUtil.toLocalDateTime(startTime).toLocalDate())) {
+            throw new IllegalArgumentException("当前记账时间不在项目起止时间范围内");
+        }
+        if (endTime != null && DateTimeUtil.toLocalDateTime(selectedDate).toLocalDate().isAfter(DateTimeUtil.toLocalDateTime(endTime).toLocalDate())) {
+            throw new IllegalArgumentException("当前记账时间不在项目起止时间范围内");
+        }
 
         bill.setMemberIds(memberItemList);
         bill.setCreateTime(DateTimeUtil.timestamp());
