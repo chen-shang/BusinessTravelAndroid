@@ -1,8 +1,5 @@
 package com.business.travel.app.ui.activity.bill.fragment;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
-import androidx.viewbinding.ViewBinding;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.blankj.utilcode.util.CollectionUtils;
@@ -27,7 +23,6 @@ import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.ui.activity.bill.DetailBillActivity;
 import com.business.travel.app.ui.activity.bill.fragment.BillItemRecyclerViewAdapter.BillItemRecyclerViewAdapterViewHolder;
 import com.business.travel.app.ui.activity.bill.fragment.BillRecyclerViewAdapter.BillRecyclerViewAdapterViewHolder;
-import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.ImageLoadUtil;
 import com.business.travel.app.utils.MoneyUtil;
@@ -38,6 +33,9 @@ import com.lxj.xpopup.XPopup.Builder;
 import com.lxj.xpopup.impl.AttachListPopupView;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author chenshang
@@ -108,7 +106,7 @@ public class BillItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillIte
 
         holder.cardView.setOnClickListener(v -> {
             Intent intent = new Intent(context, DetailBillActivity.class);
-            intent.putExtra("selectBillId", bill.getId());
+            intent.putExtra(DetailBillActivity.IntentKey.SELECT_BILL_ID, bill.getId());
             context.startActivity(intent);
         });
 
