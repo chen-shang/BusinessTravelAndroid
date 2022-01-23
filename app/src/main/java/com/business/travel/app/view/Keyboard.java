@@ -386,6 +386,18 @@ public class Keyboard extends ConstraintLayout {
                         showEqualsOrSave();
                     });
                     holder.numButton.setOnLongClickListener(v -> {
+                        if ("保存".equals(saveButtonText)) {
+                            onSaveLongClick.onClick(v);
+                            return true;
+                        }
+
+                        if ("=".equals(saveButtonText)) {
+                            Double calculate = calculate();
+                            if (calculate != null) {
+                                setAmount(String.valueOf((calculate)));
+                            }
+                        }
+                        showEqualsOrSave();
                         onSaveLongClick.onClick(v);
                         return true;
                     });
