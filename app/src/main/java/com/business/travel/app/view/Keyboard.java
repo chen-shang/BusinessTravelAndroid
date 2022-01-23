@@ -340,6 +340,9 @@ public class Keyboard extends ConstraintLayout {
                     //回退按钮
                     holder.backImageButton.setOnClickListener(v -> {
                         String amount = getAmount();
+                        if (StringUtils.isBlank(amount)) {
+                            return;
+                        }
                         String newAmount = amount.trim().substring(0, amount.trim().length() - 1);
                         setAmount(newAmount);
                         showEqualsOrSave();
@@ -454,7 +457,18 @@ public class Keyboard extends ConstraintLayout {
                 case 12:
                     holder.numButton.setText(".");
                     holder.numButton.setOnClickListener(v -> {
-                        //如果已经包含点了,再点击没有效果
+                        String amount = getAmount();
+                        if (!amount.contains("+") && !amount.contains("-") && amount.contains(".")) {
+                            return;
+                        }
+
+                        if (!amount.endsWith("-") || !amount.endsWith("+")) {
+                            String[] split = amount.split("[+\\-]");
+                            if (split.length > 1 && split[1].contains(".")) {
+                                return;
+                            }
+                        }
+
                         textViewAmount.append(".");
                     });
                     break;
