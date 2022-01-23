@@ -2,6 +2,7 @@ package com.business.travel.app.ui.activity.bill;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.widget.EditText;
 import com.blankj.utilcode.util.ColorUtils;
 import com.blankj.utilcode.util.LogUtils;
@@ -42,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author chenshang
@@ -109,23 +111,25 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
                 // 依附于所点击的View，内部会自动判断在上方或者下方显示
                 .atView(viewBinding.topTitleBar.contentBarLeftIcon)
                 //最大高度
-                .maxHeight(ScreenUtils.getScreenHeight() / 3).maxWidth(ScreenUtils.getScreenWidth() / 2)
-                //不变暗
-                .hasShadowBg(false)
+                .maxHeight(ScreenUtils.getScreenHeight() * 2 / 3).maxWidth(ScreenUtils.getScreenWidth() * 2 / 5)
                 // 宽度
-                .popupWidth(ScreenUtils.getScreenWidth())
+                .popupWidth(ScreenUtils.getScreenWidth()).offsetY(-25)
                 //动画
                 .popupAnimation(PopupAnimation.ScrollAlphaFromTop);
 
         EditText contentBarTitle = viewBinding.topTitleBar.contentBarTitle;
-        contentBarTitle.setFocusable(true);
-        contentBarTitle.setFocusableInTouchMode(true);
         contentBarTitle.setTextColor(ColorUtils.getColor(R.color.white));
 
-        AttachListPopupView attachListPopupView = builder.asAttachList(projectService.queryAllProjectName(), null, (position, text) -> {
-            contentBarTitle.setText(text);
-        }, R.layout._xpopup_attach_impl_list, R.layout.base_list_item);
+        String[] data = projectService.queryAllProjectName();
+        List<String> collect = Stream.of(data).collect(Collectors.toList());
+        collect.add(0, "添加项目");
+        data = collect.toArray(new String[]{});
 
+        AttachListPopupView attachListPopupView = builder.asAttachList(data, new int[]{R.drawable.ic_project_add}, (position, text) -> {
+            contentBarTitle.setText(text);
+        }, 0, 0, Gravity.LEFT);
+
+        contentBarTitle.setOnClickListener(v -> attachListPopupView.show());
         viewBinding.topTitleBar.setOnClickListener(v -> attachListPopupView.show());
     }
 
