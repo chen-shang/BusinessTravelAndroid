@@ -29,6 +29,7 @@ import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -267,23 +268,23 @@ public class Keyboard extends ConstraintLayout {
             }
 
             //第一个数
-            String firstNum = numQueues.poll();
-            double res = Double.parseDouble(firstNum);
+            BigDecimal resBig = new BigDecimal(numQueues.poll());
             while (!optQueues.isEmpty()) {
                 //操作符出队
                 String opt = optQueues.poll();
                 String nextNum = numQueues.poll();
-                double v = Double.parseDouble(nextNum);
+                BigDecimal nextBig = new BigDecimal(nextNum);
+
                 //求和
                 if ("+".equals(opt)) {
-                    res = res + v;
+                    resBig = resBig.add(nextBig);
                 }
                 //作差
                 if ("-".equals(opt)) {
-                    res = res - v;
+                    resBig = resBig.subtract(nextBig);
                 }
             }
-            return res;
+            return resBig.doubleValue();
         }
 
         @NonNull
