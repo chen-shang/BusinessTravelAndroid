@@ -490,7 +490,7 @@ public class Keyboard extends ConstraintLayout {
                 return true;
             }
 
-            if (!amount.contains("+") && !amount.contains("-") && amount.contains(".") && amount.length() < 11) {
+            if (!amount.contains("+") && !amount.contains("-") && amount.contains(".") && amount.length() < amount.lastIndexOf(".") + 3) {
                 return true;
             }
 
@@ -501,7 +501,7 @@ public class Keyboard extends ConstraintLayout {
                     return true;
                 }
 
-                if (s.contains(".") && s.length() < 11) {
+                if (s.contains(".") && s.length() < s.lastIndexOf(".") + 3) {
                     return true;
                 }
             }
