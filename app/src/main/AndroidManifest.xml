@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
     <application
             android:name=".BootApplication"
@@ -22,6 +23,11 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.Application">
+        <!-- 表示当前项目已经适配了分区存储特性 -->
+        <meta-data
+                android:name="ScopedStorage"
+                android:value="true"/>
+
         <activity
                 android:name=".ui.activity.my.WebTextActivity"
                 android:launchMode="singleInstance"

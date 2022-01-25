@@ -4,10 +4,10 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.widget.ImageView;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.blankj.utilcode.util.ResourceUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.api.BusinessTravelResourceApi;
@@ -88,8 +88,7 @@ public class ImageLoadUtil {
         }
 
         @Override
-        public <T> T onSvgElement(@Nullable @org.jetbrains.annotations.Nullable String id, @NonNull @NotNull T element, @Nullable @org.jetbrains.annotations.Nullable RectF elementBounds, @NonNull @NotNull Canvas canvas, @Nullable @org.jetbrains.annotations.Nullable RectF canvasBounds,
-                                  @Nullable @org.jetbrains.annotations.Nullable Paint paint) {
+        public <T> T onSvgElement(@Nullable @org.jetbrains.annotations.Nullable String id, @NonNull @NotNull T element, @Nullable @org.jetbrains.annotations.Nullable RectF elementBounds, @NonNull @NotNull Canvas canvas, @Nullable @org.jetbrains.annotations.Nullable RectF canvasBounds, @Nullable @org.jetbrains.annotations.Nullable Paint paint) {
             if (paint != null && color != null) {
                 paint.setColor(color);
                 return element;

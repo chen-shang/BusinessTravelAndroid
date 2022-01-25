@@ -183,6 +183,9 @@ dependencies {
     // 友盟统计SDK
     implementation 'com.umeng.umsdk:common:9.4.6'// 必选
     implementation 'com.umeng.umsdk:asms:1.6.0'// 必选
+
+    // 权限请求框架：https://github.com/getActivity/XXPermissions
+    implementation 'com.github.getActivity:XXPermissions:13.2'
 }
 
 //编译的时候织入代码
