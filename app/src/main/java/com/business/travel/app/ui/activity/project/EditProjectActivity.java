@@ -129,10 +129,9 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
     private void finishForResult(Project project) {
         Activity lastActivity = getLastActivity();
         if (lastActivity != null) {
-            Intent intent = new Intent(this, lastActivity.getClass());
+            Intent intent = new Intent();
             intent.putExtra(IntentKey.EDITE_PROJECT_RESULT, JacksonUtil.toString(project));
             this.setResult(RESULT_OK, intent);
-            startActivityForResult(intent, 1);
         }
         this.finish();
     }

@@ -152,7 +152,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 
             AttachListPopupView attachListPopupView = builder.asAttachList(data, new int[]{R.drawable.ic_project_add}, (position, text) -> {
                 if (position == 0) {
-                    startActivity(new Intent(this, EditProjectActivity.class));
+                    startActivityForResult(new Intent(this, EditProjectActivity.class), 1);
                     return;
                 }
                 viewBinding.topTitleBar.contentBarTitle.setText(text);
