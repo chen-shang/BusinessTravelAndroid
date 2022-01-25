@@ -100,7 +100,7 @@ public class MasterActivity extends BaseActivity<ActivityMasterBinding> {
 				Project project = projectService.queryById(billFragment.getSelectedProjectId());
 				String name = Optional.ofNullable(project).map(Project::getName).orElse("");
 				BillAddModel billAddModel = new BillAddModel(name, DateTimeUtil.timestamp(LocalDate.now()), ConsumptionTypeEnum.SPENDING.name());
-				intent.putExtra(IntentKey.billAddModel, JacksonUtil.toString(billAddModel));
+				intent.putExtra(IntentKey.BILL_ADD_MODEL, JacksonUtil.toString(billAddModel));
 				startActivity(intent);
 			}
 		});

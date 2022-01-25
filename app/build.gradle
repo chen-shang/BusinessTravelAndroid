@@ -179,6 +179,10 @@ dependencies {
 
     //可拖拽的悬浮按钮
     implementation 'com.github.wangfeng19930909:DragFloatingActionButton:1.0.1'
+    // 下面各SDK根据宿主App是否使用相关业务按需引入。
+    // 友盟统计SDK
+    implementation 'com.umeng.umsdk:common:9.4.6'// 必选
+    implementation 'com.umeng.umsdk:asms:1.6.0'// 必选
 }
 
 //编译的时候织入代码

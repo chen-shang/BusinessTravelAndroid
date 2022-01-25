@@ -82,7 +82,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
 
         //默认值
         billAddModel = new BillAddModel(null, DateTimeUtil.timestamp(LocalDate.now()), ConsumptionTypeEnum.SPENDING.name());
-        String billAdd = this.getIntent().getStringExtra(AddBillActivity.IntentKey.billAddModel);
+        String billAdd = this.getIntent().getStringExtra(AddBillActivity.IntentKey.BILL_ADD_MODEL);
         if (StringUtils.isNotBlank(billAdd)) {
             billAddModel = JacksonUtil.toBean(billAdd, BillAddModel.class);
         }
@@ -108,6 +108,21 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
         Try.of(() -> refreshBillAdd(billAddModel));
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) {
+            return;
+        }
+        String editeProjectResult = data.getStringExtra(EditProjectActivity.IntentKey.EDITE_PROJECT_RESULT);
+        if (StringUtils.isBlank(editeProjectResult)) {
+            return;
+        }
+
+        Project project = JacksonUtil.toBean(editeProjectResult, Project.class);
+        billAddModel = new BillAddModel(project.getName(), DateTimeUtil.timestamp(LocalDate.now()), ConsumptionTypeEnum.SPENDING.name());
+    }
+
     private void registerProjectNameList() {
         EditText contentBarTitle = viewBinding.topTitleBar.contentBarTitle;
         contentBarTitle.setTextColor(ColorUtils.getColor(R.color.white));
@@ -129,7 +144,7 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
                     .popupAnimation(PopupAnimation.ScrollAlphaFromTop)
                     //是否在消失的时候销毁资源，默认false。如果你的弹窗对象只使用一次，
                     .isDestroyOnDismiss(true);
-            
+
             String[] data = projectService.queryAllProjectName();
             List<String> collect = Stream.of(data).collect(Collectors.toList());
             collect.add(0, "添加项目");
@@ -347,6 +362,6 @@ public class AddBillActivity extends ColorStatusBarActivity<ActivityAddBillBindi
     }
 
     public static final class IntentKey {
-        public static final String billAddModel = "billAddModel";
+        public static final String BILL_ADD_MODEL = "billAddModel";
     }
 }

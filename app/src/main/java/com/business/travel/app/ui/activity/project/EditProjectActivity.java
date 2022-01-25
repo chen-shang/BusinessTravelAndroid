@@ -1,10 +1,14 @@
 package com.business.travel.app.ui.activity.project;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.ResourceUtils;
 import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Project;
@@ -16,6 +20,7 @@ import com.business.travel.app.service.ProjectService;
 import com.business.travel.app.ui.base.ColorStatusBarActivity;
 import com.business.travel.app.utils.Try;
 import com.business.travel.utils.DateTimeUtil;
+import com.business.travel.utils.JacksonUtil;
 import com.google.common.base.Preconditions;
 import com.lxj.xpopup.XPopup.Builder;
 import com.lxj.xpopup.impl.AttachListPopupView;
@@ -23,6 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -44,6 +50,7 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
      */
     private ProjectService projectService;
     private BillService billService;
+
 
     @Override
     protected void inject() {
@@ -78,7 +85,8 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
     private void registerSaveButton(View saveButton) {
         saveButton.setOnClickListener(v -> Try.of(() -> {
             Project project = new Project();
-            project.setName(viewBinding.projectName.getText().toString());
+            String projectName = viewBinding.projectName.getText().toString();
+            project.setName(projectName);
             //开始时间
             String projectStartTime = viewBinding.projectStartTime.getText().toString();
             Long startTime = getTime(projectStartTime);
@@ -110,18 +118,31 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
             project.setRemark(remark);
 
             if (selectProjectId > 0) {
-                if (consumeDatePeriod.getMax() != null) {
-
-                }
-
                 projectService.updateProject(selectProjectId, project);
             } else {
-                projectService.createProject(project);
+                project = projectService.createProject(project);
             }
-
-            //退出
-            this.finish();
+            this.finishForResult(project);
         }));
+    }
+
+    private void finishForResult(Project project) {
+        Activity lastActivity = getLastActivity();
+        if (lastActivity != null) {
+            Intent intent = new Intent(this, lastActivity.getClass());
+            intent.putExtra(IntentKey.EDITE_PROJECT_RESULT, JacksonUtil.toString(project));
+            this.setResult(RESULT_OK, intent);
+            startActivityForResult(intent, 1);
+        }
+        this.finish();
+    }
+
+    private Activity getLastActivity() {
+        List<Activity> activityList = ActivityUtils.getActivityList();
+        if (CollectionUtils.isEmpty(activityList) || activityList.size() < 2) {
+            return null;
+        }
+        return activityList.get(1);
     }
 
     private Long getTime(String startTime) {
@@ -254,6 +275,14 @@ public class EditProjectActivity extends ColorStatusBarActivity<ActivityEditProj
     }
 
     public static class IntentKey {
+        /**
+         * 跳转页面传递过来的projectId,非必填
+         */
         public static final String PROJECT_ID = "projectId";
+
+        /**
+         * 编辑项目的结果回传给上一个页面，或更新或新增
+         */
+        public static final String EDITE_PROJECT_RESULT = "editeProjectResult";
     }
 }

@@ -119,7 +119,7 @@ public class BillRecyclerViewAdapter extends BaseRecyclerViewAdapter<BillRecycle
         Project project = projectService.queryById(selectedProjectId);
         String name = Optional.ofNullable(project).map(Project::getName).orElse(null);
         BillAddModel billAddModel = new BillAddModel(name, DateTimeUtil.timestamp(localDateTime), consumptionTypeEnum.name());
-        intent.putExtra(IntentKey.billAddModel, JacksonUtil.toString(billAddModel));
+        intent.putExtra(IntentKey.BILL_ADD_MODEL, JacksonUtil.toString(billAddModel));
         return intent;
     }
 
