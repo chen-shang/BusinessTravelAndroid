@@ -28,7 +28,9 @@
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="5dp"
-            android:layout_margin="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
             app:cardElevation="0dp"
             >
 
@@ -64,6 +66,9 @@
                         android:id="@+id/UI_AddItemActivity_EditText_Name"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:background="@null"
                         android:hint="设置类别名称"
                         >
 

@@ -1,5 +1,12 @@
 package com.business.travel.app.ui.activity.item;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -22,18 +29,13 @@ import com.business.travel.app.ui.activity.item.AddItemRecyclerViewAdapter.AddIt
 import com.business.travel.app.ui.base.BaseRecyclerViewAdapter;
 import com.business.travel.app.utils.FutureUtil;
 import com.business.travel.app.utils.LogToast;
+import com.business.travel.utils.SplitUtil;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class AddItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<AddItemRecyclerViewAdapterViewAdapterViewHolder, GiteeContent> {
     private static final LoadingCache<String, List<GiteeContent>> cache = CacheBuilder.newBuilder()
@@ -84,45 +86,61 @@ public class AddItemRecyclerViewAdapter extends BaseRecyclerViewAdapter<AddItemR
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull AddItemRecyclerViewAdapterViewAdapterViewHolder holder, int position) {
-        if (CollectionUtils.isEmpty(dataList)) {
-            return;
-        }
-        //先获取到类型,也就是文件夹的名字
-        GiteeContent giteeContent = dataList.get(position);
-        final String name = giteeContent.getName();
-        holder.iconPathTextView.setText(name);
+	    if (CollectionUtils.isEmpty(dataList)) {
+		    return;
+	    }
+	    //先获取到类型,也就是文件夹的名字
+	    GiteeContent giteeContent = dataList.get(position);
+	    String name = parseName(giteeContent.getName());
+	    holder.iconPathTextView.setText(name);
 
-        //然后开始处理每一项下面的图标
-        List<ImageIconInfo> imageIconInfoList = new ArrayList<>();
-        String path = giteeContent.getPath();
-        //接下来是对icon的处理
-        LayoutManager layoutManager = new GridLayoutManager(context, 5);
-        holder.imageIconInfoRecyclerView.setLayoutManager(layoutManager);
-        AddItemRecyclerViewInnerAdapter billRecyclerViewAdapter = new AddItemRecyclerViewInnerAdapter(imageIconInfoList, context);
-        holder.imageIconInfoRecyclerView.setAdapter(billRecyclerViewAdapter);
+	    //然后开始处理每一项下面的图标
+	    List<ImageIconInfo> imageIconInfoList = new ArrayList<>();
+	    String path = giteeContent.getPath();
+	    //接下来是对icon的处理
+	    LayoutManager layoutManager = new GridLayoutManager(context, 5);
+	    holder.imageIconInfoRecyclerView.setLayoutManager(layoutManager);
+	    AddItemRecyclerViewInnerAdapter billRecyclerViewAdapter = new AddItemRecyclerViewInnerAdapter(imageIconInfoList, context);
+	    holder.imageIconInfoRecyclerView.setAdapter(billRecyclerViewAdapter);
 
-        try {
-            FutureUtil.supplyAsync(() -> getFromCache(path)).thenApply(giteeContents -> giteeContents.stream().sorted(Comparator.comparingInt(GiteeContent::getItemSort)).map(ImageIconInfoConverter.INSTANCE::convertImageIconInfo).collect(Collectors.toList())).thenAccept(item -> {
-                imageIconInfoList.clear();
-                imageIconInfoList.addAll(item);
-            }).get(5, TimeUnit.SECONDS);
-            billRecyclerViewAdapter.notifyDataSetChanged();
-        } catch (Exception e) {
-            LogToast.errorShow("网络环境较差,请稍后重试");
-        }
+	    try {
+		    FutureUtil.supplyAsync(() -> getFromCache(path)).thenApply(giteeContents -> giteeContents.stream().sorted(Comparator.comparingInt(GiteeContent::getItemSort)).map(ImageIconInfoConverter.INSTANCE::convertImageIconInfo).collect(Collectors.toList())).thenAccept(item -> {
+			    imageIconInfoList.clear();
+			    imageIconInfoList.addAll(item);
+		    }).get(5, TimeUnit.SECONDS);
+		    billRecyclerViewAdapter.notifyDataSetChanged();
+	    } catch (Exception e) {
+		    LogToast.errorShow("网络环境较差,请稍后重试");
+	    }
     }
 
-    @SuppressLint("NonConstantResourceId")
-    static class AddItemRecyclerViewAdapterViewAdapterViewHolder extends ViewHolder {
+	private String parseName(String name) {
+		if (StringUtils.isBlank(name)) {
+			return "";
+		}
+		if (!name.contains("-")) {
+			return name;
+		}
 
-        @BindView(R.id.UI_AddItemRecyclerViewAdapter_TextView_IconPath)
-        public TextView iconPathTextView;
-        @BindView(R.id.UI_AddItemRecyclerViewAdapter_SwipeRecyclerView)
-        public SwipeRecyclerView imageIconInfoRecyclerView;
+		List<String> list = SplitUtil.trimToStringList(name, "-");
+		if (list.size() == 1) {
+			return name;
+		}
 
-        public AddItemRecyclerViewAdapterViewAdapterViewHolder(@NonNull @NotNull View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-    }
+		return list.get(1);
+	}
+
+	@SuppressLint("NonConstantResourceId")
+	static class AddItemRecyclerViewAdapterViewAdapterViewHolder extends ViewHolder {
+
+		@BindView(R.id.UI_AddItemRecyclerViewAdapter_TextView_IconPath)
+		public TextView iconPathTextView;
+		@BindView(R.id.UI_AddItemRecyclerViewAdapter_SwipeRecyclerView)
+		public SwipeRecyclerView imageIconInfoRecyclerView;
+
+		public AddItemRecyclerViewAdapterViewAdapterViewHolder(@NonNull @NotNull View itemView) {
+			super(itemView);
+			ButterKnife.bind(this, itemView);
+		}
+	}
 }
