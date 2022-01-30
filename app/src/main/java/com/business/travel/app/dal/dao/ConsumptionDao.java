@@ -24,6 +24,9 @@ public interface ConsumptionDao extends BaseDao<Consumption> {
 	@Query("SELECT * FROM Consumption where consumptionType=:consumptionType and isDeleted=1 order by sortId asc")
 	List<Consumption> selectByType(String consumptionType);
 
+	@Query("SELECT * FROM Consumption where name=:name and isDeleted=1")
+	Consumption selectByName(String name);
+
 	/**
 	 * 查询最大的sortId
 	 */

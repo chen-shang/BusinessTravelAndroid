@@ -1,5 +1,10 @@
 package com.business.travel.app.service;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import android.content.Context;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.LogUtils;
@@ -21,11 +26,6 @@ import com.business.travel.vo.enums.DeleteEnum;
 import com.business.travel.vo.enums.ItemTypeEnum;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
  * 消费项相关的业务逻辑
  */
@@ -45,6 +45,10 @@ public class ConsumptionService {
      */
     public List<Consumption> queryConsumptionItemByType(ConsumptionTypeEnum consumptionTypeEnum) {
         return consumptionDao.selectByType(consumptionTypeEnum.name());
+    }
+
+    public Consumption queryConsumptionByName(String name) {
+        return consumptionDao.selectByName(name);
     }
 
     public List<ImageIconInfo> queryAllConsumptionIconInfoByType(ConsumptionTypeEnum consumptionTypeEnum) {

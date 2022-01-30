@@ -17,8 +17,11 @@ public interface MemberDao extends BaseDao<Member> {
 	 * 查询全部
 	 */
 	@Query("SELECT * FROM Member where isDeleted=1 order by sortId asc")
-	List<Member> selectByPrimaryKeys();
+	List<Member> selectAll();
 
+	@Query("SELECT * FROM Member where name=:name and isDeleted=1")
+	Member selectByName(String name);
+	
 	/**
 	 * 查询全部
 	 */
@@ -57,5 +60,5 @@ public interface MemberDao extends BaseDao<Member> {
 	 * @return
 	 */
 	@Query("SELECT * FROM member where id in (:idList)")
-	List<Member> selectByPrimaryKeys(List<Long> idList);
+	List<Member> selectAll(List<Long> idList);
 }

@@ -1,5 +1,14 @@
 package com.business.travel.app.ui.activity.item;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,11 +38,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static com.business.travel.app.ui.activity.item.AddItemActivity.IntentKey.CONSUMPTION_TYPE;
 import static com.business.travel.app.ui.activity.item.AddItemActivity.IntentKey.ITEM_TYPE;
@@ -129,6 +133,9 @@ public class AddItemActivity extends ColorStatusBarActivity<ActivityAddItemBindi
         String name = viewBinding.UIAddItemActivityEditTextName.getText().toString();
         Preconditions.checkArgument(StringUtils.isNotBlank(name), "请输入名称");
 
+        //名称不能重复
+        Preconditions.checkArgument(memberService.queryMemberByName(name) == null, "该类别已存在");
+
         Member member = new Member();
         member.setName(name);
         member.setGender(0);
@@ -151,6 +158,8 @@ public class AddItemActivity extends ColorStatusBarActivity<ActivityAddItemBindi
 
         String name = viewBinding.UIAddItemActivityEditTextName.getText().toString();
         Preconditions.checkArgument(StringUtils.isNotBlank(name), "请输入名称");
+        //名称不能重复
+        Preconditions.checkArgument(consumptionService.queryConsumptionByName(name) == null, "该类别已存在");
 
         Consumption consumption = new Consumption();
         consumption.setName(name);

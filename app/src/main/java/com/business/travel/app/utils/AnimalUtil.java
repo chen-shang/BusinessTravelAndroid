@@ -29,7 +29,7 @@ public class AnimalUtil {
     /**
      * 结束大小
      */
-    private static final float endSize = 1.1f;
+    private static final float endSize = 1f;
 
     /**
      * 旋转上升动画

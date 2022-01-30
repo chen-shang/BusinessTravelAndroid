@@ -1,5 +1,9 @@
 package com.business.travel.app.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import android.content.Context;
 import com.blankj.utilcode.util.CollectionUtils;
 import com.blankj.utilcode.util.LogUtils;
@@ -13,10 +17,6 @@ import com.business.travel.app.utils.LogToast;
 import com.business.travel.app.utils.NetworkUtil;
 import com.business.travel.utils.DateTimeUtil;
 import com.business.travel.vo.enums.ItemTypeEnum;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 人员相关的业务逻辑
@@ -34,7 +34,7 @@ public class MemberService {
      * @return
      */
     public List<ImageIconInfo> queryAllMembersIconInfo() {
-        return convert(memberDao.selectByPrimaryKeys());
+        return convert(memberDao.selectAll());
     }
 
     /**
@@ -85,7 +85,7 @@ public class MemberService {
     }
 
     public List<ImageIconInfo> queryByIds(List<Long> ids) {
-        List<Member> members = memberDao.selectByPrimaryKeys(ids);
+        List<Member> members = memberDao.selectAll(ids);
         return convert(members);
     }
 
@@ -102,12 +102,15 @@ public class MemberService {
         }).collect(Collectors.toList());
     }
 
-
     public Long selectMaxSort() {
         return memberDao.selectMaxSort();
     }
 
     public Long creatMember(Member member) {
         return memberDao.insert(member);
+    }
+
+    public Member queryMemberByName(String name) {
+        return memberDao.selectByName(name);
     }
 }
