@@ -18,7 +18,7 @@ import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.FragmentBillBinding;
 import com.business.travel.app.service.BillService;
 import com.business.travel.app.service.ProjectService;
-import com.business.travel.app.ui.activity.master.MasterActivity;
+import com.business.travel.app.ui.activity.MasterActivity;
 import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.utils.AnimalUtil;
 import com.business.travel.app.utils.DurationUtil;

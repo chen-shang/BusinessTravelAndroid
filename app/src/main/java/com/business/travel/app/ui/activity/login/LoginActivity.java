@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import com.business.travel.app.databinding.ActivityLoginBinding;
-import com.business.travel.app.ui.activity.master.MasterActivity;
+import com.business.travel.app.ui.activity.MasterActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 
 public class LoginActivity extends BaseActivity<ActivityLoginBinding> {

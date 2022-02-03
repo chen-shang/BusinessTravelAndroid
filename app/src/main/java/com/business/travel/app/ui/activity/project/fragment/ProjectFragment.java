@@ -14,7 +14,6 @@ import com.business.travel.app.R;
 import com.business.travel.app.dal.entity.Project;
 import com.business.travel.app.databinding.FragmentProjectBinding;
 import com.business.travel.app.service.ProjectService;
-import com.business.travel.app.ui.activity.master.MasterActivity;
 import com.business.travel.app.ui.activity.project.EditProjectActivity;
 import com.business.travel.app.ui.base.BaseFragment;
 import com.business.travel.app.utils.MoneyUtil;

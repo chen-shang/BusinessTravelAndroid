@@ -1,4 +1,4 @@
-package com.business.travel.app.ui;
+package com.business.travel.app;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +9,7 @@ import com.business.travel.app.databinding.ActivityMainBinding;
 import com.business.travel.app.service.ConsumptionService;
 import com.business.travel.app.service.MemberService;
 import com.business.travel.app.service.UserService;
-import com.business.travel.app.ui.activity.master.MasterActivity;
+import com.business.travel.app.ui.activity.MasterActivity;
 import com.business.travel.app.ui.base.BaseActivity;
 import com.business.travel.app.utils.FutureUtil;
 import com.business.travel.app.utils.Try;

@@ -1,4 +1,4 @@
-package com.business.travel.app.ui.activity.master;
+package com.business.travel.app.ui.activity;
 
 import java.time.LocalDate;
 import java.util.Optional;

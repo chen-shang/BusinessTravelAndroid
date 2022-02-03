@@ -57,11 +57,11 @@
                 android:name=".ui.activity.item.consumption.EditConsumptionActivity"
                 />
         <activity
-                android:name=".ui.activity.master.MasterActivity"
+                android:name=".ui.activity.MasterActivity"
                 android:launchMode="singleInstance"
                 />
         <activity
-                android:name=".ui.MainActivity"
+                android:name=".MainActivity"
                 android:theme="@style/Theme.Main"
                 android:launchMode="singleInstance"
                 >
