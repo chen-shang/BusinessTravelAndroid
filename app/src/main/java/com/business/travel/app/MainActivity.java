@@ -1,5 +1,8 @@
 package com.business.travel.app;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.content.Intent;
 import android.os.Bundle;
 import com.blankj.utilcode.util.ActivityUtils;
@@ -16,9 +19,7 @@ import com.business.travel.app.utils.Try;
 import com.business.travel.app.view.BottomAgreementPopupView;
 import com.lxj.xpopup.XPopup;
 import com.umeng.commonsdk.UMConfigure;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import com.umeng.socialize.PlatformConfig;
 
 /**
  * @author chenshang
@@ -112,6 +113,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
          * UMConfigure.init调用中appkey和channel参数请置为null）。
          */
         UMConfigure.init(this, "61eeb912e014255fcb04447f", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, "");
+
+        PlatformConfig.setWeixin("wxdc1e388c3822c80b", "3baf1193c85774b3fd9d18447d76cab0");
 
         //要充分利用启动页面的停顿时间,尽量做一些后台工作,比如检查网络,同步数据之类的,初始化数据之类
         //因为这个类只在启动的时候启动一次,不会重复做一些事情,可以提升其他页面的访问速度

@@ -28,7 +28,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -83,6 +89,15 @@ android {
                            'src/main/res/drawables/icon/me',
                            'src/main/res/drawables/calander',
                            'src/main/res/drawables']
+        }
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file('debug.keystore')
+            storePassword '123456'
+            keyAlias 'key0'
+            keyPassword '123456'
         }
     }
 }
@@ -183,6 +198,12 @@ dependencies {
     // 友盟统计SDK
     implementation 'com.umeng.umsdk:common:9.4.7'// 必选
     implementation 'com.umeng.umsdk:asms:1.6.0'// 必选
+
+    implementation 'com.umeng.umsdk:share-core:7.1.5'//分享核心库，必选
+    implementation 'com.umeng.umsdk:share-board:7.1.5'//分享面板功能，可选
+
+    implementation 'com.umeng.umsdk:share-wx:7.1.5' //微信完整版
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.7.0'//微信官方依赖库，必选
 
     // 权限请求框架：https://github.com/getActivity/XXPermissions
     implementation 'com.github.getActivity:XXPermissions:13.2'
