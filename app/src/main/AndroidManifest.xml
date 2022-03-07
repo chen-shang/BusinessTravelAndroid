@@ -43,7 +43,11 @@
         <activity
                 android:name=".ui.activity.log.ChangeLogActivity"
                 />
-        <activity android:name=".ui.activity.login.LoginActivity">
+        <activity
+                android:name=".ui.activity.login.LoginActivity"
+                android:configChanges="keyboardHidden|orientation|screenSize"
+                android:exported="true"
+                android:screenOrientation="fullSensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
