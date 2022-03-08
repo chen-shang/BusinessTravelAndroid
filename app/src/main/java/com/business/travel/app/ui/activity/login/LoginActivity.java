@@ -5,6 +5,7 @@ import java.util.Map;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import com.business.travel.app.MainActivity;
 import com.business.travel.app.databinding.ActivityLoginBinding;
 import com.business.travel.app.ui.activity.MasterActivity;
 import com.business.travel.app.ui.base.BaseActivity;
@@ -50,7 +51,7 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> {
 			@Override
 			public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
 				LogToast.infoShow("成功了" + data);
-				startActivity(new Intent(LoginActivity.this, MasterActivity.class));
+				startActivity(new Intent(LoginActivity.this, MainActivity.class));
 			}
 
 			/**

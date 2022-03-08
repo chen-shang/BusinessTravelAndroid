@@ -24,6 +24,11 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.Application">
+        <activity
+                android:name=".wxapi.WXEntryActivity"
+                android:exported="true"
+                android:configChanges="keyboardHidden|orientation|screenSize"
+                android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <!-- 表示当前项目已经适配了分区存储特性 -->
         <meta-data
                 android:name="ScopedStorage"
@@ -31,23 +36,17 @@
 
         <activity
                 android:name=".ui.activity.my.WebTextActivity"
-                android:launchMode="singleInstance"
-                android:exported="true"/>
+                android:exported="true"
+                android:launchMode="singleInstance"/>
         <activity
                 android:name=".ui.activity.my.AboutMeActivity"
                 android:exported="true"/>
         <activity
                 android:name=".ui.activity.project.EditProjectActivity"
-                android:exported="true"
-                />
+                android:exported="true"/>
+        <activity android:name=".ui.activity.log.ChangeLogActivity"/>
         <activity
-                android:name=".ui.activity.log.ChangeLogActivity"
-                />
-        <activity
-                android:name=".ui.activity.login.LoginActivity"
-                android:configChanges="keyboardHidden|orientation|screenSize"
-                android:exported="true"
-                android:screenOrientation="fullSensor">
+                android:name=".ui.activity.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -57,25 +56,18 @@
         <activity
                 android:name=".ui.activity.bill.DetailBillActivity"
                 android:windowSoftInputMode="stateHidden|adjustPan"/>
-        <activity
-                android:name=".ui.activity.item.member.EditMemberActivity"
-                />
+        <activity android:name=".ui.activity.item.member.EditMemberActivity"/>
         <activity
                 android:name=".ui.activity.item.AddItemActivity"
-                android:theme="@style/Theme.Main"
-                />
-        <activity
-                android:name=".ui.activity.item.consumption.EditConsumptionActivity"
-                />
+                android:theme="@style/Theme.Main"/>
+        <activity android:name=".ui.activity.item.consumption.EditConsumptionActivity"/>
         <activity
                 android:name=".ui.activity.MasterActivity"
-                android:launchMode="singleInstance"
-                />
+                android:launchMode="singleInstance"/>
         <activity
                 android:name=".MainActivity"
-                android:theme="@style/Theme.Main"
                 android:launchMode="singleInstance"
-                >
+                android:theme="@style/Theme.Main">
         </activity>
         <activity
                 android:name=".ui.activity.bill.AddBillActivity"
